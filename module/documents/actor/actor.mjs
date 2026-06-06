@@ -30,8 +30,9 @@ import * as Trait from "./trait.mjs";
  *   SkillToolRollDialogConfiguration, SkillToolRollProcessConfiguration
  * } from "../../dice/_types.mjs";
  * @import {
- *   ActorRollData, DamageAffectCategory, DamageApplicationOptions, DamageDescription, DamageSummary,
- *   RestConfiguration, RestResult, RollDataOptions, SpellcastingDescription
+ *   ActorRollData, ActorUpdatesDescription, DamageAffectCategory, DamageApplicationOptions,
+ *   DamageDescription, DamageSummary, RestConfiguration, RestResult, RollDataOptions,
+ *   SpellcastingDescription
  * } from "../_types.mjs";
  */
 
@@ -2324,9 +2325,9 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     if ( Hooks.call("dnd5e.preRestCompleted", this, result, config) === false ) return result;
 
     // Perform updates
-    await this.update(result.updateData, { isRest: true });
-    await this.deleteEmbeddedDocuments("Item", result.deleteItems, { isRest: true });
-    await this.updateEmbeddedDocuments("Item", result.updateItems, { isRest: true });
+    await this.performBulkUpdate(
+      { actor: result.updateData, delete: result.deleteItems, item: result.updateItems }, { isRest: true }
+    );
 
     // Advance the game clock
     if ( config.advanceTime && (config.duration > 0) && game.user.isGM ) await game.time.advance(60 * config.duration);
@@ -3599,6 +3600,44 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
   static getDefaultArtwork(actorData={}) {
     const img = CONFIG.DND5E.defaultArtwork.Actor[actorData.type];
     return img ? { img, texture: { src: img } } : super.getDefaultArtwork(actorData);
+  }
+
+  /* -------------------------------------------- */
+  /*  Helpers                                     */
+  /* -------------------------------------------- */
+
+  /**
+   * Perform bulk updates on the actor and its embedded documents.
+   * @param {ActorUpdatesDescription} updates
+   * @param {object} [options]                                     Options passed to all database operations.
+   * @param {Partial<DatabaseCreateOperation>} [createOptions={}]  Options passed to item creation operation.
+   *                                                               By default the `keepId` option is set to `true`.
+   * @param {Partial<DatabaseDeleteOperation>} [deleteOptions={}]  Options passed to item deletion operation.
+   * @param {Partial<DatabaseUpdateOperation>} [updateOptions={}]  Options passed to item update operation.
+   * @returns {Promise<Document[][]>}
+   */
+  performBulkUpdate(updates, { createOptions={}, deleteOptions={}, updateOptions={}, ...options }={}) {
+    const operations = [];
+    if ( !foundry.utils.isEmpty(updates.actor) ) operations.push(this.parent
+      ? {
+        action: "update", documentName: "ActorDelta", parent: this.parent,
+        updates: [{ _id: this.parent.delta.id, ...updates.actor }], ...options
+      }
+      : { action: "update", documentName: "Actor", updates: [{ _id: this.id, ...updates.actor }], ...options }
+    );
+    if ( !foundry.utils.isEmpty(updates.create) ) operations.push({
+      action: "create", documentName: "Item", data: updates.create, parent: this, keepId: true,
+      ...options, ...createOptions
+    });
+    if ( !foundry.utils.isEmpty(updates.delete) ) operations.push({
+      action: "delete", documentName: "Item", ids: updates.delete, parent: this,
+      ...options, ...updateOptions
+    });
+    if ( !foundry.utils.isEmpty(updates.item) ) operations.push({
+      action: "update", documentName: "Item", updates: updates.item, parent: this,
+      ...options, ...deleteOptions
+    });
+    return foundry.documents.modifyBatch(operations);
   }
 }
 

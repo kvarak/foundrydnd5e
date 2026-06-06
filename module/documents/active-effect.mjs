@@ -461,6 +461,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    * @param {object} options  Options passed to the effect creation.
    */
   async createRiderEnchantments(options={}) {
+    const batchedUpdates = [];
     let item;
     let profile;
     const { chatMessageOrigin } = options;
@@ -498,11 +499,13 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
     }
     let createdActivities = [];
     if ( !foundry.utils.isEmpty(riderActivities) ) {
-      await this.parent.update({ "system.activities": riderActivities });
-      createdActivities = Object.keys(riderActivities).map(id => this.parent.system.activities?.get(id));
-      createdActivities.forEach(a => a.effects?.forEach(e => {
-        if ( !this.parent.effects.has(e._id) ) riderEffects.push(item.effects.get(e._id)?.toObject());
-      }));
+      batchedUpdates.push({
+        action: "update", documentName: "Item", parent: this.item.actor,
+        updates: [{ _id: this.item.id, "system.activities": riderActivities }]
+      });
+      riderEffects = Object.values(riderActivities).flatMap(a =>
+        a.effects?.map(e => item.effects.get(e._id)?.toObject())
+      ).filter(e => e && !this.item.effects.has(e._id));
     }
 
     // Create Effects
@@ -517,7 +520,9 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
     }));
     riderEffects = riderEffects.filter(_ => _);
     riderEffects.forEach(e => foundry.utils.setProperty(e, "flags.dnd5e.dependentOn", this.id));
-    await this.parent.createEmbeddedDocuments("ActiveEffect", riderEffects, { keepId: true });
+    batchedUpdates.push({
+      action: "create", documentName: "ActiveEffect", data: riderEffects, parent: this.item, keepId: true
+    });
 
     // Create Items
     if ( this.parent.isEmbedded ) {
@@ -531,8 +536,12 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
           }
         }
       );
-      await this.parent.actor.createEmbeddedDocuments("Item", riderItems, { keepId: true });
+      batchedUpdates.push({
+        action: "create", documentName: "Item", data: riderItems, parent: this.actor, keepId: true
+      });
     }
+
+    await foundry.documents.modifyBatch(batchedUpdates);
   }
 
   /* -------------------------------------------- */
