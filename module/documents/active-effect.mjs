@@ -980,9 +980,10 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   /**
    * Render a rich tooltip for this effect.
    * @param {EnrichmentOptions} [enrichmentOptions={}]  Options for text enrichment.
+   * @param {string} [enrichmentOptions.extras]         Extra HTML displayed with the tooltip.
    * @returns {Promise<{content: string, classes: string[]}>}
    */
-  async richTooltip(enrichmentOptions={}) {
+  async richTooltip({ extras, ...enrichmentOptions }={}) {
     let properties = [];
     if ( this.isSuppressed ) properties.push("DND5E.EffectType.Unavailable");
     else if ( this.disabled ) properties.push("DND5E.EffectType.Inactive");
