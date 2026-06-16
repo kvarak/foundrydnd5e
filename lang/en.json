@@ -114,6 +114,8 @@
 "DND5E.AbilityWisAbbr": "wis",
 "DND5E.AbilityCha": "Charisma",
 "DND5E.AbilityChaAbbr": "cha",
+"DND5E.AbilityLuk": "Luck",
+"DND5E.AbilityLukAbbr": "luk",
 "DND5E.AbilityHon": "Honor",
 "DND5E.AbilityHonAbbr": "hon",
 "DND5E.AbilitySan": "Sanity",

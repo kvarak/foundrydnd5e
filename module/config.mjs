@@ -108,6 +108,15 @@ DND5E.abilities = {
     icon: "systems/dnd5e/icons/svg/abilities/charisma.svg",
     defaults: { vehicle: 0 }
   },
+  luk: {
+    label: "DND5E.AbilityLuk",
+    abbreviation: "DND5E.AbilityLukAbbr",
+    type: "fortune",
+    fullKey: "luck",
+    reference: "Compendium.dnd5e.varlyn.luck",
+    icon: "systems/dnd5e/icons/svg/abilities/luck.svg",
+    defaults: { vehicle: 0 }
+  },
   hon: {
     label: "DND5E.AbilityHon",
     abbreviation: "DND5E.AbilityHonAbbr",

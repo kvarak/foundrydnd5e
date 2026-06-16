@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" version="1.1" viewBox="0 0 100 100" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+  <g fill-rule="evenodd" style="fill: var(--icon-fill, #fff);">
+    <!-- Four-leaf clover for luck -->
+    <!-- Top left leaf -->
+    <path d="M 35,30 C 25,25 15,25 12,35 C 9,45 15,50 25,48 C 23,40 28,32 35,30 Z"/>
+    <!-- Top right leaf -->
+    <path d="M 45,30 C 52,32 57,40 55,48 C 65,50 71,45 68,35 C 65,25 55,25 45,30 Z"/>
+    <!-- Bottom left leaf -->
+    <path d="M 35,50 C 28,48 23,40 25,32 C 15,30 9,35 12,45 C 15,55 25,55 35,50 Z"/>
+    <!-- Bottom right leaf -->
+    <path d="M 45,50 C 55,55 65,55 68,45 C 71,35 65,30 55,32 C 57,40 52,48 45,50 Z"/>
+    <!-- Center circle -->
+    <circle cx="40" cy="40" r="6"/>
+    <!-- Stem -->
+    <path d="M 40,46 L 40,75 C 40,75 35,70 32,72 C 29,74 31,78 35,78 L 45,78 C 49,78 51,74 48,72 C 45,70 40,75 40,75 Z"/>
+    <!-- Lucky star accent -->
+    <path d="M 70,20 L 72,25 L 77,25 L 73,28 L 75,33 L 70,30 L 65,33 L 67,28 L 63,25 L 68,25 Z" opacity="0.8"/>
+  </g>
+</svg>
