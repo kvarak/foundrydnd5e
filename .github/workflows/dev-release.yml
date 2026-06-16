@@ -1,0 +1,176 @@
+name: Development Release
+
+env:
+  NODE_VERSION: 22
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Load package type
+      id: type
+      uses: ActionsTools/read-json-action@main
+      with:
+        file_path: "./foundryvtt.json"
+        prop_path: "project.type"
+
+    - name: Load package ID
+      id: package-id
+      uses: ActionsTools/read-json-action@main
+      with:
+        file_path: "./${{ steps.type.outputs.value }}.json"
+        prop_path: "id"
+
+    - name: Load project includes
+      id: config
+      continue-on-error: true
+      uses: ActionsTools/read-json-action@main
+      with:
+        file_path: "./foundryvtt.json"
+
+    # Set up variables for development release
+    - name: Set up variables
+      id: get_vars
+      run: |
+        PACKAGE_ID=${{ steps.package-id.outputs.value }}
+        PACKAGE_TYPE=${{ steps.type.outputs.value }}
+        SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+        TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+
+        echo "PACKAGE_ID=$PACKAGE_ID" >> $GITHUB_ENV
+        echo "PACKAGE_TYPE=$PACKAGE_TYPE" >> $GITHUB_ENV
+        echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
+        echo "ZIP_NAME=$PACKAGE_ID-dev-$TIMESTAMP.zip" >> $GITHUB_ENV
+        echo "RELEASE_DOWNLOAD_URL=https://github.com/${{ github.repository }}/releases/download/latest/$PACKAGE_ID-dev-$TIMESTAMP.zip" >> $GITHUB_ENV
+        echo "RELEASE_INSTALL_URL=https://github.com/${{ github.repository }}/releases/download/latest/$PACKAGE_TYPE.json" >> $GITHUB_ENV
+
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm ci --ignore-scripts
+
+    - name: Integrate Free Rules
+      uses: ./utils/integrate
+      continue-on-error: true
+
+    - name: Build All
+      run: |
+        npm run build
+        mv --force dnd5e-compiled.mjs dnd5e.mjs
+
+    - name: Load Manifest
+      id: manifest
+      uses: ActionsTools/read-json-action@main
+      with:
+        file_path: "./${{ steps.type.outputs.value }}.json"
+
+    - name: Update manifest for dev release
+      uses: TomaszKandula/variable-substitution@v1.0.2
+      with:
+        files: "${{ env.PACKAGE_TYPE }}.json"
+      env:
+        version: dev-${{ env.SHORT_SHA }}
+        download: ${{ env.RELEASE_DOWNLOAD_URL }}
+        manifest: ${{ env.RELEASE_INSTALL_URL }}
+        flags.hotReload: true
+
+    - name: Determine archive contents
+      id: archive
+      uses: actions/github-script@v6
+      env:
+        ESMODULES: ${{ steps.manifest.outputs.esmodules }}
+        INCLUDES: ${{ steps.config.outputs.includes }}
+        LANGUAGES: ${{ steps.manifest.outputs.languages }}
+        PACKS: ${{ steps.manifest.outputs.packs }}
+        STYLES: ${{ steps.manifest.outputs.styles }}
+      with:
+        result-encoding: string
+        script: |
+          const manifest = {};
+          if ( process.env.ESMODULES ) manifest.esmodules = JSON.parse(process.env.ESMODULES);
+          if ( process.env.INCLUDES ) manifest.includes = JSON.parse(process.env.INCLUDES);
+          if ( process.env.LANGUAGES ) manifest.languages = JSON.parse(process.env.LANGUAGES);
+          if ( process.env.PACKS ) manifest.packs = JSON.parse(process.env.PACKS);
+          if ( process.env.STYLES ) manifest.styles = JSON.parse(process.env.STYLES);
+          const includes = [
+            "${{ env.PACKAGE_TYPE }}.json",
+            ...(manifest.esmodules ?? []),
+            ...(manifest.esmodules?.map(s => `${s}.map`) ?? []),
+            ...(manifest.styles ?? []),
+            ...(manifest.packs?.map(p => p.path) ?? []),
+            ...(manifest.languages?.map(l => l.path) ?? []),
+            ...(manifest.includes ?? [])
+          ];
+          return includes.join(" ");
+
+    - name: Zip package
+      run: zip ${{ env.ZIP_NAME }} -r ${{ steps.archive.outputs.result }}
+
+    - name: Delete existing latest release
+      uses: dev-drprasad/delete-tag-and-release@v1.0
+      continue-on-error: true
+      with:
+        delete_release: true
+        tag_name: latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create/Update Latest Release
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true
+        name: Latest Development Build
+        draft: false
+        prerelease: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: './${{ env.PACKAGE_TYPE }}.json, ./${{ env.ZIP_NAME }}'
+        tag: latest
+        body: |
+          **🚧 Development Build - Automated Release 🚧**
+
+          This is an automatically generated development build from commit `${{ github.sha }}`.
+
+          **Branch:** `${{ github.ref_name }}`
+          **Commit:** ${{ github.sha }}
+          **Build Time:** ${{ github.event.head_commit.timestamp }}
+          **Author:** ${{ github.event.head_commit.author.name }}
+
+          **⚠️ Warning:** This is a development build and may be unstable. Use at your own risk!
+
+          ---
+
+          ### Installation
+
+          Use this manifest URL in Foundry VTT to install/update:
+          ```
+          ${{ env.RELEASE_INSTALL_URL }}
+          ```
+
+          Or install directly:
+          ```
+          https://github.com/${{ github.repository }}/releases/download/latest/system.json
+          ```
+
+          ---
+
+          **Last Commit Message:**
+          ```
+          ${{ github.event.head_commit.message }}
+          ```
