@@ -2181,7 +2181,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
       dialog: true, chat: restConfig.chat !== false,
       duration: restConfig.duration[game.settings.get("dnd5e", "restVariant")],
       newDay: restConfig.newDay === true,
-      advanceBastionTurn: restConfig.advanceBastionTurn === true, advanceTime: restConfig.advanceTime === true,
+      advanceTime: restConfig.advanceTime === true,
       autoHD: restConfig.autoHD === true, autoHDThreshold: 3,
       recoverTemp: restConfig.recoverTemp, recoverTempMax: restConfig.recoverTempMax,
       exhaustionDelta: restConfig.exhaustionDelta
@@ -2262,7 +2262,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    */
   static async handleRestRequest(actor, request, config) {
     const result = await actor.initiateRest({
-      ...config, request, advanceBastionTurn: false, advanceTime: false
+      ...config, request, advanceTime: false
     });
     return result?.message ?? null;
   }
@@ -2346,9 +2346,6 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {RestConfiguration} config  Configuration data for that occurred.
      */
     Hooks.callAll("dnd5e.restCompleted", this, result, config);
-
-    if ( config.advanceBastionTurn && game.user.isGM && game.settings.get("dnd5e", "bastionConfiguration").enabled
-      && this.itemTypes.facility.length ) await dnd5e.bastion.advanceAllFacilities(this);
 
     // Return data summarizing the rest effects
     return result;

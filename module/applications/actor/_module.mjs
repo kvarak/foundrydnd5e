@@ -1,4 +1,3 @@
-export {default as BastionAttackDialog} from "./bastion-attack-dialog.mjs";
 export {default as CharacterActorSheet} from "./character-sheet.mjs";
 export {default as NPCActorSheet} from "./npc-sheet.mjs";
 export {default as TransformDialog} from "./transform-dialog.mjs";

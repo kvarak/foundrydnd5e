@@ -1,6 +1,5 @@
 import { formatNumber } from "../../utils.mjs";
 import AdvancementManager from "../advancement/advancement-manager.mjs";
-import CompendiumBrowser from "../compendium-browser.mjs";
 import ContextMenu5e from "../context-menu.mjs";
 import BaseActorSheet from "./api/base-actor-sheet.mjs";
 import Item5e from "../../documents/item.mjs";
@@ -11,7 +10,6 @@ const TextEditor = foundry.applications.ux.TextEditor.implementation;
 /**
  * @import { FavoriteData5e } from "../../data/abstract/_types.mjs";
  * @import { ActorFavorites5e } from "../../data/actor/_types.mjs";
- * @import { FacilityOccupants } from "../../data/item/_types.mjs";
  */
 
 /**
@@ -22,12 +20,9 @@ export default class CharacterActorSheet extends BaseActorSheet {
   static DEFAULT_OPTIONS = {
     actions: {
       deleteFavorite: CharacterActorSheet.#deleteFavorite,
-      deleteOccupant: CharacterActorSheet.#deleteOccupant,
-      findItem: CharacterActorSheet.#findItem,
       setSpellcastingAbility: CharacterActorSheet.#setSpellcastingAbility,
       toggleDeathTray: CharacterActorSheet.#toggleDeathTray,
       toggleInspiration: CharacterActorSheet.#toggleInspiration,
-      useFacility: CharacterActorSheet.#useFacility,
       useFavorite: CharacterActorSheet.#useFavorite
     },
     classes: ["character", "vertical-tabs"],
@@ -85,11 +80,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
       template: "systems/dnd5e/templates/actors/tabs/character-biography.hbs",
       scrollable: [""]
     },
-    bastion: {
-      container: { classes: ["tab-body"], id: "tabs" },
-      template: "systems/dnd5e/templates/actors/tabs/character-bastion.hbs",
-      scrollable: [""]
-    },
     specialTraits: {
       classes: ["flexcol"],
       container: { classes: ["tab-body"], id: "tabs" },
@@ -132,7 +122,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
     { tab: "spells", label: "TYPES.Item.spellPl", icon: "fas fa-book" },
     { tab: "effects", label: "DND5E.Effects", icon: "fas fa-bolt" },
     { tab: "biography", label: "DND5E.Biography", icon: "fas fa-feather" },
-    { tab: "bastion", label: "DND5E.Bastion.Label", icon: "fas fa-chess-rook", condition: this.hasBastion },
     { tab: "specialTraits", label: "DND5E.SpecialTraits", icon: "fas fa-star" }
   ];
 
@@ -198,7 +187,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
     context = await super._preparePartContext(partId, context, options);
     switch ( partId ) {
       case "abilityScores": return this._prepareAbilityScoresContext(context, options);
-      case "bastion": return this._prepareBastionContext(context, options);
       case "biography": return this._prepareBiographyContext(context, options);
       case "details": return this._prepareDetailsContext(context, options);
       case "effects": return this._prepareEffectsContext(context, options);
@@ -226,55 +214,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
       if ( context.abilityRows.bottom.length > 5 ) context.abilityRows.top.push(ability);
       else context.abilityRows.bottom.push(ability);
     }
-    return context;
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Prepare rendering context for the bastion tab.
-   * @param {ApplicationRenderContext} context  Context being prepared.
-   * @param {HandlebarsRenderOptions} options   Options which configure application rendering behavior.
-   * @returns {ApplicationRenderContext}
-   * @protected
-   */
-  async _prepareBastionContext(context, options) {
-    context.bastion = {
-      description: await TextEditor.enrichHTML(this.actor.system.bastion.description, {
-        secrets: this.actor.isOwner, relativeTo: this.actor, rollData: context.rollData
-      })
-    };
-    context.defenders = [];
-    context.facilities = { basic: { chosen: [] }, special: { chosen: [] } };
-
-    for ( const facility of context.itemCategories.facilities ?? [] ) {
-      const ctx = context.itemContext[facility.id] ?? {};
-      context.defenders.push(...ctx.defenders.map(({ actor }) => {
-        if ( !actor ) return null;
-        const { img, name, uuid } = actor;
-        return { img, name, uuid, facility: facility.id };
-      }).filter(_ => _));
-      if ( ctx.isSpecial ) context.facilities.special.chosen.push(ctx);
-      else context.facilities.basic.chosen.push(ctx);
-    }
-
-    for ( const [type, facilities] of Object.entries(context.facilities) ) {
-      const config = CONFIG.DND5E.facilities.advancement[type];
-      let [, available] = Object.entries(config).reverse().find(([level]) => {
-        return level <= this.actor.system.details.level;
-      }) ?? [];
-      facilities.value = facilities.chosen.filter(({ free }) => (type === "basic") || !free).length;
-      facilities.max = available ?? 0;
-      available = (available ?? 0) - facilities.value;
-      facilities.available = Array.fromRange(Math.max(0, available)).map(() => {
-        return { label: `DND5E.FACILITY.AvailableFacility.${type}.free` };
-      });
-    }
-
-    if ( !context.facilities.basic.available.length ) {
-      context.facilities.basic.available.push({ label: "DND5E.FACILITY.AvailableFacility.basic.build" });
-    }
-
     return context;
   }
 
@@ -777,70 +716,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
 
   /* -------------------------------------------- */
 
-  /**
-   * Prepare context for a facility.
-   * @param {Item5e} item  Item being prepared for display.
-   * @param {object} ctx   Item specific context.
-   * @protected
-   */
-  async _prepareItemFacility(item, ctx) {
-    const { id, img, labels, name, system } = item;
-    const { building, craft, defenders, disabled, free, hirelings, progress, size, trade, type } = system;
-    const subtitle = [
-      building.built ? CONFIG.DND5E.facilities.sizes[size].label : _loc("DND5E.FACILITY.Build.Unbuilt")
-    ];
-    if ( trade.stock.max ) subtitle.push(`${trade.stock.value ?? 0} &sol; ${trade.stock.max}`);
-    Object.assign(ctx, {
-      id, labels, name, building, disabled, free, progress,
-      craft: craft.item ? await fromUuid(craft.item) : null,
-      creatures: await this._prepareItemFacilityLivestock(trade),
-      defenders: await this._prepareItemFacilityOccupants(defenders),
-      executing: CONFIG.DND5E.facilities.orders[progress.order]?.icon,
-      hirelings: await this._prepareItemFacilityOccupants(hirelings),
-      img: foundry.utils.getRoute(img),
-      isSpecial: type.value === "special",
-      subtitle: subtitle.join(" &bull; ")
-    });
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Prepare facility livestock for display.
-   * @param {object} trade  Facility trade information.
-   * @returns {Promise<object[]>}
-   * @protected
-   */
-  async _prepareItemFacilityLivestock(trade) {
-    const creatures = await this._prepareItemFacilityOccupants(trade.creatures);
-    const pending = trade.pending.creatures;
-    return [
-      ...(await Promise.all((pending ?? []).map(async (uuid, index) => {
-        return { index, actor: await fromUuid(uuid), pending: true };
-      }))),
-      ...creatures
-    ];
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Prepare facility occupants for display.
-   * @param {FacilityOccupants} occupants  The occupants.
-   * @returns {Promise<object[]>}
-   * @protected
-   */
-  _prepareItemFacilityOccupants(occupants) {
-    const { max, value } = occupants;
-    return Promise.all(Array.fromRange(max).map(async index => {
-      const uuid = value[index];
-      if ( uuid ) return { index, actor: await fromUuid(uuid) };
-      return { empty: true };
-    }));
-  }
-
-  /* -------------------------------------------- */
-
   /** @inheritDoc */
   async _prepareItemFeature(item, ctx) {
     await super._prepareItemFeature(item, ctx);
@@ -891,7 +766,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
     // Apply special context menus for items outside inventory elements
     const featuresElement = this.element.querySelector(`[data-tab="features"] ${this.options.elements.inventory}`);
     if ( featuresElement ) new ContextMenu5e(
-      this.element, ".pills-lg [data-item-id], .favorites [data-item-id], .facility[data-item-id]", [],
+      this.element, ".pills-lg [data-item-id], .favorites [data-item-id]", [],
       { onOpen: (...args) => featuresElement._onOpenContextMenu(...args), jQuery: false }
     );
     const inventoryElement = this.element.querySelector(`[data-tab="inventory"] ${this.options.elements.inventory}`);
@@ -933,84 +808,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
   static #deleteFavorite(event, target) {
     const { favoriteId } = target.closest("[data-favorite-id]")?.dataset ?? {};
     if ( favoriteId ) this.actor.system.removeFavorite(favoriteId);
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Handle deleting an occupant from a facility.
-   * @this {CharacterActorSheet}
-   * @param {Event} event         Triggering click event.
-   * @param {HTMLElement} target  Button that was clicked.
-   */
-  static async #deleteOccupant(event, target) {
-    const { facilityId } = target.closest("[data-facility-id]")?.dataset ?? {};
-    const { prop } = target.closest("[data-prop]")?.dataset ?? {};
-    const { index } = target.closest("[data-index]")?.dataset ?? {};
-    const facility = this.actor.items.get(facilityId);
-    if ( !facility || !prop || (index === undefined) ) return;
-
-    // Prompt to clear a pending trade
-    if ( target.closest(".occupant-slot.pending") ) {
-      const result = await foundry.applications.api.DialogV2.confirm({
-        content: `
-          <p>
-            <strong>${_loc("COMMON.AreYouSure")}</strong> ${_loc("DND5E.Bastion.Trade.Invalid")}
-          </p>
-        `,
-        window: {
-          icon: "fa-solid fa-coins",
-          title: "DND5E.Bastion.Trade.Cancel"
-        },
-        position: { width: 400 }
-      }, { rejectClose: false });
-      if ( result ) facility.update({
-        system: {
-          progress: { max: null, order: "", value: null },
-          trade: {
-            pending: { creatures: [], operation: null }
-          }
-        }
-      });
-    }
-
-    // Remove the occupant
-    else {
-      let { value } = foundry.utils.getProperty(facility, prop);
-      value = value.filter((_, i) => i !== Number(index));
-      facility.update({ [`${prop}.value`]: value });
-    }
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Handle finding an available item of a given type.
-   * @this {CharacterActorSheet}
-   * @param {Event} event         Triggering click event.
-   * @param {HTMLElement} target  Button that was clicked.
-   */
-  static async #findItem(event, target) {
-    if ( !this.isEditable ) return;
-    const { classIdentifier, facilityType, itemType: type } = target.dataset;
-    const filters = { locked: { types: new Set([type]) } };
-
-    if ( classIdentifier ) filters.locked.additional = { class: { [classIdentifier]: 1 } };
-    if ( type === "class" ) {
-      const existingIdentifiers = new Set(Object.keys(this.actor.classes));
-      filters.initial = { additional: { properties: { sidekick: -1 } } };
-      filters.locked.arbitrary = [{ o: "NOT", v: { k: "system.identifier", o: "in", v: existingIdentifiers } }];
-    }
-    if ( type === "facility" ) {
-      const otherType = facilityType === "basic" ? "special" : "basic";
-      filters.locked.additional = {
-        type: { [facilityType]: 1, [otherType]: -1 },
-        level: { max: this.actor.system.details.level }
-      };
-    }
-
-    const result = await CompendiumBrowser.selectOne({ filters }, this._detachOptions());
-    if ( result ) this._onDropCreateItems(event, [game.items.fromCompendium(await fromUuid(result), { keepId: true })]);
   }
 
   /* -------------------------------------------- */
@@ -1064,21 +861,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
    */
   static #toggleInspiration(event, target) {
     this.submit({ updateData: { "system.attributes.inspiration": !this.actor.system.attributes.inspiration } });
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Handle using a facility.
-   * @this {CharacterActorSheet}
-   * @param {Event} event         Triggering click event.
-   * @param {HTMLElement} target  Button that was clicked.
-   */
-  static #useFacility(event, target) {
-    if ( !target.classList.contains("rollable") ) return;
-    const { facilityId } = target.closest("[data-facility-id]")?.dataset ?? {};
-    const facility = this.actor.items.get(facilityId);
-    facility?.use({ legacy: false, chooseActivity: true, event });
   }
 
   /* -------------------------------------------- */
@@ -1199,14 +981,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
 
   /** @inheritDoc */
   async _onDropActor(event, actor) {
-    if ( !event.target.closest(".facility-occupants") || !actor.uuid ) return super._onDropActor(event, actor);
-    const { facilityId } = event.target.closest("[data-facility-id]").dataset;
-    const facility = this.actor.items.get(facilityId);
-    if ( !facility ) return;
-    const { prop } = event.target.closest("[data-prop]").dataset;
-    const { max, value } = foundry.utils.getProperty(facility, prop);
-    if ( (value.length + 1) > max ) return;
-    return facility.update({ [`${prop}.value`]: [...value, actor.uuid] });
+    return super._onDropActor(event, actor);
   }
 
   /* -------------------------------------------- */
@@ -1328,18 +1103,5 @@ export default class CharacterActorSheet extends BaseActorSheet {
   /** @inheritDoc */
   canExpand(item) {
     return !["race"].includes(item.type) && super.canExpand(item);
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Determine if the sheet should show a bastion tab.
-   * @param {Actor5e} actor
-   * @returns {boolean}
-   */
-  static hasBastion(actor) {
-    const { basic, special } = CONFIG.DND5E.facilities.advancement;
-    const threshold = Math.min(...Object.keys(basic), ...Object.keys(special));
-    return game.settings.get("dnd5e", "bastionConfiguration")?.enabled && (actor.system.details.level >= threshold);
   }
 }

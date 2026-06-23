@@ -2,7 +2,6 @@ import HitDice from "../../documents/actor/hit-dice.mjs";
 import Proficiency from "../../documents/actor/proficiency.mjs";
 import { defaultUnits, simplifyBonus } from "../../utils.mjs";
 import FormulaField from "../fields/formula-field.mjs";
-import LocalDocumentField from "../fields/local-document-field.mjs";
 import CreatureTypeField from "../shared/creature-type-field.mjs";
 import RollConfigField from "../shared/roll-config-field.mjs";
 import SensesField from "../shared/senses-field.mjs";
@@ -13,7 +12,7 @@ import DetailsFields from "./templates/details.mjs";
 import TraitsFields from "./templates/traits.mjs";
 
 const {
-  ArrayField, BooleanField, HTMLField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+  ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
 } = foundry.data.fields;
 
 /**
@@ -79,16 +78,9 @@ export default class CharacterData extends CreatureTemplate {
         }, { label: "DND5E.DeathSave" }),
         inspiration: new BooleanField({ required: true, label: "DND5E.Inspiration" })
       }, { label: "DND5E.Attributes" }),
-      bastion: new SchemaField({
-        name: new StringField({ required: true }),
-        description: new HTMLField()
-      }),
       details: new SchemaField({
         ...DetailsFields.common,
         ...DetailsFields.creature,
-        background: new LocalDocumentField(foundry.documents.BaseItem, {
-          required: true, fallback: true, label: "DND5E.Background"
-        }),
         originalClass: new StringField({ required: true, label: "DND5E.ClassOriginal" }),
         xp: new SchemaField({
           value: new NumberField({

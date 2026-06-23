@@ -1729,7 +1729,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
   /** @override */
   async _onDropActor(event, actor) {
     const canPolymorph = game.user.isGM || (this.actor.isOwner && game.settings.get("dnd5e", "allowPolymorphing"));
-    if ( !canPolymorph || (this.tabGroups.primary === "bastion") ) return;
+    if ( !canPolymorph ) return;
 
     // Configure the transformation
     const settings = await TransformDialog.promptSettings(this.actor, actor, {

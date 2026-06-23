@@ -1,11 +1,9 @@
 import CompendiumBrowser from "./applications/compendium-browser.mjs";
-import BastionSettingsConfig from "./applications/settings/bastion-settings.mjs";
 import CalendarSettingsConfig from "./applications/settings/calendar-settings.mjs";
 import CombatSettingsConfig from "./applications/settings/combat-settings.mjs";
 import CompendiumBrowserSettingsConfig from "./applications/settings/compendium-browser-settings.mjs";
 import VariantRulesSettingsConfig from "./applications/settings/variant-rules-settings.mjs";
 import VisibilitySettingsConfig from "./applications/settings/visibility-settings.mjs";
-import BastionSetting from "./data/settings/bastion-setting.mjs";
 import { CalendarConfigSetting, CalendarPreferencesSetting } from "./data/settings/calendar-setting.mjs";
 import PrimaryPartySetting from "./data/settings/primary-party-setting.mjs";
 import TransformationSetting from "./data/settings/transformation-setting.mjs";
@@ -269,29 +267,6 @@ export function registerSystemSettings() {
         }
       });
     }
-  });
-
-  // Bastions
-  game.settings.registerMenu("dnd5e", "bastionConfiguration", {
-    name: "DND5E.Bastion.Configuration.Name",
-    label: "DND5E.Bastion.Configuration.Label",
-    hint: "DND5E.Bastion.Configuration.Hint",
-    icon: "fas fa-chess-rook",
-    type: BastionSettingsConfig,
-    restricted: true
-  });
-
-  game.settings.register("dnd5e", "bastionConfiguration", {
-    name: "Bastion Configuration",
-    scope: "world",
-    config: false,
-    type: BastionSetting,
-    default: {
-      button: false,
-      enabled: false,
-      duration: 7
-    },
-    onChange: () => game.dnd5e.bastion.initializeUI()
   });
 
   // Calendar Settings
