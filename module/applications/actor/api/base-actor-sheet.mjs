@@ -521,7 +521,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
       return src ?? "int";
     };
     return Object.entries(context.system[property] ?? {})
-      .filter(([key]) => key in CONFIG.DND5E[property] || ((property === "tools") && (key in CONFIG.DND5E.vehicleTypes)))
+      .filter(([key]) => key in CONFIG.DND5E[property])
       .map(([key, entry]) => ({
         ...entry, key,
         abbreviation: CONFIG.DND5E.abilities[entry.ability]?.abbreviation,
@@ -1888,8 +1888,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     }
 
     // Create a Consumable spell scroll on the Inventory tab
-    if ( (itemData.type === "spell")
-      && ((this.tabGroups.primary === "inventory") || (actor.type === "vehicle")) ) {
+    if ( (itemData.type === "spell") && (this.tabGroups.primary === "inventory") ) {
       const scroll = await Item5e.createScrollFromSpell(itemData);
       return scroll?.toObject?.() ?? false;
     }

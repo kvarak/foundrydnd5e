@@ -85,7 +85,7 @@ export default class Award extends Application5e {
    * @type {boolean}
    */
   get isPartyAward() {
-    return this.origin?.type === "group";
+    return false;
   }
 
   /* -------------------------------------------- */
@@ -122,9 +122,7 @@ export default class Award extends Application5e {
    */
   static prepareDestinations(destinations, savedDestinations) {
     const icons = {
-      container: '<dnd5e-icon class="fa-fw" src="systems/dnd5e/icons/svg/backpack.svg"></dnd5e-icon>',
-      group: '<i class="fa-solid fa-people-group"></i>',
-      vehicle: '<i class="fa-solid fa-sailboat"></i>'
+      container: '<dnd5e-icon class="fa-fw" src="systems/dnd5e/icons/svg/backpack.svg"></dnd5e-icon>'
     };
     return destinations.map(doc => ({
       doc, checked: savedDestinations?.has(doc.id), icon: icons[doc.type] ?? '<i class="fa-solid fa-fw fa-user"></i>'

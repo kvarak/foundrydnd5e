@@ -144,21 +144,6 @@ Hooks.once("init", function() {
     makeDefault: true,
     label: "DND5E.SheetClass.NPC"
   });
-  DocumentSheetConfig.registerSheet(Actor, "dnd5e", applications.actor.VehicleActorSheet, {
-    types: ["vehicle"],
-    makeDefault: true,
-    label: "DND5E.SheetClass.Vehicle"
-  });
-  DocumentSheetConfig.registerSheet(Actor, "dnd5e", applications.actor.GroupActorSheet, {
-    types: ["group"],
-    makeDefault: true,
-    label: "DND5E.SheetClass.Group"
-  });
-  DocumentSheetConfig.registerSheet(Actor, "dnd5e", applications.actor.EncounterActorSheet, {
-    types: ["encounter"],
-    makeDefault: true,
-    label: "DND5E.SheetClass.Encounter"
-  });
 
   DocumentSheetConfig.unregisterSheet(Item, "core", foundry.appv1.sheets.ItemSheet);
   DocumentSheetConfig.registerSheet(Item, "dnd5e", applications.item.ItemSheet5e, {
@@ -308,14 +293,6 @@ function _configureTrackableAttributes() {
     npc: {
       bar: [...creature.bar, "resources.legact", "resources.legres"],
       value: [...creature.value, "attributes.spell.level", "details.cr", "details.xp.value"]
-    },
-    vehicle: {
-      bar: [...common.bar, "attributes.hp"],
-      value: [...common.value]
-    },
-    group: {
-      bar: [],
-      value: []
     }
   };
 }

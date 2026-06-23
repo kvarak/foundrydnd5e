@@ -35,25 +35,7 @@
           "bastion.description"
         ]
       },
-      "encounter": {
-        "htmlFields": [
-          "description.full",
-          "description.summary"
-        ]
-      },
-      "group": {
-        "htmlFields": [
-          "description.full",
-          "description.summary"
-        ]
-      },
       "npc": {
-        "htmlFields": [
-          "details.biography.value",
-          "details.biography.public"
-        ]
-      },
-      "vehicle": {
         "htmlFields": [
           "details.biography.value",
           "details.biography.public"

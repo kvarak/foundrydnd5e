@@ -3,7 +3,6 @@ import ShortRestDialog from "./applications/actor/rest/short-rest-dialog.mjs";
 import CalenderHUD from "./applications/calendar/calendar-hud.mjs";
 import MapLocationControlIcon from "./canvas/map-location-control-icon.mjs";
 import { ConsumptionTargetData } from "./data/activity/fields/consumption-targets-field.mjs";
-import VehicleData from "./data/actor/vehicle.mjs";
 import { CalendarGreyhawk, CALENDAR_OF_GREYHAWK } from "./data/calendar/calendar-of-greyhawk.mjs";
 import { CalendarHarptos, CALENDAR_OF_HARPTOS } from "./data/calendar/calendar-of-harptos.mjs";
 import { CalendarKhorvaire, CALENDAR_OF_KHORVAIRE } from "./data/calendar/calendar-of-khorvaire.mjs";
@@ -87,8 +86,7 @@ DND5E.abilities = {
     type: "mental",
     fullKey: "intelligence",
     reference: "Compendium.dnd5e.content24.JournalEntry.phbAppendixDRule.JournalEntryPage.WzWWcTIppki35YvF",
-    icon: "systems/dnd5e/icons/svg/abilities/intelligence.svg",
-    defaults: { vehicle: 0 }
+    icon: "systems/dnd5e/icons/svg/abilities/intelligence.svg"
   },
   wis: {
     label: "DND5E.AbilityWis",
@@ -96,8 +94,7 @@ DND5E.abilities = {
     type: "mental",
     fullKey: "wisdom",
     reference: "Compendium.dnd5e.content24.JournalEntry.phbAppendixDRule.JournalEntryPage.v3IPyTtqvXqN934s",
-    icon: "systems/dnd5e/icons/svg/abilities/wisdom.svg",
-    defaults: { vehicle: 0 }
+    icon: "systems/dnd5e/icons/svg/abilities/wisdom.svg"
   },
   cha: {
     label: "DND5E.AbilityCha",
@@ -105,8 +102,7 @@ DND5E.abilities = {
     type: "mental",
     fullKey: "charisma",
     reference: "Compendium.dnd5e.content24.JournalEntry.phbAppendixDRule.JournalEntryPage.9FyghudYFV5QJOuG",
-    icon: "systems/dnd5e/icons/svg/abilities/charisma.svg",
-    defaults: { vehicle: 0 }
+    icon: "systems/dnd5e/icons/svg/abilities/charisma.svg"
   },
   luk: {
     label: "DND5E.AbilityLuk",
@@ -114,15 +110,14 @@ DND5E.abilities = {
     type: "fortune",
     fullKey: "luck",
     reference: "Compendium.dnd5e.varlyn.luck",
-    icon: "systems/dnd5e/icons/svg/abilities/luck.svg",
-    defaults: { vehicle: 0 }
+    icon: "systems/dnd5e/icons/svg/abilities/luck.svg"
   },
   hon: {
     label: "DND5E.AbilityHon",
     abbreviation: "DND5E.AbilityHonAbbr",
     type: "mental",
     fullKey: "honor",
-    defaults: { npc: "cha", vehicle: 0 },
+    defaults: { npc: "cha" },
     improvement: false
   },
   san: {
@@ -130,7 +125,7 @@ DND5E.abilities = {
     abbreviation: "DND5E.AbilitySanAbbr",
     type: "mental",
     fullKey: "sanity",
-    defaults: { npc: "wis", vehicle: 0 },
+    defaults: { npc: "wis" },
     improvement: false
   }
 };
@@ -1084,17 +1079,6 @@ DND5E.activityActivationTypes = {
     header: "DND5E.ACTIVATION.Type.Lair.Header",
     group: "DND5E.ACTIVATION.Category.Monster"
   },
-  crew: {
-    counted: "DND5E.ACTIVATION.Type.Crew.Counted",
-    consume: {
-      canConsume: VehicleData.canConsumeCrewAction,
-      property: "attributes.actions"
-    },
-    label: "DND5E.ACTIVATION.Type.Crew.Label",
-    header: "DND5E.ACTIVATION.Type.Crew.Header",
-    group: "DND5E.ACTIVATION.Category.Vehicle",
-    scalar: true
-  },
   special: {
     label: "DND5E.Special",
     passive: true
@@ -1650,7 +1634,6 @@ DND5E.miscEquipmentTypes = {
   ring: "DND5E.EQUIPMENT.Type.Ring.Label",
   rod: "DND5E.EQUIPMENT.Type.Rod.Label",
   trinket: "DND5E.EQUIPMENT.Type.Trinket.Label",
-  vehicle: "DND5E.EQUIPMENT.Type.Vehicle.Label",
   wand: "DND5E.EQUIPMENT.Type.Wand.Label",
   wondrous: "DND5E.EQUIPMENT.Type.Wondrous.Label"
 };
@@ -1667,20 +1650,6 @@ DND5E.equipmentTypes = {
   ...DND5E.armorTypes
 };
 preLocalize("equipmentTypes", { sort: true });
-
-/* -------------------------------------------- */
-
-/**
- * The various types of vehicles in which characters can be proficient.
- * @enum {string}
- */
-DND5E.vehicleTypes = {
-  air: "DND5E.VEHICLE.Type.Air.label",
-  land: "DND5E.VEHICLE.Type.Land.label",
-  space: "DND5E.VEHICLE.Type.Space.label",
-  water: "DND5E.VEHICLE.Type.Water.label"
-};
-preLocalize("vehicleTypes", { sort: true });
 
 /* -------------------------------------------- */
 
@@ -1859,9 +1828,6 @@ DND5E.featureTypes = {
       epicBoon: "DND5E.Feature.SupernaturalGift.EpicBoon"
     }
   },
-  vehicle: {
-    label: "DND5E.Feature.Vehicle.Label"
-  }
 };
 preLocalize("featureTypes", { key: "label" });
 preLocalize("featureTypes.class.subtypes", { sort: true });
@@ -4152,7 +4118,6 @@ DND5E.traits = {
     actorKeyPath: "system.tools",
     configKey: "toolProficiencies",
     subtypes: { keyPath: "toolType", ids: ["tools"] },
-    children: { vehicle: "vehicleTypes" },
     sortCategories: true,
     expertise: true,
     dataType: MappingField
@@ -4353,18 +4318,6 @@ DND5E.characterFlags = {
   }
 };
 preLocalize("characterFlags", { keys: ["name", "hint", "section"] });
-
-/* -------------------------------------------- */
-
-/**
- * Different types of actor structures that groups can represent.
- * @enum {object}
- */
-DND5E.groupTypes = {
-  party: "DND5E.Group.TypeParty",
-  encounter: "DND5E.Group.TypeEncounter"
-};
-preLocalize("groupTypes");
 
 /* -------------------------------------------- */
 
@@ -4871,7 +4824,6 @@ Object.defineProperty(DND5E, "enrichmentLookup", {
       addFullKeys("skills");
       addFullKeys("spellSchools");
       addFullKeys("tools");
-      Object.entries(DND5E.vehicleTypes).forEach(([k, label]) => _enrichmentLookup.tools[k] = { label, key: k });
     }
     return _enrichmentLookup;
   },

@@ -158,7 +158,7 @@ export default class EquipmentData extends ItemDataModel.mixin(
    * @type {boolean}
    */
   get isMountable() {
-    return this.type.value === "vehicle";
+    return false;
   }
 
   /* -------------------------------------------- */

@@ -1,17 +1,10 @@
 import CharacterData from "./character.mjs";
-import EncounterData from "./encounter.mjs";
-import GroupData from "./group.mjs";
 import NPCData from "./npc.mjs";
-import VehicleData from "./vehicle.mjs";
 
 export {
   CharacterData,
-  EncounterData,
-  GroupData,
-  NPCData,
-  VehicleData
+  NPCData
 };
-export {default as GroupSystemFlags} from "./group-system-flags.mjs";
 export {default as DamageTraitField} from "./fields/damage-trait-field.mjs";
 export {default as SimpleTraitField} from "./fields/simple-trait-field.mjs";
 export {default as TravelField} from "./fields/travel-field.mjs";
@@ -23,8 +16,5 @@ export {default as TraitsFields} from "./templates/traits.mjs";
 
 export const config = {
   character: CharacterData,
-  encounter: EncounterData,
-  group: GroupData,
-  npc: NPCData,
-  vehicle: VehicleData
+  npc: NPCData
 };

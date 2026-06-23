@@ -255,12 +255,6 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      */
     if ( options.pack ) Hooks.callAll("dnd5e.initializeActorSource", this, source, options);
 
-    // Migrate encounter groups to their own Actor type.
-    if ( (source.type === "group") && (source.system?.type?.value === "encounter") ) {
-      source.type = "encounter";
-      foundry.utils.setProperty(source, "flags.dnd5e.persistSourceMigration", true);
-    }
-
     return super._initializeSource(source, options);
   }
 
@@ -1282,7 +1276,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     const name = type === "skill" ? "Skill" : "ToolCheck";
 
     const skillConfig = CONFIG.DND5E.skills[config.skill];
-    const toolConfig = CONFIG.DND5E.tools[config.tool] ?? CONFIG.DND5E.vehicleTypes[config.tool];
+    const toolConfig = CONFIG.DND5E.tools[config.tool];
     if ( ((type === "skill") && !skillConfig) || ((type === "tool") && !toolConfig) ) {
       return this.rollAbilityCheck(config, dialog, message);
     }
@@ -3296,27 +3290,6 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
         const actor = game.actors.get(target.dataset.entryId);
         return actor.revertOriginalForm();
       }
-    }, {
-      label: "DND5E.Group.Primary.Set",
-      icon: '<i class="fa-solid fa-star"></i>',
-      group: "system",
-      visible: li => {
-        const actor = game.actors.get(li.dataset.entryId);
-        const primary = game.actors.party;
-        return game.user.isGM && (actor?.type === "group") && (actor !== primary);
-      },
-      onClick: (_, target) => game.settings.set("dnd5e", "primaryParty", {
-        actor: game.actors.get(target.dataset.entryId)
-      })
-    }, {
-      label: "DND5E.Group.Primary.Remove",
-      icon: '<i class="fa-regular fa-star"></i>',
-      group: "system",
-      visible: li => {
-        const actor = game.actors.get(li.dataset.entryId);
-        return game.user.isGM && (actor === game.actors.party);
-      },
-      onClick: () => game.settings.set("dnd5e", "primaryParty", { actor: null })
     });
   }
 
@@ -3371,12 +3344,6 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
   /** @inheritDoc */
   _onDelete(options, userId) {
-    // Remove any group sheet apps so they aren't also closed.
-    for ( const id in this.apps ) {
-      const app = this.apps[id];
-      if ( app instanceof dnd5e.applications.actor.GroupActorSheet ) delete this.apps[id];
-    }
-
     super._onDelete(options, userId);
 
     const origin = this.getFlag("dnd5e", "summon.origin");

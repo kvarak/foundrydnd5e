@@ -91,7 +91,7 @@ export default class BaseRestDialog extends Dialog5e {
    * @type {boolean}
    */
   get isPartyGroup() {
-    return this.actor.type === "group";
+    return false;
   }
 
   /* -------------------------------------------- */
