@@ -39,7 +39,7 @@ export default class ItemGrantAdvancement extends Advancement {
    * The item types that are supported in Item Grant.
    * @type {Set<string>}
    */
-  static VALID_TYPES = new Set(["feat", "spell", "consumable", "container", "equipment", "loot", "tool", "weapon"]);
+  static VALID_TYPES = new Set(["feat", "spell", "consumable", "container", "equipment", "tool", "weapon"]);
 
   /* -------------------------------------------- */
   /*  Display Methods                             */

@@ -335,7 +335,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
       subtitle: details.type.subtype
     };
     if ( details.race instanceof dnd5e.documents.Item5e ) context.species = details.race;
-    if ( details.background instanceof dnd5e.documents.Item5e ) context.background = details.background;
     context.labels.size = CONFIG.DND5E.actorSizes[traits.size]?.label ?? traits.size;
 
     // Saving Throws
@@ -421,9 +420,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
         }),
       this.actor.system.details.race instanceof Item5e ? {
         columns, id: "species", label: "DND5E.Species.Features", order: 1000, groups: { origin: "species" }
-      } : null,
-      this.actor.system.details.background instanceof Item5e ? {
-        columns, id: "background", label: "DND5E.FeaturesBackground", order: 2000, groups: { origin: "background" }
       } : null,
       { columns, id: "other", label: "DND5E.FeaturesOther", order: 3000, groups: { origin: "other" } }
     ].filter(_ => _);
@@ -772,9 +768,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
   /** @inheritDoc */
   _assignItemCategories(item) {
     switch ( item.type ) {
-      case "background": return new Set(["background"]);
       case "class": return new Set(["classes"]);
-      case "facility": return new Set(["facilities"]);
       case "race": return new Set(["species"]);
       case "subclass": return new Set(["subclasses"]);
       default: return super._assignItemCategories(item);
@@ -849,8 +843,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
 
   /** @inheritDoc */
   async _prepareItemFeature(item, ctx) {
-    if ( item.type === "facility" ) return this._prepareItemFacility(item, ctx);
-
     await super._prepareItemFeature(item, ctx);
 
     const [originId] = (item.getFlag("dnd5e", "advancementRoot") ?? item.getFlag("dnd5e", "advancementOrigin"))
@@ -859,7 +851,6 @@ export default class CharacterActorSheet extends BaseActorSheet {
     ctx.groups.origin = "other";
     switch ( group?.type ) {
       case "race": ctx.groups.origin = "species"; break;
-      case "background": ctx.groups.origin = "background"; break;
       case "class": ctx.groups.origin = group.identifier; break;
       case "subclass": ctx.groups.origin = group.class?.identifier ?? "other"; break;
     }
@@ -1336,7 +1327,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
 
   /** @inheritDoc */
   canExpand(item) {
-    return !["background", "race", "facility"].includes(item.type) && super.canExpand(item);
+    return !["race"].includes(item.type) && super.canExpand(item);
   }
 
   /* -------------------------------------------- */

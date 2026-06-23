@@ -674,7 +674,7 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
     return [
       { value: "", label: "" },
       ...(this.actor?.items ?? [])
-        .filter(i => ["consumable", "loot"].includes(i.type))
+        .filter(i => i.type === "consumable")
         .map(i => ({ value: i.id, label: `${i.name} (${formatNumber(i.system.quantity)})` }))
     ];
   }

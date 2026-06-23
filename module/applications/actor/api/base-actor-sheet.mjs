@@ -1213,7 +1213,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
    */
   _addDocumentItemTypes(tab) {
     switch ( tab ) {
-      case "features": return ["feat", "race", "background", "class", "subclass"];
+      case "features": return ["feat", "race", "class", "subclass"];
       case "inventory": return Object.entries(CONFIG.Item.dataModels)
         .filter(([type, model]) => ("inventorySection" in model) && (type !== "backpack"))
         .map(([type]) => type);

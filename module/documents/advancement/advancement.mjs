@@ -73,7 +73,7 @@ export default class Advancement extends PseudoDocumentMixin(BaseAdvancementData
       title: _loc("DND5E.AdvancementTitle"),
       hint: "",
       multiLevel: false,
-      validItemTypes: new Set(["background", "class", "race", "subclass"]),
+      validItemTypes: new Set(["class", "race", "subclass"]),
       apps: {
         config: AdvancementConfig,
         flow: AdvancementFlow

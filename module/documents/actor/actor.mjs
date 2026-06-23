@@ -3004,13 +3004,11 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
         switch ( origin.type ) {
           case "spell": return settings.effects.has("spell");
           case "feat": return settings.effects.has("feat");
-          case "background": return settings.effects.has("background");
           case "class":
           case "subclass": return settings.effects.has("class");
           case "equipment":
           case "weapon":
           case "tool":
-          case "loot":
           case "container": return settings.effects.has("equipment");
           default: return true;
         }

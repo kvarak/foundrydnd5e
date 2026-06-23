@@ -22,7 +22,7 @@ export default class MultiActorSheet extends BaseActorSheet {
 
   /** @override */
   static unsupportedItemTypes = new Set([
-    "background", "class", "facility", "feat", "race", "spell", "subclass"
+    "class", "feat", "race", "spell", "subclass"
   ]);
 
   /* -------------------------------------------- */

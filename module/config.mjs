@@ -1827,7 +1827,7 @@ DND5E.featureTypes = {
       charm: "DND5E.Feature.SupernaturalGift.Charm",
       epicBoon: "DND5E.Feature.SupernaturalGift.EpicBoon"
     }
-  },
+  }
 };
 preLocalize("featureTypes", { key: "label" });
 preLocalize("featureTypes.class.subtypes", { sort: true });
@@ -1971,9 +1971,6 @@ DND5E.validProperties = {
     "mgc",
     "trait"
   ]),
-  loot: new Set([
-    "mgc"
-  ]),
   weapon: new Set([
     "ada",
     "amm",
@@ -2005,40 +2002,6 @@ DND5E.validProperties = {
     "mgc"
   ])
 };
-
-/* -------------------------------------------- */
-
-/**
- * Types of "loot" items.
- * @enum {{ label: string }}
- */
-DND5E.lootTypes = {
-  art: {
-    label: "DND5E.Loot.Art"
-  },
-  gear: {
-    label: "DND5E.Loot.Gear"
-  },
-  gem: {
-    label: "DND5E.Loot.Gem"
-  },
-  junk: {
-    label: "DND5E.Loot.Junk"
-  },
-  material: {
-    label: "DND5E.Loot.Material"
-  },
-  resource: {
-    label: "DND5E.Loot.Resource"
-  },
-  trade: {
-    label: "DND5E.Loot.Trade"
-  },
-  treasure: {
-    label: "DND5E.Loot.Treasure"
-  }
-};
-preLocalize("lootTypes", { key: "label" });
 
 /* -------------------------------------------- */
 
@@ -3431,7 +3394,7 @@ DND5E.transformation = {
       icon: '<i class="fas fa-paw" inert></i>',
       label: "DND5E.TRANSFORM.Preset.WildShape.Label",
       settings: {
-        effects: new Set(["otherOrigin", "origin", "feat", "spell", "class", "background"]),
+        effects: new Set(["otherOrigin", "origin", "feat", "spell", "class"]),
         keep: new Set(["bio", "class", "feats", "hp", "languages", "mental", "tempHP", "type"]),
         merge: new Set(["saves", "skills"]),
         minimumAC: "(13 + @abilities.wis.mod) * sign(@subclasses.moon.levels)",
@@ -4351,7 +4314,7 @@ DND5E.activityTypes = {
 
 /* -------------------------------------------- */
 
-const _ALL_ITEM_TYPES = ["background", "class", "feat", "race", "subclass"];
+const _ALL_ITEM_TYPES = ["class", "feat", "race", "subclass"];
 
 /**
  * Advancement types that can be added to items.
@@ -4360,7 +4323,7 @@ const _ALL_ITEM_TYPES = ["background", "class", "feat", "race", "subclass"];
 DND5E.advancementTypes = {
   AbilityScoreImprovement: {
     documentClass: advancement.AbilityScoreImprovementAdvancement,
-    validItemTypes: new Set(["background", "class", "race", "feat"])
+    validItemTypes: new Set(["class", "race", "feat"])
   },
   HitPoints: {
     documentClass: advancement.HitPointsAdvancement,
@@ -4415,14 +4378,11 @@ DND5E.defaultArtwork = {
     vehicle: "systems/dnd5e/icons/svg/actors/vehicle.svg"
   },
   Item: {
-    background: "systems/dnd5e/icons/svg/items/background.svg",
     class: "systems/dnd5e/icons/svg/items/class.svg",
     consumable: "systems/dnd5e/icons/svg/items/consumable.svg",
     container: "systems/dnd5e/icons/svg/items/container.svg",
     equipment: "systems/dnd5e/icons/svg/items/equipment.svg",
-    facility: "systems/dnd5e/icons/svg/items/facility.svg",
     feat: "systems/dnd5e/icons/svg/items/feature.svg",
-    loot: "systems/dnd5e/icons/svg/items/loot.svg",
     race: "systems/dnd5e/icons/svg/items/race.svg",
     spell: "systems/dnd5e/icons/svg/items/spell.svg",
     subclass: "systems/dnd5e/icons/svg/items/subclass.svg",

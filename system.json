@@ -103,26 +103,7 @@
           "unidentified.description"
         ]
       },
-      "loot": {
-        "htmlFields": [
-          "description.value",
-          "description.chat",
-          "unidentified.description"
-        ]
-      },
       "race": {
-        "filePathFields": {
-          "advancement.*.icon": [
-            "IMAGE"
-          ]
-        },
-        "htmlFields": [
-          "advancement.*.hint",
-          "description.value",
-          "description.chat"
-        ]
-      },
-      "background": {
         "filePathFields": {
           "advancement.*.icon": [
             "IMAGE"
@@ -191,25 +172,6 @@
           "description.value",
           "description.chat",
           "unidentified.description"
-        ]
-      },
-      "backpack": {
-        "htmlFields": [
-          "description.value",
-          "description.chat",
-          "unidentified.description"
-        ]
-      },
-      "facility": {
-        "filePathFields": {
-          "activities.*.img": [
-            "IMAGE"
-          ]
-        },
-        "htmlFields": [
-          "activities.*.description.value",
-          "description.value",
-          "description.chat"
         ]
       }
     },

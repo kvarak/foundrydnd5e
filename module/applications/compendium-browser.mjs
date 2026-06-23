@@ -159,13 +159,6 @@ export default class CompendiumBrowser extends Application5e {
       types: ["feat"]
     },
     {
-      tab: "backgrounds",
-      label: "TYPES.Item.backgroundPl",
-      svg: "systems/dnd5e/icons/svg/items/background.svg",
-      documentClass: "Item",
-      types: ["background"]
-    },
-    {
       tab: "physical",
       label: "DND5E.CompendiumBrowser.Tabs.Item.other",
       svg: "systems/dnd5e/icons/svg/backpack.svg",
