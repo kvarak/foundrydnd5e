@@ -23,7 +23,6 @@ import * as dice from "./module/dice/_module.mjs";
 import * as documents from "./module/documents/_module.mjs";
 import * as enrichers from "./module/enrichers.mjs";
 import * as Filter from "./module/filter.mjs";
-import * as migrations from "./module/migration.mjs";
 import { registerModuleData, registerModuleRedirects, setupModulePacks } from "./module/module-registration.mjs";
 import { default as registry } from "./module/registry.mjs";
 import Tooltips5e from "./module/tooltips.mjs";
@@ -43,7 +42,6 @@ globalThis.dnd5e = {
   documents,
   enrichers,
   Filter,
-  migrations,
   registry,
   ui: {},
   utils
@@ -534,24 +532,6 @@ Hooks.once("ready", function() {
     dnd5e.ui.calendar = new CONFIG.DND5E.calendar.application();
     dnd5e.ui.calendar.render({ force: true });
   }
-
-  // Determine whether a system migration is required and feasible
-  if ( !game.user.isGM ) return;
-  const cv = game.settings.get("dnd5e", "systemMigrationVersion") || game.world.flags.dnd5e?.version;
-  const totalDocuments = game.actors.size + game.scenes.size + game.items.size;
-  if ( !cv && totalDocuments === 0 ) return game.settings.set("dnd5e", "systemMigrationVersion", game.system.version);
-  if ( cv && !foundry.utils.isNewerVersion(game.system.flags.needsMigrationVersion, cv) ) return;
-
-  // Compendium pack folder migration.
-  if ( foundry.utils.isNewerVersion("3.0.0", cv) ) {
-    migrations.reparentCompendiums("DnD5e SRD Content", "D&D SRD Content");
-  }
-
-  // Perform the migration
-  if ( cv && foundry.utils.isNewerVersion(game.system.flags.compatibleMigrationVersion, cv) ) {
-    ui.notifications.error("MIGRATION.DND5E.Warning.VersionTooOld", { permanent: true });
-  }
-  migrations.migrateWorld();
 });
 
 /* -------------------------------------------- */
@@ -641,7 +621,6 @@ export {
   documents,
   enrichers,
   Filter,
-  migrations,
   registry,
   utils,
   DND5E

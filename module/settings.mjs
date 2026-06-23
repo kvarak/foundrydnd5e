@@ -47,15 +47,6 @@ export function registerSystemKeybindings() {
  * Register all of the system's settings.
  */
 export function registerSystemSettings() {
-  // Internal System Migration Version
-  game.settings.register("dnd5e", "systemMigrationVersion", {
-    name: "System Migration Version",
-    scope: "world",
-    config: false,
-    type: String,
-    default: ""
-  });
-
   // Polymorph Settings
   game.settings.register("dnd5e", "transformationSettings", {
     scope: "client",

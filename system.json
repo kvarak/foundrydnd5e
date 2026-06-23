@@ -242,8 +242,6 @@
   "background": "systems/dnd5e/ui/official/dnd5e-background.webp",
   "flags": {
     "dnd5e": {},
-    "needsMigrationVersion": "5.3.0",
-    "compatibleMigrationVersion": "0.8",
     "hotReload": {
       "extensions": [
         "css",
