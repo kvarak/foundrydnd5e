@@ -195,7 +195,7 @@
     <a class="draggable name {{ @root.rollableClass }} {{ roll }}" data-action="roll" data-type="{{ type }}">
         {{ label }}
     </a>
-    <div class="bonus">{{ dnd5e-formatModifier total }}</div>
+    <div class="bonus">{{ varlyn5e-formatModifier total }}</div>
     {{#if @root.editable}}
     <button type="button" class="config-button unbutton" data-action="showConfiguration" data-config="{{ type }}"
             data-tooltip="{{ config }}" aria-label="{{ localize config }}">
@@ -210,7 +210,7 @@
 {{#*inline ".ability-prof"}}
 <li data-ability="{{ @key }}" class="{{ class }}">
     {{#if isConcentration}}
-    <dnd5e-icon src="systems/dnd5e/icons/svg/statuses/concentrating.svg"></dnd5e-icon>
+    <varlyn5e-icon src="systems/dnd5e/icons/svg/statuses/concentrating.svg"></varlyn5e-icon>
     {{else}}
     <proficiency-cycle type="ability" name="{{ path }}.proficient" data-tooltip aria-label="{{ hover }}"
                        value="{{#if @root.editable}}{{ source.proficient }}{{else}}{{ proficient }}{{/if}}"
@@ -218,7 +218,7 @@
     {{/if}}
     <a class="name saving-throw full {{ @root.rollableClass }}" data-action="roll" data-type="ability">{{ label }}</a>
     <a class="name saving-throw abbr {{ @root.rollableClass }}" data-action="roll" data-type="ability">{{ abbr }}</a>
-    <div class="bonus">{{ dnd5e-formatModifier save.value }}</div>
+    <div class="bonus">{{ varlyn5e-formatModifier save.value }}</div>
     {{#if @root.editable}}
     <button type="button" class="config-button unbutton" data-action="showConfiguration" data-config="ability"
             data-tooltip aria-label="{{ config }}">

@@ -28,8 +28,8 @@
             <div class="name-stacked">
                 <div class="title">{{ localize name }}</div>
             </div>
-            <dnd5e-checkbox class="item-control" name="recommendation-selected" {{ checked checked }}
-                            {{ disabled locked }}></dnd5e-checkbox>
+            <varlyn5e-checkbox class="item-control" name="recommendation-selected" {{ checked checked }}
+                            {{ disabled locked }}></varlyn5e-checkbox>
         </div>
         {{/with}}
 
@@ -40,8 +40,8 @@
             <div class="name-stacked">
                 <div class="title">{{ localize "VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Feat.ASIName" }}</div>
             </div>
-            <dnd5e-checkbox class="item-control" name="asi-selected" {{ checked isASI }}
-                            {{ disabled lockImprovement }}></dnd5e-checkbox>
+            <varlyn5e-checkbox class="item-control" name="asi-selected" {{ checked isASI }}
+                            {{ disabled lockImprovement }}></varlyn5e-checkbox>
         </div>
         {{/if}}
 

@@ -133,7 +133,7 @@ export default class ChatMessage5e extends ChatMessage {
     }
 
     /**
-     * A hook event that fires after dnd5e-specific chat message modifications have completed.
+     * A hook event that fires after varlyn5e-specific chat message modifications have completed.
      * @function varlyn5e.renderChatMessage
      * @memberof hookEvents
      * @param {ChatMessage5e} message  Chat message being rendered.
@@ -330,8 +330,8 @@ export default class ChatMessage5e extends ChatMessage {
     metadata.appendChild(anchor);
 
     // SVG icons
-    html.querySelectorAll("i.dnd5e-icon").forEach(el => {
-      const icon = document.createElement("dnd5e-icon");
+    html.querySelectorAll("i.varlyn5e-icon").forEach(el => {
+      const icon = document.createElement("varlyn5e-icon");
       icon.src = el.dataset.src;
       el.replaceWith(icon);
     });

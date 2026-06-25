@@ -5,7 +5,7 @@
             <ol class="items-list">
                 {{#if document.system.item}}
                 <li class="item flexrow" data-item-uuid="{{ document.system.item }}" data-item-type="linked">
-                    <div class="item-name">{{{ dnd5e-linkForUuid document.system.item }}}</div>
+                    <div class="item-name">{{{ varlyn5e-linkForUuid document.system.item }}}</div>
                     <div class="item-controls flexrow">
                         <a class="item-control" data-action="deleteItem" data-tooltip
                            aria-label="{{ localize 'VARLYN5E.ItemDelete' }}">
@@ -85,7 +85,7 @@
             <ol class="items-list">
                 {{#each subclasses}}
                 <li class="item flexrow" data-item-uuid="{{this.document.uuid}}" data-item-type="subclass">
-                    <div class="item-name">{{{ dnd5e-linkForUuid this.document.uuid }}}</div>
+                    <div class="item-name">{{{ varlyn5e-linkForUuid this.document.uuid }}}</div>
                     <div class="item-controls flexrow">
                         <a class="item-control" data-action="deleteItem" data-tooltip
                            aria-label="{{ localize 'VARLYN5E.ItemDelete' }}">

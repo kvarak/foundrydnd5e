@@ -654,13 +654,13 @@ export function setTheme(element, theme="", flags=new Set()) {
     if ( matchMedia("(prefers-color-scheme: light)").matches ) theme = "light";
   }
   if ( theme ) {
-    element.classList.add(`dnd5e-theme-${theme.slugify()}`);
+    element.classList.add(`varlyn5e-theme-${theme.slugify()}`);
     element.dataset.theme = theme;
   }
   else delete element.dataset.theme;
 
   // Additional Flags
   if ( (element === document.body) && matchMedia("(prefers-contrast: more)").matches ) flags.add("high-contrast");
-  for ( const flag of flags ) element.classList.add(`dnd5e-flag-${flag.slugify()}`);
+  for ( const flag of flags ) element.classList.add(`varlyn5e-flag-${flag.slugify()}`);
   element.dataset.themeFlags = Array.from(flags).join(" ");
 }

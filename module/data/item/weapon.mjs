@@ -543,7 +543,7 @@ export default class WeaponData extends ItemDataModel.mixin(
         return `${str}
           <span class="formula">${formula}</span>
           ${type ? `<span class="damage-type" data-tooltip aria-label="${type.label}">
-            <dnd5e-icon src="${type.icon}"></dnd5e-icon>
+            <varlyn5e-icon src="${type.icon}"></varlyn5e-icon>
           </span>` : ""}
         `;
       }, ""), classes: "info-grid damage" });

@@ -49,7 +49,7 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
   _usageChatButtons(message) {
     const buttons = [{
       label: _loc("VARLYN5E.Attack"),
-      icon: '<i class="dnd5e-icon" data-src="systems/dnd5e/icons/svg/trait-weapon-proficiencies.svg" inert></i>',
+      icon: '<i class="varlyn5e-icon" data-src="systems/dnd5e/icons/svg/trait-weapon-proficiencies.svg" inert></i>',
       dataset: {
         action: "rollAttack"
       }

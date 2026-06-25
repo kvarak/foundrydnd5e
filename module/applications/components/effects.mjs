@@ -40,7 +40,7 @@ export default class EffectsElement extends (foundry.applications.elements.Adopt
    * The HTML tag named used by this element.
    * @type {string}
    */
-  static tagName = "dnd5e-effects";
+  static tagName = "varlyn5e-effects";
 
   /* -------------------------------------------- */
 
@@ -190,7 +190,7 @@ export default class EffectsElement extends (foundry.applications.elements.Adopt
       },
       {
         label: "VARLYN5E.ConcentrationBreak",
-        icon: '<dnd5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></dnd5e-icon>',
+        icon: '<varlyn5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></varlyn5e-icon>',
         group: "state",
         visible: () => isConcentrationEffect,
         onClick: () => this.document.endConcentration(effect)

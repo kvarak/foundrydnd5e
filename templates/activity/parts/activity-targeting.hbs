@@ -5,7 +5,7 @@
                 {{ localize "VARLYN5E.RANGE.FIELDS.range.label" }}
                 {{#if (or activity.range.canOverride activity.isRider)}}
                 {{ formInput fields.range.fields.override value=source.range.override input=inputs.createCheckboxInput
-                             dataset=(dnd5e-object tooltip="VARLYN5E.RANGE.FIELDS.range.override.hint")
+                             dataset=(varlyn5e-object tooltip="VARLYN5E.RANGE.FIELDS.range.override.hint")
                              ariaLabel=(localize "VARLYN5E.RANGE.FIELDS.range.override.hint")}}
                 {{/if}}
             </label>

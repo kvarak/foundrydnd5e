@@ -27,7 +27,7 @@
 
 {{#*inline ".enchantment"}}
 <div class="details flexrow">
-    {{ dnd5e-icon effect.img alt=effect.name classes="gold-icon" }}
+    {{ varlyn5e-icon effect.img alt=effect.name classes="gold-icon" }}
     {{{ contentLink }}}
     <div class="list-controls flexrow">
         <button type="button" class="unbutton control-button" data-action="dissociateEffect"
@@ -55,7 +55,7 @@
                     {{ formInput fields.level.fields.min name=(concat prefix "level.min") value=data.level.min
                                  placeholder="0" ariaLabel=(localize "VARLYN5E.LevelLimit.Min")
                                  input=@root.inputs.createNumberInput }}
-                    <dnd5e-icon src="systems/dnd5e/icons/svg/range-connector.svg" class="sep"></dnd5e-icon>
+                    <varlyn5e-icon src="systems/dnd5e/icons/svg/range-connector.svg" class="sep"></varlyn5e-icon>
                     {{ formInput fields.level.fields.max name=(concat prefix "level.max") value=data.level.max
                                  placeholder="∞" ariaLabel=(localize "VARLYN5E.LevelLimit.Max") }}
                 </div>

@@ -3,7 +3,7 @@
         {{#if school}}
         <div class="school">
             {{#with (lookup @root.config.spellSchools school) as |schoolConfig|}}
-            <dnd5e-icon src="{{ schoolConfig.icon }}"></dnd5e-icon>
+            <varlyn5e-icon src="{{ schoolConfig.icon }}"></varlyn5e-icon>
             {{/with}}
         </div>
         {{/if}}
@@ -18,7 +18,7 @@
             <div class="price">
                 {{#if price}}
                 <i class="currency {{ price.denomination }}"></i>
-                <span>{{ dnd5e-numberFormat price.value }}</span>
+                <span>{{ varlyn5e-numberFormat price.value }}</span>
                 {{/if}}
             </div>
 

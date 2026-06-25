@@ -10,7 +10,7 @@ export default class ContainerSheet extends ItemSheet5e {
   /** @override */
   static DEFAULT_OPTIONS = {
     elements: {
-      inventory: "dnd5e-inventory"
+      inventory: "varlyn5e-inventory"
     }
   };
 

@@ -122,7 +122,7 @@ export default class Award extends Application5e {
    */
   static prepareDestinations(destinations, savedDestinations) {
     const icons = {
-      container: '<dnd5e-icon class="fa-fw" src="systems/dnd5e/icons/svg/backpack.svg"></dnd5e-icon>'
+      container: '<varlyn5e-icon class="fa-fw" src="systems/dnd5e/icons/svg/backpack.svg"></varlyn5e-icon>'
     };
     return destinations.map(doc => ({
       doc, checked: savedDestinations?.has(doc.id), icon: icons[doc.type] ?? '<i class="fa-solid fa-fw fa-user"></i>'

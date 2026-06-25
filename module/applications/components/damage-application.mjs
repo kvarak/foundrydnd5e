@@ -240,7 +240,7 @@ export default class DamageApplicationElement extends TargetedApplicationMixin(C
     return `
       <button class="change-source unbutton" type="button" data-type="${type}" data-change="${change}"
               data-tooltip aria-label="${label}" aria-pressed="${pressed}">
-        <dnd5e-icon src="${icon}" inert></dnd5e-icon>
+        <varlyn5e-icon src="${icon}" inert></varlyn5e-icon>
         <i class="fa-solid fa-slash" inert></i>
         <i class="fa-solid fa-arrow-turn-down" inert></i>
       </button>

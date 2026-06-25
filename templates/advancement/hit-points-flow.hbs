@@ -60,7 +60,7 @@
         {{#if manual}}
         <button class="roll-button dice-button" type="button" data-action="rollHitPoints" data-tooltip
                 aria-label="{{ localize 'VARLYN5E.ADVANCEMENT.HitPoints.Action.RollDie' die=hitDie }}">
-            <dnd5e-icon src="systems/dnd5e/icons/svg/dice/{{ hitDie }}.svg" inert></dnd5e-icon>
+            <varlyn5e-icon src="systems/dnd5e/icons/svg/dice/{{ hitDie }}.svg" inert></varlyn5e-icon>
         </button>
         {{/if}}
     </div>
@@ -71,8 +71,8 @@
         <div class="form-group">
             <label for="{{ partId }}-useAverage">{{ localize "VARLYN5E.ADVANCEMENT.HitPoints.TakeAverage" }}</label>
             <div class="form-fields">
-                <dnd5e-checkbox name="useAverage" id="{{ partId }}-useAverage"
-                                {{ checked data.useAverage }}></dnd5e-checkbox>
+                <varlyn5e-checkbox name="useAverage" id="{{ partId }}-useAverage"
+                                {{ checked data.useAverage }}></varlyn5e-checkbox>
             </div>
         </div>
     </fieldset>

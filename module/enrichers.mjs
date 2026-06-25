@@ -21,18 +21,18 @@ const CHAT_REGEX = new RegExp(`^${makeCommandPattern(VALID_CHAT_COMMANDS)}$`, "i
  */
 export function registerCustomEnrichers() {
   CONFIG.TextEditor.enrichers.push({
-    id: "dnd5e-enricher",
+    id: "varlyn5e-enricher",
     pattern: new RegExp(`\\[\\[${makeCommandPattern(VALID_COMMANDS)}]](?!])(?:{(?<label>[^}]+)})?`, "gi"),
     enricher: enrichString,
     onRender: onRenderEnricher
   },
   {
-    id: "dnd5e-lookup",
+    id: "varlyn5e-lookup",
     pattern: /\[\[(?<type>language|lookup) (?<config>[^\]]+)]](?:{(?<label>[^}]+)})?/gi,
     enricher: enrichString
   },
   {
-    id: "dnd5e-reference",
+    id: "varlyn5e-reference",
     pattern: /&(?<type>Reference)\[(?<config>[^\]]+)](?:{(?<label>[^}]+)})?/gi,
     enricher: enrichString,
     onRender: onRenderEnricher
@@ -1637,7 +1637,7 @@ export function createRollLabel(config) {
     switch ( config.type ) {
       case "check":
       case "skill":
-        label = `<i class="dnd5e-icon" data-src="systems/dnd5e/icons/svg/ability-score-improvement.svg"></i>${label}`;
+        label = `<i class="varlyn5e-icon" data-src="systems/dnd5e/icons/svg/ability-score-improvement.svg"></i>${label}`;
         break;
       case "tool":
         label = `<i class="fas fa-hammer"></i>${label}`;

@@ -1,5 +1,5 @@
 :is(#tooltip, .locked-tooltip) {
-  &.dnd5e-tooltip {
+  &.varlyn5e-tooltip {
     font-family: var(--dnd5e-font-roboto);
     font-size: var(--font-size-13);
     text-align: start;
@@ -40,7 +40,7 @@
   &.locked-tooltip {
     z-index: calc(var(--z-index-tooltip) - 1);
 
-    &.dnd5e-tooltip::after {
+    &.varlyn5e-tooltip::after {
       content: "";
       position: absolute;
       inset: 1px;

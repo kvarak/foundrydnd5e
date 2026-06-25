@@ -93,7 +93,7 @@
                         </button>
                         {{else}}
                         <span>
-                            {{ dnd5e-numberFormat system.attributes.init.total signDisplay="always" }}
+                            {{ varlyn5e-numberFormat system.attributes.init.total signDisplay="always" }}
                         </span>
                         {{/if}}
                     </div>
@@ -118,7 +118,7 @@
                 {{!-- Proficiency --}}
                 <div class="lozenge">
                     <div class="value">
-                        {{ dnd5e-numberFormat system.attributes.prof signDisplay="always" }}
+                        {{ varlyn5e-numberFormat system.attributes.prof signDisplay="always" }}
                     </div>
                     <div class="label roboto-condensed-upper">{{ localize "VARLYN5E.Proficiency" }}</div>
                 </div>
@@ -148,7 +148,7 @@
                             <span class="separator">&sol;</span>
                             <span class="max">{{ effectiveMax }}</span>
                             {{#if tempmax}}
-                            <span class="bonus">{{dnd5e-numberFormat tempmax signDisplay="always"}}</span>
+                            <span class="bonus">{{varlyn5e-numberFormat tempmax signDisplay="always"}}</span>
                             {{/if}}
                         </div>
                         <input type="text" name="system.attributes.hp.value" data-dtype="Number"
@@ -212,7 +212,7 @@
                 <button type="button" class="{{ rollableClass }} death-save unbutton" data-action="roll"
                         data-type="deathSave" data-tooltip="VARLYN5E.DeathSaveRoll"
                         aria-label="{{ localize 'VARLYN5E.DeathSaveRoll' }}">
-                    <dnd5e-icon src="systems/dnd5e/icons/svg/statuses/dead.svg"></dnd5e-icon>
+                    <varlyn5e-icon src="systems/dnd5e/icons/svg/statuses/dead.svg"></varlyn5e-icon>
                 </button>
                 {{/if}}
 
@@ -297,7 +297,7 @@
 
                         {{!-- Modifiers --}}
                         {{else if modifier includeZero=true}}
-                        {{ dnd5e-formatModifier modifier }}
+                        {{ varlyn5e-formatModifier modifier }}
 
                         {{!-- Passive Score --}}
                         {{#if passive}}

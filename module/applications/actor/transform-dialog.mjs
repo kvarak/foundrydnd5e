@@ -191,7 +191,7 @@ export default class TransformDialog extends Dialog5e {
       });
     };
     if ( changed ) handleDisable(changed);
-    else this.element.querySelectorAll("dnd5e-checkbox").forEach(e => handleDisable(e));
+    else this.element.querySelectorAll("varlyn5e-checkbox").forEach(e => handleDisable(e));
   }
 
   /* -------------------------------------------- */

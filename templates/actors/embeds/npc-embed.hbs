@@ -19,9 +19,9 @@
                         {{#each abilities}}
                         <tr>
                             <th scope="row">{{ label }}</th>
-                            <td class="score">{{ dnd5e-numberFormat value }}</td>
-                            <td>{{ dnd5e-numberFormat mod signDisplay="always" }}</td>
-                            <td>{{ dnd5e-numberFormat save.value signDisplay="always" }}</td>
+                            <td class="score">{{ varlyn5e-numberFormat value }}</td>
+                            <td>{{ varlyn5e-numberFormat mod signDisplay="always" }}</td>
+                            <td>{{ varlyn5e-numberFormat save.value signDisplay="always" }}</td>
                         </tr>
                         {{/each}}
                     </tbody>
@@ -30,7 +30,7 @@
                 {{#each system.abilities}}
                 <div class="ability">
                     <span class="name">{{ lookup (lookup @root.CONFIG.abilities @key) "abbreviation" }}</span>
-                    <span class="score">{{ dnd5e-numberFormat value }} ({{ dnd5e-numberFormat mod signDisplay="always" }})</span>
+                    <span class="score">{{ varlyn5e-numberFormat value }} ({{ varlyn5e-numberFormat mod signDisplay="always" }})</span>
                 </div>
                 {{/each}}
                 {{/each}}
@@ -42,7 +42,7 @@
             {{#unless hideLabel}}<h5 class="statblock-actions-title" data-no-toc>{{ label }}</h5>{{/unless}}
             {{{ description }}}
             {{#each actions}}
-            <div class="statblock-action" {{ dnd5e-dataset dataset }}>
+            <div class="statblock-action" {{ varlyn5e-dataset dataset }}>
                 {{{ openingTag }}}
                 <span class="name">{{ name }}</span>
                 {{{ description }}}

@@ -652,7 +652,7 @@ export default class CompendiumBrowser extends Application5e {
         <i class="fa-solid fa-spinner fa-spin-pulse" inert></i>
       </section>
     `;
-    element.dataset.tooltipClass = "dnd5e2 dnd5e-tooltip item-tooltip";
+    element.dataset.tooltipClass = "dnd5e2 varlyn5e-tooltip item-tooltip";
     element.dataset.tooltipDirection ??= "RIGHT";
     return element;
   }
@@ -817,8 +817,8 @@ export default class CompendiumBrowser extends Application5e {
    */
   #adjustCheckboxStates(htmlElement) {
     for ( const groupArea of htmlElement.querySelectorAll(".type-group") ) {
-      const group = groupArea.querySelector(".type-group-header dnd5e-checkbox");
-      const children = groupArea.querySelectorAll(".wrapper dnd5e-checkbox");
+      const group = groupArea.querySelector(".type-group-header varlyn5e-checkbox");
+      const children = groupArea.querySelectorAll(".wrapper varlyn5e-checkbox");
       if ( Array.from(children).every(e => e.checked) ) {
         group.checked = true;
         group.indeterminate = false;
@@ -1022,7 +1022,7 @@ export default class CompendiumBrowser extends Application5e {
 
     else {
       target.indeterminate = false;
-      for ( const child of target.closest(".type-group").querySelectorAll("dnd5e-checkbox[value]") ) {
+      for ( const child of target.closest(".type-group").querySelectorAll("varlyn5e-checkbox[value]") ) {
         child.checked = target.checked;
         if ( target.checked ) this.#filters.types.add(child.defaultValue);
         else this.#filters.types.delete(child.defaultValue);

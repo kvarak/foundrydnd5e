@@ -963,7 +963,7 @@ function generateIcon(icon, { alt, classes }={}) {
     element = document.createElement("i");
     element.className = icon;
   } else if ( icon ) {
-    element = document.createElement(icon.endsWith(".svg") ? "dnd5e-icon" : "img");
+    element = document.createElement(icon.endsWith(".svg") ? "varlyn5e-icon" : "img");
     element.draggable = false;
     element.src = icon;
   } else {
@@ -1035,7 +1035,7 @@ function groupedSelectOptions(choices, options) {
  * @returns {string}
  */
 function itemContext(context, options) {
-  if ( arguments.length !== 2 ) throw new Error("#dnd5e-itemContext requires exactly one argument");
+  if ( arguments.length !== 2 ) throw new Error("#varlyn5e-itemContext requires exactly one argument");
   if ( foundry.utils.getType(context) === "function" ) context = context.call(this);
 
   const ctx = options.data.root.itemContext?.[context.id];
@@ -1095,27 +1095,27 @@ function registerHandlebarsHelpers() {
   };
   Handlebars.registerHelper({
     getProperty: foundry.utils.getProperty,
-    "dnd5e-concealSection": concealSection,
-    "dnd5e-dataset": dataset,
-    "dnd5e-icon": (icon, { hash: options }) => {
+    "varlyn5e-concealSection": concealSection,
+    "varlyn5e-dataset": dataset,
+    "varlyn5e-icon": (icon, { hash: options }) => {
       let element = generateIcon(icon, options);
       if ( !element && options.fallback ) element = generateIcon(options.fallback, options);
       return element ? new Handlebars.SafeString(element.outerHTML) : "";
     },
-    "dnd5e-formatCR": (value, options) => formatCR(value, options.hash),
-    "dnd5e-formatLength": curryUnitFormatter(formatLength),
-    "dnd5e-formatModifier": formatModifier,
-    "dnd5e-formatTravelSpeed": curryUnitFormatter(formatTravelSpeed),
-    "dnd5e-formatTime": curryUnitFormatter(formatTime),
-    "dnd5e-formatVolume": curryUnitFormatter(formatVolume),
-    "dnd5e-formatWeight": curryUnitFormatter(formatWeight),
-    "dnd5e-groupedSelectOptions": groupedSelectOptions,
-    "dnd5e-itemContext": itemContext,
-    "dnd5e-linkForUuid": (uuid, options) => linkForUuid(uuid, options.hash),
-    "dnd5e-numberFormat": (value, options) => formatNumber(value, options.hash),
-    "dnd5e-numberParts": (value, options) => formatNumberParts(value, options.hash),
-    "dnd5e-object": makeObject,
-    "dnd5e-textFormat": formatText
+    "varlyn5e-formatCR": (value, options) => formatCR(value, options.hash),
+    "varlyn5e-formatLength": curryUnitFormatter(formatLength),
+    "varlyn5e-formatModifier": formatModifier,
+    "varlyn5e-formatTravelSpeed": curryUnitFormatter(formatTravelSpeed),
+    "varlyn5e-formatTime": curryUnitFormatter(formatTime),
+    "varlyn5e-formatVolume": curryUnitFormatter(formatVolume),
+    "varlyn5e-formatWeight": curryUnitFormatter(formatWeight),
+    "varlyn5e-groupedSelectOptions": groupedSelectOptions,
+    "varlyn5e-itemContext": itemContext,
+    "varlyn5e-linkForUuid": (uuid, options) => linkForUuid(uuid, options.hash),
+    "varlyn5e-numberFormat": (value, options) => formatNumber(value, options.hash),
+    "varlyn5e-numberParts": (value, options) => formatNumberParts(value, options.hash),
+    "varlyn5e-object": makeObject,
+    "varlyn5e-textFormat": formatText
   });
 }
 
@@ -1819,7 +1819,7 @@ function ApplicationV2Mixin(Base, { handlebars=true }={}) {
     /* -------------------------------------------- */
 
     /**
-     * Edit a Document image. Not restricted to `<img>` elements to allow editing `<dnd5e-icon>` elements.
+     * Edit a Document image. Not restricted to `<img>` elements to allow editing `<varlyn5e-icon>` elements.
      * @this {DocumentSheetV2}
      * @param {Event} event         Triggering click event.
      * @param {HTMLElement} target  Button that was clicked.
@@ -11232,7 +11232,7 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
   _usageChatButtons(message) {
     const buttons = [{
       label: _loc("VARLYN5E.Attack"),
-      icon: '<i class="dnd5e-icon" data-src="systems/dnd5e/icons/svg/trait-weapon-proficiencies.svg" inert></i>',
+      icon: '<i class="varlyn5e-icon" data-src="systems/dnd5e/icons/svg/trait-weapon-proficiencies.svg" inert></i>',
       dataset: {
         action: "rollAttack"
       }
@@ -13042,7 +13042,7 @@ class CheckActivity extends ActivityMixin(BaseCheckActivityData) {
           <span class="hidden-dc">${wrap(label)}</span>
         ` : wrap(label),
         icon: checkType === "tool" ? '<i class="fa-solid fa-hammer" inert></i>'
-          : '<i class="dnd5e-icon" data-src="systems/dnd5e/icons/svg/ability-score-improvement.svg" inert></i>',
+          : '<i class="varlyn5e-icon" data-src="systems/dnd5e/icons/svg/ability-score-improvement.svg" inert></i>',
         dataset
       });
     };
@@ -16249,10 +16249,10 @@ class TraitConfig extends AdvancementConfig$1 {
   async _onRender(context, options) {
     await super._onRender(context, options);
     // Handle selecting & disabling category children when a category is selected
-    for ( const checkbox of this.element.querySelectorAll(".trait-list dnd5e-checkbox[checked]") ) {
+    for ( const checkbox of this.element.querySelectorAll(".trait-list varlyn5e-checkbox[checked]") ) {
       const toCheck = (checkbox.name.endsWith("*") || checkbox.name.endsWith("ALL"))
-        ? checkbox.closest("ol").querySelectorAll(`dnd5e-checkbox:not([name="${checkbox.name}"])`)
-        : checkbox.closest("li").querySelector("ol")?.querySelectorAll("dnd5e-checkbox");
+        ? checkbox.closest("ol").querySelectorAll(`varlyn5e-checkbox:not([name="${checkbox.name}"])`)
+        : checkbox.closest("li").querySelector("ol")?.querySelectorAll("varlyn5e-checkbox");
       toCheck?.forEach(i => i.checked = i.disabled = true);
     }
   }
@@ -17477,7 +17477,7 @@ class ItemDataModel extends SystemDataModel {
       content: await foundry.applications.handlebars.renderTemplate(
         this.constructor.ITEM_TOOLTIP_TEMPLATE, await this.getCardData(enrichmentOptions)
       ),
-      classes: ["dnd5e2", "dnd5e-tooltip", "item-tooltip", "themed", "theme-light"]
+      classes: ["dnd5e2", "varlyn5e-tooltip", "item-tooltip", "themed", "theme-light"]
     };
   }
 
@@ -21313,7 +21313,7 @@ class Award extends Application5e {
    */
   static prepareDestinations(destinations, savedDestinations) {
     const icons = {
-      container: '<dnd5e-icon class="fa-fw" src="systems/dnd5e/icons/svg/backpack.svg"></dnd5e-icon>'
+      container: '<varlyn5e-icon class="fa-fw" src="systems/dnd5e/icons/svg/backpack.svg"></varlyn5e-icon>'
     };
     return destinations.map(doc => ({
       doc, checked: savedDestinations?.has(doc.id), icon: icons[doc.type] ?? '<i class="fa-solid fa-fw fa-user"></i>'
@@ -21767,18 +21767,18 @@ const CHAT_REGEX = new RegExp(`^${makeCommandPattern(VALID_CHAT_COMMANDS)}$`, "i
  */
 function registerCustomEnrichers() {
   CONFIG.TextEditor.enrichers.push({
-    id: "dnd5e-enricher",
+    id: "varlyn5e-enricher",
     pattern: new RegExp(`\\[\\[${makeCommandPattern(VALID_COMMANDS)}]](?!])(?:{(?<label>[^}]+)})?`, "gi"),
     enricher: enrichString,
     onRender: onRenderEnricher
   },
   {
-    id: "dnd5e-lookup",
+    id: "varlyn5e-lookup",
     pattern: /\[\[(?<type>language|lookup) (?<config>[^\]]+)]](?:{(?<label>[^}]+)})?/gi,
     enricher: enrichString
   },
   {
-    id: "dnd5e-reference",
+    id: "varlyn5e-reference",
     pattern: /&(?<type>Reference)\[(?<config>[^\]]+)](?:{(?<label>[^}]+)})?/gi,
     enricher: enrichString,
     onRender: onRenderEnricher
@@ -23383,7 +23383,7 @@ function createRollLabel(config) {
     switch ( config.type ) {
       case "check":
       case "skill":
-        label = `<i class="dnd5e-icon" data-src="systems/dnd5e/icons/svg/ability-score-improvement.svg"></i>${label}`;
+        label = `<i class="varlyn5e-icon" data-src="systems/dnd5e/icons/svg/ability-score-improvement.svg"></i>${label}`;
         break;
       case "tool":
         label = `<i class="fas fa-hammer"></i>${label}`;
@@ -26851,7 +26851,7 @@ class HealActivity extends ActivityMixin(BaseHealActivityData) {
     if ( !this.healing.formula ) return super._usageChatButtons(message);
     return [{
       label: _loc("VARLYN5E.HEAL.HealingButton"),
-      icon: '<i class="dnd5e-icon" data-src="systems/dnd5e/icons/svg/damage/healing.svg"></i>',
+      icon: '<i class="varlyn5e-icon" data-src="systems/dnd5e/icons/svg/damage/healing.svg"></i>',
       dataset: {
         action: "rollHealing"
       }
@@ -28922,7 +28922,7 @@ class CompendiumBrowser extends Application5e {
         <i class="fa-solid fa-spinner fa-spin-pulse" inert></i>
       </section>
     `;
-    element.dataset.tooltipClass = "dnd5e2 dnd5e-tooltip item-tooltip";
+    element.dataset.tooltipClass = "dnd5e2 varlyn5e-tooltip item-tooltip";
     element.dataset.tooltipDirection ??= "RIGHT";
     return element;
   }
@@ -29087,8 +29087,8 @@ class CompendiumBrowser extends Application5e {
    */
   #adjustCheckboxStates(htmlElement) {
     for ( const groupArea of htmlElement.querySelectorAll(".type-group") ) {
-      const group = groupArea.querySelector(".type-group-header dnd5e-checkbox");
-      const children = groupArea.querySelectorAll(".wrapper dnd5e-checkbox");
+      const group = groupArea.querySelector(".type-group-header varlyn5e-checkbox");
+      const children = groupArea.querySelectorAll(".wrapper varlyn5e-checkbox");
       if ( Array.from(children).every(e => e.checked) ) {
         group.checked = true;
         group.indeterminate = false;
@@ -29292,7 +29292,7 @@ class CompendiumBrowser extends Application5e {
 
     else {
       target.indeterminate = false;
-      for ( const child of target.closest(".type-group").querySelectorAll("dnd5e-checkbox[value]") ) {
+      for ( const child of target.closest(".type-group").querySelectorAll("varlyn5e-checkbox[value]") ) {
         child.checked = target.checked;
         if ( target.checked ) this.#filters.types.add(child.defaultValue);
         else this.#filters.types.delete(child.defaultValue);
@@ -30589,7 +30589,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
  * @returns {HTMLElement}
  */
 function createCheckboxInput(field, config) {
-  const input = document.createElement("dnd5e-checkbox");
+  const input = document.createElement("varlyn5e-checkbox");
   input.name = config.name;
   if ( config.value ) input.checked = true;
   foundry.applications.fields.setInputAttributes(input, config);
@@ -30613,7 +30613,7 @@ function createMultiCheckboxInput(field, config) {
     const element = document.createElement("label");
     element.classList.add("checkbox");
     element.innerHTML = `
-      <dnd5e-checkbox name="${config.name}.${value}" ${selected ? "checked" : ""}></dnd5e-checkbox>
+      <varlyn5e-checkbox name="${config.name}.${value}" ${selected ? "checked" : ""}></varlyn5e-checkbox>
       <span>${label}</span>
     `;
     template.content.append(element);
@@ -32904,7 +32904,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
           properties
         }
       ),
-      classes: ["dnd5e2", "dnd5e-tooltip", "effect-tooltip", "themed", "theme-light"]
+      classes: ["dnd5e2", "varlyn5e-tooltip", "effect-tooltip", "themed", "theme-light"]
     };
   }
 
@@ -46028,14 +46028,14 @@ function setTheme(element, theme="", flags=new Set()) {
     if ( matchMedia("(prefers-color-scheme: light)").matches ) theme = "light";
   }
   if ( theme ) {
-    element.classList.add(`dnd5e-theme-${theme.slugify()}`);
+    element.classList.add(`varlyn5e-theme-${theme.slugify()}`);
     element.dataset.theme = theme;
   }
   else delete element.dataset.theme;
 
   // Additional Flags
   if ( (element === document.body) && matchMedia("(prefers-contrast: more)").matches ) flags.add("high-contrast");
-  for ( const flag of flags ) element.classList.add(`dnd5e-flag-${flag.slugify()}`);
+  for ( const flag of flags ) element.classList.add(`varlyn5e-flag-${flag.slugify()}`);
   element.dataset.themeFlags = Array.from(flags).join(" ");
 }
 
@@ -46268,7 +46268,7 @@ class CheckboxElement extends AdoptedStyleSheetMixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static tagName = "dnd5e-checkbox";
+  static tagName = "varlyn5e-checkbox";
 
   /* -------------------------------------------- */
 
@@ -46295,7 +46295,7 @@ class CheckboxElement extends AdoptedStyleSheetMixin(
       width: 100%;
       height: 100%;
       border-radius: var(--checkbox-border-radius, 3px);
-      border: var(--checkbox-border-width, 2px) solid var(--checkbox-border-color, var(--dnd5e-color-gold));
+      border: var(--checkbox-border-width, 2px) solid var(--checkbox-border-color, var(--varlyn5e-color-gold));
       background: var(--checkbox-empty-color, transparent);
       box-sizing: border-box;
       position: relative;
@@ -46312,7 +46312,7 @@ class CheckboxElement extends AdoptedStyleSheetMixin(
     }
 
     :host([checked]) :is(.checked, .disabled, .indeterminate) {
-      background: var(--checkbox-fill-color, var(--dnd5e-color-gold));
+      background: var(--checkbox-fill-color, var(--varlyn5e-color-gold));
     }
 
     :host([checked]) .checked { display: flex; }
@@ -46629,7 +46629,7 @@ class EffectsElement extends (foundry.applications.elements.AdoptableHTMLElement
    * The HTML tag named used by this element.
    * @type {string}
    */
-  static tagName = "dnd5e-effects";
+  static tagName = "varlyn5e-effects";
 
   /* -------------------------------------------- */
 
@@ -46779,7 +46779,7 @@ class EffectsElement extends (foundry.applications.elements.AdoptableHTMLElement
       },
       {
         label: "VARLYN5E.ConcentrationBreak",
-        icon: '<dnd5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></dnd5e-icon>',
+        icon: '<varlyn5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></varlyn5e-icon>',
         group: "state",
         visible: () => isConcentrationEffect,
         onClick: () => this.document.endConcentration(effect)
@@ -47582,8 +47582,8 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
     classes: ["item"],
     editingDescriptionTarget: null,
     elements: {
-      activities: "dnd5e-activities",
-      effects: "dnd5e-effects"
+      activities: "varlyn5e-activities",
+      effects: "varlyn5e-effects"
     },
     form: {
       submitOnChange: true
@@ -48991,7 +48991,7 @@ function PrimarySheetMixin(Base) {
       element.dataset.tooltip = `
         <section class="loading" data-uuid="${uuid}"><i class="fas fa-spinner fa-spin-pulse"></i></section>
       `;
-      element.dataset.tooltipClass = "dnd5e2 dnd5e-tooltip item-tooltip themed theme-light";
+      element.dataset.tooltipClass = "dnd5e2 varlyn5e-tooltip item-tooltip themed theme-light";
       element.dataset.tooltipDirection ??= "LEFT";
     }
 
@@ -50657,7 +50657,7 @@ class TransformDialog extends Dialog5e {
       });
     };
     if ( changed ) handleDisable(changed);
-    else this.element.querySelectorAll("dnd5e-checkbox").forEach(e => handleDisable(e));
+    else this.element.querySelectorAll("varlyn5e-checkbox").forEach(e => handleDisable(e));
   }
 
   /* -------------------------------------------- */
@@ -51314,8 +51314,8 @@ class BaseActorSheet extends PrimarySheetMixin(
     },
     classes: ["actor", "standard-form"],
     elements: {
-      effects: "dnd5e-effects",
-      inventory: "dnd5e-inventory"
+      effects: "varlyn5e-effects",
+      inventory: "varlyn5e-inventory"
     },
     form: {
       submitOnChange: true
@@ -52313,7 +52313,7 @@ class BaseActorSheet extends PrimarySheetMixin(
         const button = document.createElement("button");
         Object.assign(button, { type: "button", className: classes, ariaLabel: label, ariaPressed: filled });
         Object.assign(button.dataset, { n, tooltip, action: "togglePip" });
-        const icon = '<dnd5e-icon src="systems/dnd5e/icons/svg/spell-slot.svg"></dnd5e-icon>';
+        const icon = '<varlyn5e-icon src="systems/dnd5e/icons/svg/spell-slot.svg"></varlyn5e-icon>';
         button.insertAdjacentHTML("afterbegin", icon);
         slots.append(button);
       });
@@ -55830,7 +55830,7 @@ class AdvancementFlow extends FormApplication {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static _customElements = super._customElements.concat(["dnd5e-checkbox"]);
+  static _customElements = super._customElements.concat(["varlyn5e-checkbox"]);
 
   /* -------------------------------------------- */
 
@@ -56206,7 +56206,7 @@ class ActivitiesElement extends (foundry.applications.elements.AdoptableHTMLElem
    * The HTML tag named used by this element.
    * @type {string}
    */
-  static tagName = "dnd5e-activities";
+  static tagName = "varlyn5e-activities";
 
   /* -------------------------------------------- */
 
@@ -56883,7 +56883,7 @@ class DamageApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
     return `
       <button class="change-source unbutton" type="button" data-type="${type}" data-change="${change}"
               data-tooltip aria-label="${label}" aria-pressed="${pressed}">
-        <dnd5e-icon src="${icon}" inert></dnd5e-icon>
+        <varlyn5e-icon src="${icon}" inert></varlyn5e-icon>
         <i class="fa-solid fa-slash" inert></i>
         <i class="fa-solid fa-arrow-turn-down" inert></i>
       </button>
@@ -57173,7 +57173,7 @@ class EffectApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
         tooltip: `
           <section class="loading" data-uuid="${effect.uuid}"><i class="fas fa-spinner fa-spin-pulse"></i></section>
         `,
-        tooltipClass: "dnd5e2 dnd5e-tooltip item-tooltip themed theme-light",
+        tooltipClass: "dnd5e2 varlyn5e-tooltip item-tooltip themed theme-light",
         tooltipDirection: "LEFT"
       });
       li.innerHTML = `
@@ -57213,7 +57213,7 @@ class EffectApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
         <span class="title"></span>
       </div>
       <div class="checkbox">
-        <dnd5e-checkbox name="${uuid}"${checked}${disabled}></dnd5e-checkbox>
+        <varlyn5e-checkbox name="${uuid}"${checked}${disabled}></varlyn5e-checkbox>
       </div>
     `;
     Object.assign(li.querySelector(".gold-icon"), { alt: name, src: actor.img });
@@ -57295,7 +57295,7 @@ class EffectApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
     if ( !effect ) return;
     for ( const target of this.targetList.querySelectorAll("[data-target-uuid]") ) {
       const actor = fromUuidSync(target.dataset.targetUuid);
-      if ( !actor || !target.querySelector("dnd5e-checkbox")?.checked ) continue;
+      if ( !actor || !target.querySelector("varlyn5e-checkbox")?.checked ) continue;
       try {
         await this._applyEffectToActor(effect, actor);
       } catch(err) {
@@ -57553,13 +57553,13 @@ class FiligreeBoxElement extends AdoptedStyleSheetMixin(MaybeAdoptable$1) {
       position: relative;
       isolation: isolate;
       min-height: 56px;
-      filter: var(--filigree-drop-shadow, drop-shadow(0 0 12px var(--dnd5e-shadow-15)));
+      filter: var(--filigree-drop-shadow, drop-shadow(0 0 12px var(--varlyn5e-shadow-15)));
     }
     .backdrop {
       --chamfer: 12px;
       position: absolute;
       inset: 0;
-      background: var(--filigree-background-color, var(--dnd5e-color-card));
+      background: var(--filigree-background-color, var(--varlyn5e-color-card));
       z-index: -2;
       clip-path: polygon(
         var(--chamfer) 0,
@@ -57574,7 +57574,7 @@ class FiligreeBoxElement extends AdoptedStyleSheetMixin(MaybeAdoptable$1) {
     }
     .filigree {
       position: absolute;
-      fill: var(--filigree-border-color, var(--dnd5e-color-gold));
+      fill: var(--filigree-border-color, var(--varlyn5e-color-gold));
       z-index: -1;
 
       &.top, &.bottom { height: 30px; }
@@ -57786,7 +57786,7 @@ class IconElement extends AdoptedStyleSheetMixin(MaybeAdoptable) {
    * The HTML tag named used by this element.
    * @type {string}
    */
-  static tagName = "dnd5e-icon";
+  static tagName = "varlyn5e-icon";
 
   /* -------------------------------------------- */
 
@@ -58415,7 +58415,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
    * The HTML tag named used by this element.
    * @type {string}
    */
-  static tagName = "dnd5e-inventory";
+  static tagName = "varlyn5e-inventory";
 
   /* -------------------------------------------- */
 
@@ -58630,7 +58630,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       }
     }, {
       label: "VARLYN5E.ConcentrationBreak",
-      icon: '<dnd5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></dnd5e-icon>',
+      icon: '<varlyn5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></varlyn5e-icon>',
       group: "state",
       visible: () => this.actor?.concentration?.items.has(item),
       onClick: () => this.actor?.endConcentration(item)
@@ -59185,8 +59185,8 @@ class ProficiencyCycleElement extends AdoptedStyleSheetMixin(
   /** @inheritDoc */
   static CSS = `
     :host { display: inline-block; }
-    div { --_fill: var(--proficiency-cycle-enabled-color, var(--dnd5e-color-blue)); }
-    div:has(:disabled, :focus-visible) { --_fill: var(--proficiency-cycle-disabled-color, var(--dnd5e-color-gold)); }
+    div { --_fill: var(--proficiency-cycle-enabled-color, var(--varlyn5e-color-blue)); }
+    div:has(:disabled, :focus-visible) { --_fill: var(--proficiency-cycle-disabled-color, var(--varlyn5e-color-gold)); }
     div:not(:has(:disabled)) { cursor: var(--cursor-pointer); }
 
     div {
@@ -59597,7 +59597,7 @@ class ContainerSheet extends ItemSheet5e {
   /** @override */
   static DEFAULT_OPTIONS = {
     elements: {
-      inventory: "dnd5e-inventory"
+      inventory: "varlyn5e-inventory"
     }
   };
 
@@ -63059,7 +63059,7 @@ class ChatMessage5e extends ChatMessage {
     }
 
     /**
-     * A hook event that fires after dnd5e-specific chat message modifications have completed.
+     * A hook event that fires after varlyn5e-specific chat message modifications have completed.
      * @function varlyn5e.renderChatMessage
      * @memberof hookEvents
      * @param {ChatMessage5e} message  Chat message being rendered.
@@ -63256,8 +63256,8 @@ class ChatMessage5e extends ChatMessage {
     metadata.appendChild(anchor);
 
     // SVG icons
-    html.querySelectorAll("i.dnd5e-icon").forEach(el => {
-      const icon = document.createElement("dnd5e-icon");
+    html.querySelectorAll("i.varlyn5e-icon").forEach(el => {
+      const icon = document.createElement("varlyn5e-icon");
       icon.src = el.dataset.src;
       el.replaceWith(icon);
     });
@@ -64106,8 +64106,8 @@ class RollTableSheet5e extends ApplicationV2Mixin(RollTableSheet, { handlebars: 
     this.element.querySelector(".sheet-header img")?.classList.add("document-image");
     this.element.querySelector(".sheet-header [data-action=changeMode]")?.remove();
     this.element.querySelectorAll("tbody .inline-control").forEach(c => c.classList.add("unbutton", "control-button"));
-    this._replaceElements("input[type=checkbox]", "dnd5e-checkbox");
-    this._replaceElements('table td.image img[src$=".svg"]', "dnd5e-icon", {
+    this._replaceElements("input[type=checkbox]", "varlyn5e-checkbox");
+    this._replaceElements('table td.image img[src$=".svg"]', "varlyn5e-icon", {
       callback: icon => {
         if ( icon.src === "icons/svg/d20-black.svg" ) icon.src = "systems/dnd5e/icons/svg/dice/d20.svg";
       }
@@ -65172,7 +65172,7 @@ class ChatMessageDataModel extends foundry.abstract.TypeDataModel {
       if ( !uuid ) continue;
       Object.assign(e.dataset, {
         tooltip: `<section class="loading" data-uuid="${uuid}"><i class="fas fa-spinner fa-spin-pulse"></i></section>`,
-        tooltipClass: "dnd5e2 dnd5e-tooltip item-tooltip",
+        tooltipClass: "dnd5e2 varlyn5e-tooltip item-tooltip",
         tooltipDirection: "LEFT"
       });
     }
@@ -70733,7 +70733,7 @@ class WeaponData extends ItemDataModel.mixin(
         return `${str}
           <span class="formula">${formula}</span>
           ${type ? `<span class="damage-type" data-tooltip aria-label="${type.label}">
-            <dnd5e-icon src="${type.icon}"></dnd5e-icon>
+            <varlyn5e-icon src="${type.icon}"></varlyn5e-icon>
           </span>` : ""}
         `;
       }, ""), classes: "info-grid damage" });
@@ -70959,7 +70959,7 @@ class RuleJournalPageData extends foundry.abstract.TypeDataModel {
       content: await foundry.applications.handlebars.renderTemplate(
         "systems/dnd5e/templates/journal/page-rule-tooltip.hbs", context
       ),
-      classes: ["dnd5e-tooltip", "rule-tooltip", "dnd5e2", "themed", "theme-light"]
+      classes: ["varlyn5e-tooltip", "rule-tooltip", "dnd5e2", "themed", "theme-light"]
     };
   }
 
@@ -74727,7 +74727,7 @@ class Tooltips5e {
       if ( ctx ) context.party.push({ name: member.actor.name, img: member.actor.img, ...ctx });
     }
 
-    this.tooltip.classList.add("dnd5e-tooltip", "passive-tooltip", "dnd5e2", "themed", "theme-light");
+    this.tooltip.classList.add("varlyn5e-tooltip", "passive-tooltip", "dnd5e2", "themed", "theme-light");
     this.tooltip.classList.remove("theme-dark");
     this.tooltip.innerHTML = await foundry.applications.handlebars.renderTemplate(
       "systems/dnd5e/templates/journal/passive-tooltip.hbs", context

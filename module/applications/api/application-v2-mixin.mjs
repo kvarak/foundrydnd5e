@@ -359,7 +359,7 @@ export default function ApplicationV2Mixin(Base, { handlebars=true }={}) {
     /* -------------------------------------------- */
 
     /**
-     * Edit a Document image. Not restricted to `<img>` elements to allow editing `<dnd5e-icon>` elements.
+     * Edit a Document image. Not restricted to `<img>` elements to allow editing `<varlyn5e-icon>` elements.
      * @this {DocumentSheetV2}
      * @param {Event} event         Triggering click event.
      * @param {HTMLElement} target  Button that was clicked.

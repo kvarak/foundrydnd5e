@@ -11,11 +11,11 @@
         {{#each advancements}}
         <li class="advancement-item item flexrow">
             <div class="item-name flexrow">
-                {{ dnd5e-icon icon alt=title classes="gold-icon" }}
+                {{ varlyn5e-icon icon alt=title classes="gold-icon" }}
                 <span class="name">{{ title }}</span>
             </div>
             <div class="item-controls flexrow">
-                <dnd5e-checkbox name="{{ id }}" checked></dnd5e-checkbox>
+                <varlyn5e-checkbox name="{{ id }}" checked></varlyn5e-checkbox>
             </div>
             {{#if summary}}
             <div class="item-summary">

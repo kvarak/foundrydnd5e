@@ -963,7 +963,7 @@ export function generateIcon(icon, { alt, classes }={}) {
     element = document.createElement("i");
     element.className = icon;
   } else if ( icon ) {
-    element = document.createElement(icon.endsWith(".svg") ? "dnd5e-icon" : "img");
+    element = document.createElement(icon.endsWith(".svg") ? "varlyn5e-icon" : "img");
     element.draggable = false;
     element.src = icon;
   } else {
@@ -1035,7 +1035,7 @@ function groupedSelectOptions(choices, options) {
  * @returns {string}
  */
 function itemContext(context, options) {
-  if ( arguments.length !== 2 ) throw new Error("#dnd5e-itemContext requires exactly one argument");
+  if ( arguments.length !== 2 ) throw new Error("#varlyn5e-itemContext requires exactly one argument");
   if ( foundry.utils.getType(context) === "function" ) context = context.call(this);
 
   const ctx = options.data.root.itemContext?.[context.id];
@@ -1095,27 +1095,27 @@ export function registerHandlebarsHelpers() {
   };
   Handlebars.registerHelper({
     getProperty: foundry.utils.getProperty,
-    "dnd5e-concealSection": concealSection,
-    "dnd5e-dataset": dataset,
-    "dnd5e-icon": (icon, { hash: options }) => {
+    "varlyn5e-concealSection": concealSection,
+    "varlyn5e-dataset": dataset,
+    "varlyn5e-icon": (icon, { hash: options }) => {
       let element = generateIcon(icon, options);
       if ( !element && options.fallback ) element = generateIcon(options.fallback, options);
       return element ? new Handlebars.SafeString(element.outerHTML) : "";
     },
-    "dnd5e-formatCR": (value, options) => formatCR(value, options.hash),
-    "dnd5e-formatLength": curryUnitFormatter(formatLength),
-    "dnd5e-formatModifier": formatModifier,
-    "dnd5e-formatTravelSpeed": curryUnitFormatter(formatTravelSpeed),
-    "dnd5e-formatTime": curryUnitFormatter(formatTime),
-    "dnd5e-formatVolume": curryUnitFormatter(formatVolume),
-    "dnd5e-formatWeight": curryUnitFormatter(formatWeight),
-    "dnd5e-groupedSelectOptions": groupedSelectOptions,
-    "dnd5e-itemContext": itemContext,
-    "dnd5e-linkForUuid": (uuid, options) => linkForUuid(uuid, options.hash),
-    "dnd5e-numberFormat": (value, options) => formatNumber(value, options.hash),
-    "dnd5e-numberParts": (value, options) => formatNumberParts(value, options.hash),
-    "dnd5e-object": makeObject,
-    "dnd5e-textFormat": formatText
+    "varlyn5e-formatCR": (value, options) => formatCR(value, options.hash),
+    "varlyn5e-formatLength": curryUnitFormatter(formatLength),
+    "varlyn5e-formatModifier": formatModifier,
+    "varlyn5e-formatTravelSpeed": curryUnitFormatter(formatTravelSpeed),
+    "varlyn5e-formatTime": curryUnitFormatter(formatTime),
+    "varlyn5e-formatVolume": curryUnitFormatter(formatVolume),
+    "varlyn5e-formatWeight": curryUnitFormatter(formatWeight),
+    "varlyn5e-groupedSelectOptions": groupedSelectOptions,
+    "varlyn5e-itemContext": itemContext,
+    "varlyn5e-linkForUuid": (uuid, options) => linkForUuid(uuid, options.hash),
+    "varlyn5e-numberFormat": (value, options) => formatNumber(value, options.hash),
+    "varlyn5e-numberParts": (value, options) => formatNumberParts(value, options.hash),
+    "varlyn5e-object": makeObject,
+    "varlyn5e-textFormat": formatText
   });
 }
 

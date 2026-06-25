@@ -167,10 +167,10 @@ export default class TraitConfig extends AdvancementConfig {
   async _onRender(context, options) {
     await super._onRender(context, options);
     // Handle selecting & disabling category children when a category is selected
-    for ( const checkbox of this.element.querySelectorAll(".trait-list dnd5e-checkbox[checked]") ) {
+    for ( const checkbox of this.element.querySelectorAll(".trait-list varlyn5e-checkbox[checked]") ) {
       const toCheck = (checkbox.name.endsWith("*") || checkbox.name.endsWith("ALL"))
-        ? checkbox.closest("ol").querySelectorAll(`dnd5e-checkbox:not([name="${checkbox.name}"])`)
-        : checkbox.closest("li").querySelector("ol")?.querySelectorAll("dnd5e-checkbox");
+        ? checkbox.closest("ol").querySelectorAll(`varlyn5e-checkbox:not([name="${checkbox.name}"])`)
+        : checkbox.closest("li").querySelector("ol")?.querySelectorAll("varlyn5e-checkbox");
       toCheck?.forEach(i => i.checked = i.disabled = true);
     }
   }

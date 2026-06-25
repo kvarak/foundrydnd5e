@@ -42,7 +42,7 @@
                     </button>
                     <input type="hidden" name="{{ uuid }}" value="true" data-dtype="Boolean">
                     {{else}}
-                    <dnd5e-checkbox name="{{ uuid }}" {{ checked checked }} {{ disabled disabled }}></dnd5e-checkbox>
+                    <varlyn5e-checkbox name="{{ uuid }}" {{ checked checked }} {{ disabled disabled }}></varlyn5e-checkbox>
                     {{/if}}
                 </div>
                 {{else if (and @root.replaceable (not previouslyReplaced))}}

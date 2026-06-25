@@ -159,7 +159,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
    * The HTML tag named used by this element.
    * @type {string}
    */
-  static tagName = "dnd5e-inventory";
+  static tagName = "varlyn5e-inventory";
 
   /* -------------------------------------------- */
 
@@ -374,7 +374,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       }
     }, {
       label: "VARLYN5E.ConcentrationBreak",
-      icon: '<dnd5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></dnd5e-icon>',
+      icon: '<varlyn5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></varlyn5e-icon>',
       group: "state",
       visible: () => this.actor?.concentration?.items.has(item),
       onClick: () => this.actor?.endConcentration(item)

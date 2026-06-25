@@ -2,7 +2,7 @@
 /*  Advancement Config Sheet                 */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement.sheet, .dnd5e2.advancement-migration {
+.varlyn5e.advancement.sheet, .varlyn5e.advancement-migration {
   &.grid-columns {
     --grid-column-left-size: 1fr;
     --grid-column-center-size: 1fr;
@@ -46,7 +46,7 @@
 /*  Ability Score Improvement                */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement.ability-score-improvement, .advancement.flow[data-type="AbilityScoreImprovement"] {
+.varlyn5e.advancement.ability-score-improvement, .advancement.flow[data-type="AbilityScoreImprovement"] {
   .ability-scores {
     contain: layout;
     display: grid;
@@ -146,7 +146,7 @@
 /*  Choose Items Advancement                 */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement.item-choice.sheet {
+.varlyn5e.advancement.item-choice.sheet {
   --grid-column-left-size: 1fr;
   --grid-column-center-size: .8fr;
   --grid-column-right-size: .5fr;
@@ -180,7 +180,7 @@
 /*  Grant Items Advancement                  */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement.item-grant.sheet {
+.varlyn5e.advancement.item-grant.sheet {
   .card.items {
     grid-template-columns: [optional] 1fr [name] 3fr [controls] 20px;
     .item-optional { grid-column: optional; }
@@ -217,7 +217,7 @@
 /*  Modify Items Advancement                 */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement.modify-item.sheet {
+.varlyn5e.advancement.modify-item.sheet {
   .separated-list {
     margin-block-start: 4px;
     li.flexcol { gap: 4px; }
@@ -254,7 +254,7 @@
 /*  Scale Value Advancement                  */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement.scale-value.sheet {
+.varlyn5e.advancement.scale-value.sheet {
   --grid-column-right-size: .6fr;
   .identifier-hint {
     code {
@@ -303,7 +303,7 @@
 /*  Size Advancement                         */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement.size.sheet {
+.varlyn5e.advancement.size.sheet {
   .trait-list {
     column-gap: 24px;
     row-gap: 6px;
@@ -314,7 +314,7 @@
 /*  Trait Advancement                        */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement.trait.sheet {
+.varlyn5e.advancement.trait.sheet {
   .selected-trait {
     li {
       display: flex;
@@ -345,7 +345,7 @@
 /*  Advancement Manager                      */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement.manager.application {
+.varlyn5e.advancement.manager.application {
   [data-application-part="manager"] {
     gap: 8px;
 
@@ -358,7 +358,7 @@
         text-shadow: none;
         margin-bottom: 8px;
       }
-      &.dnd5e {
+      &.varlyn5e {
         h4 {
           color: var(--color-text-primary);
           font-family: var(--dnd5e-font-roboto);
@@ -416,7 +416,7 @@
 /*  Advancement Flow                         */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement.flow {
+.varlyn5e.advancement.flow {
   [data-application-part=header] {
     color: var(--color-text-secondary);
     font-size: var(--font-size-12);
@@ -468,7 +468,7 @@
 /*  Advancement Deletion                     */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement-deletion {
+.varlyn5e.advancement-deletion {
   .window-content > section { gap: 8px; }
 }
 
@@ -476,7 +476,7 @@
 /*  Advancement Migration                    */
 /* ----------------------------------------- */
 
-.dnd5e2.advancement-migration {
+.varlyn5e.advancement-migration {
   --icon-size: 32px;
 
   .items {

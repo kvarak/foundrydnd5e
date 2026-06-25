@@ -178,7 +178,7 @@ export default class ItemDataModel extends SystemDataModel {
       content: await foundry.applications.handlebars.renderTemplate(
         this.constructor.ITEM_TOOLTIP_TEMPLATE, await this.getCardData(enrichmentOptions)
       ),
-      classes: ["dnd5e2", "dnd5e-tooltip", "item-tooltip", "themed", "theme-light"]
+      classes: ["dnd5e2", "varlyn5e-tooltip", "item-tooltip", "themed", "theme-light"]
     };
   }
 

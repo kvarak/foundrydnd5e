@@ -2,7 +2,7 @@
 /*  Document Sheets                   */
 /* ---------------------------------- */
 
-.dnd5e2.sheet {
+.varlyn5e.sheet {
   &:where(:not(.minimized)) > header {
     /* Edit Mode Toggle */
     > slide-toggle {
@@ -49,7 +49,7 @@
   }
 }
 
-.dnd5e2.sheet:is(.item, .actor, .roll-table-sheet) {
+.varlyn5e.sheet:is(.item, .actor, .roll-table-sheet) {
   &:where(:not(.minimized)) > header {
     background: transparent;
     position: relative;
@@ -63,12 +63,12 @@
 /*  Detached Sheets                   */
 /* ---------------------------------- */
 
-body.detached .dnd5e2.sheet .tab { max-height: unset; }
+body.detached .varlyn5e.sheet .tab { max-height: unset; }
 
 /* ---------------------------------- */
 /*  Actors & Item Sheets              */
 /* ---------------------------------- */
-.dnd5e2.sheet:is(.item, .actor) {
+.varlyn5e.sheet:is(.item, .actor) {
 
   /* ---------------------------------- */
   /*  Outer Window                      */
@@ -284,7 +284,7 @@ body.detached .dnd5e2.sheet .tab { max-height: unset; }
 /*  Roll Table Sheets                 */
 /* ---------------------------------- */
 
-.dnd5e2.roll-table-sheet {
+.varlyn5e.roll-table-sheet {
   .sheet-header { --dnd5e-document-image-size: 4rem; }
   table {
     border-radius: 4px;

@@ -6,7 +6,7 @@
                 {{#if (or activity.activation.canOverride activity.isRider)}}
                 {{ formInput fields.activation.fields.override value=source.activation.override
                              input=inputs.createCheckboxInput
-                             dataset=(dnd5e-object tooltip="VARLYN5E.ACTIVATION.FIELDS.activation.override.hint")
+                             dataset=(varlyn5e-object tooltip="VARLYN5E.ACTIVATION.FIELDS.activation.override.hint")
                              ariaLabel=(localize "VARLYN5E.ACTIVATION.FIELDS.activation.override.hint") }}
                 {{/if}}
             </label>
@@ -22,7 +22,7 @@
                 {{#if (or activity.duration.canOverride activity.isRider)}}
                 {{ formInput fields.duration.fields.override value=source.duration.override
                              input=inputs.createCheckboxInput
-                             dataset=(dnd5e-object tooltip="VARLYN5E.DURATION.FIELDS.duration.override.hint")
+                             dataset=(varlyn5e-object tooltip="VARLYN5E.DURATION.FIELDS.duration.override.hint")
                              ariaLabel=(localize "VARLYN5E.DURATION.FIELDS.duration.override.hint") }}
                 {{/if}}
             </label>

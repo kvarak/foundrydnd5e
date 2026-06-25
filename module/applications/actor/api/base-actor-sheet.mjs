@@ -73,8 +73,8 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     },
     classes: ["actor", "standard-form"],
     elements: {
-      effects: "dnd5e-effects",
-      inventory: "dnd5e-inventory"
+      effects: "varlyn5e-effects",
+      inventory: "varlyn5e-inventory"
     },
     form: {
       submitOnChange: true
@@ -1072,7 +1072,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
         const button = document.createElement("button");
         Object.assign(button, { type: "button", className: classes, ariaLabel: label, ariaPressed: filled });
         Object.assign(button.dataset, { n, tooltip, action: "togglePip" });
-        const icon = '<dnd5e-icon src="systems/dnd5e/icons/svg/spell-slot.svg"></dnd5e-icon>';
+        const icon = '<varlyn5e-icon src="systems/dnd5e/icons/svg/spell-slot.svg"></varlyn5e-icon>';
         button.insertAdjacentHTML("afterbegin", icon);
         slots.append(button);
       });

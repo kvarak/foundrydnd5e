@@ -211,7 +211,7 @@ export default class Tooltips5e {
       if ( ctx ) context.party.push({ name: member.actor.name, img: member.actor.img, ...ctx });
     }
 
-    this.tooltip.classList.add("dnd5e-tooltip", "passive-tooltip", "dnd5e2", "themed", "theme-light");
+    this.tooltip.classList.add("varlyn5e-tooltip", "passive-tooltip", "dnd5e2", "themed", "theme-light");
     this.tooltip.classList.remove("theme-dark");
     this.tooltip.innerHTML = await foundry.applications.handlebars.renderTemplate(
       "systems/dnd5e/templates/journal/passive-tooltip.hbs", context

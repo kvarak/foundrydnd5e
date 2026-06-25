@@ -307,7 +307,7 @@ export default function PrimarySheetMixin(Base) {
       element.dataset.tooltip = `
         <section class="loading" data-uuid="${uuid}"><i class="fas fa-spinner fa-spin-pulse"></i></section>
       `;
-      element.dataset.tooltipClass = "dnd5e2 dnd5e-tooltip item-tooltip themed theme-light";
+      element.dataset.tooltipClass = "dnd5e2 varlyn5e-tooltip item-tooltip themed theme-light";
       element.dataset.tooltipDirection ??= "LEFT";
     }
 

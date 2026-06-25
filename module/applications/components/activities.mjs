@@ -14,7 +14,7 @@ export default class ActivitiesElement extends (foundry.applications.elements.Ad
    * The HTML tag named used by this element.
    * @type {string}
    */
-  static tagName = "dnd5e-activities";
+  static tagName = "varlyn5e-activities";
 
   /* -------------------------------------------- */
 

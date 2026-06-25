@@ -20,7 +20,7 @@
                    placeholder=1 step=1 min=1 }}
                 {{#if (eq entry.type "linked")}}
                 {{#if linked}}
-                {{{ dnd5e-linkForUuid entry.key }}}
+                {{{ varlyn5e-linkForUuid entry.key }}}
                 {{else}}
                 <div class="drop-area">
                     {{ localize "VARLYN5E.StartingEquipment.DropHint" }}
@@ -35,8 +35,8 @@
                 {{/if}}
                 {{#if showRequireProficiency}}
                 <label class="flexrow require-proficiency">
-                    <dnd5e-checkbox name="startingEquipment.{{ id }}.requiresProficiency"
-                           {{ checked entry.requiresProficiency }}></dnd5e-checkbox>
+                    <varlyn5e-checkbox name="startingEquipment.{{ id }}.requiresProficiency"
+                           {{ checked entry.requiresProficiency }}></varlyn5e-checkbox>
                     {{ localize "VARLYN5E.StartingEquipment.RequireProficiency" }}
                 </label>
                 {{else}}

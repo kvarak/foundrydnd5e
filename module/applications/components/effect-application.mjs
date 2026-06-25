@@ -125,7 +125,7 @@ export default class EffectApplicationElement extends TargetedApplicationMixin(C
         tooltip: `
           <section class="loading" data-uuid="${effect.uuid}"><i class="fas fa-spinner fa-spin-pulse"></i></section>
         `,
-        tooltipClass: "dnd5e2 dnd5e-tooltip item-tooltip themed theme-light",
+        tooltipClass: "dnd5e2 varlyn5e-tooltip item-tooltip themed theme-light",
         tooltipDirection: "LEFT"
       });
       li.innerHTML = `
@@ -165,7 +165,7 @@ export default class EffectApplicationElement extends TargetedApplicationMixin(C
         <span class="title"></span>
       </div>
       <div class="checkbox">
-        <dnd5e-checkbox name="${uuid}"${checked}${disabled}></dnd5e-checkbox>
+        <varlyn5e-checkbox name="${uuid}"${checked}${disabled}></varlyn5e-checkbox>
       </div>
     `;
     Object.assign(li.querySelector(".gold-icon"), { alt: name, src: actor.img });
@@ -247,7 +247,7 @@ export default class EffectApplicationElement extends TargetedApplicationMixin(C
     if ( !effect ) return;
     for ( const target of this.targetList.querySelectorAll("[data-target-uuid]") ) {
       const actor = fromUuidSync(target.dataset.targetUuid);
-      if ( !actor || !target.querySelector("dnd5e-checkbox")?.checked ) continue;
+      if ( !actor || !target.querySelector("varlyn5e-checkbox")?.checked ) continue;
       try {
         await this._applyEffectToActor(effect, actor);
       } catch(err) {

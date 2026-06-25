@@ -56,7 +56,7 @@ export default class AdvancementFlow extends FormApplication {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static _customElements = super._customElements.concat(["dnd5e-checkbox"]);
+  static _customElements = super._customElements.concat(["varlyn5e-checkbox"]);
 
   /* -------------------------------------------- */
 

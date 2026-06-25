@@ -1002,7 +1002,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
           properties
         }
       ),
-      classes: ["dnd5e2", "dnd5e-tooltip", "effect-tooltip", "themed", "theme-light"]
+      classes: ["dnd5e2", "varlyn5e-tooltip", "effect-tooltip", "themed", "theme-light"]
     };
   }
 

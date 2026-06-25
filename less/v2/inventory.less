@@ -1,4 +1,4 @@
-.dnd5e2 .inventory-element {
+.varlyn5e .inventory-element {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -118,7 +118,7 @@
 /*  Entries                           */
 /* ---------------------------------- */
 
-.dnd5e2 {
+.varlyn5e {
 
   .items-list {
     display: flex;
@@ -497,7 +497,7 @@
 /*  Currency                          */
 /* ---------------------------------- */
 
-.dnd5e2 section.currency, .dnd5e2 .currency-style {
+.varlyn5e section.currency, .varlyn5e .currency-style {
   display: flex;
   gap: 8px;
 
@@ -544,7 +544,7 @@
 /*  Locked                            */
 /* ---------------------------------- */
 
-.dnd5e2 .locked .inventory-element {
+.varlyn5e .locked .inventory-element {
   .item :is(.item-quantity, .item-uses, .item-charges) input:is(:focus-visible, :hover) { box-shadow: none; }
 }
 
@@ -552,7 +552,7 @@
 /*  Edit Mode                         */
 /* ---------------------------------- */
 
-.dnd5e2 {
+.varlyn5e {
   &.editable, .editable {
     .inventory-element .items-section {
       .pips { display: none; }
@@ -565,7 +565,7 @@
 /*  Award & Currency                  */
 /* ---------------------------------- */
 
-.dnd5e2:is(.award, .currency-manager) {
+.varlyn5e:is(.award, .currency-manager) {
   --award-gap: 8px;
 
   [data-tab="convert"] p {

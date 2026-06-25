@@ -35,8 +35,8 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
     classes: ["item"],
     editingDescriptionTarget: null,
     elements: {
-      activities: "dnd5e-activities",
-      effects: "dnd5e-effects"
+      activities: "varlyn5e-activities",
+      effects: "varlyn5e-effects"
     },
     form: {
       submitOnChange: true
