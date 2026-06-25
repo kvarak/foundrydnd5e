@@ -23066,7 +23066,7 @@ function enrichLookup(config, fallback, options) {
  * ```html
  * <span class="reference-link">
  *   <a class="content-link" draggable="true"
- *      data-uuid="Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.UWw13ISmMxDzmwbd"
+ *      data-uuid="Compendium.varlyn-dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.UWw13ISmMxDzmwbd"
  *      data-type="JournalEntryPage" data-tooltip="Text Page">
  *     <i class="fas fa-book-open"></i> Label
  *   </a>
@@ -73770,26 +73770,26 @@ function registerModuleRedirects() {
 
 const moduleRedirects = {
   "dnd-players-handbook": {
-    "Compendium.dnd-players-handbook.actors": "Compendium.dnd5e.actors24",
-    "Compendium.dnd-players-handbook.classes": "Compendium.dnd5e.classes24",
-    "Compendium.dnd-players-handbook.content": "Compendium.dnd5e.content24",
-    "Compendium.dnd-players-handbook.equipment": "Compendium.dnd5e.equipment24",
-    "Compendium.dnd-players-handbook.feats": "Compendium.dnd5e.feats24",
-    "Compendium.dnd-players-handbook.origins": "Compendium.dnd5e.origins24",
-    "Compendium.dnd-players-handbook.spells": "Compendium.dnd5e.spells24",
-    "Compendium.dnd-players-handbook.tables": "Compendium.dnd5e.tables24"
+    "Compendium.dnd-players-handbook.actors": "Compendium.varlyn-dnd5e.actors24",
+    "Compendium.dnd-players-handbook.classes": "Compendium.varlyn-dnd5e.classes24",
+    "Compendium.dnd-players-handbook.content": "Compendium.varlyn-dnd5e.content24",
+    "Compendium.dnd-players-handbook.equipment": "Compendium.varlyn-dnd5e.equipment24",
+    "Compendium.dnd-players-handbook.feats": "Compendium.varlyn-dnd5e.feats24",
+    "Compendium.dnd-players-handbook.origins": "Compendium.varlyn-dnd5e.origins24",
+    "Compendium.dnd-players-handbook.spells": "Compendium.varlyn-dnd5e.spells24",
+    "Compendium.dnd-players-handbook.tables": "Compendium.varlyn-dnd5e.tables24"
   },
   "dnd-dungeon-masters-guide": {
-    "Compendium.dnd-dungeon-masters-guide.actors": "Compendium.dnd5e.actors24",
-    "Compendium.dnd-dungeon-masters-guide.content": "Compendium.dnd5e.content24",
-    "Compendium.dnd-dungeon-masters-guide.equipment": "Compendium.dnd5e.equipment24",
-    "Compendium.dnd-dungeon-masters-guide.tables": "Compendium.dnd5e.tables24"
+    "Compendium.dnd-dungeon-masters-guide.actors": "Compendium.varlyn-dnd5e.actors24",
+    "Compendium.dnd-dungeon-masters-guide.content": "Compendium.varlyn-dnd5e.content24",
+    "Compendium.dnd-dungeon-masters-guide.equipment": "Compendium.varlyn-dnd5e.equipment24",
+    "Compendium.dnd-dungeon-masters-guide.tables": "Compendium.varlyn-dnd5e.tables24"
   },
   "dnd-monster-manual": {
-    "Compendium.dnd-monster-manual.actors": "Compendium.dnd5e.actors24",
-    "Compendium.dnd-monster-manual.content": "Compendium.dnd5e.content24",
-    "Compendium.dnd-monster-manual.features": "Compendium.dnd5e.monsterfeatures24",
-    "Compendium.dnd-monster-manual.tables": "Compendium.dnd5e.tables24"
+    "Compendium.dnd-monster-manual.actors": "Compendium.varlyn-dnd5e.actors24",
+    "Compendium.dnd-monster-manual.content": "Compendium.varlyn-dnd5e.content24",
+    "Compendium.dnd-monster-manual.features": "Compendium.varlyn-dnd5e.monsterfeatures24",
+    "Compendium.dnd-monster-manual.tables": "Compendium.varlyn-dnd5e.tables24"
   }
 };
 
