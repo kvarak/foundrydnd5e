@@ -1,20 +1,18 @@
 {
-  "id": "dnd5e",
-  "title": "Dungeons & Dragons Fifth Edition",
-  "description": "A system for playing the fifth edition of the world's most popular role-playing game in the Foundry Virtual Tabletop environment.",
+  "id": "varlyn-dnd5e",
+  "title": "Varlyn D&D 5e",
+  "description": "A custom Foundry VTT system for the homebrew Varlyn setting.",
   "version": "6.0.0",
   "compatibility": {
     "minimum": "14.359",
     "verified": "14"
   },
-  "url": "https://github.com/foundryvtt/dnd5e/",
-  "manifest": "https://raw.githubusercontent.com/foundryvtt/dnd5e/master/system.json",
-  "download": "https://github.com/foundryvtt/dnd5e/releases/download/release-6.0.0/dnd5e-release-6.0.0.zip",
+  "url": "https://dnd.rigo.nu/",
+  "manifest": "https://raw.githubusercontent.com/kvarak/varlyn-dnd5e/main/system.json",
+  "download": "https://github.com/kvarak/varlyn-dnd5e/releases/download/latest/varlyn-dnd5e.zip",
   "authors": [
     {
-      "name": "Atropos",
-      "url": "https://foundryvtt.com",
-      "flags": {}
+      "name": "kvarak"
     }
   ],
   "esmodules": [
@@ -31,8 +29,7 @@
       "character": {
         "htmlFields": [
           "details.biography.value",
-          "details.biography.public",
-          "bastion.description"
+          "details.biography.public"
         ]
       },
       "npc": {
@@ -198,15 +195,18 @@
     },
     "RegionBehavior": {
       "dnd5e.applyActiveEffect": {},
+      "varlyn-dnd5e.applyActiveEffect": {},
       "dnd5e.difficultTerrain": {},
-      "dnd5e.rotateArea": {}
+      "varlyn-dnd5e.difficultTerrain": {},
+      "dnd5e.rotateArea": {},
+      "varlyn-dnd5e.rotateArea": {}
     }
   },
   "packs": [
     {
       "name": "varlyn-folk",
       "label": "Varlyn Folk",
-      "system": "dnd5e",
+      "system": "varlyn-dnd5e",
       "path": "packs/varlyn-folk",
       "type": "Item",
       "flags": {}
@@ -221,27 +221,16 @@
       "flags": {}
     }
   ],
-  "media": [
-    {
-      "type": "cover",
-      "loop": false,
-      "flags": {}
-    },
-    {
-      "type": "setup",
-      "url": "systems/dnd5e/ui/official/dnd5e-repo.jpg",
-      "thumbnail": "systems/dnd5e/ui/official/dnd5e-thumbnail.jpg"
-    }
-  ],
+  "media": [],
   "socket": true,
   "grid": {
     "distance": 5,
     "units": "ft"
   },
   "primaryTokenAttribute": "attributes.hp",
-  "background": "systems/dnd5e/ui/official/dnd5e-background.webp",
+  "background": "",
   "flags": {
-    "dnd5e": {},
+    "varlyn-dnd5e": {},
     "hotReload": {
       "extensions": [
         "css",
