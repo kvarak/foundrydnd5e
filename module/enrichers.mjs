@@ -833,6 +833,7 @@ export async function enrichSave(config, label, options) {
 /**
  * Handle a save command in chat.
  * @param {object} config  Configuration data.
+ * @returns {Promise<void>}
  */
 async function handleSaveCommand(config) {
   config = parseSaveConfig(config);

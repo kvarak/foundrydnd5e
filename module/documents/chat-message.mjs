@@ -520,7 +520,7 @@ export default class ChatMessage5e extends ChatMessage {
         <section class="tooltip-part">
           <div class="dice">
             ${icon
-              ? `<span class="part-method" data-tooltip aria-label="${_loc(method)}">${icon}</span>` : ""}
+    ? `<span class="part-method" data-tooltip aria-label="${_loc(method)}">${icon}</span>` : ""}
             <ol class="dice-rolls">
               ${dice.reduce((str, { result, classes }) => `
                 ${str}<li class="roll ${classes}">${result}</li>
@@ -1002,7 +1002,7 @@ export default class ChatMessage5e extends ChatMessage {
   /**
    * Get the Activity that created this chat card.
    * @param {object} [options={}]
-   * @param {boolean} [scaled=false]  Pre-scaled the item based on the scaling value on the chat card.
+   * @param {boolean} [options.scaled=false]  Pre-scaled the item based on the scaling value on the chat card.
    * @returns {Activity|void}
    */
   getAssociatedActivity({ scaled=false }={}) {
@@ -1034,7 +1034,7 @@ export default class ChatMessage5e extends ChatMessage {
   /**
    * Get the item associated with this chat card.
    * @param {object} [options={}]
-   * @param {boolean} [scaled=false]  Pre-scaled the item based on the scaling value on the chat card.
+   * @param {boolean} [options.scaled=false]  Pre-scaled the item based on the scaling value on the chat card.
    * @returns {Item5e|void}
    */
   getAssociatedItem({ scaled=false }={}) {
