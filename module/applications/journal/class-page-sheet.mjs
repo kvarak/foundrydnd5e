@@ -366,14 +366,14 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
 
     /**
      * A hook event that fires to generate the table for spellcasting types.
-     * The actual hook names include the spellcasting type (e.g. `dnd5e.buildPsionicSpellcastingTable`).
+     * The actual hook names include the spellcasting type (e.g. `varlyn5e.buildPsionicSpellcastingTable`).
      * @param {object} table                          Table definition being built. *Will be mutated.*
      * @param {Item5e} item                           Class for which the spellcasting table is being built.
      * @param {SpellcastingDescription} spellcasting  Spellcasting descriptive object.
      * @function varlyn5e.buildSpellcastingTable
      * @memberof hookEvents
      */
-    Hooks.callAll(`dnd5e.build${spellcasting.type.capitalize()}SpellcastingTable`, table, item, spellcasting);
+    Hooks.callAll(`varlyn5e.build${spellcasting.type.capitalize()}SpellcastingTable`, table, item, spellcasting);
 
     return foundry.utils.isEmpty(table) ? null : table;
   }

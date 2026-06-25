@@ -185,7 +185,7 @@ export default class WeaponData extends ItemDataModel.mixin(
       });
     }
 
-    const isLight = this.properties.has("lgt") || (this.parent.actor?.getFlag("dnd5e", "enhancedDualWielding")
+    const isLight = this.properties.has("lgt") || (this.parent.actor?.getFlag("varlyn-dnd5e", "enhancedDualWielding")
       && ((this.attackType === "melee") && !this.properties.has("two")));
 
     // Weapons with the "Light" property will have Offhand attack
@@ -277,7 +277,7 @@ export default class WeaponData extends ItemDataModel.mixin(
 
   /** @override */
   get criticalThreshold() {
-    return this.parent?.actor?.flags.dnd5e?.weaponCriticalThreshold ?? Infinity;
+    return this.parent?.actor?.flags["varlyn-dnd5e"]?.weaponCriticalThreshold ?? Infinity;
   }
 
   /* -------------------------------------------- */
@@ -366,7 +366,7 @@ export default class WeaponData extends ItemDataModel.mixin(
     const itemProf = config[this.type.value];
     const actorProfs = actor.system.traits?.weaponProf?.value ?? new Set();
     const natural = this.type.value === "natural";
-    const improvised = (this.type.value === "improv") && !!actor.getFlag("dnd5e", "tavernBrawlerFeat");
+    const improvised = (this.type.value === "improv") && !!actor.getFlag("varlyn-dnd5e", "tavernBrawlerFeat");
     const isProficient = natural || improvised || actorProfs.has(itemProf) || actorProfs.has(this.type.baseItem);
     return Number(isProficient);
   }
@@ -549,7 +549,7 @@ export default class WeaponData extends ItemDataModel.mixin(
       }, ""), classes: "info-grid damage" });
     }
 
-    context.parts = ["dnd5e.details-weapon", "dnd5e.field-uses"];
+    context.parts = ["varlyn5e.details-weapon", "varlyn5e.field-uses"];
     const typeOptions = Object.entries(CONFIG.VARLYN5E.damageTypes).map(([value, config]) => {
       return {
         ...config, value,

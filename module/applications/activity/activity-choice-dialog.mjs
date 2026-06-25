@@ -84,7 +84,7 @@ export default class ActivityChoiceDialog extends Application5e {
   /** @inheritDoc */
   async _prepareContext(options) {
     let controlHint;
-    if ( game.settings.get("dnd5e", "controlHints") ) {
+    if ( game.settings.get("varlyn-dnd5e", "controlHints") ) {
       controlHint = _loc("VARLYN5E.Controls.Activity.FastForwardHint");
       controlHint = controlHint.replace(
         "<left-click>",

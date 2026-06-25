@@ -25,7 +25,7 @@ export default class EnchantUsageDialog extends ActivityUsageDialog {
 
     const enchantments = this.activity.availableEnchantments;
     if ( (enchantments.length > 1) && this._shouldDisplay("create.enchantment") ) {
-      const existingProfile = this.activity.existingEnchantment?.flags.dnd5e?.enchantmentProfile;
+      const existingProfile = this.activity.existingEnchantment?.flags["varlyn-dnd5e"]?.enchantmentProfile;
       context.hasCreation = true;
       context.enchantment = {
         field: new StringField({ required: true, blank: false, label: _loc("VARLYN5E.ENCHANTMENT.Label") }),

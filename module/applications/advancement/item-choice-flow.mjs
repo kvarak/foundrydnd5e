@@ -149,7 +149,7 @@ export default class ItemChoiceFlow extends ItemGrantFlow {
       isCurrentLevel: true,
       items: [...this.pool, ...dropped].reduce((arr, item) => {
         const { id, name, img } = item;
-        const uuid = item.flags.dnd5e?.sourceId ?? item.uuid;
+        const uuid = item.flags["varlyn-dnd5e"]?.sourceId ?? item.uuid;
         const validFeature = !item.system.validatePrerequisites || (item.system.validatePrerequisites(
           this.advancement.actor, { added, removed, level: this.featureLevel }
         ) === true);

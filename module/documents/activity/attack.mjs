@@ -68,7 +68,7 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
 
   /** @override */
   async _triggerSubsequentActions(config, results) {
-    this.rollAttack({ event: config.event }, {}, { data: { "flags.dnd5e.originatingMessage": results.message?.id } });
+    this.rollAttack({ event: config.event }, {}, { data: { "flags.varlyn-dnd5e.originatingMessage": results.message?.id } });
   }
 
   /* -------------------------------------------- */
@@ -92,12 +92,12 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
     const buildConfig = this._buildAttackConfig.bind(this);
 
     const rollConfig = foundry.utils.mergeObject({
-      ammunition: this.item.getFlag("dnd5e", `last.${this.id}.ammunition`),
-      attackMode: this.item.getFlag("dnd5e", `last.${this.id}.attackMode`),
-      elvenAccuracy: this.actor?.getFlag("dnd5e", "elvenAccuracy")
+      ammunition: this.item.getFlag("varlyn-dnd5e", `last.${this.id}.ammunition`),
+      attackMode: this.item.getFlag("varlyn-dnd5e", `last.${this.id}.attackMode`),
+      elvenAccuracy: this.actor?.getFlag("varlyn-dnd5e", "elvenAccuracy")
         && CONFIG.VARLYN5E.characterFlags.elvenAccuracy.abilities.includes(this.ability),
-      halflingLucky: this.actor?.getFlag("dnd5e", "halflingLucky"),
-      mastery: this.item.getFlag("dnd5e", `last.${this.id}.mastery`),
+      halflingLucky: this.actor?.getFlag("varlyn-dnd5e", "halflingLucky"),
+      mastery: this.item.getFlag("varlyn-dnd5e", `last.${this.id}.mastery`),
       target: targets.length === 1 ? targets[0].ac : undefined
     }, config);
 
@@ -166,7 +166,7 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
     if ( !rolls.length ) return null;
     for ( const key of ["ammunition", "attackMode", "mastery"] ) {
       if ( !rolls[0].options[key] ) continue;
-      foundry.utils.setProperty(messageConfig.data, `flags.dnd5e.roll.${key}`, rolls[0].options[key]);
+      foundry.utils.setProperty(messageConfig.data, `flags.varlyn-dnd5e.roll.${key}`, rolls[0].options[key]);
     }
     await CONFIG.Dice.D20Roll.buildPost(rolls, rollConfig, messageConfig);
 
@@ -192,7 +192,7 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
     else if ( rollConfig.attackMode ) rolls[0].options.attackMode = rollConfig.attackMode;
     if ( rolls[0].options.mastery ) flags.mastery = rolls[0].options.mastery;
     if ( canUpdate && !foundry.utils.isEmpty(flags) && (this.actor && this.actor.items.has(this.item.id)) ) {
-      await this.item.setFlag("dnd5e", `last.${this.id}`, flags);
+      await this.item.setFlag("varlyn-dnd5e", `last.${this.id}`, flags);
     }
 
     /**
@@ -211,10 +211,10 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
     if ( canUpdate && ammoUpdate?.destroy ) {
       // If ammunition was deleted, store a copy of it in the roll message
       const data = this.actor.items.get(ammoUpdate.id).toObject();
-      const messageId = messageConfig.data?.flags?.dnd5e?.originatingMessage
+      const messageId = messageConfig.data?.flags?.["varlyn-dnd5e"]?.originatingMessage
         ?? rollConfig.event?.target.closest("[data-message-id]")?.dataset.messageId;
       const attackMessage = varlyn5e.registry.messages.get(messageId, "attack")?.pop();
-      await attackMessage?.setFlag("dnd5e", "roll.ammunitionData", data);
+      await attackMessage?.setFlag("varlyn-dnd5e", "roll.ammunitionData", data);
       await this.actor.deleteEmbeddedDocuments("Item", [ammoUpdate.id]);
     }
     else if ( canUpdate && ammoUpdate ) await this.actor?.updateEmbeddedDocuments("Item", [
@@ -286,16 +286,16 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
    */
   static #rollDamage(event, target, message) {
     const lastAttack = message.getAssociatedRolls("attack").pop();
-    const attackMode = lastAttack?.getFlag("dnd5e", "roll.attackMode");
+    const attackMode = lastAttack?.getFlag("varlyn-dnd5e", "roll.attackMode");
 
     // Fetch the ammunition used with the last attack roll
     let ammunition;
     const actor = lastAttack?.getAssociatedActor();
     if ( actor ) {
-      const storedData = lastAttack.getFlag("dnd5e", "roll.ammunitionData");
+      const storedData = lastAttack.getFlag("varlyn-dnd5e", "roll.ammunitionData");
       ammunition = storedData
         ? new Item.implementation(storedData, { parent: actor })
-        : actor.items.get(lastAttack.getFlag("dnd5e", "roll.ammunition"));
+        : actor.items.get(lastAttack.getFlag("varlyn-dnd5e", "roll.ammunition"));
     }
 
     const isCritical = lastAttack?.rolls[0]?.isCritical;

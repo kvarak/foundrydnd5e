@@ -52,14 +52,14 @@ export default class JournalNavigationConfig extends DocumentSheet5e {
   /** @inheritDoc */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const data = this.document.getFlag("dnd5e", "navigation") ?? {};
+    const data = this.document.getFlag("varlyn-dnd5e", "navigation") ?? {};
     const entryOptions = getCollectionDocumentOptions(this.document.collection, {
       disabled: entry => entry._id === this.document.id
     });
     context.fields = ["previous", "up", "next"].map(name => ({
       field: new StringField(),
       label: _loc(`VARLYN5E.JOURNALENTRY.Navigation.${name.capitalize()}`),
-      name: `flags.dnd5e.navigation.${name}`,
+      name: `flags.varlyn-dnd5e.navigation.${name}`,
       options: entryOptions,
       value: data[name]
     }));
@@ -74,10 +74,10 @@ export default class JournalNavigationConfig extends DocumentSheet5e {
   _processFormData(event, form, formData) {
     const submitData = super._processFormData(event, form, formData);
 
-    const navigation = submitData.flags.dnd5e.navigation;
-    const keys = Object.keys(this.document.flags.dnd5e ?? {});
+    const navigation = submitData.flags["varlyn-dnd5e"].navigation;
+    const keys = Object.keys(this.document.flags["varlyn-dnd5e"] ?? {});
     if ( Object.values(navigation).some(v => v) ) {
-      submitData.flags.dnd5e.navigation = Object.entries(navigation).reduce((obj, [k, v]) => {
+      submitData.flags["varlyn-dnd5e"].navigation = Object.entries(navigation).reduce((obj, [k, v]) => {
         if ( v ) obj[k] = v;
         else obj[k] = _del;
         return obj;

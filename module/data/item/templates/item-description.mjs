@@ -72,7 +72,7 @@ export default class ItemDescriptionTemplate extends SystemDataModel {
    * Prepare the source label.
    */
   prepareDescriptionData() {
-    const uuid = this.parent.flags.dnd5e?.sourceId ?? this.parent._stats?.compendiumSource ?? this.parent.uuid;
+    const uuid = this.parent.flags["varlyn-dnd5e"]?.sourceId ?? this.parent._stats?.compendiumSource ?? this.parent.uuid;
     SourceField.prepareData.call(this.source, uuid);
   }
 

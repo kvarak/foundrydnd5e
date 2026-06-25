@@ -221,7 +221,7 @@ export default class ToolData extends ItemDataModel.mixin(
       { label: this.type.label },
       ...this.physicalItemSheetFields
     ];
-    context.parts = ["dnd5e.details-tool", "dnd5e.field-uses"];
+    context.parts = ["varlyn5e.details-tool", "varlyn5e.field-uses"];
   }
 
   /* -------------------------------------------- */

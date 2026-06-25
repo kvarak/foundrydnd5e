@@ -279,7 +279,7 @@ export default class AttributesFields {
     const encumbrance = this.attributes.encumbrance ??= {};
     const baseUnits = CONFIG.VARLYN5E.encumbrance.baseUnits[this.parent.type]
       ?? CONFIG.VARLYN5E.encumbrance.baseUnits.default;
-    const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
+    const unitSystem = game.settings.get("varlyn-dnd5e", "metricWeightUnits") ? "metric" : "imperial";
     const { attributes } = this;
 
     // Get the total weight from items
@@ -289,7 +289,7 @@ export default class AttributesFields {
 
     // [Optional] add Currency Weight (for non-transformed actors)
     const currency = this.currency;
-    if ( game.settings.get("dnd5e", "currencyWeight") && currency ) {
+    if ( game.settings.get("varlyn-dnd5e", "currencyWeight") && currency ) {
       const numCoins = Object.values(currency).reduce((val, denom) => val + Math.max(denom, 0), 0);
       const currencyPerWeight = config.currencyPerWeight[unitSystem];
       weight += convertWeight(
@@ -303,7 +303,7 @@ export default class AttributesFields {
     const keys = Object.keys(CONFIG.VARLYN5E.actorSizes);
     const index = keys.findIndex(k => k === this.traits.size);
     const sizeConfig = CONFIG.VARLYN5E.actorSizes[
-      keys[this.parent.flags.dnd5e?.powerfulBuild ? Math.min(index + 1, keys.length - 1) : index]
+      keys[this.parent.flags["varlyn-dnd5e"]?.powerfulBuild ? Math.min(index + 1, keys.length - 1) : index]
     ];
     const sizeMod = sizeConfig?.capacityMultiplier ?? sizeConfig?.token ?? 1;
     let maximumMultiplier;
@@ -352,7 +352,7 @@ export default class AttributesFields {
    */
   static prepareExhaustionLevel() {
     const exhaustion = this.parent.effects.get(ActiveEffect5e.ID.EXHAUSTION);
-    const level = exhaustion?.getFlag("dnd5e", "exhaustionLevel");
+    const level = exhaustion?.getFlag("varlyn-dnd5e", "exhaustionLevel");
     this.attributes.exhaustion = Number.isFinite(level) ? level : 0;
   }
 
@@ -388,7 +388,7 @@ export default class AttributesFields {
    */
   static prepareInitiative(rollData) {
     const init = this.attributes.init ??= {};
-    const flags = this.parent.flags.dnd5e ?? {};
+    const flags = this.parent.flags["varlyn-dnd5e"] ?? {};
     const globalCheckBonus = simplifyBonus(this.bonuses?.abilities?.check, rollData);
 
     // Compute initiative modifier
@@ -447,7 +447,7 @@ export default class AttributesFields {
     let reduction = varlyn5e.settings.rulesVersion === "modern" && !this.traits?.ci?.value?.has("exhaustion")
       ? (this.attributes.exhaustion ?? 0) * (CONFIG.VARLYN5E.conditionTypes.exhaustion?.reduction?.speed ?? 0) : 0;
     if ( ((this.attributes.ac?.equippedArmor?.system.strength ?? 0) > (this.abilities?.str?.value ?? Infinity))
-      && !this.parent.flags.dnd5e?.ignoreArmorSpeedReduction && this.isCreature ) {
+      && !this.parent.flags["varlyn-dnd5e"]?.ignoreArmorSpeedReduction && this.isCreature ) {
       reduction += CONFIG.VARLYN5E.armorSpeedReduction;
     }
     reduction = convertLength(reduction, CONFIG.VARLYN5E.defaultUnits.length.imperial, units);
@@ -537,7 +537,7 @@ export default class AttributesFields {
       foundry.utils.setProperty(changes, "system.attributes.death.success", 0);
       foundry.utils.setProperty(changes, "system.attributes.death.failure", 0);
     }
-    foundry.utils.setProperty(options, "dnd5e.hp", { ...this.attributes.hp });
+    foundry.utils.setProperty(options, "varlyn5e.hp", { ...this.attributes.hp });
   }
 
   /* -------------------------------------------- */
@@ -553,7 +553,7 @@ export default class AttributesFields {
     if ( !changed.system?.attributes?.hp ) return;
     if ( userId === game.userId ) await this.parent.updateBloodied(options);
 
-    const hp = options.dnd5e?.hp;
+    const hp = options["varlyn-dnd5e"]?.hp;
     if ( !hp || options.isRest || options.isAdvancement ) return;
 
     const curr = this.attributes.hp;
@@ -565,8 +565,8 @@ export default class AttributesFields {
     if ( !Number.isInteger(changes.total) || (changes.total === 0) ) return;
 
     this.parent._displayTokenEffect(changes);
-    if ( !game.settings.get("dnd5e", "disableConcentration") && (userId === game.userId)
-      && (options.dnd5e?.concentrationCheck !== false)
+    if ( !game.settings.get("varlyn-dnd5e", "disableConcentration") && (userId === game.userId)
+      && (options["varlyn-dnd5e"]?.concentrationCheck !== false)
       && (changes.total < 0) && ((changes.temp < 0) || (curr.value < curr.effectiveMax)) ) {
       this.parent.challengeConcentration({ dc: this.parent.getConcentrationDC(-changes.total) });
     }

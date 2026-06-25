@@ -174,7 +174,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    * @type {boolean}
    */
   get isPolymorphed() {
-    return this.getFlag("dnd5e", "isPolymorphed") || false;
+    return this.getFlag("varlyn-dnd5e", "isPolymorphed") || false;
   }
 
   /* -------------------------------------------- */
@@ -214,7 +214,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     for ( const effect of this.effects ) {
       if ( !effect.statuses.has(CONFIG.specialStatusEffects.CONCENTRATING) ) continue;
-      const data = effect.getFlag("dnd5e", "item");
+      const data = effect.getFlag("varlyn-dnd5e", "item");
       concentration.effects.add(effect);
       if ( data ) {
         let item = this.items.get(data.id);
@@ -306,7 +306,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
   /** @inheritDoc */
   prepareData() {
-    if ( this.system.modelProvider !== dnd5e ) return super.prepareData();
+    if ( this.system.modelProvider !== varlyn5e ) return super.prepareData();
     this._clearCachedValues();
     super.prepareData();
     this.items.forEach(item => item.prepareFinalAttributes());
@@ -367,7 +367,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
   *allApplicableEffects() {
     for ( const effect of super.allApplicableEffects() ) {
       if ( effect.type === "enchantment" ) continue;
-      if ( effect.parent?.getFlag("dnd5e", "riders.effect")?.includes(effect.id) ) continue;
+      if ( effect.parent?.getFlag("varlyn-dnd5e", "riders.effect")?.includes(effect.id) ) continue;
       yield effect;
     }
   }
@@ -401,7 +401,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     const localActor = game.actors.find(a => {
       const matchesOrigin = !origin || (foundry.utils.getProperty(a, origin.key) === origin.value);
       // Has been auto-imported by this process.
-      return (a.getFlag("dnd5e", "isAutoImported") || a.getFlag("dnd5e", "summonedCopy")) // Back-compat
+      return (a.getFlag("varlyn-dnd5e", "isAutoImported") || a.getFlag("varlyn-dnd5e", "summonedCopy")) // Back-compat
       // User has ownership of existing actor
       && a.isOwner
       // Sourced from the desired actor UUID.
@@ -418,13 +418,13 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     if ( actor.pack ) {
       // Template actor resides only in a compendium, import the actor into the world.
       return game.actors.importFromCompendium(game.packs.get(actor.pack), actor.id, {
-        "flags.dnd5e.isAutoImported": true,
+        "flags.varlyn-dnd5e.isAutoImported": true,
         folder: game.folders.get(folderId) ?? null
       }, { keepId: false });
     } else {
       // A linked world actor was found. Create a copy to avoid affecting the original.
       return actor.clone({
-        "flags.dnd5e.isAutoImported": true,
+        "flags.varlyn-dnd5e.isAutoImported": true,
         folder: game.folders.get(folderId) ?? null,
         "_stats.compendiumSource": actor._stats.compendiumSource,
         "_stats.duplicateSource": actor.uuid
@@ -440,7 +440,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    */
   async getPreferredArtwork() {
     if ( !this._preferredArtwork ) {
-      const showTokenPortrait = this.getFlag("dnd5e", "showTokenPortrait") === true;
+      const showTokenPortrait = this.getFlag("varlyn-dnd5e", "showTokenPortrait") === true;
       const token = this.isToken ? this.token : this.prototypeToken;
       const defaultArtwork = Actor.implementation.getDefaultArtwork(this._source)?.img;
       let texture = token?.texture.src;
@@ -463,7 +463,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
   /** @inheritDoc */
   prepareDerivedData() {
-    const origin = this.getFlag("dnd5e", "summon.origin");
+    const origin = this.getFlag("varlyn-dnd5e", "summon.origin");
     if ( origin && this.token?.id ) {
       const { collection, primaryId } = foundry.utils.parseUuid(origin);
       varlyn5e.registry.summons.track(collection?.get?.(primaryId)?.uuid, this.uuid);
@@ -625,7 +625,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires while computing the spellcasting progression for each class on each actor.
-     * The actual hook names include the spellcasting type (e.g. `dnd5e.computeLeveledProgression`).
+     * The actual hook names include the spellcasting type (e.g. `varlyn5e.computeLeveledProgression`).
      * @param {object} progression                    Spellcasting progression data. *Will be mutated.*
      * @param {Actor5e|void} actor                    Actor for whom the data is being prepared.
      * @param {Item5e} cls                            Class for whom this progression is being computed.
@@ -636,7 +636,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @memberof hookEvents
      */
     const allowed = Hooks.call(
-      `dnd5e.compute${type.capitalize()}Progression`, progression, actor, cls, spellcasting, count
+      `varlyn5e.compute${type.capitalize()}Progression`, progression, actor, cls, spellcasting, count
     );
     const model = CONFIG.VARLYN5E.spellcasting[type];
     if ( (allowed === false) || !model.slots ) return;
@@ -658,7 +658,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
   static prepareSpellcastingSlots(spells, type, progression, { actor }={}) {
     /**
      * A hook event that fires to convert the provided spellcasting progression into spell slots.
-     * The actual hook names include the spellcasting type (e.g. `dnd5e.prepareLeveledSlots`).
+     * The actual hook names include the spellcasting type (e.g. `varlyn5e.prepareLeveledSlots`).
      * @param {object} spells        The `data.spells` object within actor's data. *Will be mutated.*
      * @param {Actor5e|void} actor   Actor for whom the data is being prepared, if any.
      * @param {object} progression   Spellcasting progression data.
@@ -666,7 +666,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @function varlyn5e.prepareSpellcastingSlots
      * @memberof hookEvents
      */
-    const allowed = Hooks.call(`dnd5e.prepare${type.capitalize()}Slots`, spells, actor, progression);
+    const allowed = Hooks.call(`varlyn5e.prepare${type.capitalize()}Slots`, spells, actor, progression);
     if ( allowed === false ) return;
     const model = CONFIG.VARLYN5E.spellcasting[type];
 
@@ -789,8 +789,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     if ( Hooks.call("varlyn5e.preCalculateDamage", this, damages, options) === false ) return false;
 
     const multiplier = options.multiplier ?? 1;
-    const treatAs = options.originatingMessage?.flags?.dnd5e?.roll?.type
-      ? options.originatingMessage.flags.dnd5e.roll.type === "healing" ? "healing" : "damage"
+    const treatAs = options.originatingMessage?.flags?.["varlyn-dnd5e"]?.roll?.type
+      ? options.originatingMessage.flags["varlyn-dnd5e"].roll.type === "healing" ? "healing" : "damage"
       : options.only ?? "damage";
 
     const skipped = type => {
@@ -1062,7 +1062,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     else if ( target instanceof ActiveEffect5e ) effect = effects.has(target) ? target : null;
     else if ( target instanceof Item5e ) {
       effect = effects.find(e => {
-        const data = e.getFlag("dnd5e", "item") ?? {};
+        const data = e.getFlag("varlyn-dnd5e", "item") ?? {};
         return (data.id === target._id) || (data.data?._id === target._id);
       });
     }
@@ -1172,7 +1172,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    * @private
    */
   _isRemarkableAthlete(ability) {
-    return (varlyn5e.settings.rulesVersion === "legacy") && this.getFlag("dnd5e", "remarkableAthlete")
+    return (varlyn5e.settings.rulesVersion === "legacy") && this.getFlag("varlyn-dnd5e", "remarkableAthlete")
       && CONFIG.VARLYN5E.characterFlags.remarkableAthlete.abilities.includes(ability);
   }
 
@@ -1207,7 +1207,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    */
   static async handleSkillCheckRequest(actor, request, config, { event }={}) {
     const data = {};
-    foundry.utils.setProperty(data, "flags.dnd5e.requestResult", { actorUuid: actor.uuid, requestId: request.id });
+    foundry.utils.setProperty(data, "flags.varlyn-dnd5e.requestResult", { actorUuid: actor.uuid, requestId: request.id });
     const [roll] = (await actor.rollSkill({ ...config, event }, {}, { data })) ?? [];
     return roll?.parent ?? null;
   }
@@ -1285,8 +1285,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     const alternate = type === "skill" ? this.system.tools?.[config.tool] : this.system.skills?.[config.skill];
     const abilityId = config.ability ?? relevant?.ability ?? (type === "skill" ? skillConfig.ability : toolConfig.ability);
     const ability = this.system.abilities?.[abilityId];
-    const hostActor = this.isPolymorphed && this.flags?.dnd5e?.transformOptions?.mergeSkills && (type === "skill")
-      ? game.actors.get(this.flags.dnd5e?.originalActor) : null;
+    const hostActor = this.isPolymorphed && this.flags?.["varlyn-dnd5e"]?.transformOptions?.mergeSkills && (type === "skill")
+      ? game.actors.get(this.flags["varlyn-dnd5e"]?.originalActor) : null;
     const buildConfig = this._buildSkillToolConfig.bind(this, type, hostActor);
     const doubleProf = !!relevant?.prof.hasProficiency && !!alternate?.prof.hasProficiency;
     const pace = TravelField.getTravelPaceMode(config.pace, config.skill);
@@ -1302,8 +1302,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     const rollConfig = foundry.utils.mergeObject({
       advantage, disadvantage,
       ability: relevant?.ability ?? (type === "skill" ? skillConfig.ability : toolConfig?.ability),
-      halflingLucky: this.getFlag("dnd5e", "halflingLucky"),
-      reliableTalent: (relevant?.value >= 1) && this.getFlag("dnd5e", "reliableTalent")
+      halflingLucky: this.getFlag("varlyn-dnd5e", "halflingLucky"),
+      reliableTalent: (relevant?.value >= 1) && this.getFlag("varlyn-dnd5e", "reliableTalent")
     }, config);
     rollConfig.hookNames = [...(config.hookNames ?? []), type, "abilityCheck", "d20Test"];
     rollConfig.rolls = [CONFIG.Dice.D20Roll.mergeConfigs({
@@ -1359,8 +1359,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {Actor5e} data.subject  Actor for which the roll has been performed.
      */
     const data = { ability: rollConfig.ability, [type]: rollConfig[type], subject: this };
-    Hooks.callAll(`dnd5e.roll${name}`, rolls, data);
-    Hooks.callAll(`dnd5e.roll${name}V2`, rolls, data);
+    Hooks.callAll(`varlyn5e.roll${name}`, rolls, data);
+    Hooks.callAll(`varlyn5e.roll${name}V2`, rolls, data);
 
     return oldFormat ? rolls[0] : rolls;
   }
@@ -1513,7 +1513,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     };
 
     const rollConfig = foundry.utils.mergeObject({
-      halflingLucky: this.getFlag("dnd5e", "halflingLucky")
+      halflingLucky: this.getFlag("varlyn-dnd5e", "halflingLucky")
     }, config);
     rollConfig.hookNames = [...(config.hookNames ?? []), name, "d20Test"];
     rollConfig.rolls = [
@@ -1561,7 +1561,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {string} data.ability   ID of the ability that was rolled as defined in `CONFIG.VARLYN5E.abilities`.
      * @param {Actor5e} data.subject  Actor for which the roll has been performed.
      */
-    Hooks.callAll(`dnd5e.roll${name}`, rolls, { ability: config.ability, subject: this });
+    Hooks.callAll(`varlyn5e.roll${name}`, rolls, { ability: config.ability, subject: this });
 
     return oldFormat ? rolls[0] : rolls;
   }
@@ -1596,7 +1596,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     };
 
     // Diamond Soul adds proficiency
-    if ( this.getFlag("dnd5e", "diamondSoul") ) {
+    if ( this.getFlag("varlyn-dnd5e", "diamondSoul") ) {
       parts.push("@prof");
       data.prof = new Proficiency(this.system.attributes.prof, 1).term;
     }
@@ -1809,7 +1809,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    */
   getInitiativeRollConfig(options={}) {
     const init = this.system.attributes?.init;
-    const flags = this.flags.dnd5e ?? {};
+    const flags = this.flags["varlyn-dnd5e"] ?? {};
     const abilityId = init?.ability || CONFIG.VARLYN5E.defaultAbilities.initiative;
     const ability = this.system.abilities?.[abilityId];
 
@@ -1832,11 +1832,11 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     this.addRollExhaustion(parts, data);
 
     // Ability score tiebreaker
-    const tiebreaker = game.settings.get("dnd5e", "initiativeDexTiebreaker");
+    const tiebreaker = game.settings.get("varlyn-dnd5e", "initiativeDexTiebreaker");
     if ( tiebreaker && Number.isNumeric(ability?.value) ) parts.push(String(ability.value / 100));
 
     // Fixed initiative score
-    const scoreMode = game.settings.get("dnd5e", "initiativeScore");
+    const scoreMode = game.settings.get("varlyn-dnd5e", "initiativeScore");
     const useScore = (scoreMode === "all") || ((scoreMode === "npcs") && game.user.isGM && this.system.isNPC);
 
     options = foundry.utils.mergeObject({
@@ -2000,7 +2000,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
         speaker: ChatMessage.implementation.getSpeaker({actor: this}),
         flavor,
         title: `${flavor}: ${this.name}`,
-        "flags.dnd5e.roll": {type: "hitDie"}
+        "flags.varlyn-dnd5e.roll": {type: "hitDie"}
       }
     }, message);
 
@@ -2075,7 +2075,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
       title: `${flavor}: ${this.name}`,
       flavor,
       speaker: ChatMessage.implementation.getSpeaker({ actor: this }),
-      "flags.dnd5e.roll": { type: "hitPoints" }
+      "flags.varlyn-dnd5e.roll": { type: "hitPoints" }
     };
 
     /**
@@ -2128,7 +2128,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
       title: `${flavor}: ${this.name}`,
       flavor,
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      "flags.dnd5e.roll": { type: "hitPoints" }
+      "flags.varlyn-dnd5e.roll": { type: "hitPoints" }
     };
 
     /**
@@ -2170,7 +2170,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    */
   async initiateRest(config={}) {
     if ( this.system.isVehicle ) return;
-    if ( !game.user.isGM && !game.settings.get("dnd5e", "allowRests") && !config.request ) {
+    if ( !game.user.isGM && !game.settings.get("varlyn-dnd5e", "allowRests") && !config.request ) {
       ui.notifications.warn("VARLYN5E.REST.Warning.OnlyByRequest", { console: false });
       return;
     }
@@ -2179,7 +2179,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     const restConfig = CONFIG.VARLYN5E.restTypes[config.type];
     config = foundry.utils.mergeObject({
       dialog: true, chat: restConfig.chat !== false,
-      duration: restConfig.duration[game.settings.get("dnd5e", "restVariant")],
+      duration: restConfig.duration[game.settings.get("varlyn-dnd5e", "restVariant")],
       newDay: restConfig.newDay === true,
       advanceTime: restConfig.advanceTime === true,
       autoHD: restConfig.autoHD === true, autoHDThreshold: 3,
@@ -2190,14 +2190,14 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before a rest is started. The actual name of the hook will depend on the rest type
-     * (e.g. `dnd5e.preShortRest` or `dnd5e.preLongRest`).
+     * (e.g. `varlyn5e.preShortRest` or `varlyn5e.preLongRest`).
      * @function varlyn5e.preRest
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor that is being rested.
      * @param {RestConfiguration} config  Configuration options for the rest.
      * @returns {boolean}                 Explicitly return `false` to prevent the rest from being started.
      */
-    if ( Hooks.call(`dnd5e.pre${config.type.capitalize()}Rest`, this, config) === false ) return;
+    if ( Hooks.call(`varlyn5e.pre${config.type.capitalize()}Rest`, this, config) === false ) return;
 
     // Take note of the initial hit points and number of hit dice the Actor has
     const hd0 = foundry.utils.getProperty(this, "system.attributes.hd.value");
@@ -2401,7 +2401,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
         type: result.type
       }
     };
-    if ( config.request ) foundry.utils.setProperty(chatData, "flags.dnd5e.requestResult", {
+    if ( config.request ) foundry.utils.setProperty(chatData, "flags.varlyn-dnd5e.requestResult", {
       actorUuid: this.uuid, requestId: config.request.id
     });
     ChatMessage.applyMode(chatData, CONFIG.Dice.BasicRoll.getMessageMode());
@@ -2758,8 +2758,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     let originalSaves = null;
     let originalSkills = null;
     if ( this.isPolymorphed ) {
-      const transformOptions = this.flags.dnd5e?.transformOptions;
-      const original = game.actors?.get(this.flags.dnd5e?.originalActor);
+      const transformOptions = this.flags["varlyn-dnd5e"]?.transformOptions;
+      const original = game.actors?.get(this.flags["varlyn-dnd5e"]?.originalActor);
       if ( original ) {
         if ( transformOptions.mergeSaves ) originalSaves = original.system.abilities;
         if ( transformOptions.mergeSkills ) originalSkills = original.system.skills;
@@ -2781,7 +2781,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    */
   async transformInto(source, settings=new TransformationSetting(), options={}) {
     // Ensure the player is allowed to polymorph
-    const allowed = game.settings.get("dnd5e", "allowPolymorphing");
+    const allowed = game.settings.get("varlyn-dnd5e", "allowPolymorphing");
     if ( !allowed && !game.user.isGM ) {
       ui.notifications.warn("VARLYN5E.TRANSFORM.Warning.NoPermission");
       return null;
@@ -2789,8 +2789,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     // Get the original Actor data and the new source data
     const o = this.toObject();
-    o.flags.dnd5e = o.flags.dnd5e || {};
-    o.flags.dnd5e.transformOptions = {
+    o.flags["varlyn-dnd5e"] = o.flags["varlyn-dnd5e"] || {};
+    o.flags["varlyn-dnd5e"].transformOptions = {
       ...settings.toObject(),
       mergeSaves: settings.merge.has("saves"),
       mergeSkills: settings.merge.has("skills")
@@ -3026,13 +3026,13 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     }
 
     // Set new data flags
-    if ( !this.isPolymorphed || !d.flags.dnd5e.originalActor ) d.flags.dnd5e.originalActor = this.id;
-    d.flags.dnd5e.isPolymorphed = true;
+    if ( !this.isPolymorphed || !d.flags["varlyn-dnd5e"].originalActor ) d.flags["varlyn-dnd5e"].originalActor = this.id;
+    d.flags["varlyn-dnd5e"].isPolymorphed = true;
 
     // Gather previous actor data
-    const previousActorIds = this.getFlag("dnd5e", "previousActorIds") || [];
+    const previousActorIds = this.getFlag("varlyn-dnd5e", "previousActorIds") || [];
     previousActorIds.push(this._id);
-    foundry.utils.setProperty(d.flags, "dnd5e.previousActorIds", previousActorIds);
+    foundry.utils.setProperty(d.flags, "varlyn5e.previousActorIds", previousActorIds);
 
     // If `renderSheet` isn't specified, only render if non-transformed sheet is open
     options.renderSheet ??= this.sheet?.rendered ?? false;
@@ -3050,7 +3050,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
         tokenData.name = `${this.token.name} (${sourceData.name})`;
       }
 
-      if ( !this.token.flags.dnd5e?.previousActorData ) {
+      if ( !this.token.flags["varlyn-dnd5e"]?.previousActorData ) {
         const previousActorData = this.token.delta.toObject();
         const previousTokenData = { texture: {} };
         for ( const k of [...tokenPropsFromSource, ...tokenPropsFromSelf, "name"] ) {
@@ -3059,8 +3059,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
         for ( const k of tokenTexturePropsFromSource ) {
           previousTokenData.texture[k] = this.token.texture[k];
         }
-        foundry.utils.setProperty(tokenData, "flags.dnd5e.previousActorData", previousActorData);
-        foundry.utils.setProperty(tokenData, "flags.dnd5e.previousTokenData", previousTokenData);
+        foundry.utils.setProperty(tokenData, "flags.varlyn-dnd5e.previousActorData", previousActorData);
+        foundry.utils.setProperty(tokenData, "flags.varlyn-dnd5e.previousTokenData", previousTokenData);
       }
       await this.sheet?.close();
       const update = await this.token.update(tokenData);
@@ -3117,10 +3117,10 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
         newTokenData.name = `${t.document.name} (${sourceData.name})`;
       }
 
-      const dOriginalActor = foundry.utils.getProperty(d, "flags.dnd5e.originalActor");
-      foundry.utils.setProperty(newTokenData, "flags.dnd5e.originalActor", dOriginalActor);
-      foundry.utils.setProperty(newTokenData, "flags.dnd5e.isPolymorphed", true);
-      if ( !t.document.flags.dnd5e?.previousTokenData ) {
+      const dOriginalActor = foundry.utils.getProperty(d, "flags.varlyn-dnd5e.originalActor");
+      foundry.utils.setProperty(newTokenData, "flags.varlyn-dnd5e.originalActor", dOriginalActor);
+      foundry.utils.setProperty(newTokenData, "flags.varlyn-dnd5e.isPolymorphed", true);
+      if ( !t.document.flags["varlyn-dnd5e"]?.previousTokenData ) {
         const previousTokenData = { texture: {} };
         for ( const k of [...tokenPropsFromSource, ...tokenPropsFromSelf, "name"] ) {
           previousTokenData[k] = t.document[k];
@@ -3128,7 +3128,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
         for ( const k of tokenTexturePropsFromSource ) {
           previousTokenData.texture[k] = t.document.texture[k];
         }
-        foundry.utils.setProperty(newTokenData, "flags.dnd5e.previousTokenData", previousTokenData);
+        foundry.utils.setProperty(newTokenData, "flags.varlyn-dnd5e.previousTokenData", previousTokenData);
       }
       return newTokenData;
     });
@@ -3164,12 +3164,12 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      */
     Hooks.callAll("varlyn5e.revertOriginalForm", this, options);
 
-    const transformOptions = this.getFlag("dnd5e", "transformOptions");
-    const previousActorIds = this.getFlag("dnd5e", "previousActorIds") ?? [];
+    const transformOptions = this.getFlag("varlyn-dnd5e", "transformOptions");
+    const previousActorIds = this.getFlag("varlyn-dnd5e", "previousActorIds") ?? [];
     const isRendered = this.sheet.rendered;
 
     // Obtain a reference to the original actor
-    const original = game.actors.get(this.getFlag("dnd5e", "originalActor"));
+    const original = game.actors.get(this.getFlag("varlyn-dnd5e", "originalActor"));
 
     const update = {};
     if ( transformOptions?.keep?.includes("hp") ) {
@@ -3189,22 +3189,22 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
       const baseActor = original ? original : game.actors.get(this.token.actorId);
       if ( !baseActor ) {
         ui.notifications.warn("VARLYN5E.TRANSFORM.Warning.OriginalActor", {
-          format: { reference: this.getFlag("dnd5e", "originalActor") }
+          format: { reference: this.getFlag("varlyn-dnd5e", "originalActor") }
         });
         return;
       }
       const prototypeTokenData = (await baseActor.getTokenDocument()).toObject();
-      const actorData = this.token.getFlag("dnd5e", "previousActorData");
+      const actorData = this.token.getFlag("varlyn-dnd5e", "previousActorData");
       foundry.utils.mergeObject(actorData, update);
       const tokenUpdate = this.token.toObject();
       actorData._id = tokenUpdate.delta._id;
       tokenUpdate.delta = actorData;
 
-      foundry.utils.mergeObject(tokenUpdate, this.token.getFlag("dnd5e", "previousTokenData"));
+      foundry.utils.mergeObject(tokenUpdate, this.token.getFlag("varlyn-dnd5e", "previousTokenData"));
       tokenUpdate.sight = prototypeTokenData.sight;
       tokenUpdate.detectionModes = prototypeTokenData.detectionModes;
-      delete tokenUpdate.flags.dnd5e.previousActorData;
-      delete tokenUpdate.flags.dnd5e.previousTokenData;
+      delete tokenUpdate.flags["varlyn-dnd5e"].previousActorData;
+      delete tokenUpdate.flags["varlyn-dnd5e"].previousTokenData;
 
       await this.sheet.close();
       const token = await TokenDocument.implementation.create(tokenUpdate, { parent: this.token.parent, render: true });
@@ -3215,7 +3215,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     if ( !original ) {
       ui.notifications.warn("VARLYN5E.TRANSFORM.Warning.OriginalActor", {
-        format: { reference: this.getFlag("dnd5e", "originalActor") }
+        format: { reference: this.getFlag("varlyn-dnd5e", "originalActor") }
       });
       return;
     }
@@ -3227,7 +3227,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
       const tokenUpdates = tokens.map(t => {
         const update = foundry.utils.deepClone(tokenData);
         update._id = t.id;
-        foundry.utils.mergeObject(update, t.document.getFlag("dnd5e", "previousTokenData"));
+        foundry.utils.mergeObject(update, t.document.getFlag("varlyn-dnd5e", "previousTokenData"));
         delete update.x;
         delete update.y;
         delete update.elevation;
@@ -3249,7 +3249,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     } else {
       // Remove the flags
       const actorUpdates = polymorphedActorIds.filter(id => game.actors.get(id).isOwner).map(p => {
-        return { _id: p, "flags.dnd5e": { isPolymorphed: _del, previousActorIds: _del } };
+        return { _id: p, "flags.varlyn-dnd5e": { isPolymorphed: _del, previousActorIds: _del } };
       });
       await Actor.implementation.updateDocuments(actorUpdates);
 
@@ -3276,7 +3276,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
       icon: '<i class="fa-solid fa-backward"></i>',
       group: "system",
       visible: li => {
-        const allowed = game.settings.get("dnd5e", "allowPolymorphing");
+        const allowed = game.settings.get("varlyn-dnd5e", "allowPolymorphing");
         if ( !allowed && !game.user.isGM ) return false;
         const actor = game.actors.get(li.dataset.entryId);
         return actor && actor.isPolymorphed;
@@ -3320,7 +3320,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     // Record previous exhaustion level.
     if ( Number.isFinite(foundry.utils.getProperty(changed, "system.attributes.exhaustion")) ) {
-      foundry.utils.setProperty(options, "dnd5e.originalExhaustion", this.system.attributes.exhaustion);
+      foundry.utils.setProperty(options, "varlyn5e.originalExhaustion", this.system.attributes.exhaustion);
     }
   }
 
@@ -3341,7 +3341,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
   _onDelete(options, userId) {
     super._onDelete(options, userId);
 
-    const origin = this.getFlag("dnd5e", "summon.origin");
+    const origin = this.getFlag("varlyn-dnd5e", "summon.origin");
     if ( origin ) {
       const { collection, primaryId } = foundry.utils.parseUuid(origin);
       varlyn5e.registry.summons.untrack(collection?.get?.(primaryId)?.uuid, this.uuid);
@@ -3498,11 +3498,11 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     let effect = this.effects.get(ActiveEffect5e.ID.EXHAUSTION);
     if ( level < 1 ) return effect?.delete();
     else if ( effect ) {
-      const originalExhaustion = foundry.utils.getProperty(options, "dnd5e.originalExhaustion");
-      return effect.update({ "flags.dnd5e.exhaustionLevel": level }, { dnd5e: { originalExhaustion } });
+      const originalExhaustion = foundry.utils.getProperty(options, "varlyn5e.originalExhaustion");
+      return effect.update({ "flags.varlyn-dnd5e.exhaustionLevel": level }, { dnd5e: { originalExhaustion } });
     } else {
       effect = await ActiveEffect.implementation.fromStatusEffect("exhaustion", { parent: this });
-      effect.updateSource({ "flags.dnd5e.exhaustionLevel": level });
+      effect.updateSource({ "flags.varlyn-dnd5e.exhaustionLevel": level });
       return ActiveEffect.implementation.create(effect, { parent: this, keepId: true });
     }
   }
@@ -3516,7 +3516,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    */
   updateBloodied(options) {
     const hp = this.system.attributes?.hp;
-    if ( !hp?.effectiveMax || (game.settings.get("dnd5e", "bloodied") === "none") ) return;
+    if ( !hp?.effectiveMax || (game.settings.get("varlyn-dnd5e", "bloodied") === "none") ) return;
 
     const effect = this.effects.get(ActiveEffect5e.ID.BLOODIED);
     if ( hp.value > hp.effectiveMax * CONFIG.VARLYN5E.bloodied.threshold ) return effect?.delete();
@@ -3525,7 +3525,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     return ActiveEffect.implementation.create({
       _id: ActiveEffect5e.ID.BLOODIED,
       img: CONFIG.VARLYN5E.bloodied.img,
-      flags: { dnd5e: { isTemporary: true } },
+      flags: { "varlyn-dnd5e": { isTemporary: true } },
       name: _loc(CONFIG.VARLYN5E.bloodied.name),
       statuses: ["bloodied"],
       showIcon: CONST.ACTIVE_EFFECT_SHOW_ICON?.CONDITIONAL
@@ -3541,9 +3541,9 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    */
   updateEncumbrance(options) {
     const encumbrance = this.system.attributes?.encumbrance;
-    if ( !encumbrance || (game.settings.get("dnd5e", "encumbrance") === "none") ) return;
+    if ( !encumbrance || (game.settings.get("varlyn-dnd5e", "encumbrance") === "none") ) return;
     const statuses = [];
-    const variant = game.settings.get("dnd5e", "encumbrance") === "variant";
+    const variant = game.settings.get("varlyn-dnd5e", "encumbrance") === "variant";
     if ( encumbrance.value > encumbrance.thresholds.maximum ) statuses.push("exceedingCarryingCapacity");
     if ( (encumbrance.value > encumbrance.thresholds.heavilyEncumbered) && variant ) statuses.push("heavilyEncumbered");
     if ( (encumbrance.value > encumbrance.thresholds.encumbered) && variant ) statuses.push("encumbered");

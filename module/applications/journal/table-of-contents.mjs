@@ -85,7 +85,7 @@ export default class TableOfContentsCompendium extends foundry.applications.side
     context.chapters = [];
     const specialEntries = [];
     for ( const entry of documents ) {
-      const flags = entry.flags?.dnd5e;
+      const flags = entry.flags?.["varlyn-dnd5e"];
       if ( !flags ) continue;
       const keys = Object.keys(flags);
       if ( flags.tocHidden || !keys.length || ((keys.length === 1) && (keys[0] === "navigation")) ) continue;
@@ -106,7 +106,7 @@ export default class TableOfContentsCompendium extends foundry.applications.side
         name: flags.title ?? entry.name,
         pages: Array.from(entry.pages).map(({ flags, id, name, sort }) => ({
           id, sort, flags,
-          name: flags.dnd5e?.title ?? name,
+          name: flags["varlyn-dnd5e"]?.title ?? name,
           entryId: entry.id
         }))
       };

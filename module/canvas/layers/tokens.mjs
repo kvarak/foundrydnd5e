@@ -10,7 +10,7 @@ export default class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
   isOccupiedGridSpaceBlocking(gridSpace, token, { preview=false }={}) {
     const tokenSize = CONFIG.VARLYN5E.actorSizes[token.actor?.system.traits.size]?.numerical ?? 2;
     const modernRules = varlyn5e.settings.rulesVersion === "modern";
-    const halflingNimbleness = token.actor?.getFlag("dnd5e", "halflingNimbleness");
+    const halflingNimbleness = token.actor?.getFlag("varlyn-dnd5e", "halflingNimbleness");
     const found = this.#getRelevantOccupyingTokens(gridSpace, token, { preview }).filter(t => {
       // Only creatures block movement.
       if ( !t.actor?.system.isCreature ) return false;

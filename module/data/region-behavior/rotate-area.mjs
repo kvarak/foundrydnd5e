@@ -346,7 +346,7 @@ export default class RotateAreaRegionBehaviorType extends foundry.data.regionBeh
    * @param {object} options
    */
   async updateRotatateArea(changes, options) {
-    const animationDetails = foundry.utils.getProperty(options, "dnd5e.rotateArea");
+    const animationDetails = foundry.utils.getProperty(options, "varlyn5e.rotateArea");
     if ( animationDetails && (canvas.scene === this.scene) ) {
       const { angle, duration, pivot } = animationDetails;
       this.#animateRotation(angle, pivot, duration);

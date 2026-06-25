@@ -65,7 +65,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
   /** @inheritDoc */
   _prepareUsageConfig(config) {
     config = super._prepareUsageConfig(config);
-    const existingProfile = this.existingEnchantment?.flags.dnd5e?.enchantmentProfile;
+    const existingProfile = this.existingEnchantment?.flags["varlyn-dnd5e"]?.enchantmentProfile;
     config.enchantmentProfile ??= this.item.effects.has(existingProfile) ? existingProfile
       : this.availableEnchantments[0]?._id;
     return config;
@@ -86,11 +86,11 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
 
     // Store selected enchantment profile in message flag
     if ( usageConfig.enchantmentProfile ) foundry.utils.setProperty(
-      messageConfig, "data.flags.dnd5e.use.enchantmentProfile", usageConfig.enchantmentProfile
+      messageConfig, "data.flags.varlyn-dnd5e.use.enchantmentProfile", usageConfig.enchantmentProfile
     );
 
     // Don't display message if just auto-disabling existing enchantment
-    if ( this.existingEnchantment?.flags.dnd5e?.enchantmentProfile === usageConfig.enchantmentProfile ) {
+    if ( this.existingEnchantment?.flags["varlyn-dnd5e"]?.enchantmentProfile === usageConfig.enchantmentProfile ) {
       messageConfig.create = false;
     }
   }
@@ -99,7 +99,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
 
   /** @override */
   onRenderChatCard(message, element) {
-    const enchantmentProfile = message.getFlag("dnd5e", "use.enchantmentProfile");
+    const enchantmentProfile = message.getFlag("varlyn-dnd5e", "use.enchantmentProfile");
     if ( !enchantmentProfile || !message.isContentVisible ) return;
 
     // Ensure concentration is still being maintained
@@ -125,7 +125,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
     if ( existingEnchantment ) await existingEnchantment?.delete({ chatMessageOrigin: results.message?.id });
 
     // If no existing enchantment, or existing enchantment profile doesn't match provided one, create new enchantment
-    if ( !existingEnchantment || (existingEnchantment.flags.dnd5e?.enchantmentProfile !== config.enchantmentProfile) ) {
+    if ( !existingEnchantment || (existingEnchantment.flags["varlyn-dnd5e"]?.enchantmentProfile !== config.enchantmentProfile) ) {
       const concentration = results.effects.find(e => e.statuses.has(CONFIG.specialStatusEffects.CONCENTRATING));
       this.applyEnchantment(config.enchantmentProfile, this.item, {
         chatMessage: results.message, concentration, strict: false
@@ -172,7 +172,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
 
     const flags = { enchantmentProfile: profile };
     if ( concentration ) flags.dependentOn = concentration.uuid;
-    const enchantmentData = effect.clone({ origin: this.uuid, "flags.dnd5e": flags }).toObject();
+    const enchantmentData = effect.clone({ origin: this.uuid, "flags.varlyn-dnd5e": flags }).toObject();
 
     /**
      * Hook that fires before an enchantment is applied to an item.
@@ -196,7 +196,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
       }
       enchantmentData._id = foundry.utils.randomID();
       const toCreate = await Item5e.createWithContents([item], {
-        transformAll: item => item.clone({ "flags.dnd5e.dependentOn": `.ActiveEffect.${enchantmentData._id}` })
+        transformAll: item => item.clone({ "flags.varlyn-dnd5e.dependentOn": `.ActiveEffect.${enchantmentData._id}` })
       });
       [item] = await Item5e.createDocuments(toCreate, { keepId: true, parent: actor });
     }

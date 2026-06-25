@@ -87,7 +87,7 @@ export default class CreateDocumentDialog extends Dialog5e {
     context.types = [];
     context.hasTypes = false;
     let defaultType = this.options.createData.type
-      ?? game.settings.get("dnd5e", "defaultDocumentSubtypes")[this.documentName];
+      ?? game.settings.get("varlyn-dnd5e", "defaultDocumentSubtypes")[this.documentName];
     const TYPES = this.documentType._createDialogTypes?.(parent) ?? this.documentType.TYPES;
     if ( TYPES?.length > 1 ) {
       if ( this.options.types?.length === 0 ) throw new Error("The array of sub-types to restrict to must not be empty");
@@ -166,9 +166,9 @@ export default class CreateDocumentDialog extends Dialog5e {
     }));
     foundry.utils.mergeObject(this.options.createData, formData.object);
     this.#submitted = true;
-    const subtypes = game.settings.get("dnd5e", "defaultDocumentSubtypes");
+    const subtypes = game.settings.get("varlyn-dnd5e", "defaultDocumentSubtypes");
     subtypes[this.documentName] = this.options.createData.type;
-    game.settings.set("dnd5e", "defaultDocumentSubtypes", subtypes);
+    game.settings.set("varlyn-dnd5e", "defaultDocumentSubtypes", subtypes);
     await this.close();
   }
 

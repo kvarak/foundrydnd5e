@@ -48,7 +48,7 @@ export default class TransformActivity extends ActivityMixin(BaseTransformActivi
    * @type {boolean}
    */
   get canTransform() {
-    return game.user.can("ACTOR_CREATE") && (game.user.isGM || game.settings.get("dnd5e", "allowPolymorphing"));
+    return game.user.can("ACTOR_CREATE") && (game.user.isGM || game.settings.get("varlyn-dnd5e", "allowPolymorphing"));
   }
 
   /* -------------------------------------------- */
@@ -76,7 +76,7 @@ export default class TransformActivity extends ActivityMixin(BaseTransformActivi
   async _finalizeMessageConfig(usageConfig, messageConfig, results) {
     await super._finalizeMessageConfig(usageConfig, messageConfig, results);
     if ( usageConfig.transform?.profile ) {
-      foundry.utils.setProperty(messageConfig.data, "flags.dnd5e.transform.profile", usageConfig.transform.profile);
+      foundry.utils.setProperty(messageConfig.data, "flags.varlyn-dnd5e.transform.profile", usageConfig.transform.profile);
     }
   }
 
@@ -110,8 +110,8 @@ export default class TransformActivity extends ActivityMixin(BaseTransformActivi
     if ( profile ) {
       const uuid = !this.transform.mode ? profile.uuid : await this.queryActor(profile);
       if ( uuid ) {
-        if ( results.message instanceof ChatMessage ) results.message.setFlag("dnd5e", "transform.uuid", uuid);
-        else foundry.utils.setProperty(results.message, "flags.dnd5e.transform.uuid", uuid);
+        if ( results.message instanceof ChatMessage ) results.message.setFlag("varlyn-dnd5e", "transform.uuid", uuid);
+        else foundry.utils.setProperty(results.message, "flags.varlyn-dnd5e.transform.uuid", uuid);
       }
     }
     await super._finalizeUsage(config, results);
@@ -158,9 +158,9 @@ export default class TransformActivity extends ActivityMixin(BaseTransformActivi
       return;
     }
 
-    const profileId = message.getFlag("dnd5e", "transform.profile");
+    const profileId = message.getFlag("varlyn-dnd5e", "transform.profile");
     const profile = this.profiles.find(p => p._id === profileId) || this.profiles[0];
-    const uuid = message.getFlag("dnd5e", "transform.uuid") ?? await this.queryActor(profile);
+    const uuid = message.getFlag("varlyn-dnd5e", "transform.uuid") ?? await this.queryActor(profile);
     const source = await fromUuid(uuid);
     if ( !source ) {
       ui.notifications.warn("VARLYN5E.TRANSFORM.Warning.SourceActor");

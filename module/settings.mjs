@@ -13,27 +13,27 @@ const { StringField } = foundry.data.fields;
  * Register all of the system's keybindings.
  */
 export function registerSystemKeybindings() {
-  game.keybindings.register("dnd5e", "skipDialogNormal", {
+  game.keybindings.register("varlyn-dnd5e", "skipDialogNormal", {
     name: "KEYBINDINGS.VARLYN5E.SkipDialogNormal",
     editable: [{ key: "ShiftLeft" }, { key: "ShiftRight" }]
   });
 
-  game.keybindings.register("dnd5e", "skipDialogAdvantage", {
+  game.keybindings.register("varlyn-dnd5e", "skipDialogAdvantage", {
     name: "KEYBINDINGS.VARLYN5E.SkipDialogAdvantage",
     editable: [{ key: "AltLeft" }, { key: "AltRight" }]
   });
 
-  game.keybindings.register("dnd5e", "skipDialogDisadvantage", {
+  game.keybindings.register("varlyn-dnd5e", "skipDialogDisadvantage", {
     name: "KEYBINDINGS.VARLYN5E.SkipDialogDisadvantage",
     editable: [{ key: "ControlLeft" }, { key: "ControlRight" }, { key: "OsLeft" }, { key: "OsRight" }]
   });
 
-  game.keybindings.register("dnd5e", "dragCopy", {
+  game.keybindings.register("varlyn-dnd5e", "dragCopy", {
     name: "KEYBINDINGS.VARLYN5E.DragCopy",
     editable: [{ key: "ControlLeft" }, { key: "ControlRight" }, { key: "AltLeft" }, { key: "AltRight" }]
   });
 
-  game.keybindings.register("dnd5e", "dragMove", {
+  game.keybindings.register("varlyn-dnd5e", "dragMove", {
     name: "KEYBINDINGS.VARLYN5E.DragMove",
     editable: [{ key: "ShiftLeft" }, { key: "ShiftRight" }, { key: "OsLeft" }, { key: "OsRight" }]
   });
@@ -46,14 +46,14 @@ export function registerSystemKeybindings() {
  */
 export function registerSystemSettings() {
   // Polymorph Settings
-  game.settings.register("dnd5e", "transformationSettings", {
+  game.settings.register("varlyn-dnd5e", "transformationSettings", {
     scope: "client",
     config: false,
     type: TransformationSetting
   });
 
   // Movement automation
-  game.settings.register("dnd5e", "movementAutomation", {
+  game.settings.register("varlyn-dnd5e", "movementAutomation", {
     name: "SETTINGS.VARLYN5E.AUTOMATION.Movement.Name",
     hint: "SETTINGS.VARLYN5E.AUTOMATION.Movement.Hint",
     scope: "world",
@@ -68,7 +68,7 @@ export function registerSystemSettings() {
   });
 
   // Sense-to-token vision sync
-  game.settings.register("dnd5e", "senseVisionSync", {
+  game.settings.register("varlyn-dnd5e", "senseVisionSync", {
     name: "SETTINGS.VARLYN5E.AUTOMATION.SenseVision.Name",
     hint: "SETTINGS.VARLYN5E.AUTOMATION.SenseVision.Hint",
     scope: "world",
@@ -81,7 +81,7 @@ export function registerSystemSettings() {
   });
 
   // Allow rotating square templates
-  game.settings.register("dnd5e", "gridAlignedSquareTemplates", {
+  game.settings.register("varlyn-dnd5e", "gridAlignedSquareTemplates", {
     name: "SETTINGS.5eGridAlignedSquareTemplatesN",
     hint: "SETTINGS.5eGridAlignedSquareTemplatesL",
     scope: "world",
@@ -91,7 +91,7 @@ export function registerSystemSettings() {
   });
 
   // Loyalty
-  game.settings.register("dnd5e", "loyaltyScore", {
+  game.settings.register("varlyn-dnd5e", "loyaltyScore", {
     name: "SETTINGS.VARLYN5E.LOYALTY.Name",
     hint: "SETTINGS.VARLYN5E.LOYALTY.Hint",
     scope: "world",
@@ -101,7 +101,7 @@ export function registerSystemSettings() {
   });
 
   // Disable Advancements
-  game.settings.register("dnd5e", "disableAdvancements", {
+  game.settings.register("varlyn-dnd5e", "disableAdvancements", {
     name: "SETTINGS.5eNoAdvancementsN",
     hint: "SETTINGS.5eNoAdvancementsL",
     scope: "world",
@@ -111,7 +111,7 @@ export function registerSystemSettings() {
   });
 
   // Disable Concentration Tracking
-  game.settings.register("dnd5e", "disableConcentration", {
+  game.settings.register("varlyn-dnd5e", "disableConcentration", {
     name: "SETTINGS.5eNoConcentrationN",
     hint: "SETTINGS.5eNoConcentrationL",
     scope: "world",
@@ -121,7 +121,7 @@ export function registerSystemSettings() {
   });
 
   // Collapse Item Cards (by default)
-  game.settings.register("dnd5e", "autoCollapseItemCards", {
+  game.settings.register("varlyn-dnd5e", "autoCollapseItemCards", {
     name: "SETTINGS.5eAutoCollapseCardN",
     hint: "SETTINGS.5eAutoCollapseCardL",
     scope: "client",
@@ -134,7 +134,7 @@ export function registerSystemSettings() {
   });
 
   // Collapse Chat Card Trays
-  game.settings.register("dnd5e", "autoCollapseChatTrays", {
+  game.settings.register("varlyn-dnd5e", "autoCollapseChatTrays", {
     name: "SETTINGS.VARLYN5E.COLLAPSETRAYS.Name",
     hint: "SETTINGS.VARLYN5E.COLLAPSETRAYS.Hint",
     scope: "client",
@@ -150,7 +150,7 @@ export function registerSystemSettings() {
   });
 
   // Allow Rests from Sheet
-  game.settings.register("dnd5e", "allowRests", {
+  game.settings.register("varlyn-dnd5e", "allowRests", {
     name: "SETTINGS.VARLYN5E.PERMISSIONS.AllowRests.Name",
     hint: "SETTINGS.VARLYN5E.PERMISSIONS.AllowRests.Hint",
     scope: "world",
@@ -160,7 +160,7 @@ export function registerSystemSettings() {
   });
 
   // Allow Polymorphing
-  game.settings.register("dnd5e", "allowPolymorphing", {
+  game.settings.register("varlyn-dnd5e", "allowPolymorphing", {
     name: "SETTINGS.VARLYN5E.PERMISSIONS.AllowTransformation.Name",
     hint: "SETTINGS.VARLYN5E.PERMISSIONS.AllowTransformation.Hint",
     scope: "world",
@@ -170,7 +170,7 @@ export function registerSystemSettings() {
   });
 
   // Allow Summoning
-  game.settings.register("dnd5e", "allowSummoning", {
+  game.settings.register("varlyn-dnd5e", "allowSummoning", {
     name: "SETTINGS.VARLYN5E.PERMISSIONS.AllowSummoning.Name",
     hint: "SETTINGS.VARLYN5E.PERMISSIONS.AllowSummoning.Hint",
     scope: "world",
@@ -180,7 +180,7 @@ export function registerSystemSettings() {
   });
 
   // Metric Length Weights
-  game.settings.register("dnd5e", "metricLengthUnits", {
+  game.settings.register("varlyn-dnd5e", "metricLengthUnits", {
     name: "SETTINGS.VARLYN5E.METRIC.LengthUnits.Name",
     hint: "SETTINGS.VARLYN5E.METRIC.LengthUnits.Hint",
     scope: "world",
@@ -190,7 +190,7 @@ export function registerSystemSettings() {
   });
 
   // Metric Volume Weights
-  game.settings.register("dnd5e", "metricVolumeUnits", {
+  game.settings.register("varlyn-dnd5e", "metricVolumeUnits", {
     name: "SETTINGS.VARLYN5E.METRIC.VolumeUnits.Name",
     hint: "SETTINGS.VARLYN5E.METRIC.VolumeUnits.Hint",
     scope: "world",
@@ -200,7 +200,7 @@ export function registerSystemSettings() {
   });
 
   // Metric Unit Weights
-  game.settings.register("dnd5e", "metricWeightUnits", {
+  game.settings.register("varlyn-dnd5e", "metricWeightUnits", {
     name: "SETTINGS.VARLYN5E.METRIC.WeightUnits.Name",
     hint: "SETTINGS.VARLYN5E.METRIC.WeightUnits.Hint",
     scope: "world",
@@ -210,7 +210,7 @@ export function registerSystemSettings() {
   });
 
   // Strict validation
-  game.settings.register("dnd5e", "strictValidation", {
+  game.settings.register("varlyn-dnd5e", "strictValidation", {
     scope: "world",
     config: false,
     type: Boolean,
@@ -218,7 +218,7 @@ export function registerSystemSettings() {
   });
 
   // Compendium Browser source exclusion
-  game.settings.registerMenu("dnd5e", "packSourceConfiguration", {
+  game.settings.registerMenu("varlyn-dnd5e", "packSourceConfiguration", {
     name: "VARLYN5E.CompendiumBrowser.Sources.Name",
     label: "VARLYN5E.CompendiumBrowser.Sources.Label",
     hint: "VARLYN5E.CompendiumBrowser.Sources.Hint",
@@ -227,7 +227,7 @@ export function registerSystemSettings() {
     restricted: true
   });
 
-  game.settings.register("dnd5e", "packSourceConfiguration", {
+  game.settings.register("varlyn-dnd5e", "packSourceConfiguration", {
     name: "Pack Source Configuration",
     scope: "world",
     config: false,
@@ -244,7 +244,7 @@ export function registerSystemSettings() {
   });
 
   // Calendar Settings
-  game.settings.registerMenu("dnd5e", "calendarConfiguration", {
+  game.settings.registerMenu("varlyn-dnd5e", "calendarConfiguration", {
     name: "VARLYN5E.CALENDAR.Configuration.Name",
     label: "VARLYN5E.CALENDAR.Configuration.Label",
     hint: "VARLYN5E.CALENDAR.Configuration.Hint",
@@ -252,7 +252,7 @@ export function registerSystemSettings() {
     type: CalendarSettingsConfig
   });
 
-  game.settings.register("dnd5e", "calendar", {
+  game.settings.register("varlyn-dnd5e", "calendar", {
     name: "VARLYN5E.CALENDAR.FIELDS.calendar.label",
     hint: "VARLYN5E.CALENDAR.FIELDS.calendar.hint",
     scope: "world",
@@ -265,7 +265,7 @@ export function registerSystemSettings() {
     requiresReload: true
   });
 
-  game.settings.register("dnd5e", "calendarConfig", {
+  game.settings.register("varlyn-dnd5e", "calendarConfig", {
     name: "Calendar Configuration",
     scope: "world",
     config: false,
@@ -273,7 +273,7 @@ export function registerSystemSettings() {
     onChange: () => varlyn5e.ui.calendar?.onUpdateSettings?.()
   });
 
-  game.settings.register("dnd5e", "calendarPreferences", {
+  game.settings.register("varlyn-dnd5e", "calendarPreferences", {
     name: "Calendar Preferences",
     scope: "user",
     config: false,
@@ -282,7 +282,7 @@ export function registerSystemSettings() {
   });
 
   // Combat Settings
-  game.settings.registerMenu("dnd5e", "combatConfiguration", {
+  game.settings.registerMenu("varlyn-dnd5e", "combatConfiguration", {
     name: "SETTINGS.VARLYN5E.COMBAT.Name",
     label: "SETTINGS.VARLYN5E.COMBAT.Label",
     hint: "SETTINGS.VARLYN5E.COMBAT.Hint",
@@ -291,7 +291,7 @@ export function registerSystemSettings() {
     restricted: true
   });
 
-  game.settings.register("dnd5e", "autoRecharge", {
+  game.settings.register("varlyn-dnd5e", "autoRecharge", {
     name: "SETTINGS.VARLYN5E.NPCS.AutoRecharge.Name",
     hint: "SETTINGS.VARLYN5E.NPCS.AutoRecharge.Hint",
     scope: "world",
@@ -305,7 +305,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register("dnd5e", "autoRollNPCHP", {
+  game.settings.register("varlyn-dnd5e", "autoRollNPCHP", {
     name: "SETTINGS.VARLYN5E.NPCS.AutoRollNPCHP.Name",
     hint: "SETTINGS.VARLYN5E.NPCS.AutoRollNPCHP.Hint",
     scope: "world",
@@ -319,7 +319,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register("dnd5e", "criticalDamageModifiers", {
+  game.settings.register("varlyn-dnd5e", "criticalDamageModifiers", {
     name: "SETTINGS.VARLYN5E.CRITICAL.MultiplyModifiers.Name",
     hint: "SETTINGS.VARLYN5E.CRITICAL.MultiplyModifiers.Hint",
     scope: "world",
@@ -328,7 +328,7 @@ export function registerSystemSettings() {
     default: false
   });
 
-  game.settings.register("dnd5e", "criticalDamageMaxDice", {
+  game.settings.register("varlyn-dnd5e", "criticalDamageMaxDice", {
     name: "SETTINGS.VARLYN5E.CRITICAL.MaxDice.Name",
     hint: "SETTINGS.VARLYN5E.CRITICAL.MaxDice.Hint",
     scope: "world",
@@ -337,7 +337,7 @@ export function registerSystemSettings() {
     default: false
   });
 
-  game.settings.register("dnd5e", "encounterPlacementBehavior", {
+  game.settings.register("varlyn-dnd5e", "encounterPlacementBehavior", {
     name: "SETTINGS.VARLYN5E.ENCOUNTERS.EncounterPlacementBehavior.Name",
     hint: "SETTINGS.VARLYN5E.ENCOUNTERS.EncounterPlacementBehavior.Hint",
     scope: "world",
@@ -351,7 +351,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register("dnd5e", "initiativeDexTiebreaker", {
+  game.settings.register("varlyn-dnd5e", "initiativeDexTiebreaker", {
     name: "SETTINGS.VARLYN5E.COMBAT.DexTiebreaker.Name",
     hint: "SETTINGS.VARLYN5E.COMBAT.DexTiebreaker.Hint",
     scope: "world",
@@ -360,7 +360,7 @@ export function registerSystemSettings() {
     type: Boolean
   });
 
-  game.settings.register("dnd5e", "initiativeGroupCombatants", {
+  game.settings.register("varlyn-dnd5e", "initiativeGroupCombatants", {
     name: "SETTINGS.VARLYN5E.COMBAT.InitiativeGroupCombatants.Name",
     hint: "SETTINGS.VARLYN5E.COMBAT.InitiativeGroupCombatants.Hint",
     scope: "world",
@@ -369,7 +369,7 @@ export function registerSystemSettings() {
     type: Boolean
   });
 
-  game.settings.register("dnd5e", "initiativeGroupRoll", {
+  game.settings.register("varlyn-dnd5e", "initiativeGroupRoll", {
     name: "SETTINGS.VARLYN5E.COMBAT.InitiativeGroupRoll.Name",
     hint: "SETTINGS.VARLYN5E.COMBAT.InitiativeGroupRoll.Hint",
     scope: "world",
@@ -378,7 +378,7 @@ export function registerSystemSettings() {
     type: Boolean
   });
 
-  game.settings.register("dnd5e", "initiativeScore", {
+  game.settings.register("varlyn-dnd5e", "initiativeScore", {
     name: "SETTINGS.VARLYN5E.COMBAT.InitiativeScore.Name",
     hint: "SETTINGS.VARLYN5E.COMBAT.InitiativeScore.Hint",
     scope: "world",
@@ -393,7 +393,7 @@ export function registerSystemSettings() {
   });
 
   // Variant Rules
-  game.settings.registerMenu("dnd5e", "variantRulesConfiguration", {
+  game.settings.registerMenu("varlyn-dnd5e", "variantRulesConfiguration", {
     name: "SETTINGS.VARLYN5E.VARIANT.Name",
     label: "SETTINGS.VARLYN5E.VARIANT.Label",
     hint: "SETTINGS.VARLYN5E.VARIANT.Hint",
@@ -402,7 +402,7 @@ export function registerSystemSettings() {
     restricted: true
   });
 
-  game.settings.register("dnd5e", "allowFeats", {
+  game.settings.register("varlyn-dnd5e", "allowFeats", {
     name: "SETTINGS.VARLYN5E.VARIANT.AllowFeats.Name",
     hint: "SETTINGS.VARLYN5E.VARIANT.AllowFeats.Hint",
     scope: "world",
@@ -411,7 +411,7 @@ export function registerSystemSettings() {
     type: Boolean
   });
 
-  game.settings.register("dnd5e", "currencyWeight", {
+  game.settings.register("varlyn-dnd5e", "currencyWeight", {
     name: "SETTINGS.VARLYN5E.VARIANT.CurrencyWeight.Name",
     hint: "SETTINGS.VARLYN5E.VARIANT.CurrencyWeight.Hint",
     scope: "world",
@@ -420,7 +420,7 @@ export function registerSystemSettings() {
     type: Boolean
   });
 
-  game.settings.register("dnd5e", "encumbrance", {
+  game.settings.register("varlyn-dnd5e", "encumbrance", {
     name: "SETTINGS.VARLYN5E.VARIANT.Encumbrance.Name",
     hint: "SETTINGS.VARLYN5E.VARIANT.Encumbrance.Hint",
     scope: "world",
@@ -434,7 +434,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register("dnd5e", "levelingMode", {
+  game.settings.register("varlyn-dnd5e", "levelingMode", {
     name: "SETTINGS.VARLYN5E.VARIANT.LevelingMode.Name",
     hint: "SETTINGS.VARLYN5E.VARIANT.LevelingMode.Hint",
     scope: "world",
@@ -448,7 +448,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register("dnd5e", "proficiencyModifier", {
+  game.settings.register("varlyn-dnd5e", "proficiencyModifier", {
     name: "SETTINGS.VARLYN5E.VARIANT.ProficiencyModifier.Name",
     hint: "SETTINGS.VARLYN5E.VARIANT.ProficiencyModifier.Hint",
     scope: "world",
@@ -461,7 +461,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register("dnd5e", "restVariant", {
+  game.settings.register("varlyn-dnd5e", "restVariant", {
     name: "SETTINGS.VARLYN5E.VARIANT.Rest.Name",
     hint: "SETTINGS.VARLYN5E.VARIANT.Rest.Hint",
     scope: "world",
@@ -476,7 +476,7 @@ export function registerSystemSettings() {
   });
 
   // Visibility Settings
-  game.settings.registerMenu("dnd5e", "visibilityConfiguration", {
+  game.settings.registerMenu("varlyn-dnd5e", "visibilityConfiguration", {
     name: "SETTINGS.VARLYN5E.VISIBILITY.Name",
     label: "SETTINGS.VARLYN5E.VISIBILITY.Label",
     hint: "SETTINGS.VARLYN5E.VISIBILITY.Hint",
@@ -485,7 +485,7 @@ export function registerSystemSettings() {
     restricted: true
   });
 
-  game.settings.register("dnd5e", "attackRollVisibility", {
+  game.settings.register("varlyn-dnd5e", "attackRollVisibility", {
     name: "SETTINGS.VARLYN5E.VISIBILITY.Attack.Name",
     hint: "SETTINGS.VARLYN5E.VISIBILITY.Attack.Hint",
     scope: "world",
@@ -499,7 +499,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register("dnd5e", "bloodied", {
+  game.settings.register("varlyn-dnd5e", "bloodied", {
     name: "SETTINGS.VARLYN5E.BLOODIED.Name",
     hint: "SETTINGS.VARLYN5E.BLOODIED.Hint",
     scope: "world",
@@ -513,7 +513,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register("dnd5e", "challengeVisibility", {
+  game.settings.register("varlyn-dnd5e", "challengeVisibility", {
     name: "SETTINGS.VARLYN5E.VISIBILITY.Challenge.Name",
     hint: "SETTINGS.VARLYN5E.VISIBILITY.Challenge.Hint",
     scope: "world",
@@ -527,7 +527,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register("dnd5e", "concealItemDescriptions", {
+  game.settings.register("varlyn-dnd5e", "concealItemDescriptions", {
     name: "SETTINGS.VARLYN5E.VISIBILITY.ItemDescriptions.Name",
     hint: "SETTINGS.VARLYN5E.VISIBILITY.ItemDescriptions.Hint",
     scope: "world",
@@ -537,7 +537,7 @@ export function registerSystemSettings() {
   });
 
   // Primary Group
-  game.settings.register("dnd5e", "primaryParty", {
+  game.settings.register("varlyn-dnd5e", "primaryParty", {
     name: "Primary Party",
     scope: "world",
     config: false,
@@ -547,7 +547,7 @@ export function registerSystemSettings() {
   });
 
   // Control hints
-  game.settings.register("dnd5e", "controlHints", {
+  game.settings.register("varlyn-dnd5e", "controlHints", {
     name: "VARLYN5E.Controls.Name",
     hint: "VARLYN5E.Controls.Hint",
     scope: "client",
@@ -557,7 +557,7 @@ export function registerSystemSettings() {
   });
 
   // NPC sheet default skills
-  game.settings.register("dnd5e", "defaultSkills", {
+  game.settings.register("varlyn-dnd5e", "defaultSkills", {
     name: "SETTINGS.VARLYN5E.DEFAULTSKILLS.Name",
     hint: "SETTINGS.VARLYN5E.DEFAULTSKILLS.Hint",
     type: new foundry.data.fields.SetField(
@@ -581,7 +581,7 @@ function cacheSettings() {
   varlyn5e.settings = { rulesVersion: "modern" };
   for ( const setting of game.settings.settings.values() ) {
     const { key, namespace, onChange, requiresReload, scope } = setting;
-    if ( (scope !== "world") || (namespace !== "dnd5e") ) continue;
+    if ( (scope !== "world") || (namespace !== "varlyn-dnd5e") ) continue;
     varlyn5e.settings[key] = game.settings.get(namespace, key);
     if ( !requiresReload ) setting.onChange = (value, ...args) => {
       varlyn5e.settings[key] = value;
@@ -596,7 +596,7 @@ function cacheSettings() {
  * Register additional settings after modules have had a chance to initialize to give them a chance to modify choices.
  */
 export function registerDeferredSettings() {
-  game.settings.register("dnd5e", "defaultDocumentSubtypes", {
+  game.settings.register("varlyn-dnd5e", "defaultDocumentSubtypes", {
     name: "Default Document Subtypes",
     scope: "client",
     config: false,
@@ -604,7 +604,7 @@ export function registerDeferredSettings() {
     default: { Actor: game.user.isGM ? "npc" : "character", Item: "feat" }
   });
 
-  game.settings.register("dnd5e", "theme", {
+  game.settings.register("varlyn-dnd5e", "theme", {
     name: "SETTINGS.VARLYN5E.THEME.Name",
     hint: "SETTINGS.VARLYN5E.THEME.Hint",
     scope: "client",
@@ -619,10 +619,10 @@ export function registerDeferredSettings() {
   });
 
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-    setTheme(document.body, game.settings.get("dnd5e", "theme"));
+    setTheme(document.body, game.settings.get("varlyn-dnd5e", "theme"));
   });
   matchMedia("(prefers-contrast: more)").addEventListener("change", () => {
-    setTheme(document.body, game.settings.get("dnd5e", "theme"));
+    setTheme(document.body, game.settings.get("varlyn-dnd5e", "theme"));
   });
 
   // Hook into core color scheme setting.

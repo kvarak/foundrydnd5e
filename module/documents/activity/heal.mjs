@@ -60,7 +60,7 @@ export default class HealActivity extends ActivityMixin(BaseHealActivityData) {
 
   /** @override */
   async _triggerSubsequentActions(config, results) {
-    this.rollDamage({ event: config.event }, {}, { data: { "flags.dnd5e.originatingMessage": results.message?.id } });
+    this.rollDamage({ event: config.event }, {}, { data: { "flags.varlyn-dnd5e.originatingMessage": results.message?.id } });
   }
 
   /* -------------------------------------------- */
@@ -70,7 +70,7 @@ export default class HealActivity extends ActivityMixin(BaseHealActivityData) {
   /** @inheritDoc */
   async rollDamage(config={}, dialog={}, message={}) {
     const messageConfig = foundry.utils.mergeObject({
-      "data.flags.dnd5e.roll.type": "healing"
+      "data.flags.varlyn-dnd5e.roll.type": "healing"
     }, message);
     return super.rollDamage(config, dialog, messageConfig);
   }

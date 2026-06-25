@@ -69,8 +69,8 @@ export default class InitiativeConfig extends BaseConfigSheet {
     context.flags = {
       alert: {
         field: new BooleanField({ label: _loc("VARLYN5E.FlagsAlert") }),
-        name: "flags.dnd5e.initiativeAlert",
-        value: source.flags.dnd5e?.initiativeAlert
+        name: "flags.varlyn-dnd5e.initiativeAlert",
+        value: source.flags["varlyn-dnd5e"]?.initiativeAlert
       }
     };
 

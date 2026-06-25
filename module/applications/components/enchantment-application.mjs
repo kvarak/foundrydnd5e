@@ -156,7 +156,7 @@ export default class EnchantmentApplicationElement extends MaybeAdoptable {
     }
 
     this.enchantmentActivity.applyEnchantment(
-      this.chatMessage.getFlag("dnd5e", "use.enchantmentProfile"),
+      this.chatMessage.getFlag("varlyn-dnd5e", "use.enchantmentProfile"),
       droppedItem,
       { chatMessage: this.chatMessage, concentration }
     );

@@ -317,7 +317,7 @@ export default class CalendarData5e extends foundry.data.CalendarData {
     };
 
     const days = CalendarData5e.#dayDifference(previousTime, nowTime);
-    foundry.utils.setProperty(options, "dnd5e.deltas", {
+    foundry.utils.setProperty(options, "varlyn5e.deltas", {
       midnights: days,
       middays: days + passedHour(game.time.calendar.days.hoursPerDay / 2),
       sunrises: ("sunrise" in game.time.calendar) ? days + passedHour(game.time.calendar.sunrise(nowTime)) : null,

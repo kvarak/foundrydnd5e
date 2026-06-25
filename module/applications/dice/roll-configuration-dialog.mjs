@@ -286,8 +286,8 @@ export default class RollConfigurationDialog extends Dialog5e {
 
     /**
      * A hook event that fires when a roll config is built using the roll prompt. Multiple hooks may be called depending
-     * on the rolling method (e.g. `dnd5e.buildSkillRollConfig`, `dnd5e.buildAbilityCheckRollConfig`,
-     * `dnd5e.buildRollConfig`).
+     * on the rolling method (e.g. `varlyn5e.buildSkillRollConfig`, `varlyn5e.buildAbilityCheckRollConfig`,
+     * `varlyn5e.buildRollConfig`).
      * @function varlyn5e.buildRollConfig
      * @memberof hookEvents
      * @param {RollConfigurationDialog} app    Roll configuration dialog.
@@ -296,7 +296,7 @@ export default class RollConfigurationDialog extends Dialog5e {
      * @param {number} index                   Index of the roll within all rolls being prepared.
      */
     for ( const hookName of this.#config.hookNames ?? [""] ) {
-      Hooks.callAll(`dnd5e.build${hookName.capitalize()}RollConfig`, this, config, formData, index);
+      Hooks.callAll(`varlyn5e.build${hookName.capitalize()}RollConfig`, this, config, formData, index);
     }
 
     config = this._buildConfig(config, formData, index);
@@ -304,8 +304,8 @@ export default class RollConfigurationDialog extends Dialog5e {
 
     /**
      * A hook event that fires after a roll config has been built using the roll prompt. Multiple hooks may be called
-     * depending on the rolling method (e.g. `dnd5e.postBuildSkillRollConfig`, `dnd5e.postBuildAbilityCheckRollConfig`,
-     * `dnd5e.postBuildRollConfig`).
+     * depending on the rolling method (e.g. `varlyn5e.postBuildSkillRollConfig`, `varlyn5e.postBuildAbilityCheckRollConfig`,
+     * `varlyn5e.postBuildRollConfig`).
      * @function varlyn5e.postBuildRollConfig
      * @memberof hookEvents
      * @param {BasicRollProcessConfiguration} process  Full process configuration data.
@@ -316,7 +316,7 @@ export default class RollConfigurationDialog extends Dialog5e {
      * @param {FormDataExtended} [options.formData]    Any data entered into the rolling prompt.
      */
     for ( const hookName of this.#config.hookNames ?? [""] ) {
-      Hooks.callAll(`dnd5e.postBuild${hookName.capitalize()}RollConfig`, this.config, config, index, {
+      Hooks.callAll(`varlyn5e.postBuild${hookName.capitalize()}RollConfig`, this.config, config, index, {
         app: this, formData
       });
     }
@@ -399,7 +399,7 @@ export default class RollConfigurationDialog extends Dialog5e {
 
   /** @override */
   _onClose(options={}) {
-    if ( !options.dnd5e?.submitted ) this.#rolls = [];
+    if ( !options["varlyn-dnd5e"]?.submitted ) this.#rolls = [];
   }
 
   /* -------------------------------------------- */

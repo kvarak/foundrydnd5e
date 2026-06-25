@@ -51,7 +51,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
    * @type {boolean}
    */
   get canSummon() {
-    return game.user.can("TOKEN_CREATE") && (game.user.isGM || game.settings.get("dnd5e", "allowSummoning"));
+    return game.user.can("TOKEN_CREATE") && (game.user.isGM || game.settings.get("varlyn-dnd5e", "allowSummoning"));
   }
 
   /* -------------------------------------------- */
@@ -151,7 +151,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
     if ( !summonUuid ) return;
     const fetchOptions = {
       folderId: this.actor?.folder?.id ?? null,
-      origin: { key: "flags.dnd5e.summon.origin", value: this.item?.uuid }
+      origin: { key: "flags.varlyn-dnd5e.summon.origin", value: this.item?.uuid }
     };
     const actor = await varlyn5e.documents.Actor5e.fetchExisting(summonUuid, fetchOptions);
 
@@ -267,7 +267,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
     const prof = rollData.attributes?.prof ?? 0;
 
     // Add flags
-    actorUpdates["flags.dnd5e.summon"] = {
+    actorUpdates["flags.varlyn-dnd5e.summon"] = {
       level: this.relevantLevel,
       mod: rollData.mod,
       origin: this.item.uuid,

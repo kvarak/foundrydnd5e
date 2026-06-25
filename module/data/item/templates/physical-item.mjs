@@ -310,8 +310,8 @@ export default class PhysicalItemTemplate extends SystemDataModel {
   async asGear() {
     if ( !this.properties?.has("gear") ) return this.parent;
     let clone;
-    const change = { "flags.dnd5e.gearSource": this.parent.uuid };
-    const flags = this.parent.getFlag("dnd5e", "gear") ?? {};
+    const change = { "flags.varlyn-dnd5e.gearSource": this.parent.uuid };
+    const flags = this.parent.getFlag("varlyn-dnd5e", "gear") ?? {};
     if ( this.metadata.compendiumGearSource && this.parent._stats.compendiumSource && (flags.preserve !== true) ) {
       const item = await fromUuid(this.parent._stats.compendiumSource);
       const name = (flags.preserveName === true ? this.parent._source.name : flags.preserveName) ?? item?.name;
@@ -348,7 +348,7 @@ export default class PhysicalItemTemplate extends SystemDataModel {
    */
   gearPresentationData() {
     const compendiumSrc = fromUuidSync(this.parent._stats.compendiumSource, { strict: false });
-    const flags = this.parent.getFlag("dnd5e", "gear") ?? {};
+    const flags = this.parent.getFlag("varlyn-dnd5e", "gear") ?? {};
     const useCompendiumCopy = this.metadata.compendiumGearSource && compendiumSrc && (flags.preserve !== true);
     const enchantment = this.parent.effects.get(flags.effectId);
 
@@ -361,7 +361,7 @@ export default class PhysicalItemTemplate extends SystemDataModel {
     // If persevered name specified, display preserved name outside with special name(?) inside
     //   (e.g. "Stacy (Longsword +1)")
     if ( flags.preserveName ) {
-      const namePattern = enchantment?.flags.dnd5e?.namePattern;
+      const namePattern = enchantment?.flags["varlyn-dnd5e"]?.namePattern;
       const nameOuter = flags.preserveName === true ? this.parent._source.name : flags.preserveName;
       const nameInner = namePattern ? namePattern.replace("{}", name) : name;
       if ( nameOuter !== nameInner ) {

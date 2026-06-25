@@ -59,7 +59,7 @@ export default class ItemDataModel extends SystemDataModel {
    * @type {Item5e|void}
    */
   get advancementRootItem() {
-    return this.parent?.actor?.items.get(this.parent.getFlag("dnd5e", "advancementRoot")?.split(".")?.[0]);
+    return this.parent?.actor?.items.get(this.parent.getFlag("varlyn-dnd5e", "advancementRoot")?.split(".")?.[0]);
   }
 
   /* -------------------------------------------- */
@@ -147,7 +147,7 @@ export default class ItemDataModel extends SystemDataModel {
   prepareBaseData() {
     if ( this.parent.isEmbedded && this.parent.actor?.items.has(this.parent.id) ) {
       this.parent.actor.identifiedItems?.set(this.parent.identifier, this.parent);
-      const sourceId = this.parent._stats.compendiumSource ?? this.parent.flags.dnd5e?.sourceId;
+      const sourceId = this.parent._stats.compendiumSource ?? this.parent.flags["varlyn-dnd5e"]?.sourceId;
       if ( sourceId ) this.parent.actor.sourcedItems?.set(sourceId, this.parent);
     }
   }
@@ -204,7 +204,7 @@ export default class ItemDataModel extends SystemDataModel {
     const context = {
       name, type, img, price, weight, uses, school, materials,
       config: CONFIG.VARLYN5E,
-      controlHints: game.settings.get("dnd5e", "controlHints"),
+      controlHints: game.settings.get("varlyn-dnd5e", "controlHints"),
       labels: foundry.utils.deepClone((activity ?? this.parent).labels),
       tags: this.parent.labels?.components?.tags,
       subtitle: this.tooltipSubtitle.filterJoin(" • "),
@@ -219,7 +219,7 @@ export default class ItemDataModel extends SystemDataModel {
             || "",
           enrichmentOptions
         ),
-        concealed: game.user.isGM && game.settings.get("dnd5e", "concealItemDescriptions") && !description.chat
+        concealed: game.user.isGM && game.settings.get("varlyn-dnd5e", "concealItemDescriptions") && !description.chat
       }
     };
 

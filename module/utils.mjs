@@ -510,7 +510,7 @@ export function areKeysPressed(event, action) {
   addModifiers(MODIFIER_KEYS.CONTROL, event.ctrlKey);
   addModifiers("Meta", event.metaKey);
   addModifiers(MODIFIER_KEYS.SHIFT, event.shiftKey);
-  return game.keybindings.get("dnd5e", action).some(b => {
+  return game.keybindings.get("varlyn-dnd5e", action).some(b => {
     if ( game.keyboard.downKeys.has(b.key) && b.modifiers.every(m => activeModifiers[m]) ) return true;
     if ( b.modifiers.length ) return false;
     return activeModifiers[b.key];
@@ -792,7 +792,7 @@ function _convertSystemUnits(value, from, to, config, { message, strict }) {
  */
 export function defaultUnits(type) {
   const settingKey = type === "travel" ? "metricLengthUnits" : `metric${type.capitalize()}Units`;
-  return CONFIG.VARLYN5E.defaultUnits[type]?.[game.settings.get("dnd5e", settingKey) ? "metric" : "imperial"];
+  return CONFIG.VARLYN5E.defaultUnits[type]?.[game.settings.get("varlyn-dnd5e", settingKey) ? "metric" : "imperial"];
 }
 
 /* -------------------------------------------- */
@@ -851,7 +851,7 @@ export function parseOrString(raw) {
 /**
  * Define a set of template paths to pre-load. Pre-loaded templates are compiled and cached for fast access when
  * rendering. These paths will also be available as Handlebars partials by using the file name
- * (e.g. "dnd5e.actor-traits").
+ * (e.g. "varlyn5e.actor-traits").
  * @returns {Promise}
  */
 export async function preloadHandlebarsTemplates() {

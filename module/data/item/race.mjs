@@ -134,7 +134,7 @@ export default class RaceData extends ItemDataModel.mixin(AdvancementTemplate, I
     context.subtitles = [{ label: _loc(CONFIG.Item.typeLabels.race) }];
     context.singleDescription = true;
 
-    context.parts = ["dnd5e.details-species"];
+    context.parts = ["varlyn5e.details-species"];
     context.info = [{
       label: "VARLYN5E.CreatureType",
       classes: "info-sm",

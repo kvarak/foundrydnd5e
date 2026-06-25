@@ -387,7 +387,7 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
   async _prepareEffectsContext(context, options) {
     const effectMap = {};
     const riders = [];
-    const riderIds = new Set(this.item.getFlag("dnd5e", "riders.effect") ?? []);
+    const riderIds = new Set(this.item.getFlag("varlyn-dnd5e", "riders.effect") ?? []);
     context.tab = context.tabs.effects;
     context.effects = EffectsElement.prepareCategories(this.item.effects, { parent: this.item });
     for ( const category of Object.values(context.effects) ) {
@@ -1038,7 +1038,7 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
     }
 
     if ( !advancements.length ) return false;
-    if ( this.item.actor?.system.metadata?.supportsAdvancement && !game.settings.get("dnd5e", "disableAdvancements") ) {
+    if ( this.item.actor?.system.metadata?.supportsAdvancement && !game.settings.get("varlyn-dnd5e", "disableAdvancements") ) {
       const manager = AdvancementManager.forNewAdvancement(this.item.actor, this.item.id, advancements);
       if ( manager.steps.length ) return this._renderChild(manager);
     }

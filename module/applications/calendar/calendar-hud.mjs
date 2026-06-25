@@ -170,7 +170,7 @@ export default class CalendarHUD extends BaseCalendarHUD {
     const controls = this._doEvent(this._getCalendarButtons, {
       async: false,
       debugText: "Calendar Control Buttons",
-      hookName: "dnd5e.prepareCalendarButtons",
+      hookName: "varlyn5e.prepareCalendarButtons",
       hookResponse: true,
       parentClassHooks: false
     });
@@ -209,7 +209,7 @@ export default class CalendarHUD extends BaseCalendarHUD {
    * @param {CalendarTimeDeltas} [deltas={}]  Information on the time change deltas.
    */
   async renderCore(deltas={}) {
-    const prefs = game.settings.get("dnd5e", "calendarPreferences");
+    const prefs = game.settings.get("varlyn-dnd5e", "calendarPreferences");
     const dateFormatter = CONFIG.VARLYN5E.calendar.formatters.find(f => f.value === prefs.formatters.date);
     this.element.querySelector(".calendar-date").innerText = dateFormatter ? game.time.calendar.format(
       game.time.components, dateFormatter.formatter
@@ -302,6 +302,6 @@ export default class CalendarHUD extends BaseCalendarHUD {
 
   /** @override */
   static onUpdateWorldTime(worldTime, deltaTime, options, userId) {
-    if ( this.shouldDisplay ) varlyn5e.ui.calendar?.renderCore(options.dnd5e?.deltas);
+    if ( this.shouldDisplay ) varlyn5e.ui.calendar?.renderCore(options["varlyn-dnd5e"]?.deltas);
   }
 }

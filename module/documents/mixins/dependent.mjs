@@ -10,8 +10,8 @@ export default function DependentDocumentMixin(Base) {
     /** @inheritDoc */
     prepareData() {
       super.prepareData();
-      if ( this.flags?.dnd5e?.dependentOn && this.uuid ) {
-        varlyn5e.registry.dependents.track(this.flags.dnd5e.dependentOn, this);
+      if ( this.flags?.["varlyn-dnd5e"]?.dependentOn && this.uuid ) {
+        varlyn5e.registry.dependents.track(this.flags["varlyn-dnd5e"].dependentOn, this);
       }
     }
 
@@ -20,8 +20,8 @@ export default function DependentDocumentMixin(Base) {
     /** @inheritDoc */
     _onDelete(options, userId) {
       super._onDelete(options, userId);
-      if ( this.flags?.dnd5e?.dependentOn && this.uuid ) {
-        varlyn5e.registry.dependents.untrack(this.flags.dnd5e.dependentOn, this);
+      if ( this.flags?.["varlyn-dnd5e"]?.dependentOn && this.uuid ) {
+        varlyn5e.registry.dependents.untrack(this.flags["varlyn-dnd5e"].dependentOn, this);
       }
     }
   }

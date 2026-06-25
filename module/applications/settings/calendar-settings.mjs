@@ -63,7 +63,7 @@ export default class CalendarSettingsConfig extends BaseSettingsConfig {
    * @protected
    */
   async _prepareConfigContext(context, options) {
-    const data = game.settings.get("dnd5e", "calendarConfig");
+    const data = game.settings.get("varlyn-dnd5e", "calendarConfig");
     context.fields = Object.entries(CalendarConfigSetting.schema.fields)
       .filter(([name]) => name !== "buttons")
       .map(([name, field]) => ({
@@ -97,7 +97,7 @@ export default class CalendarSettingsConfig extends BaseSettingsConfig {
    * @protected
    */
   async _preparePreferencesContext(context, options) {
-    const data = game.settings.get("dnd5e", "calendarPreferences");
+    const data = game.settings.get("varlyn-dnd5e", "calendarPreferences");
     const fields = CalendarPreferencesSetting.schema.fields;
     context.fields = [
       {
@@ -126,7 +126,7 @@ export default class CalendarSettingsConfig extends BaseSettingsConfig {
         level: "warn",
         text: _loc("VARLYN5E.CALENDAR.Configuration.UnavailableMessage")
       };
-    } else if ( !game.settings.get("dnd5e", "calendarConfig")?.enabled ) {
+    } else if ( !game.settings.get("varlyn-dnd5e", "calendarConfig")?.enabled ) {
       context.disabled = !game.user.isGM;
       context.message = {
         level: "warn",

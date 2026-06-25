@@ -299,7 +299,7 @@ export default class FeatData extends ItemDataModel.mixin(
         placeholder: "VARLYN5E.Requirements" }
     ];
 
-    context.parts = ["dnd5e.details-feat", "dnd5e.field-uses"];
+    context.parts = ["varlyn5e.details-feat", "varlyn5e.field-uses"];
     const itemTypes = CONFIG.VARLYN5E.featureTypes[this._source.type.value];
     if ( itemTypes ) {
       context.itemType = itemTypes.label;

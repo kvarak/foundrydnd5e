@@ -125,7 +125,7 @@ export default function ActivityMixin(Base) {
      * @type {ActiveEffect5e|null}
      */
     get dependentOrigin() {
-      return this.item.effects.get(this.flags?.dnd5e?.dependentOn) ?? null;
+      return this.item.effects.get(this.flags?.["varlyn-dnd5e"]?.dependentOn) ?? null;
     }
 
     /* -------------------------------------------- */
@@ -242,7 +242,7 @@ export default function ActivityMixin(Base) {
 
       // Create concentration effect & end previous effects
       if ( usageConfig.concentration?.begin ) {
-        const effect = await item.actor.beginConcentrating(activity, { "flags.dnd5e.scaling": usageConfig.scaling });
+        const effect = await item.actor.beginConcentrating(activity, { "flags.varlyn-dnd5e.scaling": usageConfig.scaling });
         if ( effect ) {
           results.effects ??= [];
           results.effects.push(effect);
@@ -276,7 +276,7 @@ export default function ActivityMixin(Base) {
       if ( usageConfig.subsequentActions !== false ) {
         const deltas = results.message?.system?.deltas ?? results.message?.data?.system?.deltas;
         const consumed = this.createConsumedFlag(this.actor, deltas);
-        if ( consumed ) item.updateSource({ "flags.dnd5e.consumed": consumed });
+        if ( consumed ) item.updateSource({ "flags.varlyn-dnd5e.consumed": consumed });
         activity._triggerSubsequentActions(usageConfig, results);
       }
 
@@ -441,7 +441,7 @@ export default function ActivityMixin(Base) {
           || (!linked && hasSpellSlotConsumption);
       }
 
-      const levelingFlag = this.item.getFlag("dnd5e", "spellLevel");
+      const levelingFlag = this.item.getFlag("varlyn-dnd5e", "spellLevel");
       if ( levelingFlag ) {
         // Handle fixed scaling from spell scrolls
         config.scaling = false;
@@ -468,13 +468,13 @@ export default function ActivityMixin(Base) {
         config.scaling ??= 0;
       }
 
-      if ( this.requiresConcentration && !game.settings.get("dnd5e", "disableConcentration") ) {
+      if ( this.requiresConcentration && !game.settings.get("varlyn-dnd5e", "disableConcentration") ) {
         config.concentration ??= {};
         config.concentration.begin ??= true;
         const { effects } = this.actor.concentration;
         const limit = this.actor.system.attributes?.concentration?.limit ?? 0;
         if ( limit && (limit <= effects.size) ) config.concentration.end ??= effects.find(e => {
-          const data = e.flags.dnd5e?.item?.data ?? {};
+          const data = e.flags["varlyn-dnd5e"]?.item?.data ?? {};
           return (data === this.id) || (data._id === this.id);
         })?.id ?? effects.first()?.id ?? null;
       }
@@ -498,7 +498,7 @@ export default function ActivityMixin(Base) {
      * @protected
      */
     async _prepareUsageScaling(usageConfig, messageConfig, item) {
-      const levelingFlag = this.item.getFlag("dnd5e", "spellLevel");
+      const levelingFlag = this.item.getFlag("varlyn-dnd5e", "spellLevel");
       if ( levelingFlag ) {
         usageConfig.scaling = Math.max(0, levelingFlag.value - levelingFlag.base);
       } else if ( this.isSpell ) {
@@ -511,9 +511,9 @@ export default function ActivityMixin(Base) {
 
       if ( usageConfig.scaling ) {
         foundry.utils.setProperty(messageConfig, "data.system.scaling", usageConfig.scaling);
-        if ( usageConfig.scaling !== item.flags.dnd5e?.scaling ) {
+        if ( usageConfig.scaling !== item.flags["varlyn-dnd5e"]?.scaling ) {
           item.actor._embeddedPreparation = true;
-          item.updateSource({ "flags.dnd5e.scaling": usageConfig.scaling });
+          item.updateSource({ "flags.varlyn-dnd5e.scaling": usageConfig.scaling });
           delete item.actor._embeddedPreparation;
           item.prepareFinalAttributes();
         }
@@ -600,7 +600,7 @@ export default function ActivityMixin(Base) {
             const otherLinkedActivity = linkedActivity.type === "forward"
               ? linkedActivity.item.system.activities.get(linkedActivity.activity.id) : linkedActivity;
             if ( updates.delete.includes(linkedActivity.item.id)
-              && (this.item.getFlag("dnd5e", "cachedFor") === otherLinkedActivity?.relativeUUID) ) {
+              && (this.item.getFlag("varlyn-dnd5e", "cachedFor") === otherLinkedActivity?.relativeUUID) ) {
               updates.delete.push(this.item.id);
             }
           } else if ( results?.length ) {
@@ -911,7 +911,7 @@ export default function ActivityMixin(Base) {
       }, {});
       if ( canUpdate && !foundry.utils.isEmpty(lastDamageTypes)
         && (this.actor && this.actor.items.has(this.item.id)) ) {
-        await this.item.setFlag("dnd5e", `last.${this.id}.damageType`, lastDamageTypes);
+        await this.item.setFlag("varlyn-dnd5e", `last.${this.id}.damageType`, lastDamageTypes);
       }
 
       /**
@@ -1010,7 +1010,7 @@ export default function ActivityMixin(Base) {
       const consumed = this.createConsumedFlag(message.getAssociatedActor(), message.system.deltas);
       const scaling = message.system.scaling ?? 0;
       const item = (consumed || scaling) ? this.item.clone({
-        "flags.dnd5e": { consumed, scaling }
+        "flags.varlyn-dnd5e": { consumed, scaling }
       }, { keepId: true }) : this.item;
       const activity = item.system.activities.get(this.id);
 
@@ -1173,7 +1173,7 @@ export default function ActivityMixin(Base) {
      */
     getLinkedActivity(relativeUUID) {
       if ( !this.actor ) return null;
-      relativeUUID ??= this.item.getFlag("dnd5e", "cachedFor");
+      relativeUUID ??= this.item.getFlag("varlyn-dnd5e", "cachedFor");
       return fromUuidSync(relativeUUID, { relative: this.actor, strict: false });
     }
 
@@ -1187,7 +1187,7 @@ export default function ActivityMixin(Base) {
     getRollData(options) {
       const rollData = this.item.getRollData(options);
       rollData.activity = { ...this };
-      rollData.consumed = this.item.flags.dnd5e?.consumed;
+      rollData.consumed = this.item.flags["varlyn-dnd5e"]?.consumed;
       rollData.mod = this.actor?.system.abilities?.[this.ability]?.mod ?? 0;
       return rollData;
     }

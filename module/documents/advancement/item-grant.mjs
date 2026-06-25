@@ -105,7 +105,7 @@ export default class ItemGrantAdvancement extends Advancement {
     const existing = new Set(Object.values(added));
     for ( const uuid of selected ) {
       if ( existing.has(uuid) ) continue;
-      let itemData = retainedData.items?.find(i => i.flags?.dnd5e?.sourceId ?? i._stats?.compendiumSource);
+      let itemData = retainedData.items?.find(i => i.flags?.["varlyn-dnd5e"]?.sourceId ?? i._stats?.compendiumSource);
       if ( !itemData ) {
         itemData = await this.createItemData(uuid);
         if ( !itemData ) continue;
@@ -150,7 +150,7 @@ export default class ItemGrantAdvancement extends Advancement {
     const updates = {};
     for ( const item of data.items ?? [] ) {
       this.actor.updateSource({ items: [item] });
-      updates[item._id] = item.flags.dnd5e.sourceId;
+      updates[item._id] = item.flags["varlyn-dnd5e"].sourceId;
     }
     this.updateSource({
       "value.ability": data.ability,
@@ -173,7 +173,7 @@ export default class ItemGrantAdvancement extends Advancement {
       const item = this.actor.items.get(id);
       if ( item ) {
         items.push(item.toObject());
-        items[item.flags.dnd5e?.sourceId ?? item._stats.compendiumSource ?? item.uuid] = item.toObject();
+        items[item.flags["varlyn-dnd5e"]?.sourceId ?? item._stats.compendiumSource ?? item.uuid] = item.toObject();
       }
       this.actor.items.delete(id);
       added[id] = _del;

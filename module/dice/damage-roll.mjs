@@ -50,8 +50,8 @@ export default class DamageRoll extends BasicRoll {
   /** @inheritDoc */
   static async build(config={}, dialog={}, message={}) {
     config.critical ??= {};
-    config.critical.multiplyNumeric ??= game.settings.get("dnd5e", "criticalDamageModifiers");
-    config.critical.powerfulCritical ??= game.settings.get("dnd5e", "criticalDamageMaxDice");
+    config.critical.multiplyNumeric ??= game.settings.get("varlyn-dnd5e", "criticalDamageModifiers");
+    config.critical.powerfulCritical ??= game.settings.get("varlyn-dnd5e", "criticalDamageMaxDice");
     return super.build(config, dialog, message);
   }
 

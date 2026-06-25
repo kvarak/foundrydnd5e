@@ -81,7 +81,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    */
   get dependentOrigin() {
     if ( !(this.parent instanceof Item) ) return null;
-    return this.parent.effects.get(this.flags.dnd5e?.dependentOn) ?? null;
+    return this.parent.effects.get(this.flags["varlyn-dnd5e"]?.dependentOn) ?? null;
   }
 
   /* -------------------------------------------- */
@@ -104,7 +104,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
     if ( this.target?.testUserPermission(game.user, "OBSERVER") ) return false;
 
     // Hide bloodied status effect from players unless the token is friendly
-    if ( (this.id === this.constructor.ID.BLOODIED) && (game.settings.get("dnd5e", "bloodied") === "player") ) {
+    if ( (this.id === this.constructor.ID.BLOODIED) && (game.settings.get("varlyn-dnd5e", "bloodied") === "player") ) {
       return this.target?.token?.disposition !== foundry.CONST.TOKEN_DISPOSITIONS.FRIENDLY;
     }
 
@@ -128,7 +128,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
 
   /** @inheritDoc */
   get isTemporary() {
-    return !this.isConcealed && (super.isTemporary || this.getFlag("dnd5e", "isTemporary"));
+    return !this.isConcealed && (super.isTemporary || this.getFlag("varlyn-dnd5e", "isTemporary"));
   }
 
   /* -------------------------------------------- */
@@ -160,10 +160,10 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   _initializeSource(data, options={}) {
     if ( data instanceof foundry.abstract.DataModel ) data = data.toObject();
 
-    if ( data.flags?.dnd5e?.type === "enchantment" ) {
+    if ( data.flags?.["varlyn-dnd5e"]?.type === "enchantment" ) {
       data.type = "enchantment";
-      delete data.flags.dnd5e.type;
-      foundry.utils.setProperty(data, "flags.dnd5e.persistSourceMigration", true);
+      delete data.flags["varlyn-dnd5e"].type;
+      foundry.utils.setProperty(data, "flags.varlyn-dnd5e.persistSourceMigration", true);
     }
 
     return super._initializeSource(data, options);
@@ -175,7 +175,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   static migrateData(source) {
     source = super.migrateData(source);
     for ( const change of source.changes ?? [] ) {
-      if ( change.key === "flags.dnd5e.initiativeAdv" ) {
+      if ( change.key === "flags.varlyn-dnd5e.initiativeAdv" ) {
         change.key = "system.attributes.init.roll.mode";
         change.type = "add";
         change.value = 1;
@@ -193,7 +193,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
     change = change.effect._applyChangeShim(change);
 
     // Handle special actor flags
-    if ( change.key.startsWith("flags.dnd5e.") ) change = change.effect._prepareFlagChange(model, change);
+    if ( change.key.startsWith("flags.varlyn-dnd5e.") ) change = change.effect._prepareFlagChange(model, change);
 
     // Properly handle formulas that don't exist as part of the data model
     if ( ActiveEffect5e.FORMULA_FIELDS.has(change.key) ) {
@@ -363,7 +363,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    */
   _prepareFlagChange(actor, change) {
     const { key, value } = change;
-    const data = CONFIG.VARLYN5E.characterFlags[key.replace("flags.dnd5e.", "")];
+    const data = CONFIG.VARLYN5E.characterFlags[key.replace("flags.varlyn-dnd5e.", "")];
     if ( !data ) return change;
 
     // Set flag to initial value if it isn't present
@@ -411,7 +411,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    */
   _prepareExhaustionLevel() {
     const config = CONFIG.VARLYN5E.conditionTypes.exhaustion;
-    let level = this.getFlag("dnd5e", "exhaustionLevel");
+    let level = this.getFlag("varlyn-dnd5e", "exhaustionLevel");
     if ( !Number.isFinite(level) ) level = 1;
     this.img = this.constructor._getExhaustionImage(level);
     this.name = `${_loc("VARLYN5E.Exhaustion")} ${level}`;
@@ -446,7 +446,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   async createRiderConditions() {
     const riders = new Set();
 
-    for ( const status of this.getFlag("dnd5e", "riders.statuses") ?? [] ) {
+    for ( const status of this.getFlag("varlyn-dnd5e", "riders.statuses") ?? [] ) {
       riders.add(status);
     }
 
@@ -478,13 +478,13 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
     let item;
     let profile;
     const { chatMessageOrigin } = options;
-    const { enchantmentProfile, activityId } = options.dnd5e ?? {};
+    const { enchantmentProfile, activityId } = options["varlyn-dnd5e"] ?? {};
 
     if ( chatMessageOrigin ) {
       const message = game.messages.get(chatMessageOrigin);
       item = message?.getAssociatedItem();
       const activity = message?.getAssociatedActivity();
-      profile = activity?.effects.find(e => e._id === message?.getFlag("dnd5e", "use.enchantmentProfile"));
+      profile = activity?.effects.find(e => e._id === message?.getFlag("varlyn-dnd5e", "use.enchantmentProfile"));
     } else if ( enchantmentProfile && activityId ) {
       let activity;
       const origin = await fromUuid(this.origin);
@@ -507,7 +507,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
       const activityData = item.system.activities.get(id)?.toObject();
       if ( !activityData ) continue;
       activityData._id = foundry.utils.randomID();
-      foundry.utils.setProperty(activityData, "flags.dnd5e.dependentOn", this.id);
+      foundry.utils.setProperty(activityData, "flags.varlyn-dnd5e.dependentOn", this.id);
       riderActivities[activityData._id] = activityData;
     }
     let createdActivities = [];
@@ -524,13 +524,13 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
       const effectData = item.effects.get(id)?.toObject();
       if ( effectData ) {
         delete effectData._id;
-        delete effectData.flags?.dnd5e?.rider;
+        delete effectData.flags?.["varlyn-dnd5e"]?.rider;
         effectData.origin = this.origin;
       }
       return effectData;
     }));
     riderEffects = riderEffects.filter(_ => _);
-    riderEffects.forEach(e => foundry.utils.setProperty(e, "flags.dnd5e.dependentOn", this.id));
+    riderEffects.forEach(e => foundry.utils.setProperty(e, "flags.varlyn-dnd5e.dependentOn", this.id));
     await this.parent.createEmbeddedDocuments("ActiveEffect", riderEffects, { keepId: true });
 
     // Create Items
@@ -539,8 +539,8 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
         (await Promise.all(profile.riders.item.map(uuid => fromUuid(uuid)))).filter(_ => _), {
           transformAll: item => {
             const itemData = item.clone({}, { keepId: true }).toObject();
-            foundry.utils.setProperty(itemData, "flags.dnd5e.dependentOn", this.uuid);
-            foundry.utils.setProperty(itemData, "flags.dnd5e.enchantment.origin", this.uuid);
+            foundry.utils.setProperty(itemData, "flags.varlyn-dnd5e.dependentOn", this.uuid);
+            foundry.utils.setProperty(itemData, "flags.varlyn-dnd5e.enchantment.origin", this.uuid);
             return itemData;
           }
         }
@@ -625,9 +625,9 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   /** @inheritDoc */
   _onUpdate(data, options, userId) {
     super._onUpdate(data, options, userId);
-    const originalLevel = foundry.utils.getProperty(options, "dnd5e.originalExhaustion");
-    const newLevel = foundry.utils.getProperty(data, "flags.dnd5e.exhaustionLevel");
-    const originalEncumbrance = foundry.utils.getProperty(options, "dnd5e.originalEncumbrance");
+    const originalLevel = foundry.utils.getProperty(options, "varlyn5e.originalExhaustion");
+    const newLevel = foundry.utils.getProperty(data, "flags.varlyn-dnd5e.exhaustionLevel");
+    const originalEncumbrance = foundry.utils.getProperty(options, "varlyn5e.originalEncumbrance");
     const newEncumbrance = data.statuses?.[0];
     const name = this.name;
 
@@ -708,7 +708,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
         type: _loc(`TYPES.Item.${item.type}`)
       })}</p><hr><p>@Embed[${item.uuid} inline]</p>`,
       duration: activity.duration.getEffectData(),
-      "flags.dnd5e": {
+      "flags.varlyn-dnd5e": {
         activity: {
           type: activity.type, id: activity.id, uuid: activity.uuid
         },
@@ -721,7 +721,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
       statuses: [statusEffect.id].concat(statusEffect.statuses ?? [])
     }, data, {inplace: false});
     delete effectData.id;
-    if ( item.type === "spell" ) effectData["flags.dnd5e.spellLevel"] = item.system.level;
+    if ( item.type === "spell" ) effectData["flags.varlyn-dnd5e.spellLevel"] = item.system.level;
 
     return effectData;
   }
@@ -764,8 +764,8 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
       label: _loc("VARLYN5E.CONDITIONS.RiderConditions.label"),
       hint: _loc("VARLYN5E.CONDITIONS.RiderConditions.hint")
     }, {
-      name: "flags.dnd5e.riders.statuses",
-      value: app.document.getFlag("dnd5e", "riders.statuses") ?? [],
+      name: "flags.varlyn-dnd5e.riders.statuses",
+      value: app.document.getFlag("varlyn-dnd5e", "riders.statuses") ?? [],
       options: CONFIG.statusEffects.map(se => ({ value: se.id, label: se.name })),
       disabled: !context.editable
     });
@@ -871,7 +871,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
       return;
     }
     const choices = effects.reduce((acc, effect) => {
-      const data = effect.getFlag("dnd5e", "item");
+      const data = effect.getFlag("varlyn-dnd5e", "item");
       acc[effect.id] = data?.name ?? actor.items.get(data?.id)?.name ?? _loc("VARLYN5E.ConcentratingItemless");
       return acc;
     }, {});
@@ -906,7 +906,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   getDependents() {
     const actor = this.parent instanceof Actor ? this.parent : this.parent?.parent;
     const item = this.parent instanceof Item ? this.parent : null;
-    return (this.getFlag("dnd5e", "dependents") || []).reduce((arr, { uuid }) => {
+    return (this.getFlag("varlyn-dnd5e", "dependents") || []).reduce((arr, { uuid }) => {
       let doc;
       // TODO: Remove this special casing once https://github.com/foundryvtt/foundryvtt/issues/11214 is resolved
       if ( this.parent.pack && uuid.includes(this.parent.uuid) ) {

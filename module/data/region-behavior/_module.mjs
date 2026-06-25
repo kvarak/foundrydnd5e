@@ -9,13 +9,13 @@ export {
 };
 
 export const config = {
-  "dnd5e.applyActiveEffect": ApplyActiveEffect5eRegionBehaviorType,
-  "dnd5e.difficultTerrain": DifficultTerrainRegionBehaviorType,
-  "dnd5e.rotateArea": RotateAreaRegionBehaviorType
+  "varlyn5e.applyActiveEffect": ApplyActiveEffect5eRegionBehaviorType,
+  "varlyn5e.difficultTerrain": DifficultTerrainRegionBehaviorType,
+  "varlyn5e.rotateArea": RotateAreaRegionBehaviorType
 };
 
 export const icons = {
-  "dnd5e.applyActiveEffect": "fa-solid fa-person-rays",
-  "dnd5e.difficultTerrain": "fa-solid fa-hill-rockslide",
-  "dnd5e.rotateArea": "fa-solid fa-arrows-spin"
+  "varlyn5e.applyActiveEffect": "fa-solid fa-person-rays",
+  "varlyn5e.difficultTerrain": "fa-solid fa-hill-rockslide",
+  "varlyn5e.rotateArea": "fa-solid fa-arrows-spin"
 };

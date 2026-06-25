@@ -150,7 +150,7 @@ export default class ItemChoiceAdvancement extends ItemGrantAdvancement {
     const items = [];
     const messages = [];
     for ( const item of data.items ?? [] ) {
-      const original = await fromUuid(item.flags.dnd5e.sourceId);
+      const original = await fromUuid(item.flags["varlyn-dnd5e"].sourceId);
       try {
         original?.system.validatePrerequisites?.(this.actor, {
           level: level || this.actor.system.details?.level, throwError: true

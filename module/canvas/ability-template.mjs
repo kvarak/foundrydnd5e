@@ -64,7 +64,7 @@ export default class AbilityTemplate extends foundry.canvas.placeables.MeasuredT
       x: 0,
       y: 0,
       fillColor: game.user.color,
-      flags: { dnd5e: {
+      flags: { "varlyn-dnd5e": {
         dimensions: {
           size: target.size,
           width: target.width,
@@ -84,7 +84,7 @@ export default class AbilityTemplate extends foundry.canvas.placeables.MeasuredT
         break;
       case "rect": // 5e rectangular AoEs are always cubes
         templateData.width = target.size;
-        if ( game.settings.get("dnd5e", "gridAlignedSquareTemplates") ) {
+        if ( game.settings.get("varlyn-dnd5e", "gridAlignedSquareTemplates") ) {
           templateData.distance = Math.hypot(target.size, target.size);
           templateData.direction = 45;
         } else {
@@ -217,8 +217,8 @@ export default class AbilityTemplate extends foundry.canvas.placeables.MeasuredT
     const updates = this.getSnappedPosition(center);
 
     // Adjust template size to take hovered token into account if `adjustedSize` is set
-    const baseDistance = this.document.flags.dnd5e?.dimensions?.size;
-    if ( this.document.flags.dnd5e?.dimensions?.adjustedSize && baseDistance ) {
+    const baseDistance = this.document.flags["varlyn-dnd5e"]?.dimensions?.size;
+    if ( this.document.flags["varlyn-dnd5e"]?.dimensions?.adjustedSize && baseDistance ) {
       const rectangle = new PIXI.Rectangle(center.x, center.y, 1, 1);
       const hoveredToken = canvas.tokens.quadtree.getObjects(rectangle, {
         collisionTest: ({ t }) => t.visible && !t.document.isSecret }).first();

@@ -133,7 +133,7 @@ export default class CommonTemplate extends ActorDataModel.mixin(CurrencyTemplat
    * @param {object} [options.originalSaves]       Original ability data for transformed actors.
    */
   prepareAbilities({ rollData={}, originalSaves }={}) {
-    const flags = this.parent.flags.dnd5e ?? {};
+    const flags = this.parent.flags["varlyn-dnd5e"] ?? {};
     const { prof = 0, ac } = this.attributes ?? {};
     Object.values(this.abilities).forEach(a => a.mod = Math.floor((a.value - 10) / 2));
     const checkBonus = simplifyBonus(this.bonuses?.abilities?.check, rollData);
@@ -204,7 +204,7 @@ export default class CommonTemplate extends ActorDataModel.mixin(CurrencyTemplat
         multiplier = .5;
         roundDown = false;
       }
-      else if ( this.parent.flags.dnd5e?.jackOfAllTrades ) multiplier = .5;
+      else if ( this.parent.flags["varlyn-dnd5e"]?.jackOfAllTrades ) multiplier = .5;
     }
     return new Proficiency(this.attributes.prof, multiplier, roundDown);
   }
@@ -221,7 +221,7 @@ export default class CommonTemplate extends ActorDataModel.mixin(CurrencyTemplat
    * @returns {Proficiency}
    */
   calculateToolProficiency(multiplier, ability, options={}) {
-    if ( (multiplier === 1) && this.parent.flags.dnd5e?.toolExpertise ) {
+    if ( (multiplier === 1) && this.parent.flags["varlyn-dnd5e"]?.toolExpertise ) {
       return new Proficiency(this.attributes.prof, 2, true);
     }
     return this.calculateAbilityCheckProficiency(multiplier, ability, options);

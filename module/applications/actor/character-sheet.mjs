@@ -429,8 +429,8 @@ export default class CharacterActorSheet extends BaseActorSheet {
     }
 
     // Visibility
-    context.showExperience = game.settings.get("dnd5e", "levelingMode") !== "noxp";
-    context.showRests = game.user.isGM || (this.actor.isOwner && game.settings.get("dnd5e", "allowRests"));
+    context.showExperience = game.settings.get("varlyn-dnd5e", "levelingMode") !== "noxp";
+    context.showRests = game.user.isGM || (this.actor.isOwner && game.settings.get("varlyn-dnd5e", "allowRests"));
 
     return context;
   }
@@ -720,7 +720,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
   async _prepareItemFeature(item, ctx) {
     await super._prepareItemFeature(item, ctx);
 
-    const [originId] = (item.getFlag("dnd5e", "advancementRoot") ?? item.getFlag("dnd5e", "advancementOrigin"))
+    const [originId] = (item.getFlag("varlyn-dnd5e", "advancementRoot") ?? item.getFlag("varlyn-dnd5e", "advancementOrigin"))
       ?.split(".") ?? [];
     const group = item.parent.items.get(originId);
     ctx.groups.origin = "other";
@@ -1024,7 +1024,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
       const cls = this.actor.itemTypes.class.find(c => c.identifier === itemData.system.identifier);
       if ( cls ) {
         const priorLevel = cls.system.levels;
-        if ( !game.settings.get("dnd5e", "disableAdvancements") ) {
+        if ( !game.settings.get("varlyn-dnd5e", "disableAdvancements") ) {
           const manager = AdvancementManager.forLevelChange(this.actor, cls.id, itemData.system.levels);
           if ( manager.steps.length ) {
             manager.render({ force: true });

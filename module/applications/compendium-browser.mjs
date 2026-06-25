@@ -357,7 +357,7 @@ export default class CompendiumBrowser extends Application5e {
     super._configureRenderOptions(options);
     if ( options.isFirstRender ) {
       const tab = this.constructor.TABS.find(t => t.tab === this.options.tab);
-      if ( tab ) foundry.utils.setProperty(options, "dnd5e.browser.types", tab.types);
+      if ( tab ) foundry.utils.setProperty(options, "varlyn5e.browser.types", tab.types);
     }
   }
 
@@ -465,7 +465,7 @@ export default class CompendiumBrowser extends Application5e {
     context.isLocked.filters = ("additional" in this.options.filters.locked);
     context.isLocked.types = ("types" in this.options.filters.locked) || context.isLocked.filters;
     context.isLocked.documentClass = ("documentClass" in this.options.filters.locked) || context.isLocked.types;
-    const types = foundry.utils.getProperty(options, "dnd5e.browser.types") ?? [];
+    const types = foundry.utils.getProperty(options, "varlyn5e.browser.types") ?? [];
 
     if ( partId === "search" ) {
       context.name = this.#filters.name;
@@ -1094,7 +1094,7 @@ export default class CompendiumBrowser extends Application5e {
         && sources.has(p.collection)
 
         // If types are set and specified in compendium flag, only include those that include the correct types
-        && (!types.size || !p.metadata.flags.dnd5e?.types || new Set(p.metadata.flags.dnd5e.types).intersects(types)))
+        && (!types.size || !p.metadata.flags["varlyn-dnd5e"]?.types || new Set(p.metadata.flags["varlyn-dnd5e"].types).intersects(types)))
 
       // Generate an index based on the needed fields
       .map(async p => await Promise.all((await p.getIndex({ fields: Array.from(indexFields) }))
@@ -1109,7 +1109,7 @@ export default class CompendiumBrowser extends Application5e {
         // Remove any documents that don't match the specified types or the provided filters
         .filter(i =>
           (!types.size || (types.has(i.type)
-            && (!p.metadata.flags.dnd5e?.types || p.metadata.flags.dnd5e.types.includes(i.type))))
+            && (!p.metadata.flags["varlyn-dnd5e"]?.types || p.metadata.flags["varlyn-dnd5e"].types.includes(i.type))))
             && (!filters.length || Filter.performCheck(i, filters))
         )
 

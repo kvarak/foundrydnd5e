@@ -89,7 +89,7 @@ export default class BasicRoll extends Roll {
 
     /**
      * A hook event that fires before a roll is performed. Multiple hooks may be called depending on the rolling
-     * method (e.g. `dnd5e.preRollSkill`, `dnd5e.preRollAbilityCheck`, `dnd5e.preRoll`). Exact contents of the
+     * method (e.g. `varlyn5e.preRollSkill`, `varlyn5e.preRollAbilityCheck`, `varlyn5e.preRoll`). Exact contents of the
      * configuration object will also change based on the roll type, but the same objects will always be present.
      * @function varlyn5e.preRoll
      * @memberof hookEvents
@@ -99,8 +99,8 @@ export default class BasicRoll extends Roll {
      * @returns {boolean}                              Explicitly return `false` to prevent the roll.
      */
     for ( const hookName of config.hookNames ) {
-      if ( Hooks.call(`dnd5e.preRoll${hookName.capitalize()}`, config, dialog, message) === false ) return [];
-      if ( Hooks.call(`dnd5e.preRoll${hookName.capitalize()}V2`, config, dialog, message) === false ) return [];
+      if ( Hooks.call(`varlyn5e.preRoll${hookName.capitalize()}`, config, dialog, message) === false ) return [];
+      if ( Hooks.call(`varlyn5e.preRoll${hookName.capitalize()}V2`, config, dialog, message) === false ) return [];
     }
 
     this.applyKeybindings(config, dialog, message);
@@ -111,7 +111,7 @@ export default class BasicRoll extends Roll {
       rolls = config.rolls?.map((r, index) => {
         dialog.options?.buildConfig?.(config, r, null, index);
         for ( const hookName of config.hookNames ) {
-          Hooks.callAll(`dnd5e.postBuild${hookName.capitalize()}RollConfig`, config, r, index);
+          Hooks.callAll(`varlyn5e.postBuild${hookName.capitalize()}RollConfig`, config, r, index);
         }
         return this.fromConfig(r, config);
       }) ?? [];
@@ -121,13 +121,13 @@ export default class BasicRoll extends Roll {
     }
 
     // Store the roll type in roll.options so it can be accessed from only the roll
-    const rollType = foundry.utils.getProperty(message, "data.flags.dnd5e.roll.type");
+    const rollType = foundry.utils.getProperty(message, "data.flags.varlyn-dnd5e.roll.type");
     if ( rollType ) rolls.forEach(roll => roll.options.rollType ??= rollType);
 
     /**
      * A hook event that fires after roll configuration is complete, but before the roll is evaluated.
-     * Multiple hooks may be called depending on the rolling method (e.g. `dnd5e.postSkillCheckRollConfiguration`,
-     * `dnd5e.postAbilityTestRollConfiguration`, and `dnd5e.postRollConfiguration` for skill checks). Exact contents of
+     * Multiple hooks may be called depending on the rolling method (e.g. `varlyn5e.postSkillCheckRollConfiguration`,
+     * `varlyn5e.postAbilityTestRollConfiguration`, and `varlyn5e.postRollConfiguration` for skill checks). Exact contents of
      * the configuration object will also change based on the roll type, but the same objects will always be present.
      * @function varlyn5e.postRollConfiguration
      * @memberof hookEvents
@@ -138,7 +138,7 @@ export default class BasicRoll extends Roll {
      * @returns {boolean}                              Explicitly return `false` to prevent rolls.
      */
     for ( const hookName of config.hookNames ) {
-      const name = `dnd5e.post${hookName.capitalize()}RollConfiguration`;
+      const name = `varlyn5e.post${hookName.capitalize()}RollConfiguration`;
       if ( Hooks.call(name, rolls, config, dialog, message) === false ) return [];
     }
 
@@ -171,11 +171,11 @@ export default class BasicRoll extends Roll {
   static async buildPost(rolls, config, message) {
     message.data = foundry.utils.expandObject(message.data ?? {});
     const messageId = config.event?.target?.closest("[data-message-id]")?.dataset.messageId;
-    if ( messageId ) foundry.utils.setProperty(message.data, "flags.dnd5e.originatingMessage", messageId);
+    if ( messageId ) foundry.utils.setProperty(message.data, "flags.varlyn-dnd5e.originatingMessage", messageId);
 
     // Attack & Damage store originatingMessage directly on message.data and do not have a config.event. We retrieve
     // those here.
-    const originatingMessage = foundry.utils.getProperty(message.data, "flags.dnd5e.originatingMessage");
+    const originatingMessage = foundry.utils.getProperty(message.data, "flags.varlyn-dnd5e.originatingMessage");
     // Store in roll options so that it can be serialized.
     if ( originatingMessage ) rolls?.forEach(r => r.options.originatingMessage ??= originatingMessage);
 

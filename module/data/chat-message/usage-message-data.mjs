@@ -93,7 +93,7 @@ export default class UsageMessageData extends ChatMessageDataModel {
     super._onRender(element);
     this.activity?.onRenderChatCard(this.parent, element);
     this._displayChatActionButtons(element);
-    if ( game.settings.get("dnd5e", "autoCollapseItemCards") ) {
+    if ( game.settings.get("varlyn-dnd5e", "autoCollapseItemCards") ) {
       element.querySelectorAll(".description.collapsible").forEach(el => el.classList.add("collapsed"));
     }
     this.activity?.activateChatListeners(this.parent, element);

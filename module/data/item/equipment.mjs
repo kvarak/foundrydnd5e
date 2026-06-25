@@ -248,7 +248,7 @@ export default class EquipmentData extends ItemDataModel.mixin(
    */
   static _migrateStealth(source) {
     if ( foundry.utils.getProperty(source, "system.stealth") === true ) {
-      foundry.utils.setProperty(source, "flags.dnd5e.migratedProperties", ["stealthDisadvantage"]);
+      foundry.utils.setProperty(source, "flags.varlyn-dnd5e.migratedProperties", ["stealthDisadvantage"]);
     }
   }
 
@@ -320,7 +320,7 @@ export default class EquipmentData extends ItemDataModel.mixin(
       ...this.physicalItemSheetFields
     ];
 
-    context.parts = ["dnd5e.details-equipment", "dnd5e.field-uses"];
+    context.parts = ["varlyn5e.details-equipment", "varlyn5e.field-uses"];
     context.equipmentTypeOptions = [
       ...Object.entries(CONFIG.VARLYN5E.miscEquipmentTypes).map(([value, label]) => ({ value, label })),
       ...Object.entries(CONFIG.VARLYN5E.armorTypes).map(([value, label]) => ({ value, label, group: "VARLYN5E.Armor" }))

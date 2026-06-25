@@ -25,7 +25,7 @@ install:
 
 ## Build everything: JS bundle, CSS, and compendium packs
 build: build-code build-css build-db
-	@mv --force varlyn-dnd5e-compiled.mjs varlyn-dnd5e.mjs 2>/dev/null || true
+	@mv -f varlyn-dnd5e-compiled.mjs varlyn-dnd5e.mjs 2>/dev/null || true
 
 ## Build and bundle the JS entry point
 build-code:
@@ -47,9 +47,28 @@ unpack:
 lint:
 	npm run lint
 
-## Run all checks: lint, system.json validation, and full build
-test: lint _validate-system-json build
+## Run all checks: lint, system.json validation, stale-id check, and full build
+test: lint _validate-system-json _check-stale-dnd5e build
 	@echo "All checks passed."
+
+_check-stale-dnd5e:
+	@echo "Checking for stale 'dnd5e' system-ID references in source..."
+	@! grep -rn \
+	    -e 'keybindings\.register("dnd5e"' \
+	    -e 'keybindings\.get("dnd5e"' \
+	    -e 'settings\.get("dnd5e"' \
+	    -e 'settings\.set("dnd5e"' \
+	    -e 'settings\.register("dnd5e"' \
+	    -e 'getFlag("dnd5e"' \
+	    -e 'setFlag("dnd5e"' \
+	    -e 'unsetFlag("dnd5e"' \
+	    -e 'scope === "dnd5e"' \
+	    -e '"dnd5e" in this\.flags' \
+	    -e 'namespace !== "dnd5e"' \
+	    -e 'namespace === "dnd5e"' \
+	    module/ \
+	  || (echo "ERROR: stale 'dnd5e' system-ID references found above — replace with 'varlyn-dnd5e'" && exit 1)
+	@echo "Stale-ID check OK."
 
 _validate-system-json:
 	@echo "Validating system.json..."

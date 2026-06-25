@@ -334,7 +334,7 @@ export default class DamageApplicationElement extends TargetedApplicationMixin(C
       const options = this.getTargetOptions(target.dataset.targetUuid);
       await token?.applyDamage(this.damages, { ...options, isDelta: true, origin: this.chatMessage });
     }
-    if ( game.settings.get("dnd5e", "autoCollapseChatTrays") !== "manual" ) {
+    if ( game.settings.get("varlyn-dnd5e", "autoCollapseChatTrays") !== "manual" ) {
       this.open = false;
     }
   }
