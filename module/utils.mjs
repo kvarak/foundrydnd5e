@@ -880,14 +880,11 @@ export async function preloadHandlebarsTemplates() {
     "systems/dnd5e/templates/chat/parts/card-deltas.hbs",
 
     // Item Sheet Partials
-    "systems/dnd5e/templates/items/details/details-background.hbs",
     "systems/dnd5e/templates/items/details/details-class.hbs",
     "systems/dnd5e/templates/items/details/details-consumable.hbs",
     "systems/dnd5e/templates/items/details/details-container.hbs",
     "systems/dnd5e/templates/items/details/details-equipment.hbs",
-    "systems/dnd5e/templates/items/details/details-facility.hbs",
     "systems/dnd5e/templates/items/details/details-feat.hbs",
-    "systems/dnd5e/templates/items/details/details-loot.hbs",
     "systems/dnd5e/templates/items/details/details-mountable.hbs",
     "systems/dnd5e/templates/items/details/details-species.hbs",
     "systems/dnd5e/templates/items/details/details-spell.hbs",
