@@ -1,11 +1,11 @@
 <li data-score="{{ key }}">
     <label {{~#if effectedValue}} data-tooltip="
-           {{~ localize 'DND5E.ADVANCEMENT.AbilityScoreImprovement.EffectTargetHint' value=effectedValue }}"{{/if}}>
+           {{~ localize 'VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.EffectTargetHint' value=effectedValue }}"{{/if}}>
         {{ label }}{{#if effectedValue}}*{{/if}}
     </label>
     {{#if canAdjust}}
     <button class="unbutton control-button minus" type="button" {{~#if canDecrease}}data-action="decrease"{{else}} disabled{{/if}}
-       data-tooltip aria-label="{{ localize 'DND5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.decrease' }}">
+       data-tooltip aria-label="{{ localize 'VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.decrease' }}">
         <i class="fas fa-minus" inert></i>
     </button>
     {{/if}}
@@ -14,7 +14,7 @@
            {{#if isFixed}}readonly aria-readonly="true"{{/if}} {{ disabled isDisabled }}>
     {{#if canAdjust}}
     <button class="unbutton control-button plus" type="button" {{~#if canIncrease}} data-action="increase"{{else}} disabled{{/if}}
-       data-tooltip aria-label="{{ localize 'DND5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.increase' }}">
+       data-tooltip aria-label="{{ localize 'VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.increase' }}">
         <i class="fas fa-plus" inert></i>
     </button>
     {{/if}}
@@ -31,7 +31,7 @@
     <div class="delta">
         {{~#if delta}}{{ delta }}{{else if (not isLocked)}}&nbsp;{{/if~}}
         {{~#if isLocked}}<i class="fa-solid fa-lock" data-tooltip
-           aria-label="{{ localize 'DND5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.fixed.label' }}"></i>{{/if~}}
+           aria-label="{{ localize 'VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.fixed.label' }}"></i>{{/if~}}
     </div>
     {{/if}}
 </li>

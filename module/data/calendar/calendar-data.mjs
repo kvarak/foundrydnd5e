@@ -189,7 +189,7 @@ export default class CalendarData5e extends foundry.data.CalendarData {
     let formatter = "Mid";
     if ( seasonPercent <= 0.33 ) formatter = "Early";
     else if ( seasonPercent >= 0.66 ) formatter = "Late";
-    return _loc(`DND5E.CALENDAR.Formatters.ApproximateDate.${formatter}Season`, {
+    return _loc(`VARLYN5E.CALENDAR.Formatters.ApproximateDate.${formatter}Season`, {
       season: _loc(season.name)
     });
   }
@@ -217,7 +217,7 @@ export default class CalendarData5e extends foundry.data.CalendarData {
     else if ( (day > 0.5) && (day <= 0.85) ) formatter = "Afternoon";
     else if ( (day > 0.85) && (night < 0) ) formatter = "Evening";
     else formatter = "Night";
-    return _loc(`DND5E.CALENDAR.Formatters.ApproximateTime.${formatter}`);
+    return _loc(`VARLYN5E.CALENDAR.Formatters.ApproximateTime.${formatter}`);
   }
 
   /* -------------------------------------------- */
@@ -231,7 +231,7 @@ export default class CalendarData5e extends foundry.data.CalendarData {
    */
   static formatHoursMinutes(calendar, components, options) {
     return CalendarData5e.formatLocalized(
-      "DND5E.CALENDAR.Formatters.HoursMinutes.Format", calendar, components, options
+      "VARLYN5E.CALENDAR.Formatters.HoursMinutes.Format", calendar, components, options
     );
   }
 
@@ -246,7 +246,7 @@ export default class CalendarData5e extends foundry.data.CalendarData {
    */
   static formatHoursMinutesSeconds(calendar, components, options) {
     return CalendarData5e.formatLocalized(
-      "DND5E.CALENDAR.Formatters.HoursMinutesSeconds.Format", calendar, components, options
+      "VARLYN5E.CALENDAR.Formatters.HoursMinutesSeconds.Format", calendar, components, options
     );
   }
 
@@ -275,7 +275,7 @@ export default class CalendarData5e extends foundry.data.CalendarData {
    */
   static formatMonthDay(calendar, components, options) {
     return CalendarData5e.formatLocalized(
-      "DND5E.CALENDAR.Formatters.MonthDay.Format", calendar, components, options
+      "VARLYN5E.CALENDAR.Formatters.MonthDay.Format", calendar, components, options
     );
   }
 
@@ -290,7 +290,7 @@ export default class CalendarData5e extends foundry.data.CalendarData {
    */
   static formatMonthDayYear(calendar, components, options) {
     return CalendarData5e.formatLocalized(
-      "DND5E.CALENDAR.Formatters.MonthDayYear.Format", calendar, components, options
+      "VARLYN5E.CALENDAR.Formatters.MonthDayYear.Format", calendar, components, options
     );
   }
 

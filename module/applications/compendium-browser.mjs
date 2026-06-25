@@ -43,7 +43,7 @@ export default class CompendiumBrowser extends Application5e {
     classes: ["compendium-browser", "vertical-tabs", "dialog-lg"],
     tag: "form",
     window: {
-      title: "DND5E.CompendiumBrowser.Title",
+      title: "VARLYN5E.CompendiumBrowser.Title",
       minimizable: true,
       resizable: true
     },
@@ -153,14 +153,14 @@ export default class CompendiumBrowser extends Application5e {
     },
     {
       tab: "feats",
-      label: "DND5E.CompendiumBrowser.Tabs.Feat.other",
+      label: "VARLYN5E.CompendiumBrowser.Tabs.Feat.other",
       icon: "fas fa-star",
       documentClass: "Item",
       types: ["feat"]
     },
     {
       tab: "physical",
-      label: "DND5E.CompendiumBrowser.Tabs.Item.other",
+      label: "VARLYN5E.CompendiumBrowser.Tabs.Item.other",
       svg: "systems/dnd5e/icons/svg/backpack.svg",
       documentClass: "Item",
       types: ["physical"]
@@ -174,7 +174,7 @@ export default class CompendiumBrowser extends Application5e {
     },
     {
       tab: "monsters",
-      label: "DND5E.CompendiumBrowser.Tabs.Monster.other",
+      label: "VARLYN5E.CompendiumBrowser.Tabs.Monster.other",
       svg: "systems/dnd5e/icons/svg/actors/npc.svg",
       documentClass: "Actor",
       types: ["npc"]
@@ -374,14 +374,14 @@ export default class CompendiumBrowser extends Application5e {
       .map(([, d]) => d.compendiumBrowserFilters ?? new Map())
       .reduce((final, second) => CompendiumBrowser.intersectFilters(second, final, context.filters), null) ?? new Map();
     context.filterDefinitions.set("source", {
-      label: "DND5E.SOURCE.FIELDS.source.label",
+      label: "VARLYN5E.SOURCE.FIELDS.source.label",
       type: "set",
       config: {
         keyPath: "system.source.slug",
         choices: foundry.utils.mergeObject(
           this.#sources ?? {},
           Object.fromEntries(Object.keys(this.options.filters?.locked?.additional?.source ?? {}).map(k => {
-            return [k.slugify({ strict: true }), CONFIG.DND5E.sourceBooks[k] ?? k];
+            return [k.slugify({ strict: true }), CONFIG.VARLYN5E.sourceBooks[k] ?? k];
           })), { inplace: false }
         )
       }
@@ -424,12 +424,12 @@ export default class CompendiumBrowser extends Application5e {
     context.invalid = (value < (min || -Infinity)) || (value > (max || Infinity));
     const suffix = this.#selectionLocalizationSuffix;
     context.summary = suffix ? _loc(
-      `DND5E.CompendiumBrowser.Selection.Summary.${suffix}`, { max, min, value }
+      `VARLYN5E.CompendiumBrowser.Selection.Summary.${suffix}`, { max, min, value }
     ) : value;
     const pr = getPluralRules();
-    context.invalidTooltip = _loc(`DND5E.CompendiumBrowser.Selection.Warning.${suffix}`, {
+    context.invalidTooltip = _loc(`VARLYN5E.CompendiumBrowser.Selection.Warning.${suffix}`, {
       max, min, value,
-      document: _loc(`DND5E.CompendiumBrowser.Selection.Warning.Document.${pr.select(max || min)}`)
+      document: _loc(`VARLYN5E.CompendiumBrowser.Selection.Warning.Document.${pr.select(max || min)}`)
     });
     return context;
   }
@@ -537,7 +537,7 @@ export default class CompendiumBrowser extends Application5e {
             ...data,
             expandId: `${key}-${group}`,
             expanded: this.expandedSections.get(`${key}-${group}`) ?? !data.config.collapseGroup?.(group),
-            label: _loc("DND5E.CompendiumBrowser.Filters.Grouped", {
+            label: _loc("VARLYN5E.CompendiumBrowser.Filters.Grouped", {
               type: _loc(data.label), group
             }),
             config: { ...data.config, choices }
@@ -617,7 +617,7 @@ export default class CompendiumBrowser extends Application5e {
     if ( game.user.isGM ) {
       frame.querySelector('[data-action="close"]').insertAdjacentHTML("beforebegin", `
         <button type="button" class="header-control fas fa-cog icon" data-action="configureSources"
-                data-tooltip aria-label="${_loc("DND5E.CompendiumBrowser.Sources.Label")}"></button>
+                data-tooltip aria-label="${_loc("VARLYN5E.CompendiumBrowser.Sources.Label")}"></button>
       `);
     }
     return frame;
@@ -690,7 +690,7 @@ export default class CompendiumBrowser extends Application5e {
       const source = foundry.utils.getProperty(result, "system.source");
       if ( foundry.utils.getType(source) !== "Object" ) continue;
       const { slug, value } = source;
-      sources.push({ slug, value: CONFIG.DND5E.sourceBooks[value] ?? value });
+      sources.push({ slug, value: CONFIG.VARLYN5E.sourceBooks[value] ?? value });
     }
     sources.sort((a, b) => a.value.localeCompare(b.value, game.i18n.lang));
     this.#sources = Object.fromEntries(sources.map(({ slug, value }) => [slug, value]));
@@ -712,7 +712,7 @@ export default class CompendiumBrowser extends Application5e {
         value: lockExclusive && (lockedSource !== undefined) ? {} : locked,
         key: "source",
         expandId: "source",
-        label: "DND5E.SOURCE.FIELDS.source.label",
+        label: "VARLYN5E.SOURCE.FIELDS.source.label",
         config: { choices: this.#sources },
         partId: `${this.id}-filters`
       }
@@ -952,9 +952,9 @@ export default class CompendiumBrowser extends Application5e {
     if ( (value < (min || -Infinity)) || (value > (max || Infinity)) ) {
       const suffix = this.#selectionLocalizationSuffix;
       const pr = getPluralRules();
-      throw new Error(_loc(`DND5E.CompendiumBrowser.Selection.Warning.${suffix}`, {
+      throw new Error(_loc(`VARLYN5E.CompendiumBrowser.Selection.Warning.${suffix}`, {
         max, min, value,
-        document: _loc(`DND5E.CompendiumBrowser.Selection.Warning.Document.${pr.select(max || min)}`)
+        document: _loc(`VARLYN5E.CompendiumBrowser.Selection.Warning.Document.${pr.select(max || min)}`)
       }));
     }
 
@@ -1235,7 +1235,7 @@ export default class CompendiumBrowser extends Application5e {
     button.classList.add("open-compendium-browser");
     button.innerHTML = `
       <i class="fa-solid fa-book-open-reader" inert></i>
-      ${_loc("DND5E.CompendiumBrowser.Action.Open")}
+      ${_loc("VARLYN5E.CompendiumBrowser.Action.Open")}
     `;
     button.addEventListener("click", event => (new CompendiumBrowser()).render({ force: true }));
 

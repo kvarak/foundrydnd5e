@@ -1,7 +1,7 @@
 <div class="standard-form">
     {{#if added}}
     <fieldset>
-        <legend>{{ localize "DND5E.ADVANCEMENT.Trait.Action.SelectTrait" }}</legend>
+        <legend>{{ localize "VARLYN5E.ADVANCEMENT.Trait.Action.SelectTrait" }}</legend>
         {{ formInput added.field name="added" options=@root.added.options }}
     </fieldset>
     {{/if}}
@@ -9,7 +9,7 @@
     {{#if slots.length}}
     <div class="items-section card">
         <div class="items-header header">
-            <h4 class="item-name">{{ localize "DND5E.Traits" }}</h4>
+            <h4 class="item-name">{{ localize "VARLYN5E.Traits" }}</h4>
         </div>
         <ul class="item-list unlist">
             {{#each slots}}
@@ -23,7 +23,7 @@
                 {{#if showDelete}}
                 <div class="item-controls flexrow">
                     <button type="button" class="unbutton control-button item-control" data-action="removeTrait"
-                            data-tooltip aria-label="{{ localize 'DND5E.ADVANCEMENT.Trait.Action.RemoveTrait' }}">
+                            data-tooltip aria-label="{{ localize 'VARLYN5E.ADVANCEMENT.Trait.Action.RemoveTrait' }}">
                         <i class="fa-solid fa-trash" inert></i>
                     </button>
                 </div>

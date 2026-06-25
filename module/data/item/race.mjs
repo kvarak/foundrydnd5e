@@ -24,7 +24,7 @@ export default class RaceData extends ItemDataModel.mixin(AdvancementTemplate, I
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -50,7 +50,7 @@ export default class RaceData extends ItemDataModel.mixin(AdvancementTemplate, I
   static get compendiumBrowserFilters() {
     return new Map([
       ["hasDarkvision", {
-        label: "DND5E.CompendiumBrowser.Filters.HasDarkvision",
+        label: "VARLYN5E.CompendiumBrowser.Filters.HasDarkvision",
         type: "boolean",
         createFilter: (filters, value, def) => {
           if ( value === 0 ) return;
@@ -72,7 +72,7 @@ export default class RaceData extends ItemDataModel.mixin(AdvancementTemplate, I
    */
   get movementLabels() {
     const units = this.movement.units || defaultUnits("length");
-    return Object.entries(CONFIG.DND5E.movementTypes).reduce((obj, [k, { label }]) => {
+    return Object.entries(CONFIG.VARLYN5E.movementTypes).reduce((obj, [k, { label }]) => {
       const value = this.movement[k];
       if ( value ) obj[k] = `${label} ${formatLength(value, units)}`;
       return obj;
@@ -87,7 +87,7 @@ export default class RaceData extends ItemDataModel.mixin(AdvancementTemplate, I
    */
   get sensesLabels() {
     const units = this.senses.units || defaultUnits("length");
-    return Object.entries(CONFIG.DND5E.senses).reduce((arr, [k, { label }]) => {
+    return Object.entries(CONFIG.VARLYN5E.senses).reduce((arr, [k, { label }]) => {
       const value = this.senses.ranges[k];
       if ( value ) arr.push(`${label} ${formatLength(value, units)}`);
       return arr;
@@ -136,18 +136,18 @@ export default class RaceData extends ItemDataModel.mixin(AdvancementTemplate, I
 
     context.parts = ["dnd5e.details-species"];
     context.info = [{
-      label: "DND5E.CreatureType",
+      label: "VARLYN5E.CreatureType",
       classes: "info-sm",
       value: this.typeLabel,
       config: "type",
-      tooltip: "DND5E.CreatureTypeTitle"
+      tooltip: "VARLYN5E.CreatureTypeTitle"
     },
     {
-      label: "DND5E.Movement",
+      label: "VARLYN5E.Movement",
       classes: "info-sm info-grid",
       config: "movement",
-      tooltip: "DND5E.MOVEMENT.Action.Configure",
-      value: Object.entries(CONFIG.DND5E.movementTypes).reduce((str, [k, { label }]) => {
+      tooltip: "VARLYN5E.MOVEMENT.Action.Configure",
+      value: Object.entries(CONFIG.VARLYN5E.movementTypes).reduce((str, [k, { label }]) => {
         const value = this.movement[k];
         if ( !value ) return str;
         return `${str}
@@ -157,11 +157,11 @@ export default class RaceData extends ItemDataModel.mixin(AdvancementTemplate, I
       }, "")
     },
     {
-      label: "DND5E.Senses",
+      label: "VARLYN5E.Senses",
       classes: "info-sm info-grid",
       config: "senses",
-      tooltip: "DND5E.SensesConfig",
-      value: Object.entries(CONFIG.DND5E.senses).reduce((str, [k, { label }]) => {
+      tooltip: "VARLYN5E.SensesConfig",
+      value: Object.entries(CONFIG.VARLYN5E.senses).reduce((str, [k, { label }]) => {
         const value = this.senses.ranges[k];
         if ( !value ) return str;
         return `${str}

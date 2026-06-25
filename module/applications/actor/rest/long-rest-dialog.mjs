@@ -8,7 +8,7 @@ export default class LongRestDialog extends BaseRestDialog {
   static DEFAULT_OPTIONS = {
     classes: ["long-rest"],
     window: {
-      title: "DND5E.REST.Long.Label"
+      title: "VARLYN5E.REST.Long.Label"
     }
   };
 

@@ -41,7 +41,7 @@ export default class BaseProficiencyConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.ABILITY.Configure.Title", { ability: this.propertyLabel });
+    return _loc("VARLYN5E.ABILITY.Configure.Title", { ability: this.propertyLabel });
   }
 
   /* -------------------------------------------- */

@@ -22,7 +22,7 @@ export default class SetDateDialog extends Dialog5e {
       width: 300
     },
     window: {
-      title: "DND5E.CALENDAR.Action.SetDate"
+      title: "VARLYN5E.CALENDAR.Action.SetDate"
     }
   };
 
@@ -47,14 +47,14 @@ export default class SetDateDialog extends Dialog5e {
       {
         classes: "label-top",
         field: new NumberField({ integer: true }),
-        label: _loc("DND5E.CALENDAR.Component.Year"),
+        label: _loc("VARLYN5E.CALENDAR.Component.Year"),
         name: "year",
         value: year + game.time.calendar.years.yearZero
       },
       {
         classes: "label-top",
         field: new NumberField({ required: true, blank: false }),
-        label: _loc("DND5E.CALENDAR.Component.Month"),
+        label: _loc("VARLYN5E.CALENDAR.Component.Month"),
         name: "month",
         options: game.time.calendar.months.values
           .map(({ name }, value) => ({ value, label: _loc(name) })),
@@ -63,7 +63,7 @@ export default class SetDateDialog extends Dialog5e {
       {
         classes: "label-top",
         field: new NumberField(),
-        label: _loc("DND5E.CALENDAR.Component.Day"),
+        label: _loc("VARLYN5E.CALENDAR.Component.Day"),
         name: "day",
         value: dayOfMonth + 1
       }

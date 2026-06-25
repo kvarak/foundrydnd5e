@@ -22,7 +22,7 @@ export default class HabitatConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.Habitat.Configuration.Title");
+    return _loc("VARLYN5E.Habitat.Configuration.Title");
   }
 
   /* -------------------------------------------- */
@@ -32,7 +32,7 @@ export default class HabitatConfig extends BaseConfigSheet {
   /** @inheritDoc */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const config = CONFIG.DND5E.habitats;
+    const config = CONFIG.VARLYN5E.habitats;
     const { details } = this.document.system._source;
     const value = Object.fromEntries(details.habitat.value.map(({ type, subtype }) => [type, { type, subtype }]));
     const any = "any" in value;

@@ -55,27 +55,27 @@ export default class TransformSheet extends ActivitySheet {
 
     const settings = new TransformationSetting({
       ...(context.source.transform.customize ? context.source.settings
-        : CONFIG.DND5E.transformation.presets[context.source.transform.preset]?.settings ?? {}),
+        : CONFIG.VARLYN5E.transformation.presets[context.source.transform.preset]?.settings ?? {}),
       preset: context.source.transform.preset
     });
     context.categories = settings.createFormCategories({ prefix: "settings." });
     context.presetOptions = [
-      { value: "", label: _loc("DND5E.TRANSFORM.Preset.Default") },
+      { value: "", label: _loc("VARLYN5E.TRANSFORM.Preset.Default") },
       { rule: true },
-      ...Object.entries(CONFIG.DND5E.transformation.presets)
+      ...Object.entries(CONFIG.VARLYN5E.transformation.presets)
         .map(([value, { label }]) => ({ value, label }))
     ];
 
-    context.creatureSizeOptions = Object.entries(CONFIG.DND5E.actorSizes)
+    context.creatureSizeOptions = Object.entries(CONFIG.VARLYN5E.actorSizes)
       .map(([value, { label }]) => ({ value, label }));
-    context.creatureTypeOptions = Object.entries(CONFIG.DND5E.creatureTypes)
+    context.creatureTypeOptions = Object.entries(CONFIG.VARLYN5E.creatureTypes)
       .map(([value, { label }]) => ({ value, label }));
-    context.movementTypeOptions = Object.entries(CONFIG.DND5E.movementTypes)
+    context.movementTypeOptions = Object.entries(CONFIG.VARLYN5E.movementTypes)
       .map(([value, { label }]) => ({ value, label }));
 
     context.profileModes = [
-      { value: "", label: _loc("DND5E.TRANSFORM.FIELDS.transform.mode.Direct") },
-      { value: "cr", label: _loc("DND5E.TRANSFORM.FIELDS.transform.mode.CR") }
+      { value: "", label: _loc("VARLYN5E.TRANSFORM.FIELDS.transform.mode.Direct") },
+      { value: "cr", label: _loc("VARLYN5E.TRANSFORM.FIELDS.transform.mode.CR") }
     ];
     context.profiles = context.source.profiles.map((data, index) => ({
       data, index,
@@ -94,16 +94,16 @@ export default class TransformSheet extends ActivitySheet {
   /** @inheritDoc */
   _getTabs() {
     const tabs = super._getTabs();
-    tabs.effect.label = "DND5E.TRANSFORM.SECTIONS.Transformation";
+    tabs.effect.label = "VARLYN5E.TRANSFORM.SECTIONS.Transformation";
     tabs.effect.icon = "fa-solid fa-frog";
     tabs.effect.tabs = this._markTabs({
       profiles: {
         id: "profiles", group: "effect", icon: "fa-solid fa-address-card",
-        label: "DND5E.TRANSFORM.SECTIONS.Profiles"
+        label: "VARLYN5E.TRANSFORM.SECTIONS.Profiles"
       },
       settings: {
         id: "settings", group: "effect", icon: "fa-solid fa-sliders",
-        label: "DND5E.TRANSFORM.SECTIONS.Settings"
+        label: "VARLYN5E.TRANSFORM.SECTIONS.Settings"
       }
     });
     return tabs;
@@ -168,7 +168,7 @@ export default class TransformSheet extends ActivitySheet {
     if ( submitData.transform?.customize && !this.activity._source.settings ) {
       const preset = submitData.transform.preset ?? this.activity.transform.preset;
       submitData.settings = new TransformationSetting(foundry.utils.mergeObject({
-        ...(CONFIG.DND5E.transformation.presets[preset]?.settings ?? {}),
+        ...(CONFIG.VARLYN5E.transformation.presets[preset]?.settings ?? {}),
         preset: this.activity.transform.preset
       }, submitData.settings ?? {}, { inplace: false })).toObject();
     }

@@ -51,7 +51,7 @@ export default class MovementSensesConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc(this.options.type === "movement" ? "DND5E.Movement" : "DND5E.Senses");
+    return _loc(this.options.type === "movement" ? "VARLYN5E.Movement" : "VARLYN5E.Senses");
   }
 
   /* -------------------------------------------- */
@@ -61,8 +61,8 @@ export default class MovementSensesConfig extends BaseConfigSheet {
    * @type {string}
    */
   get types() {
-    if ( this.options.type === "senses" ) return Object.keys(CONFIG.DND5E.senses);
-    return Object.keys(CONFIG.DND5E.movementTypes);
+    if ( this.options.type === "senses" ) return Object.keys(CONFIG.VARLYN5E.senses);
+    return Object.keys(CONFIG.VARLYN5E.movementTypes);
   }
 
   /* -------------------------------------------- */
@@ -91,19 +91,19 @@ export default class MovementSensesConfig extends BaseConfigSheet {
       context.extras = this._prepareExtraFields(context);
       context.types = this.types.map(key => ({
         field: this.subPath ? context.fields[this.subPath].model : context.fields[key],
-        label: this.options.type === "movement" ? CONFIG.DND5E.movementTypes[key].label : CONFIG.DND5E.senses[key]?.label,
+        label: this.options.type === "movement" ? CONFIG.VARLYN5E.movementTypes[key].label : CONFIG.VARLYN5E.senses[key]?.label,
         name: this.subPath ? `system.${this.keyPath}.${this.subPath}.${key}` : `system.${this.keyPath}.${key}`,
         value: this.subPath ? context.data[this.subPath][key] : context.data[key],
         placeholder: placeholderData?.[key] ?? ""
       })).filter(type => type.field);
 
-      context.unitsOptions = Object.entries(CONFIG.DND5E.movementUnits).map(([value, { label }]) => ({ value, label }));
+      context.unitsOptions = Object.entries(CONFIG.VARLYN5E.movementUnits).map(([value, { label }]) => ({ value, label }));
       context.unitsOptions.blank = false;
       if ( this.document.system.isCharacter || (this.document.system.isNPC && placeholderData) ) {
-        const automaticUnit = CONFIG.DND5E.movementUnits[placeholderData?.units ?? defaultUnits("length")]?.label ?? "";
+        const automaticUnit = CONFIG.VARLYN5E.movementUnits[placeholderData?.units ?? defaultUnits("length")]?.label ?? "";
         context.unitsOptions.blank = true;
         context.unitsOptions.unshift(
-          { value: "", label: _loc("DND5E.AutomaticValue", { value: automaticUnit.toLowerCase() }) },
+          { value: "", label: _loc("VARLYN5E.AutomaticValue", { value: automaticUnit.toLowerCase() }) },
           { rule: true }
         );
       }
@@ -139,11 +139,11 @@ export default class MovementSensesConfig extends BaseConfigSheet {
       field: context.fields.ignoredDifficultTerrain,
       value: context.data.ignoredDifficultTerrain,
       options: [
-        { value: "all", label: _loc("DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.All") },
-        { value: "magical", label: _loc("DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Magical") },
-        { value: "nonmagical", label: _loc("DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Nonmagical") },
+        { value: "all", label: _loc("VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.All") },
+        { value: "magical", label: _loc("VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Magical") },
+        { value: "nonmagical", label: _loc("VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Nonmagical") },
         { rule: true },
-        ...Object.entries(CONFIG.DND5E.difficultTerrainTypes).map(([value, { label }]) => ({ value, label }))
+        ...Object.entries(CONFIG.VARLYN5E.difficultTerrainTypes).map(([value, { label }]) => ({ value, label }))
       ],
       localize: true
     });
@@ -166,9 +166,9 @@ export default class MovementSensesConfig extends BaseConfigSheet {
       data,
       extras: [],
       fields: this.document.system.schema.getField(keyPath).fields,
-      unitsOptions: Object.entries(CONFIG.DND5E.travelUnits).map(([value, { label }]) => ({ value, label }))
+      unitsOptions: Object.entries(CONFIG.VARLYN5E.travelUnits).map(([value, { label }]) => ({ value, label }))
     };
-    context.travel.types = Object.entries(CONFIG.DND5E.travelTypes).map(([key, config]) => ({
+    context.travel.types = Object.entries(CONFIG.VARLYN5E.travelTypes).map(([key, config]) => ({
       label: config.label,
       pace: {
         field: context.travel.fields.paces.model,
@@ -186,7 +186,7 @@ export default class MovementSensesConfig extends BaseConfigSheet {
     if ( context.travel.fields.pace ) context.travel.extras.push({
       field: context.travel.fields.pace,
       localize: true,
-      options: Object.entries(CONFIG.DND5E.travelPace).map(([value, { label }]) => ({ value, label })),
+      options: Object.entries(CONFIG.VARLYN5E.travelPace).map(([value, { label }]) => ({ value, label })),
       value: data.pace
     });
     if ( context.travel.fields.time ) context.travel.extras.push({
@@ -194,6 +194,6 @@ export default class MovementSensesConfig extends BaseConfigSheet {
       localize: true,
       value: data.time
     });
-    if ( context.fields ) context.legend = _loc("DND5E.MOVEMENT.Speed");
+    if ( context.fields ) context.legend = _loc("VARLYN5E.MOVEMENT.Speed");
   }
 }

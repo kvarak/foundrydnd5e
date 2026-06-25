@@ -54,24 +54,24 @@ export default class SummonSheet extends ActivitySheet {
     context.abilityOptions = [
       {
         value: "", rule: true,
-        label: _loc("DND5E.DefaultSpecific", {
-          default: this.activity.isSpell ? _loc("DND5E.Spellcasting").toLowerCase()
-            : CONFIG.DND5E.abilities[this.activity.ability]?.label.toLowerCase()
-              ?? _loc("DND5E.None").toLowerCase()
+        label: _loc("VARLYN5E.DefaultSpecific", {
+          default: this.activity.isSpell ? _loc("VARLYN5E.Spellcasting").toLowerCase()
+            : CONFIG.VARLYN5E.abilities[this.activity.ability]?.label.toLowerCase()
+              ?? _loc("VARLYN5E.None").toLowerCase()
         })
       },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label }))
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label }))
     ];
-    context.creatureSizeOptions = Object.entries(CONFIG.DND5E.actorSizes).map(([value, config]) => ({
+    context.creatureSizeOptions = Object.entries(CONFIG.VARLYN5E.actorSizes).map(([value, config]) => ({
       value, label: config.label, selected: this.activity.creatureSizes.has(value)
     }));
-    context.creatureTypeOptions = Object.entries(CONFIG.DND5E.creatureTypes).map(([value, config]) => ({
+    context.creatureTypeOptions = Object.entries(CONFIG.VARLYN5E.creatureTypes).map(([value, config]) => ({
       value, label: config.label, selected: this.activity.creatureTypes.has(value)
     }));
 
     context.profileModes = [
-      { value: "", label: _loc("DND5E.SUMMON.FIELDS.summon.mode.Direct") },
-      { value: "cr", label: _loc("DND5E.SUMMON.FIELDS.summon.mode.CR") }
+      { value: "", label: _loc("VARLYN5E.SUMMON.FIELDS.summon.mode.Direct") },
+      { value: "cr", label: _loc("VARLYN5E.SUMMON.FIELDS.summon.mode.CR") }
     ];
     context.profiles = this.activity.profiles.map((data, index) => ({
       data, index,
@@ -109,16 +109,16 @@ export default class SummonSheet extends ActivitySheet {
   /** @inheritDoc */
   _getTabs() {
     const tabs = super._getTabs();
-    tabs.effect.label = "DND5E.SUMMON.SECTIONS.Summoning";
+    tabs.effect.label = "VARLYN5E.SUMMON.SECTIONS.Summoning";
     tabs.effect.icon = "fa-solid fa-spaghetti-monster-flying";
     tabs.effect.tabs = this._markTabs({
       profiles: {
         id: "profiles", group: "effect", icon: "fa-solid fa-address-card",
-        label: "DND5E.SUMMON.SECTIONS.Profiles"
+        label: "VARLYN5E.SUMMON.SECTIONS.Profiles"
       },
       changes: {
         id: "changes", group: "effect", icon: "fa-solid fa-sliders",
-        label: "DND5E.SUMMON.SECTIONS.Changes"
+        label: "VARLYN5E.SUMMON.SECTIONS.Changes"
       }
     });
     return tabs;

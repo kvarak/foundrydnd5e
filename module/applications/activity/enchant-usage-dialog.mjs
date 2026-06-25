@@ -28,13 +28,13 @@ export default class EnchantUsageDialog extends ActivityUsageDialog {
       const existingProfile = this.activity.existingEnchantment?.flags.dnd5e?.enchantmentProfile;
       context.hasCreation = true;
       context.enchantment = {
-        field: new StringField({ required: true, blank: false, label: _loc("DND5E.ENCHANTMENT.Label") }),
+        field: new StringField({ required: true, blank: false, label: _loc("VARLYN5E.ENCHANTMENT.Label") }),
         name: "enchantmentProfile",
         value: this.config.enchantmentProfile,
         options: enchantments.map(e => ({
           value: e._id,
           label: e._id === existingProfile
-            ? _loc("DND5E.ENCHANT.Enchantment.Active", { name: e.effect.name })
+            ? _loc("VARLYN5E.ENCHANT.Enchantment.Active", { name: e.effect.name })
             : e.effect.name
         }))
       };

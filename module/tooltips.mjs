@@ -130,7 +130,7 @@ export default class Tooltips5e {
    * @protected
    */
   async _onHoverPassiveLanguage(language) {
-    const label = CONFIG.DND5E.enrichmentLookup.languages[language];
+    const label = CONFIG.VARLYN5E.enrichmentLookup.languages[language];
     this._onHoverPassive({ label }, actor => {
       if ( !actor.system.traits?.languages?.value ) return false;
       return { status: actor.system.traits.languages.value.has(language) ? "success" : "failure" };
@@ -148,16 +148,16 @@ export default class Tooltips5e {
    * @protected
    */
   async _onHoverPassiveCheck(skill, ability, dc) {
-    const skillConfig = CONFIG.DND5E.skills[skill];
-    const abilityConfig = CONFIG.DND5E.abilities[ability ?? skillConfig.ability];
+    const skillConfig = CONFIG.VARLYN5E.skills[skill];
+    const abilityConfig = CONFIG.VARLYN5E.abilities[ability ?? skillConfig.ability];
 
     let label;
     if ( skillConfig ) {
-      label = _loc("DND5E.SkillPassiveSpecificHint", { skill: skillConfig.label, ability: abilityConfig.label });
+      label = _loc("VARLYN5E.SkillPassiveSpecificHint", { skill: skillConfig.label, ability: abilityConfig.label });
     } else {
       // If no skill was provided, we're doing a passive ability check.
       // This isn't technically a thing in the rules, but we can support it anyway if people want to use it.
-      label = _loc("DND5E.SkillPassiveHint", { skill: abilityConfig.label });
+      label = _loc("VARLYN5E.SkillPassiveHint", { skill: abilityConfig.label });
     }
 
     this._onHoverPassive({ label }, actor => {

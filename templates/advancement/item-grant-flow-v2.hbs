@@ -1,14 +1,14 @@
 <div class="standard-form">
     {{#if abilities}}
     <fieldset>
-        <legend>{{ localize "DND5E.SpellAbility" }}</legend>
+        <legend>{{ localize "VARLYN5E.SpellAbility" }}</legend>
         {{ formInput abilities.field name="ability" value=abilities.value options=abilities.options}}
     </fieldset>
     {{/if}}
 
     <div class="items-section card">
         <div class="items-header header">
-            <h4 class="item-name">{{ localize "DND5E.ADVANCEMENT.ItemGrant.FIELDS.items.label" }}</h4>
+            <h4 class="item-name">{{ localize "VARLYN5E.ADVANCEMENT.ItemGrant.FIELDS.items.label" }}</h4>
         </div>
         <ul class="item-list unlist">
             {{#each items}}

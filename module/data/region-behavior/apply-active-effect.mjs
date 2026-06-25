@@ -12,7 +12,7 @@ const { DocumentUUIDField, NumberField, SetField, StringField } = foundry.data.f
 export default class ApplyActiveEffect5eRegionBehaviorType extends foundry.data.regionBehaviors.RegionBehaviorType {
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.REGIONBEHAVIORS.APPLYACTIVEEFFECT"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.REGIONBEHAVIORS.APPLYACTIVEEFFECT"];
 
   /* ---------------------------------------- */
 
@@ -23,8 +23,8 @@ export default class ApplyActiveEffect5eRegionBehaviorType extends foundry.data.
     return {
       effects: new SetField(new DocumentUUIDField({ type: "ActiveEffect", nullable: false })),
       dispositions: new SetField(new NumberField({ choices: dispositions })),
-      sizes: new SetField(new StringField({ choices: () => CONFIG.DND5E.actorSizes })),
-      types: new SetField(new StringField({ choices: () => CONFIG.DND5E.creatureTypes }))
+      sizes: new SetField(new StringField({ choices: () => CONFIG.VARLYN5E.actorSizes })),
+      types: new SetField(new StringField({ choices: () => CONFIG.VARLYN5E.creatureTypes }))
       // TODO: Add FiltersField for arbitrary conditions once https://github.com/foundryvtt/dnd5e/issues/6672 is done
     };
   }

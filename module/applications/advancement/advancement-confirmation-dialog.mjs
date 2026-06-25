@@ -67,8 +67,8 @@ export default class AdvancementConfirmationDialog extends Dialog5e {
   static forDelete(item, { sheet }={}) {
     return this.createDialog({
       item, sheet,
-      title: _loc("DND5E.ADVANCEMENT.Deletion.Delete.Title"),
-      message: _loc("DND5E.ADVANCEMENT.Deletion.Delete.Message"),
+      title: _loc("VARLYN5E.ADVANCEMENT.Deletion.Delete.Title"),
+      message: _loc("VARLYN5E.ADVANCEMENT.Deletion.Delete.Message"),
       continueButton: {
         icon: "fa-solid fa-trash",
         label: _loc("COMMON.Delete")
@@ -88,11 +88,11 @@ export default class AdvancementConfirmationDialog extends Dialog5e {
   static forLevelDown(item, { sheet }={}) {
     return this.createDialog({
       item, sheet,
-      title: _loc("DND5E.ADVANCEMENT.Deletion.LevelDown.Title"),
-      message: _loc("DND5E.ADVANCEMENT.Deletion.LevelDown.Message"),
+      title: _loc("VARLYN5E.ADVANCEMENT.Deletion.LevelDown.Title"),
+      message: _loc("VARLYN5E.ADVANCEMENT.Deletion.LevelDown.Message"),
       continueButton: {
         icon: "fa-solid fa-sort-numeric-down-alt",
-        label: _loc("DND5E.LevelActionDecrease")
+        label: _loc("VARLYN5E.LevelActionDecrease")
       }
     });
   }

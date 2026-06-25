@@ -364,7 +364,7 @@ class SpellListRegistry {
    * @type {FormSelectOption[]}
    */
   static get options() {
-    return Object.entries(CONFIG.DND5E.spellListTypes).map(([type, group]) => {
+    return Object.entries(CONFIG.VARLYN5E.spellListTypes).map(([type, group]) => {
       const lists = this.#byType.get(type);
       if ( !lists ) return [];
       return Array.from(lists.entries())
@@ -400,7 +400,7 @@ class SpellListRegistry {
 
   /**
    * Retrieve a specific spell list from the registry.
-   * @param {string} type          Type of list as defined in `CONFIG.DND5E.spellListTypes`. Can also be a combination
+   * @param {string} type          Type of list as defined in `CONFIG.VARLYN5E.spellListTypes`. Can also be a combination
    *                               of the type and identifier split by a colon (e.g. `class:bard`).
    * @param {string} [identifier]  Identifier of the specific spell list.
    * @returns {SpellList|null}

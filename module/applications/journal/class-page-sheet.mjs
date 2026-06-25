@@ -93,10 +93,10 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
     context.systemFields = this.document.system.schema.fields;
 
     context.styleOptions = [
-      { value: "", label: _loc("JOURNALENTRYPAGE.DND5E.Class.Style.Inferred") },
+      { value: "", label: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Style.Inferred") },
       { rule: true },
-      { value: "2024", label: _loc("JOURNALENTRYPAGE.DND5E.Class.Style.Modern") },
-      { value: "2014", label: _loc("JOURNALENTRYPAGE.DND5E.Class.Style.Legacy") }
+      { value: "2024", label: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Style.Modern") },
+      { value: "2014", label: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Style.Legacy") }
     ];
 
     context.title = {
@@ -136,7 +136,7 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
     if ( linked.system.primaryAbility ) {
       context.primaryAbility = game.i18n.getListFormatter(
         { type: linked.system.primaryAbility.all ? "conjunction" : "disjunction" }
-      ).format(Array.from(linked.system.primaryAbility.value).map(v => CONFIG.DND5E.abilities[v]?.label));
+      ).format(Array.from(linked.system.primaryAbility.value).map(v => CONFIG.VARLYN5E.abilities[v]?.label));
     }
 
     return context;
@@ -226,9 +226,9 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
     const scaleValues = (item.advancement.byType.ScaleValue ?? []);
     const spellProgression = await this._getSpellProgression(item);
 
-    const headers = [[{content: _loc("DND5E.Level")}]];
-    if ( item.type === "class" ) headers[0].push({content: _loc("DND5E.ProficiencyBonus")});
-    if ( hasFeatures ) headers[0].push({content: _loc("DND5E.Features")});
+    const headers = [[{content: _loc("VARLYN5E.Level")}]];
+    if ( item.type === "class" ) headers[0].push({content: _loc("VARLYN5E.ProficiencyBonus")});
+    if ( hasFeatures ) headers[0].push({content: _loc("VARLYN5E.Features")});
     headers[0].push(...scaleValues.map(a => ({content: a.title})));
     if ( spellProgression?.headers?.length > 1 ) {
       headers[0].forEach(h => h.rowSpan = 2);
@@ -251,7 +251,7 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
     };
 
     const rows = [];
-    for ( const level of Array.fromRange((CONFIG.DND5E.maxLevel - (initialLevel - 1)), initialLevel) ) {
+    for ( const level of Array.fromRange((CONFIG.VARLYN5E.maxLevel - (initialLevel - 1)), initialLevel) ) {
       let features = [];
       for ( const advancement of item.advancement.byLevel[level] ) {
         switch ( advancement.constructor.typeName ) {
@@ -302,7 +302,7 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
     const spellcasting = foundry.utils.deepClone(item.spellcasting);
     if ( !spellcasting || (spellcasting.progression === "none") ) return null;
 
-    const spellcastingModel = CONFIG.DND5E.spellcasting[spellcasting.type];
+    const spellcastingModel = CONFIG.VARLYN5E.spellcasting[spellcasting.type];
     const table = {};
 
     if ( spellcastingModel?.isSingleLevel ) {
@@ -310,14 +310,14 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
       const spells = { [spellSlotKey]: {} };
 
       table.headers = [[
-        { content: _loc("JOURNALENTRYPAGE.DND5E.Class.SpellSlots") },
-        { content: _loc("JOURNALENTRYPAGE.DND5E.Class.SpellSlotLevel") }
+        { content: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.SpellSlots") },
+        { content: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.SpellSlotLevel") }
       ]];
       table.cols = [{class: "spellcasting", span: 2}];
 
       // Loop through each level, gathering "Spell Slots" & "Slot Level" for each one
       table.rows = [];
-      for ( const level of Array.fromRange(CONFIG.DND5E.maxLevel, 1) ) {
+      for ( const level of Array.fromRange(CONFIG.VARLYN5E.maxLevel, 1) ) {
         const progression = { [spellSlotKey]: 0 };
         spellcasting.levels = level;
         Actor5e.computeClassProgression(progression, item, { spellcasting });
@@ -328,14 +328,14 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
         ] : null);
       }
     } else if ( spellcastingModel?.slots ) {
-      const maxSpellLevel = Object.keys(CONFIG.DND5E.spellLevels).length - 1;
+      const maxSpellLevel = Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1;
       const spells = Object.fromEntries(Array.fromRange(maxSpellLevel, 1).map(l => {
         return [spellcastingModel.getSpellSlotKey(l), {}];
       }));
 
       let largestSlot;
       table.rows = [];
-      for ( const level of Array.fromRange(CONFIG.DND5E.maxLevel, 1).reverse() ) {
+      for ( const level of Array.fromRange(CONFIG.VARLYN5E.maxLevel, 1).reverse() ) {
         const progression = { [spellcasting.type]: 0 };
         spellcasting.levels = level;
         Actor5e.computeClassProgression(progression, item, { spellcasting });
@@ -357,7 +357,7 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
 
       // Prepare headers & columns
       table.headers = [
-        [{content: _loc("JOURNALENTRYPAGE.DND5E.Class.SpellSlotsPerSpellLevel"), colSpan: largestSlot}],
+        [{content: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.SpellSlotsPerSpellLevel"), colSpan: largestSlot}],
         Array.fromRange(largestSlot, 1).map(spellLevel => ({content: spellLevel.ordinalString()}))
       ];
       table.cols = [{class: "spellcasting", span: largestSlot}];
@@ -390,8 +390,8 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
    */
   async _getOptionalTable(item, { modernStyle }) {
     const headers = [[
-      { content: _loc("DND5E.Level") },
-      { content: _loc("DND5E.Features") }
+      { content: _loc("VARLYN5E.Level") },
+      { content: _loc("VARLYN5E.Features") }
     ]];
 
     const cols = [
@@ -406,7 +406,7 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
     };
 
     const rows = [];
-    for ( const level of Array.fromRange(CONFIG.DND5E.maxLevel, 1) ) {
+    for ( const level of Array.fromRange(CONFIG.VARLYN5E.maxLevel, 1) ) {
       let features = [];
       for ( const advancement of item.advancement.byLevel[level] ) {
         switch ( advancement.constructor.typeName ) {
@@ -448,7 +448,7 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
       if ( document?.type !== "feat" ) return null;
       return {
         document, level,
-        name: modernStyle ? _loc("JOURNALENTRYPAGE.DND5E.Class.Features.Name", {
+        name: modernStyle ? _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Features.Name", {
           name: document.name, level: formatNumber(level)
         }) : document.name,
         description: await TextEditor.enrichHTML(document.system.description.value, {
@@ -471,22 +471,22 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
     }, { levels: [], boons: [] });
     if ( asi.levels.length ) {
       const [firstLevel, ...otherLevels] = asi.levels.sort((a, b) => a - b);
-      const name = _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.Journal.Name");
+      const name = _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Journal.Name");
       features.push({
         description: _loc(
-          `DND5E.ADVANCEMENT.AbilityScoreImprovement.Journal.Description${modernStyle ? "Modern" : "Legacy"}`,
+          `VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Journal.Description${modernStyle ? "Modern" : "Legacy"}`,
           {
             class: item.name,
             firstLevel: formatNumber(firstLevel),
             firstLevelOrdinal: formatNumber(firstLevel, { ordinal: true }),
-            maxAbilityScore: formatNumber(CONFIG.DND5E.maxAbilityScore),
+            maxAbilityScore: formatNumber(CONFIG.VARLYN5E.maxAbilityScore),
             otherLevels: game.i18n.getListFormatter({ style: "long" }).format(otherLevels.map(l => formatNumber(l))),
             otherLevelsOrdinal: game.i18n.getListFormatter({ style: "long" })
               .format(otherLevels.map(l => formatNumber(l, { ordinal: true })))
           }
         ),
         level: asi.levels[0],
-        name: modernStyle ? _loc("JOURNALENTRYPAGE.DND5E.Class.Features.Name", {
+        name: modernStyle ? _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Features.Name", {
           name: name, level: formatNumber(firstLevel)
         }) : name
       });
@@ -495,11 +495,11 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
       const recommendation = await fromUuid(advancement.configuration.recommendation);
       features.push({
         description: _loc(
-          `DND5E.ADVANCEMENT.AbilityScoreImprovement.Journal.DescriptionEpic${recommendation ? "Recommendation" : ""}`,
+          `VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Journal.DescriptionEpic${recommendation ? "Recommendation" : ""}`,
           { recommendation: recommendation?.toAnchor().outerHTML }
         ),
         level: advancement.level,
-        name: _loc("JOURNALENTRYPAGE.DND5E.Class.Features.Name", {
+        name: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Features.Name", {
           name: advancement._defaultTitle, level: formatNumber(advancement.level)
         })
       });

@@ -77,7 +77,7 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
       default: return false;
     }
     if ( !recovery?.length ) return false;
-    return recovery.every(r => CONFIG.DND5E.limitedUsePeriods[r.period]?.type === "combat");
+    return recovery.every(r => CONFIG.VARLYN5E.limitedUsePeriods[r.period]?.type === "combat");
   }
 
   /* -------------------------------------------- */
@@ -97,7 +97,7 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
    * @type {FormSelectOption[]|null}
    */
   get validTargets() {
-    const config = CONFIG.DND5E.activityConsumptionTypes[this.type];
+    const config = CONFIG.VARLYN5E.activityConsumptionTypes[this.type];
     if ( !config?.validTargets || (!this.item.isEmbedded && (config.targetRequiresEmbedded === true)) ) return null;
     return config.validTargets.call(this);
   }
@@ -113,7 +113,7 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
    * @throws ConsumptionError
    */
   async consume(config, updates) {
-    const typeConfig = CONFIG.DND5E.activityConsumptionTypes[this.type];
+    const typeConfig = CONFIG.VARLYN5E.activityConsumptionTypes[this.type];
     if ( !typeConfig?.consume ) throw new Error("Consumption types must define consumption method.");
     await typeConfig.consume.call(this, config, updates);
   }
@@ -130,7 +130,7 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
   static async consumeActivityUses(config, updates) {
     const result = await this._usesConsumption(config, {
       uses: this.activity.uses,
-      type: _loc("DND5E.CONSUMPTION.Type.ActivityUses.Warning", {
+      type: _loc("VARLYN5E.CONSUMPTION.Type.ActivityUses.Warning", {
         activity: this.activity.name, item: this.item.name
       }),
       rolls: updates.rolls,
@@ -154,18 +154,18 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
 
     const attribute = getHumanReadableAttributeLabel(this.target, { actor: this.actor });
     if ( !foundry.utils.hasProperty(this.actor, keyPath) ) throw new ConsumptionError(
-      _loc("DND5E.CONSUMPTION.Warning.MissingAttribute", {
+      _loc("VARLYN5E.CONSUMPTION.Warning.MissingAttribute", {
         activity: this.activity.name, attribute, item: this.item.name
       })
     );
     let current = foundry.utils.getProperty(this.actor, keyPath);
 
     let warningMessage;
-    if ( (cost > 0) && !current ) warningMessage = "DND5E.CONSUMPTION.Warning.None";
-    else if ( current < cost ) warningMessage = "DND5E.CONSUMPTION.Warning.NotEnough";
+    if ( (cost > 0) && !current ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.None";
+    else if ( current < cost ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.NotEnough";
     if ( warningMessage ) throw new ConsumptionError(_loc(warningMessage, {
       available: formatNumber(current), cost: formatNumber(cost),
-      type: _loc("DND5E.CONSUMPTION.Type.Attribute.Warning", { attribute })
+      type: _loc("VARLYN5E.CONSUMPTION.Type.Attribute.Warning", { attribute })
     }));
 
     const adjustedKeyPath = keyPath.replace(/\.value$/, ".spent");
@@ -201,14 +201,14 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
     });
 
     let warningMessage;
-    if ( !validClasses.length ) warningMessage = "DND5E.CONSUMPTION.Warning.MissingHitDice";
-    else if ( (cost > 0) && !total ) warningMessage = "DND5E.CONSUMPTION.Warning.None";
-    else if ( total < cost ) warningMessage = "DND5E.CONSUMPTION.Warning.NotEnough";
+    if ( !validClasses.length ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.MissingHitDice";
+    else if ( (cost > 0) && !total ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.None";
+    else if ( total < cost ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.NotEnough";
     if ( warningMessage ) {
       const denomination = !["smallest", "largest"].includes(this.target) ? this.target : "";
       throw new ConsumptionError(_loc(warningMessage, {
         available: formatNumber(total), cost: formatNumber(cost), denomination,
-        type: _loc("DND5E.CONSUMPTION.Type.HitDice.Warning", { denomination })
+        type: _loc("VARLYN5E.CONSUMPTION.Type.HitDice.Warning", { denomination })
       }));
     }
 
@@ -238,13 +238,13 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
    */
   static async consumeItemUses(config, updates) {
     const item = this.target ? this.actor.items.get(this.target) : this.item;
-    if ( !item ) throw new ConsumptionError(_loc("DND5E.CONSUMPTION.Warning.MissingItem", {
+    if ( !item ) throw new ConsumptionError(_loc("VARLYN5E.CONSUMPTION.Warning.MissingItem", {
       activity: this.activity.name, item: this.item.name
     }));
 
     const result = await this._usesConsumption(config, {
       uses: item.system.uses,
-      type: _loc("DND5E.CONSUMPTION.Type.ItemUses.Warning", { name: this.item.name }),
+      type: _loc("VARLYN5E.CONSUMPTION.Type.ItemUses.Warning", { name: this.item.name }),
       rolls: updates.rolls,
       delta: { item: item.id, keyPath: "system.uses.spent" }
     });
@@ -280,7 +280,7 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
    */
   static async consumeMaterial(config, updates) {
     const item = this.actor.items.get(this.target);
-    if ( !item ) throw new ConsumptionError(_loc("DND5E.CONSUMPTION.Warning.MissingItem", {
+    if ( !item ) throw new ConsumptionError(_loc("VARLYN5E.CONSUMPTION.Warning.MissingItem", {
       activity: this.activity.name, item: this.item.name
     }));
 
@@ -288,11 +288,11 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
     const cost = (await this.resolveCost({ config, delta, rolls: updates.rolls })).total;
 
     let warningMessage;
-    if ( cost > 0 && !item.system.quantity ) warningMessage = "DND5E.CONSUMPTION.Warning.None";
-    else if ( cost > item.system.quantity ) warningMessage = "DND5E.CONSUMPTION.Warning.NotEnough";
+    if ( cost > 0 && !item.system.quantity ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.None";
+    else if ( cost > item.system.quantity ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.NotEnough";
     if ( warningMessage ) throw new ConsumptionError(_loc(warningMessage, {
       available: formatNumber(item.system.quantity), cost: formatNumber(cost),
-      type: _loc("DND5E.CONSUMPTION.Type.Material.Warning", { name: item.name })
+      type: _loc("VARLYN5E.CONSUMPTION.Type.Material.Warning", { name: item.name })
     }));
 
     const newQuantity = item.system.quantity - cost;
@@ -317,7 +317,7 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
    */
   static async consumeSpellSlots(config, updates) {
     const levelNumber = Math.clamp(
-      this.resolveLevel({ config, rolls: updates.rolls }), 1, Object.keys(CONFIG.DND5E.spellLevels).length - 1
+      this.resolveLevel({ config, rolls: updates.rolls }), 1, Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1
     );
     const keyPath = `system.spells.spell${levelNumber}.value`;
     const cost = (await this.resolveCost({ config, delta: { keyPath }, rolls: updates.rolls })).total;
@@ -326,12 +326,12 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
     const levelData = this.actor.system.spells?.[`spell${levelNumber}`];
     const newValue = (levelData?.value ?? 0) - cost;
     let warningMessage;
-    if ( !levelData?.max ) warningMessage = "DND5E.CONSUMPTION.Warning.MissingSpellSlot";
-    else if ( (cost > 0) && !levelData.value ) warningMessage = "DND5E.CONSUMPTION.Warning.None";
-    else if ( newValue < 0 ) warningMessage = "DND5E.CONSUMPTION.Warning.NotEnough";
+    if ( !levelData?.max ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.MissingSpellSlot";
+    else if ( (cost > 0) && !levelData.value ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.None";
+    else if ( newValue < 0 ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.NotEnough";
     if ( warningMessage ) {
-      const level = CONFIG.DND5E.spellLevels[levelNumber];
-      const type = _loc("DND5E.CONSUMPTION.Type.SpellSlots.Warning", { level });
+      const level = CONFIG.VARLYN5E.spellLevels[levelNumber];
+      const type = _loc("VARLYN5E.CONSUMPTION.Type.SpellSlots.Warning", { level });
       throw new ConsumptionError(_loc(warningMessage, {
         type, level, cost: formatNumber(cost), available: formatNumber(levelData.value)
       }));
@@ -357,8 +357,8 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
     const cost = (await this.resolveCost({ config, delta, rolls })).total;
 
     let warningMessage;
-    if ( cost > 0 && !uses.value ) warningMessage = "DND5E.CONSUMPTION.Warning.None";
-    else if ( cost > uses.value ) warningMessage = "DND5E.CONSUMPTION.Warning.NotEnough";
+    if ( cost > 0 && !uses.value ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.None";
+    else if ( cost > uses.value ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.NotEnough";
     if ( warningMessage ) throw new ConsumptionError(
       _loc(warningMessage, { type, cost: formatNumber(cost), available: formatNumber(uses.value) })
     );
@@ -378,7 +378,7 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
    * @returns {ConsumptionLabels}
    */
   getConsumptionLabels(config, options={}) {
-    const typeConfig = CONFIG.DND5E.activityConsumptionTypes[this.type];
+    const typeConfig = CONFIG.VARLYN5E.activityConsumptionTypes[this.type];
     if ( !typeConfig?.consumptionLabels ) return "";
     return typeConfig.consumptionLabels.call(this, config, options);
   }
@@ -398,14 +398,14 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
     const uses = this.activity.uses;
     const usesPluralRule = new Intl.PluralRules(game.i18n.lang).select(uses.value);
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.ActivityUses.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.ActivityUses.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.ActivityUses.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.ActivityUses.PromptHint${increaseKey}`,
         {
           cost,
-          use: _loc(`DND5E.CONSUMPTION.Type.Use.${pluralRule}`),
+          use: _loc(`VARLYN5E.CONSUMPTION.Type.Use.${pluralRule}`),
           available: formatNumber(uses.value),
-          availableUse: _loc(`DND5E.CONSUMPTION.Type.Use.${usesPluralRule}`)
+          availableUse: _loc(`VARLYN5E.CONSUMPTION.Type.Use.${usesPluralRule}`)
         }
       ),
       warn: simplifiedCost > uses.value
@@ -426,9 +426,9 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
     const { cost, simplifiedCost, increaseKey } = this._resolveHintCost(config);
     const current = foundry.utils.getProperty(this.actor.system, this.target);
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.Attribute.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.Attribute.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.Attribute.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.Attribute.PromptHint${increaseKey}`,
         {
           cost,
           attribute: getHumanReadableAttributeLabel(this.target, { actor: this.actor }),
@@ -452,18 +452,18 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
   static consumptionLabelsHitDice(config, { consumed }={}) {
     const { cost, simplifiedCost, increaseKey, pluralRule } = this._resolveHintCost(config);
     let denomination;
-    if ( this.target === "smallest" ) denomination = _loc("DND5E.ConsumeHitDiceSmallest");
-    else if ( this.target === "largest" ) denomination = _loc("DND5E.ConsumeHitDiceLargest");
+    if ( this.target === "smallest" ) denomination = _loc("VARLYN5E.ConsumeHitDiceSmallest");
+    else if ( this.target === "largest" ) denomination = _loc("VARLYN5E.ConsumeHitDiceLargest");
     else denomination = this.target;
     const available = (["smallest", "largest"].includes(this.target)
       ? this.actor.system.attributes?.hd?.value : this.actor.system.attributes?.hd?.bySize?.[this.target]) ?? 0;
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.HitDice.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.HitDice.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.HitDice.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.HitDice.PromptHint${increaseKey}`,
         {
           cost, denomination: denomination.toLowerCase(),
-          die: _loc(`DND5E.CONSUMPTION.Type.HitDie.${pluralRule}`),
+          die: _loc(`VARLYN5E.CONSUMPTION.Type.HitDie.${pluralRule}`),
           available: formatNumber(available)
         }
       ),
@@ -484,7 +484,7 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
   static consumptionLabelsItemUses(config, { consumed }={}) {
     const { cost, simplifiedCost, increaseKey, pluralRule } = this._resolveHintCost(config);
     const item = this.actor.items.get(this.target);
-    const itemName = item ? item.name : _loc("DND5E.CONSUMPTION.Target.ThisItem").toLowerCase();
+    const itemName = item ? item.name : _loc("VARLYN5E.CONSUMPTION.Target.ThisItem").toLowerCase();
     const uses = (item ?? this.item).system.uses;
     const usesPluralRule = new Intl.PluralRules(game.i18n.lang).select(uses.value);
 
@@ -493,18 +493,18 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
     if ( simplifiedCost > uses.value ) warn = true;
     else if ( (simplifiedCost > 0) && (uses.value - simplifiedCost === 0) && uses.autoDestroy ) notes.push({
       type: "warn",
-      message: _loc("DND5E.CONSUMPTION.Warning.WillDestroy", { item: itemName })
+      message: _loc("VARLYN5E.CONSUMPTION.Warning.WillDestroy", { item: itemName })
     });
 
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.ItemUses.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.ItemUses.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.ItemUses.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.ItemUses.PromptHint${increaseKey}`,
         {
           cost,
-          use: _loc(`DND5E.CONSUMPTION.Type.Use.${pluralRule}`),
+          use: _loc(`VARLYN5E.CONSUMPTION.Type.Use.${pluralRule}`),
           available: formatNumber(uses.value),
-          availableUse: _loc(`DND5E.CONSUMPTION.Type.Use.${usesPluralRule}`),
+          availableUse: _loc(`VARLYN5E.CONSUMPTION.Type.Use.${usesPluralRule}`),
           item: item ? `<em>${itemName}</em>` : itemName
         }
       ),
@@ -528,13 +528,13 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
     const item = this.actor.items.get(this.target);
     const quantity = item?.system.quantity ?? 0;
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.Material.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.Material.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.Material.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.Material.PromptHint${increaseKey}`,
         {
           cost,
           item: item ? `<em>${item.name}</em>`
-            : _loc("DND5E.CONSUMPTION.Target.UnknownItem").toLowerCase(),
+            : _loc("VARLYN5E.CONSUMPTION.Target.UnknownItem").toLowerCase(),
           quantity: formatNumber(quantity)
         }
       ),
@@ -554,16 +554,16 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
    */
   static consumptionLabelsSpellSlots(config, { consumed }={}) {
     const { cost, simplifiedCost, increaseKey, pluralRule } = this._resolveHintCost(config);
-    const levelNumber = Math.clamp(this.resolveLevel({ config }), 1, Object.keys(CONFIG.DND5E.spellLevels).length - 1);
-    const level = CONFIG.DND5E.spellLevels[levelNumber].toLowerCase();
+    const levelNumber = Math.clamp(this.resolveLevel({ config }), 1, Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1);
+    const level = CONFIG.VARLYN5E.spellLevels[levelNumber].toLowerCase();
     const available = this.actor.system.spells?.[`spell${levelNumber}`]?.value ?? 0;
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.SpellSlots.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.SpellSlots.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.SpellSlots.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.SpellSlots.PromptHint${increaseKey}`,
         {
           cost,
-          slot: _loc(`DND5E.CONSUMPTION.Type.SpellSlot.${pluralRule}`, { level }),
+          slot: _loc(`VARLYN5E.CONSUMPTION.Type.SpellSlot.${pluralRule}`, { level }),
           available: formatNumber(available)
         }
       ),
@@ -609,13 +609,13 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
     if ( !this.actor ) return [];
     return TokenDocument.implementation.getConsumedAttributes(this.actor.type).map(attr => {
       let group;
-      if ( attr.startsWith("abilities.") ) group = _loc("DND5E.AbilityScorePl");
-      else if ( attr.startsWith("currency.") ) group = _loc("DND5E.Currency");
-      else if ( attr.startsWith("spells.") ) group = _loc("DND5E.CONSUMPTION.Type.SpellSlots.Label");
-      else if ( attr.startsWith("attributes.movement.") ) group = _loc("DND5E.Speed");
-      else if ( attr.startsWith("attributes.senses.") ) group = _loc("DND5E.Senses");
-      else if ( attr.startsWith("attributes.actions.") ) group = _loc("DND5E.Vehicle");
-      else if ( attr.startsWith("resources.") ) group = _loc("DND5E.Resources");
+      if ( attr.startsWith("abilities.") ) group = _loc("VARLYN5E.AbilityScorePl");
+      else if ( attr.startsWith("currency.") ) group = _loc("VARLYN5E.Currency");
+      else if ( attr.startsWith("spells.") ) group = _loc("VARLYN5E.CONSUMPTION.Type.SpellSlots.Label");
+      else if ( attr.startsWith("attributes.movement.") ) group = _loc("VARLYN5E.Speed");
+      else if ( attr.startsWith("attributes.senses.") ) group = _loc("VARLYN5E.Senses");
+      else if ( attr.startsWith("attributes.actions.") ) group = _loc("VARLYN5E.Vehicle");
+      else if ( attr.startsWith("resources.") ) group = _loc("VARLYN5E.Resources");
       return { group, value: attr, label: getHumanReadableAttributeLabel(attr, { actor: this.actor }) || attr };
     });
   }
@@ -629,9 +629,9 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
    */
   static validHitDiceTargets() {
     return [
-      { value: "smallest", label: _loc("DND5E.ConsumeHitDiceSmallest") },
-      ...CONFIG.DND5E.hitDieTypes.map(d => ({ value: d, label: d })),
-      { value: "largest", label: _loc("DND5E.ConsumeHitDiceLargest") }
+      { value: "smallest", label: _loc("VARLYN5E.ConsumeHitDiceSmallest") },
+      ...CONFIG.VARLYN5E.hitDieTypes.map(d => ({ value: d, label: d })),
+      { value: "largest", label: _loc("VARLYN5E.ConsumeHitDiceLargest") }
     ];
   }
 
@@ -648,14 +648,14 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
       const uses = item.system.uses;
       if ( uses.max && (uses.recovery?.length === 1) && (uses.recovery[0].type === "recoverAll")
         && (uses.recovery[0].period !== "recharge") ) {
-        const per = CONFIG.DND5E.limitedUsePeriods[uses.recovery[0].period]?.abbreviation;
-        label = _loc("DND5E.AbilityUseConsumableLabel", { max: uses.max, per });
+        const per = CONFIG.VARLYN5E.limitedUsePeriods[uses.recovery[0].period]?.abbreviation;
+        label = _loc("VARLYN5E.AbilityUseConsumableLabel", { max: uses.max, per });
       }
-      else label = _loc("DND5E.AbilityUseChargesLabel", { value: uses.value });
+      else label = _loc("VARLYN5E.AbilityUseChargesLabel", { value: uses.value });
       return `${name} (${label})`;
     };
     return [
-      { value: "", label: makeLabel(_loc("DND5E.CONSUMPTION.Target.ThisItem"), this.item) },
+      { value: "", label: makeLabel(_loc("VARLYN5E.CONSUMPTION.Target.ThisItem"), this.item) },
       { rule: true },
       ...(this.actor?.items ?? [])
         .filter(i => i.system.uses?.max && (i !== this.item))
@@ -687,7 +687,7 @@ export class ConsumptionTargetData extends foundry.abstract.DataModel {
    * @returns {FormSelectOption[]}
    */
   static validSpellSlotsTargets() {
-    return Object.entries(CONFIG.DND5E.spellLevels).reduce((arr, [value, label]) => {
+    return Object.entries(CONFIG.VARLYN5E.spellLevels).reduce((arr, [value, label]) => {
       if ( value !== "0" ) arr.push({ value, label });
       return arr;
     }, []);

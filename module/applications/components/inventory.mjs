@@ -35,7 +35,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 70,
       order: 800,
       priority: 600,
-      label: "DND5E.Charges",
+      label: "VARLYN5E.Charges",
       template: "systems/dnd5e/templates/inventory/columns/uses.hbs"
     },
     controls: {
@@ -50,7 +50,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 80,
       order: 700,
       priority: 700,
-      label: "DND5E.SpellHeader.Formula",
+      label: "VARLYN5E.SpellHeader.Formula",
       template: "systems/dnd5e/templates/inventory/columns/formula.hbs"
     },
     price: {
@@ -58,7 +58,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 80,
       order: 300,
       priority: 300,
-      label: "DND5E.Price",
+      label: "VARLYN5E.Price",
       template: "systems/dnd5e/templates/inventory/columns/price.hbs"
     },
     range: {
@@ -66,7 +66,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 50,
       order: 300,
       priority: 800,
-      label: "DND5E.SpellHeader.Range",
+      label: "VARLYN5E.SpellHeader.Range",
       template: "systems/dnd5e/templates/inventory/columns/range.hbs"
     },
     recovery: {
@@ -74,7 +74,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 60,
       order: 400,
       priority: 500,
-      label: "DND5E.Recovery",
+      label: "VARLYN5E.Recovery",
       template: "systems/dnd5e/templates/inventory/columns/recovery.hbs"
     },
     roll: {
@@ -82,7 +82,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 40,
       order: 600,
       priority: 800,
-      label: "DND5E.SpellHeader.Roll",
+      label: "VARLYN5E.SpellHeader.Roll",
       template: "systems/dnd5e/templates/inventory/columns/roll.hbs"
     },
     school: {
@@ -90,7 +90,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 40,
       order: 100,
       priority: 100,
-      label: "DND5E.SpellHeader.School",
+      label: "VARLYN5E.SpellHeader.School",
       template: "systems/dnd5e/templates/inventory/columns/school.hbs"
     },
     target: {
@@ -98,7 +98,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 80,
       order: 400,
       priority: 800,
-      label: "DND5E.SpellHeader.Target",
+      label: "VARLYN5E.SpellHeader.Target",
       template: "systems/dnd5e/templates/inventory/columns/target.hbs"
     },
     time: {
@@ -106,7 +106,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 40,
       order: 200,
       priority: 800,
-      label: "DND5E.SpellHeader.Time",
+      label: "VARLYN5E.SpellHeader.Time",
       template: "systems/dnd5e/templates/inventory/columns/time.hbs"
     },
     quantity: {
@@ -114,7 +114,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 70,
       order: 500,
       priority: 500,
-      label: "DND5E.Quantity",
+      label: "VARLYN5E.Quantity",
       template: "systems/dnd5e/templates/inventory/columns/quantity.hbs"
     },
     uses: {
@@ -122,7 +122,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 70,
       order: 500,
       priority: 600,
-      label: "DND5E.Uses",
+      label: "VARLYN5E.Uses",
       template: "systems/dnd5e/templates/inventory/columns/uses.hbs"
     },
     weight: {
@@ -130,7 +130,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       width: 60,
       order: 400,
       priority: 400,
-      label: "DND5E.Weight",
+      label: "VARLYN5E.Weight",
       template: "systems/dnd5e/templates/inventory/columns/weight.hbs"
     }
   };
@@ -146,7 +146,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       id: "contents",
       order: 100,
       groups: { contents: "contents" },
-      label: "DND5E.Contents",
+      label: "VARLYN5E.Contents",
       columns: ["price", "weight", "quantity", "charges", "controls"]
     }
   };
@@ -327,27 +327,27 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
 
     // Standard options.
     const options = [{
-      label: "DND5E.ItemView",
+      label: "VARLYN5E.ItemView",
       icon: '<i class="fa-solid fa-eye fa-fw"></i>',
       onClick: (event, target) => this._onAction(target, "view", { event })
     }, {
-      label: "DND5E.ContextMenuActionEdit",
+      label: "VARLYN5E.ContextMenuActionEdit",
       icon: '<i class="fa-solid fa-edit fa-fw"></i>',
       visible: () => item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "edit", { event })
     }, {
-      label: "DND5E.ContextMenuActionDuplicate",
+      label: "VARLYN5E.ContextMenuActionDuplicate",
       icon: '<i class="fa-solid fa-copy fa-fw"></i>',
       visible: () => !inFavorites && item.canDuplicate && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "duplicate", { event })
     }, {
       id: "delete",
-      label: "DND5E.ContextMenuActionDelete",
+      label: "VARLYN5E.ContextMenuActionDelete",
       icon: '<i class="fa-solid fa-trash fa-fw"></i>',
       visible: () => !inFavorites && item.canDelete && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "delete", { event })
     }, {
-      label: "DND5E.DisplayCard",
+      label: "VARLYN5E.DisplayCard",
       icon: '<i class="fa-solid fa-message"></i>',
       visible: () => item.actor,
       onClick: () => item.displayCard()
@@ -360,7 +360,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
 
     // Owned item options.
     options.push({
-      label: "DND5E.Scroll.CreateScroll",
+      label: "VARLYN5E.Scroll.CreateScroll",
       icon: '<i class="fa-solid fa-scroll"></i>',
       group: "action",
       visible: () => {
@@ -373,42 +373,42 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
         if ( scroll ) void Item.implementation.create(scroll, { parent: this.actor });
       }
     }, {
-      label: "DND5E.ConcentrationBreak",
+      label: "VARLYN5E.ConcentrationBreak",
       icon: '<dnd5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></dnd5e-icon>',
       group: "state",
       visible: () => this.actor?.concentration?.items.has(item),
       onClick: () => this.actor?.endConcentration(item)
     }, {
-      label: `DND5E.ContextMenuAction${item.system.attuned ? "Unattune" : "Attune"}`,
+      label: `VARLYN5E.ContextMenuAction${item.system.attuned ? "Unattune" : "Attune"}`,
       icon: '<i class="fa-solid fa-sun fa-fw"></i>',
       group: "state",
       visible: () => item.system.attunement && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "attune", { event })
     }, {
-      label: `DND5E.ContextMenuAction${item.system.equipped ? "Unequip" : "Equip"}`,
+      label: `VARLYN5E.ContextMenuAction${item.system.equipped ? "Unequip" : "Equip"}`,
       icon: '<i class="fa-solid fa-shield-alt fa-fw"></i>',
       group: "state",
       visible: () => ("equipped" in item.system) && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "equip", { event })
     }, {
-      label: `DND5E.ContextMenuAction${item.isOnCooldown ? "Charge" : "ExpendCharge"}`,
+      label: `VARLYN5E.ContextMenuAction${item.isOnCooldown ? "Charge" : "ExpendCharge"}`,
       icon: '<i class="fa-solid fa-bolt"></i>',
       group: "state",
       visible: () => item.hasRecharge && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "toggleCharge", { event })
     }, {
-      label: `DND5E.ContextMenuAction${item.system.prepared ? "Unprepare" : "Prepare"}`,
+      label: `VARLYN5E.ContextMenuAction${item.system.prepared ? "Unprepare" : "Prepare"}`,
       icon: '<i class="fa-solid fa-sun fa-fw"></i>',
       group: "state",
       visible: () => {
-        const isPrepared = CONFIG.DND5E.spellcasting[item.system.method]?.prepares;
-        const isAlways = item.system.prepared === CONFIG.DND5E.spellPreparationStates.always.value;
+        const isPrepared = CONFIG.VARLYN5E.spellcasting[item.system.method]?.prepares;
+        const isAlways = item.system.prepared === CONFIG.VARLYN5E.spellPreparationStates.always.value;
         const canEdit = item.isOwner && !compendiumLocked;
         return !item.hasRecharge && isPrepared && !isAlways && canEdit && !item.getFlag("dnd5e", "cachedFor");
       },
       onClick: (event, target) => this._onAction(target, "prepare", { event })
     }, {
-      label: "DND5E.Identify",
+      label: "VARLYN5E.Identify",
       icon: '<i class="fa-solid fa-magnifying-glass"></i>',
       group: "state",
       visible: () => {
@@ -418,13 +418,13 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
       },
       onClick: (event, target) => this._onAction(target, "identify", { event })
     }, {
-      label: favorited ? "DND5E.FavoriteRemove" : "DND5E.Favorite",
+      label: favorited ? "VARLYN5E.FavoriteRemove" : "VARLYN5E.Favorite",
       icon: '<i class="fa-solid fa-bookmark fa-fw"></i>',
       group: "state",
       visible: () => ("favorites" in this.actor.system) && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "toggleFavorite", { event })
     }, {
-      label: item.system.properties?.has("gear") ? "DND5E.Gear.Action.Remove" : "DND5E.Gear.Action.Add",
+      label: item.system.properties?.has("gear") ? "VARLYN5E.Gear.Action.Remove" : "VARLYN5E.Gear.Action.Add",
       icon: '<i class="fa-solid fa-axe fa-fw"></i>',
       group: "state",
       visible: () => !!this.actor.system.isNPC && item.isOwner && !compendiumLocked

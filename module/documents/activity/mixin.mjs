@@ -35,7 +35,7 @@ export default function ActivityMixin(Base) {
      */
     static metadata = Object.freeze({
       name: "Activity",
-      label: "DOCUMENT.DND5E.Activity",
+      label: "DOCUMENT.VARLYN5E.Activity",
       sheetClass: ActivitySheet,
       usage: {
         actions: {},
@@ -53,12 +53,12 @@ export default function ActivityMixin(Base) {
       foundry.helpers.Localization.localizeDataModel(this);
       const fields = this.schema.fields;
       if ( fields.damage?.fields.parts ) {
-        localizeSchema(fields.damage.fields.parts.element, ["DND5E.DAMAGE.FIELDS.damage.parts"]);
+        localizeSchema(fields.damage.fields.parts.element, ["VARLYN5E.DAMAGE.FIELDS.damage.parts"]);
       }
       if ( fields.consumption ) {
-        localizeSchema(fields.consumption.fields.targets.element, ["DND5E.CONSUMPTION.FIELDS.consumption.targets"]);
+        localizeSchema(fields.consumption.fields.targets.element, ["VARLYN5E.CONSUMPTION.FIELDS.consumption.targets"]);
       }
-      if ( fields.uses ) localizeSchema(fields.uses.fields.recovery.element, ["DND5E.USES.FIELDS.uses.recovery"]);
+      if ( fields.uses ) localizeSchema(fields.uses.fields.recovery.element, ["VARLYN5E.USES.FIELDS.uses.recovery"]);
     }
 
     /* -------------------------------------------- */
@@ -83,7 +83,7 @@ export default function ActivityMixin(Base) {
      * @type {boolean}
      */
     get canConfigure() {
-      if ( CONFIG.DND5E.activityTypes[this.type]?.configurable === false ) return false;
+      if ( CONFIG.VARLYN5E.activityTypes[this.type]?.configurable === false ) return false;
       if ( this.visibility?.requireIdentification && !this.item.system.identified && !game.user.isGM ) return false;
       if ( this.dependentOrigin?.active === false ) return false;
       return true;
@@ -115,7 +115,7 @@ export default function ActivityMixin(Base) {
      * @type {string}
      */
     get damageFlavor() {
-      return _loc("DND5E.DamageRoll");
+      return _loc("VARLYN5E.DamageRoll");
     }
 
     /* -------------------------------------------- */
@@ -159,7 +159,7 @@ export default function ActivityMixin(Base) {
      * @type {Set<string>}
      */
     get validConsumptionTypes() {
-      const types = new Set(Object.keys(CONFIG.DND5E.activityConsumptionTypes));
+      const types = new Set(Object.keys(CONFIG.VARLYN5E.activityConsumptionTypes));
       if ( this.isSpell ) types.delete("spellSlots");
       return types;
     }
@@ -178,11 +178,11 @@ export default function ActivityMixin(Base) {
     async use(usage={}, dialog={}, message={}) {
       if ( !this.item.isEmbedded ) return;
       if ( !this.item.isOwner ) {
-        ui.notifications.error("DND5E.DocumentUseWarn");
+        ui.notifications.error("VARLYN5E.DocumentUseWarn");
         return;
       }
       if ( !this.canUse ) {
-        ui.notifications.error("DND5E.ACTIVITY.Warning.UsageNotAllowed");
+        ui.notifications.error("VARLYN5E.ACTIVITY.Warning.UsageNotAllowed");
         return;
       }
 
@@ -425,7 +425,7 @@ export default function ActivityMixin(Base) {
 
       const ignoreLinkedConsumption = this.isSpell && !this.consumption.spellSlot;
       if ( config.consume !== false ) {
-        const activationConfig = CONFIG.DND5E.activityActivationTypes[this.activation.type] ?? {};
+        const activationConfig = CONFIG.VARLYN5E.activityActivationTypes[this.activation.type] ?? {};
         const hasActionConsumption = activationConfig.consume
           && (activationConfig.consume.canConsume?.(this) !== false);
         const hasResourceConsumption = !!this.consumption.targets.find(c => !c.hasZeroCost(config));
@@ -457,7 +457,7 @@ export default function ActivityMixin(Base) {
 
         if ( this.requiresSpellSlot ) {
           const { level, method } = this.item.system;
-          const model = CONFIG.DND5E.spellcasting[method];
+          const model = CONFIG.VARLYN5E.spellcasting[method];
           config.spell ??= {};
           config.spell.slot ??= linked?.spell?.level
             ? `spell${linked.spell.level}`
@@ -537,7 +537,7 @@ export default function ActivityMixin(Base) {
       const errors = [];
 
       // Handle auto consumption.
-      const activationConfig = CONFIG.DND5E.activityActivationTypes[this.activation.type];
+      const activationConfig = CONFIG.VARLYN5E.activityActivationTypes[this.activation.type];
       if ( ((config.consume === true) || config.consume.action) && activationConfig?.consume ) {
         const { property } = activationConfig.consume;
         const valueProperty = `${property}.value`;
@@ -548,8 +548,8 @@ export default function ActivityMixin(Base) {
         const current = foundry.utils.getProperty(this.actor.system, property);
         if ( current && !containsConsumption ) {
           let message;
-          if ( current.value < 1 ) message = "DND5E.ACTIVATION.Warning.NoActions";
-          else if ( count > current.value ) message = "DND5E.ACTIVATION.Warning.NotEnoughActions";
+          if ( current.value < 1 ) message = "VARLYN5E.ACTIVATION.Warning.NoActions";
+          else if ( count > current.value ) message = "VARLYN5E.ACTIVATION.Warning.NotEnoughActions";
           if ( message ) {
             const err = new ConsumptionError(_loc(message, {
               type: activationConfig.label,
@@ -612,7 +612,7 @@ export default function ActivityMixin(Base) {
       // Handle spell slot consumption
       else if ( ((config.consume === true) || config.consume.spellSlot)
         && this.requiresSpellSlot && this.consumption.spellSlot ) {
-        const spellcasting = CONFIG.DND5E.spellcasting[this.item.system.method];
+        const spellcasting = CONFIG.VARLYN5E.spellcasting[this.item.system.method];
         const effectiveLevel = this.item.system.level + (config.scaling ?? 0);
         const slot = config.spell?.slot ?? spellcasting?.getSpellSlotKey(effectiveLevel) ?? this.item.system.method;
         const slotData = this.actor.system.spells?.[slot];
@@ -621,7 +621,7 @@ export default function ActivityMixin(Base) {
             const newValue = Math.max(slotData.value - 1, 0);
             foundry.utils.mergeObject(updates.actor, { [`system.spells.${slot}.value`]: newValue });
           } else {
-            const err = new ConsumptionError(_loc("DND5E.SpellCastNoSlots", {
+            const err = new ConsumptionError(_loc("VARLYN5E.SpellCastNoSlots", {
               name: this.item.name, level: slotData.label
             }));
             errors.push(err);
@@ -636,13 +636,13 @@ export default function ActivityMixin(Base) {
         if ( config.concentration.end ) {
           const replacedEffect = effects.find(i => i.id === config.concentration.end);
           if ( !replacedEffect ) errors.push(
-            new ConsumptionError(_loc("DND5E.ConcentratingMissingItem"))
+            new ConsumptionError(_loc("VARLYN5E.ConcentratingMissingItem"))
           );
         }
 
         // Cannot begin more concentrations than the limit
         else if ( effects.size >= this.actor.system.attributes?.concentration?.limit ) errors.push(
-          new ConsumptionError(_loc("DND5E.ConcentratingLimited"))
+          new ConsumptionError(_loc("VARLYN5E.ConcentratingLimited"))
         );
       }
 
@@ -681,17 +681,17 @@ export default function ActivityMixin(Base) {
       const properties = [...(data.tags ?? []), ...(data.properties ?? [])];
       const supplements = [];
       if ( this.activation.condition ) {
-        supplements.push(`<strong>${_loc("DND5E.Trigger")}</strong> ${this.activation.condition}`);
+        supplements.push(`<strong>${_loc("VARLYN5E.Trigger")}</strong> ${this.activation.condition}`);
       }
       if ( data.materials?.value ) {
-        supplements.push(`<strong>${_loc("DND5E.Materials")}</strong> ${data.materials.value}`);
+        supplements.push(`<strong>${_loc("VARLYN5E.Materials")}</strong> ${data.materials.value}`);
       }
       const buttons = this._usageChatButtons(message);
 
       // Include spell level in the subtitle.
       if ( this.item.type === "spell" ) {
         const spellLevel = foundry.utils.getProperty(message, "data.system.spellLevel");
-        const { spellLevels, spellSchools } = CONFIG.DND5E;
+        const { spellLevels, spellSchools } = CONFIG.VARLYN5E;
         data.subtitle = [spellLevels[spellLevel], spellSchools[this.item.system.school]?.label].filterJoin(" &bull; ");
       }
 
@@ -735,7 +735,7 @@ export default function ActivityMixin(Base) {
       const buttons = [];
 
       if ( this.target?.template?.type ) buttons.push({
-        label: _loc("DND5E.TARGET.Action.PlaceTemplate"),
+        label: _loc("VARLYN5E.TARGET.Action.PlaceTemplate"),
         icon: '<i class="fas fa-bullseye" inert></i>',
         dataset: {
           action: "placeTemplate"
@@ -743,13 +743,13 @@ export default function ActivityMixin(Base) {
       });
 
       if ( message.hasConsumption ) buttons.push({
-        label: _loc("DND5E.CONSUMPTION.Action.ConsumeResource"),
+        label: _loc("VARLYN5E.CONSUMPTION.Action.ConsumeResource"),
         icon: '<i class="fa-solid fa-cubes-stacked" inert></i>',
         dataset: {
           action: "consumeResource"
         }
       }, {
-        label: _loc("DND5E.CONSUMPTION.Action.RefundResource"),
+        label: _loc("VARLYN5E.CONSUMPTION.Action.RefundResource"),
         icon: '<i class="fa-solid fa-clock-rotate-left"></i>',
         dataset: {
           action: "refundResource"
@@ -956,11 +956,11 @@ export default function ActivityMixin(Base) {
 
       if ( this.item.isOwner && !compendiumLocked ) {
         entries.push({
-          label: "DND5E.ContextMenuActionEdit",
+          label: "VARLYN5E.ContextMenuActionEdit",
           icon: '<i class="fas fa-pen-to-square fa-fw"></i>',
           onClick: () => this.item.sheet._renderChild(this.sheet)
         }, {
-          label: "DND5E.ContextMenuActionDuplicate",
+          label: "VARLYN5E.ContextMenuActionDuplicate",
           icon: '<i class="fas fa-copy fa-fw"></i>',
           onClick: () => {
             const createData = this.toObject();
@@ -968,13 +968,13 @@ export default function ActivityMixin(Base) {
             this.item.createActivity(createData.type, createData, { renderSheet: false });
           }
         }, {
-          label: "DND5E.ContextMenuActionDelete",
+          label: "VARLYN5E.ContextMenuActionDelete",
           icon: '<i class="fas fa-trash fa-fw"></i>',
           onClick: () => this.deleteDialog({ sheet: this.item.sheet })
         });
       } else {
         entries.push({
-          label: "DND5E.ContextMenuActionView",
+          label: "VARLYN5E.ContextMenuActionView",
           icon: '<i class="fas fa-eye fa-fw"></i>',
           onClick: () => this.item.sheet._renderChild(this.sheet)
         });
@@ -984,7 +984,7 @@ export default function ActivityMixin(Base) {
         const uuid = `${foundry.utils.buildRelativeUuid(this.item, this.actor)}.Activity.${this.id}`;
         const isFavorited = this.actor.system.hasFavorite(uuid);
         entries.push({
-          label: isFavorited ? "DND5E.FavoriteRemove" : "DND5E.Favorite",
+          label: isFavorited ? "VARLYN5E.FavoriteRemove" : "VARLYN5E.Favorite",
           icon: '<i class="fas fa-bookmark fa-fw"></i>',
           group: "state",
           visible: () => this.item.isOwner && !compendiumLocked,
@@ -1117,7 +1117,7 @@ export default function ActivityMixin(Base) {
         }
       } catch(err) {
         Hooks.onError("Activity#placeTemplate", err, {
-          msg: _loc("DND5E.TARGET.Warning.PlaceTemplate"),
+          msg: _loc("VARLYN5E.TARGET.Warning.PlaceTemplate"),
           log: "error",
           notify: "error"
         });
@@ -1236,7 +1236,7 @@ export default function ActivityMixin(Base) {
 
     /** @override */
     static _createDialogTypes(parent) {
-      return Object.entries(CONFIG.DND5E.activityTypes)
+      return Object.entries(CONFIG.VARLYN5E.activityTypes)
         .filter(([, c]) => (c.configurable !== false) && c.documentClass.availableForItem(parent))
         .map(([k]) => k);
     }

@@ -11,7 +11,7 @@ export default class ForwardActivity extends ActivityMixin(BaseForwardActivityDa
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.FORWARD"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.FORWARD"];
 
   /* -------------------------------------------- */
 
@@ -20,8 +20,8 @@ export default class ForwardActivity extends ActivityMixin(BaseForwardActivityDa
     foundry.utils.mergeObject(super.metadata, {
       type: "forward",
       img: "systems/dnd5e/icons/svg/activity/forward.svg",
-      title: "DND5E.FORWARD.Title",
-      hint: "DND5E.FORWARD.Hint",
+      title: "VARLYN5E.FORWARD.Title",
+      hint: "VARLYN5E.FORWARD.Hint",
       sheetClass: ForwardSheet
     }, { inplace: false })
   );
@@ -43,7 +43,7 @@ export default class ForwardActivity extends ActivityMixin(BaseForwardActivityDa
     }, usage);
 
     const activity = this.item.system.activities.get(this.activity.id);
-    if ( !activity ) ui.notifications.error("DND5E.FORWARD.Warning.NoActivity");
+    if ( !activity ) ui.notifications.error("VARLYN5E.FORWARD.Warning.NoActivity");
     return activity?.use(usageConfig, dialog, message);
   }
 }

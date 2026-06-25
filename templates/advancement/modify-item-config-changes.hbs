@@ -1,8 +1,8 @@
 <fieldset class="flexcol">
     <legend>
-        <span>{{ localize "DND5E.ADVANCEMENT.ModifyItem.FIELDS.changes.label" }}</span>
+        <span>{{ localize "VARLYN5E.ADVANCEMENT.ModifyItem.FIELDS.changes.label" }}</span>
         <button type="button" class="unbutton control-button" data-action="addChange"
-                data-tooltip aria-label="{{ localize 'DND5E.ADVANCEMENT.ModifyItem.Action.AddChange' }}">
+                data-tooltip aria-label="{{ localize 'VARLYN5E.ADVANCEMENT.ModifyItem.Action.AddChange' }}">
             <i class="fa-solid fa-plus" inert></i>
         </button>
     </legend>
@@ -17,7 +17,7 @@
         </li>
         {{else}}
         <li class="empty">
-            {{{ localize (concat "DND5E.ADVANCEMENT.ModifyItem.Empty." (ifThen hasEffectsTab "With" "Without") "Dropdown") }}}
+            {{{ localize (concat "VARLYN5E.ADVANCEMENT.ModifyItem.Empty." (ifThen hasEffectsTab "With" "Without") "Dropdown") }}}
         </li>
         {{/each}}
     </ul>
@@ -30,13 +30,13 @@
     <div class="list-controls flexrow">
         {{#if (or data.uuid @root.hasEffectsTab)}}
         <button type="button" class="unbutton control-button" data-action="dissociateEffect"
-                data-tooltip aria-label="{{ localize 'DND5E.EFFECT.Action.Dissociate' }}">
+                data-tooltip aria-label="{{ localize 'VARLYN5E.EFFECT.Action.Dissociate' }}">
             <i class="fa-solid fa-minus" inert></i>
         </button>
         {{/if}}
         {{#unless data.uuid}}
         <button type="button" class="unbutton control-button" data-action="deleteChange"
-                data-tooltip aria-label="{{ localize 'DND5E.ADVANCEMENT.ModifyItem.Action.DeleteChange' }}">
+                data-tooltip aria-label="{{ localize 'VARLYN5E.ADVANCEMENT.ModifyItem.Action.DeleteChange' }}">
             <i class="fa-solid fa-trash" inert></i>
         </button>
         {{/unless}}

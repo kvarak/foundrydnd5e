@@ -35,7 +35,7 @@ export default class SpellsUnlinkedConfig extends DocumentSheet5e {
 
   /** @inheritDoc */
   get title() {
-    return _loc("JOURNALENTRYPAGE.DND5E.SpellList.UnlinkedSpells.Configuration");
+    return _loc("JOURNALENTRYPAGE.VARLYN5E.SpellList.UnlinkedSpells.Configuration");
   }
 
   /* -------------------------------------------- */
@@ -48,8 +48,8 @@ export default class SpellsUnlinkedConfig extends DocumentSheet5e {
       ...await super._prepareContext(options),
       ...this.document.system.unlinkedSpells.find(u => u._id === this.options.unlinkedId),
       fields: this.document.system.schema.fields.unlinkedSpells.element.fields,
-      spellLevelOptions: Object.entries(CONFIG.DND5E.spellLevels).map(([value, label]) => ({ value, label })),
-      spellSchoolOptions: Object.entries(CONFIG.DND5E.spellSchools).map(([value, { label }]) => ({ value, label }))
+      spellLevelOptions: Object.entries(CONFIG.VARLYN5E.spellLevels).map(([value, label]) => ({ value, label })),
+      spellSchoolOptions: Object.entries(CONFIG.VARLYN5E.spellSchools).map(([value, { label }]) => ({ value, label }))
     };
     return context;
   }

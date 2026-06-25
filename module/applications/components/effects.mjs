@@ -83,43 +83,43 @@ export default class EffectsElement extends (foundry.applications.elements.Adopt
     const categories = {
       enchantment: {
         type: "enchantment",
-        label: _loc("DND5E.ENCHANTMENT.Category.General"),
+        label: _loc("VARLYN5E.ENCHANTMENT.Category.General"),
         effects: [],
         isEnchantment: true
       },
       temporary: {
         type: "temporary",
-        label: _loc("DND5E.EffectTemporary"),
+        label: _loc("VARLYN5E.EffectTemporary"),
         effects: []
       },
       enchantmentActive: {
         type: "activeEnchantment",
-        label: _loc("DND5E.ENCHANTMENT.Category.Active"),
+        label: _loc("VARLYN5E.ENCHANTMENT.Category.Active"),
         effects: [],
         isEnchantment: true
       },
       passive: {
         type: "passive",
-        label: _loc("DND5E.EffectPassive"),
+        label: _loc("VARLYN5E.EffectPassive"),
         effects: []
       },
       enchantmentInactive: {
         type: "inactiveEnchantment",
-        label: _loc("DND5E.ENCHANTMENT.Category.Inactive"),
+        label: _loc("VARLYN5E.ENCHANTMENT.Category.Inactive"),
         effects: [],
         isEnchantment: true
       },
       inactive: {
         type: "inactive",
-        label: _loc("DND5E.EffectInactive"),
+        label: _loc("VARLYN5E.EffectInactive"),
         effects: []
       },
       suppressed: {
         type: "suppressed",
-        label: _loc("DND5E.EffectUnavailable"),
+        label: _loc("VARLYN5E.EffectUnavailable"),
         effects: [],
         disabled: true,
-        info: [_loc("DND5E.EffectUnavailableInfo")]
+        info: [_loc("VARLYN5E.EffectUnavailableInfo")]
       }
     };
 
@@ -144,7 +144,7 @@ export default class EffectsElement extends (foundry.applications.elements.Adopt
     categories.suppressed.hidden = !categories.suppressed.effects.length;
 
     for ( const category of Object.values(categories) ) {
-      category.localizationPrefix = category.isEnchantment ? "DND5E.ENCHANTMENT.Action." : "DND5E.Effect";
+      category.localizationPrefix = category.isEnchantment ? "VARLYN5E.ENCHANTMENT.Action." : "VARLYN5E.Effect";
     }
 
     return categories;
@@ -164,32 +164,32 @@ export default class EffectsElement extends (foundry.applications.elements.Adopt
     const isConcentrationEffect = (this.document instanceof Actor5e) && this.app._concentration?.effects.has(effect);
     const options = [
       {
-        label: "DND5E.ContextMenuActionEdit",
+        label: "VARLYN5E.ContextMenuActionEdit",
         icon: "<i class='fas fa-edit fa-fw'></i>",
         visible: () => effect.isOwner,
         onClick: (_, target) => this._onAction(target, "edit")
       },
       {
-        label: "DND5E.ContextMenuActionDuplicate",
+        label: "VARLYN5E.ContextMenuActionDuplicate",
         icon: "<i class='fas fa-copy fa-fw'></i>",
         visible: () => effect.isOwner,
         onClick: (_, target) => this._onAction(target, "duplicate")
       },
       {
-        label: "DND5E.ContextMenuActionDelete",
+        label: "VARLYN5E.ContextMenuActionDelete",
         icon: "<i class='fas fa-trash fa-fw'></i>",
         visible: () => effect.isOwner && !isConcentrationEffect,
         onClick: (_, target) => this._onAction(target, "delete")
       },
       {
-        label: effect.disabled ? "DND5E.ContextMenuActionEnable" : "DND5E.ContextMenuActionDisable",
+        label: effect.disabled ? "VARLYN5E.ContextMenuActionEnable" : "VARLYN5E.ContextMenuActionDisable",
         icon: effect.disabled ? "<i class='fas fa-check fa-fw'></i>" : "<i class='fas fa-times fa-fw'></i>",
         group: "state",
         visible: () => effect.isOwner && !isConcentrationEffect,
         onClick: (_, target) => this._onAction(target, "toggle")
       },
       {
-        label: "DND5E.ConcentrationBreak",
+        label: "VARLYN5E.ConcentrationBreak",
         icon: '<dnd5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></dnd5e-icon>',
         group: "state",
         visible: () => isConcentrationEffect,
@@ -202,7 +202,7 @@ export default class EffectsElement extends (foundry.applications.elements.Adopt
       const uuid = foundry.utils.buildRelativeUuid(effect, this.document);
       const isFavorited = this.document.system.hasFavorite(uuid);
       options.push({
-        label: isFavorited ? "DND5E.FavoriteRemove" : "DND5E.Favorite",
+        label: isFavorited ? "VARLYN5E.FavoriteRemove" : "VARLYN5E.Favorite",
         icon: "<i class='fas fa-bookmark fa-fw'></i>",
         group: "state",
         visible: () => effect.isOwner,
@@ -287,7 +287,7 @@ export default class EffectsElement extends (foundry.applications.elements.Adopt
     const isEnchantment = li.dataset.effectType.startsWith("enchantment");
     return this.document.createEmbeddedDocuments("ActiveEffect", [{
       type: isEnchantment ? "enchantment" : "base",
-      name: isActor ? _loc("DND5E.EffectNew") : this.document.name,
+      name: isActor ? _loc("VARLYN5E.EffectNew") : this.document.name,
       icon: isActor ? "icons/svg/aura.svg" : this.document.img,
       origin: isEnchantment ? undefined : this.document.uuid,
       "duration.rounds": li.dataset.effectType === "temporary" ? 1 : undefined,
@@ -307,7 +307,7 @@ export default class EffectsElement extends (foundry.applications.elements.Adopt
     const doc = await fromUuid(uuid);
     if ( !doc ) return;
     if ( !doc.testUserPermission(game.user, "LIMITED") ) {
-      ui.notifications.warn("DND5E.DocumentViewWarn");
+      ui.notifications.warn("VARLYN5E.DocumentViewWarn");
       return;
     }
     doc.sheet.render(true);

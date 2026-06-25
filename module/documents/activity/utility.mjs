@@ -17,7 +17,7 @@ export default class UtilityActivity extends ActivityMixin(BaseUtilityActivityDa
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.UTILITY"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.UTILITY"];
 
   /* -------------------------------------------- */
 
@@ -26,8 +26,8 @@ export default class UtilityActivity extends ActivityMixin(BaseUtilityActivityDa
     foundry.utils.mergeObject(super.metadata, {
       type: "utility",
       img: "systems/dnd5e/icons/svg/activity/utility.svg",
-      title: "DND5E.UTILITY.Title",
-      hint: "DND5E.UTILITY.Hint",
+      title: "VARLYN5E.UTILITY.Title",
+      hint: "VARLYN5E.UTILITY.Hint",
       sheetClass: UtilitySheet,
       usage: {
         actions: {
@@ -45,7 +45,7 @@ export default class UtilityActivity extends ActivityMixin(BaseUtilityActivityDa
   _usageChatButtons(message) {
     if ( !this.roll.formula ) return super._usageChatButtons(message);
     return [{
-      label: this.roll.name || _loc("DND5E.Roll"),
+      label: this.roll.name || _loc("VARLYN5E.Roll"),
       icon: '<i class="fa-solid fa-dice" inert></i>',
       dataset: {
         action: "rollFormula",
@@ -81,7 +81,7 @@ export default class UtilityActivity extends ActivityMixin(BaseUtilityActivityDa
       options: {
         window: {
           title: this.item.name,
-          subtitle: "DND5E.RollConfiguration.Title",
+          subtitle: "VARLYN5E.RollConfiguration.Title",
           icon: this.item.img
         }
       }
@@ -90,7 +90,7 @@ export default class UtilityActivity extends ActivityMixin(BaseUtilityActivityDa
     const messageConfig = foundry.utils.mergeObject({
       create: true,
       data: {
-        flavor: `${this.item.name} - ${this.roll.label || _loc("DND5E.OtherFormula")}`,
+        flavor: `${this.item.name} - ${this.roll.label || _loc("VARLYN5E.OtherFormula")}`,
         flags: {
           dnd5e: {
             ...this.messageFlags,

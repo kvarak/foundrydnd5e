@@ -42,7 +42,7 @@ function getCollectionDocumentOptions(collection, { disabled }={}) {
  * @returns {number}
  */
 function roundCurrency(value, denomination) {
-  const fractionalDigits = CONFIG.DND5E.currencies[denomination]?.fractionalDigits;
+  const fractionalDigits = CONFIG.VARLYN5E.currencies[denomination]?.fractionalDigits;
   if ( !fractionalDigits ) return Math.floor(value);
   if ( !Number.isFinite(fractionalDigits) ) return value;
   const pow = Math.pow(10, fractionalDigits);
@@ -83,12 +83,12 @@ function formatIdentifier(input) {
 /**
  * Form a number using the provided length unit.
  * @param {number} value         The length to format.
- * @param {string} unit          Length unit as defined in `CONFIG.DND5E.movementUnits`.
+ * @param {string} unit          Length unit as defined in `CONFIG.VARLYN5E.movementUnits`.
  * @param {object} [options={}]  Formatting options passed to `formatNumber`.
  * @returns {string}
  */
 function formatLength(value, unit, options={}) {
-  return _formatSystemUnits(value, unit, CONFIG.DND5E.movementUnits[unit], options);
+  return _formatSystemUnits(value, unit, CONFIG.VARLYN5E.movementUnits[unit], options);
 }
 
 /* -------------------------------------------- */
@@ -116,7 +116,7 @@ function formatModifier(mod) {
  * @returns {string}
  */
 function formatNumber(value, { blank, numerals, ordinal, words, ...options }={}) {
-  if ( words && game.i18n.has(`DND5E.NUMBER.${value}`, false) ) return _loc(`DND5E.NUMBER.${value}`);
+  if ( words && game.i18n.has(`VARLYN5E.NUMBER.${value}`, false) ) return _loc(`VARLYN5E.NUMBER.${value}`);
   if ( !value && (typeof blank === "string") ) return blank;
   if ( numerals ) return _formatNumberAsNumerals(value);
   if ( ordinal ) return _formatNumberAsOrdinal(value, options);
@@ -159,7 +159,7 @@ function _formatNumberAsNumerals(n) {
 function _formatNumberAsOrdinal(n, options={}) {
   const pr = getPluralRules({ type: "ordinal" }).select(n);
   const number = formatNumber(n, options);
-  return game.i18n.has(`DND5E.ORDINAL.${pr}`) ? _loc(`DND5E.ORDINAL.${pr}`, { number }) : number;
+  return game.i18n.has(`VARLYN5E.ORDINAL.${pr}`) ? _loc(`VARLYN5E.ORDINAL.${pr}`, { number }) : number;
 }
 
 /* -------------------------------------------- */
@@ -181,13 +181,13 @@ function formatNumberParts(value, options) {
 /**
  * Form a number using the provided travel speed unit.
  * @param {number} value                    Travel speed to display.
- * @param {string} unit                     Unit as defined in `CONFIG.DND5E.travelUnits`.
+ * @param {string} unit                     Unit as defined in `CONFIG.VARLYN5E.travelUnits`.
  * @param {object} [options={}]             Formatting options passed to `formatNumber`.
  * @param {string} [options.period="hour"]  Time period formatting unit (e.g. hour or day).
  * @returns {string}
  */
 function formatTravelSpeed(value, unit, { period="hour", ...options }={}) {
-  const unitConfig = CONFIG.DND5E.travelUnits[unit];
+  const unitConfig = CONFIG.VARLYN5E.travelUnits[unit];
   options.unit ??= `${unitConfig?.formattingUnit ?? unit}-per-${period}`;
   return _formatSystemUnits(value, unit, unitConfig, options);
 }
@@ -222,14 +222,14 @@ function formatText(value) {
 /**
  * A helper function that formats a time in a human-readable format.
  * @param {number} value         Time to display.
- * @param {string} unit          Units as defined in `CONFIG.DND5E.timeUnits`.
+ * @param {string} unit          Units as defined in `CONFIG.VARLYN5E.timeUnits`.
  * @param {object} [options={}]  Formatting options passed to `formatNumber`.
  * @returns {string}
  */
 function formatTime(value, unit, options={}) {
   options.maximumFractionDigits ??= 0;
   options.unitDisplay ??= "long";
-  const config = CONFIG.DND5E.timeUnits[unit];
+  const config = CONFIG.VARLYN5E.timeUnits[unit];
   if ( config?.counted ) {
     if ( (options.unitDisplay === "narrow") && game.i18n.has(`${config.counted}.narrow`) ) {
       return _loc(`${config.counted}.narrow`, { number: formatNumber(value, options) });
@@ -250,12 +250,12 @@ function formatTime(value, unit, options={}) {
 /**
  * Form a number using the provided volume unit.
  * @param {number} value         The volume to format.
- * @param {string} unit          Volume unit as defined in `CONFIG.DND5E.volumeUnits`.
+ * @param {string} unit          Volume unit as defined in `CONFIG.VARLYN5E.volumeUnits`.
  * @param {object} [options={}]  Formatting options passed to `formatNumber`.
  * @returns {string}
  */
 function formatVolume(value, unit, options={}) {
-  return _formatSystemUnits(value, unit, CONFIG.DND5E.volumeUnits[unit], options);
+  return _formatSystemUnits(value, unit, CONFIG.VARLYN5E.volumeUnits[unit], options);
 }
 
 /* -------------------------------------------- */
@@ -263,12 +263,12 @@ function formatVolume(value, unit, options={}) {
 /**
  * Form a number using the provided weight unit.
  * @param {number} value         The weight to format.
- * @param {string} unit          Weight unit as defined in `CONFIG.DND5E.weightUnits`.
+ * @param {string} unit          Weight unit as defined in `CONFIG.VARLYN5E.weightUnits`.
  * @param {object} [options={}]  Formatting options passed to `formatNumber`.
  * @returns {string}
  */
 function formatWeight(value, unit, options={}) {
-  return _formatSystemUnits(value, unit, CONFIG.DND5E.weightUnits[unit], options);
+  return _formatSystemUnits(value, unit, CONFIG.VARLYN5E.weightUnits[unit], options);
 }
 
 /* -------------------------------------------- */
@@ -397,7 +397,7 @@ function prepareFormulaValue(model, keyPath, label, rollData) {
     foundry.utils.setProperty(model, keyPath, roll.evaluateSync().total);
   } catch(err) {
     if ( item.isEmbedded ) {
-      const message = _loc("DND5E.FormulaMalformedError", { property, name: model.name ?? item.name });
+      const message = _loc("VARLYN5E.FormulaMalformedError", { property, name: model.name ?? item.name });
       item.actor._preparationWarnings.push({ message, link: item.uuid, type: "error" });
       console.error(message, err);
     }
@@ -432,7 +432,7 @@ function replaceFormulaData(formula, data, { actor, item, missing="0", property 
   actor ??= item?.parent;
   if ( (missingReferences.size > 0) && actor && property ) {
     const listFormatter = new Intl.ListFormat(game.i18n.lang, { style: "long", type: "conjunction" });
-    const message = _loc("DND5E.FormulaMissingReferenceWarn", {
+    const message = _loc("VARLYN5E.FormulaMissingReferenceWarn", {
       property, name: item?.name ?? actor.name, references: listFormatter.format(missingReferences)
     });
     actor._preparationWarnings.push({ message, link: item?.uuid ?? actor.uuid, type: "warning" });
@@ -695,8 +695,8 @@ function getSceneTargets(actor) {
  * @returns {number}
  */
 function convertLength(value, from, to, { strict=true }={}) {
-  const message = unit => `Length unit ${unit} not defined in CONFIG.DND5E.movementUnits`;
-  return _convertSystemUnits(value, from, to, CONFIG.DND5E.movementUnits, { message, strict });
+  const message = unit => `Length unit ${unit} not defined in CONFIG.VARLYN5E.movementUnits`;
+  return _convertSystemUnits(value, from, to, CONFIG.VARLYN5E.movementUnits, { message, strict });
 }
 
 /* -------------------------------------------- */
@@ -705,7 +705,7 @@ function convertLength(value, from, to, { strict=true }={}) {
  * Convert the provided time value to another unit. If no final unit is provided, then will convert it to the largest
  * unit that can still represent the value as a whole number.
  * @param {number} value                    The time being converted.
- * @param {string} from                     The initial unit as defined in `CONFIG.DND5E.timeUnits`.
+ * @param {string} from                     The initial unit as defined in `CONFIG.VARLYN5E.timeUnits`.
  * @param {object} [options={}]
  * @param {boolean} [options.combat=false]  Use combat units when auto-selecting units, rather than normal units.
  * @param {boolean} [options.strict=true]   Throw an error if from unit isn't found.
@@ -713,10 +713,10 @@ function convertLength(value, from, to, { strict=true }={}) {
  * @returns {{ value: number, unit: string }}
  */
 function convertTime(value, from, { combat=false, strict=true, to }={}) {
-  const base = value * (CONFIG.DND5E.timeUnits[from]?.conversion ?? 1);
+  const base = value * (CONFIG.VARLYN5E.timeUnits[from]?.conversion ?? 1);
   if ( !to ) {
     // Find unit with largest conversion value that can still display the value
-    const unitOptions = Object.entries(CONFIG.DND5E.timeUnits)
+    const unitOptions = Object.entries(CONFIG.VARLYN5E.timeUnits)
       .reduce((arr, [key, v]) => {
         if ( ((v.combat ?? false) === combat) && ((base % v.conversion === 0) || (base >= v.conversion * 2)) ) {
           arr.push({ key, conversion: v.conversion });
@@ -727,8 +727,8 @@ function convertTime(value, from, { combat=false, strict=true, to }={}) {
     to = unitOptions[0]?.key ?? from;
   }
 
-  const message = unit => `Time unit ${unit} not defined in CONFIG.DND5E.timeUnits`;
-  return { value: _convertSystemUnits(value, from, to, CONFIG.DND5E.timeUnits, { message, strict }), unit: to };
+  const message = unit => `Time unit ${unit} not defined in CONFIG.VARLYN5E.timeUnits`;
+  return { value: _convertSystemUnits(value, from, to, CONFIG.VARLYN5E.timeUnits, { message, strict }), unit: to };
 }
 
 /* -------------------------------------------- */
@@ -743,8 +743,8 @@ function convertTime(value, from, { combat=false, strict=true, to }={}) {
  * @returns {{ value: number, unit: string }}
  */
 function convertTravelSpeed(value, from, { strict=false, to }) {
-  const message = unit => `Travel speed unit ${unit} not defined in CONFIG.DND5E.travelUnits`;
-  return { value: _convertSystemUnits(value, from, to, CONFIG.DND5E.travelUnits, { message, strict }), unit: to };
+  const message = unit => `Travel speed unit ${unit} not defined in CONFIG.VARLYN5E.travelUnits`;
+  return { value: _convertSystemUnits(value, from, to, CONFIG.VARLYN5E.travelUnits, { message, strict }), unit: to };
 }
 
 /* -------------------------------------------- */
@@ -752,15 +752,15 @@ function convertTravelSpeed(value, from, { strict=false, to }) {
 /**
  * Convert the provided weight to another unit.
  * @param {number} value                   The weight being converted.
- * @param {string} from                    The initial unit as defined in `CONFIG.DND5E.weightUnits`.
+ * @param {string} from                    The initial unit as defined in `CONFIG.VARLYN5E.weightUnits`.
  * @param {string} to                      The final units.
  * @param {object} [options={}]
  * @param {boolean} [options.strict=true]  Throw an error if either unit isn't found.
  * @returns {number}      Weight in the specified units.
  */
 function convertWeight(value, from, to, { strict=true }={}) {
-  const message = unit => `Weight unit ${unit} not defined in CONFIG.DND5E.weightUnits`;
-  return _convertSystemUnits(value, from, to, CONFIG.DND5E.weightUnits, { message, strict });
+  const message = unit => `Weight unit ${unit} not defined in CONFIG.VARLYN5E.weightUnits`;
+  return _convertSystemUnits(value, from, to, CONFIG.VARLYN5E.weightUnits, { message, strict });
 }
 
 /* -------------------------------------------- */
@@ -792,7 +792,7 @@ function _convertSystemUnits(value, from, to, config, { message, strict }) {
  */
 function defaultUnits(type) {
   const settingKey = type === "travel" ? "metricLengthUnits" : `metric${type.capitalize()}Units`;
-  return CONFIG.DND5E.defaultUnits[type]?.[game.settings.get("dnd5e", settingKey) ? "metric" : "imperial"];
+  return CONFIG.VARLYN5E.defaultUnits[type]?.[game.settings.get("dnd5e", settingKey) ? "metric" : "imperial"];
 }
 
 /* -------------------------------------------- */
@@ -1064,8 +1064,8 @@ function concealSection(conceal, options) {
   </div>
   <div class="unidentified-notice">
       <div>
-          <strong>${_loc("DND5E.Unidentified.Title")}</strong>
-          <p>${_loc("DND5E.Unidentified.Notice")}</p>
+          <strong>${_loc("VARLYN5E.Unidentified.Title")}</strong>
+          <p>${_loc("VARLYN5E.Unidentified.Notice")}</p>
       </div>
   </div>`;
   return content;
@@ -1132,7 +1132,7 @@ const _preLocalizationRegistrations = {};
 
 /**
  * Mark the provided config key to be pre-localized during the init stage.
- * @param {string} configKeyPath          Key path within `CONFIG.DND5E` to localize.
+ * @param {string} configKeyPath          Key path within `CONFIG.VARLYN5E` to localize.
  * @param {object} [options={}]
  * @param {string} [options.key]          If each entry in the config enum is an object,
  *                                        localize and sort using this property.
@@ -1149,7 +1149,7 @@ function preLocalize(configKeyPath, { key, keys=[], sort=false }={}) {
 
 /**
  * Execute previously defined pre-localization tasks on the provided config object.
- * @param {object} config  The `CONFIG.DND5E` object to localize and sort. *Will be mutated.*
+ * @param {object} config  The `CONFIG.VARLYN5E` object to localize and sort. *Will be mutated.*
  */
 function performPreLocalization(config) {
   for ( const [keyPath, settings] of Object.entries(_preLocalizationRegistrations) ) {
@@ -1234,7 +1234,7 @@ function getHumanReadableAttributeLabel(attr, { actor, item }={}) {
   }
 
   if ( (attr === "details.xp.value") && actor?.system.isNPC ) {
-    return _loc("DND5E.ExperiencePoints.Value");
+    return _loc("VARLYN5E.ExperiencePoints.Value");
   }
 
   const getUnknownLabel = (attr, options) => {
@@ -1282,7 +1282,7 @@ function getHumanReadableAttributeLabel(attr, { actor, item }={}) {
     name = `${item.name}: ${activity.name}`;
     type = "activity";
     if ( _attributeLabelCache.activity.has(attr) ) label = _attributeLabelCache.activity.get(attr);
-    else if ( attr === "uses.spent" ) label = "DND5E.Uses";
+    else if ( attr === "uses.spent" ) label = "VARLYN5E.Uses";
   }
 
   // Item labels
@@ -1290,57 +1290,57 @@ function getHumanReadableAttributeLabel(attr, { actor, item }={}) {
     name = item.name;
     type = "item";
     if ( _attributeLabelCache.item.has(attr) ) label = _attributeLabelCache.item.get(attr);
-    else if ( attr === "hd.spent" ) label = "DND5E.HitDice";
-    else if ( attr === "uses.spent" ) label = "DND5E.Uses";
+    else if ( attr === "hd.spent" ) label = "VARLYN5E.HitDice";
+    else if ( attr === "uses.spent" ) label = "VARLYN5E.Uses";
     else label = getSchemaLabel(attr, "Item", item);
   }
 
   // Derived fields.
-  else if ( attr === "attributes.init.total" ) label = "DND5E.InitiativeBonus";
-  else if ( (attr === "attributes.ac.value") || (attr === "attributes.ac.flat") ) label = "DND5E.ArmorClass";
-  else if ( attr === "attributes.spell.attack" ) label = "DND5E.SpellAttackBonus";
-  else if ( attr === "attributes.spell.dc" ) label = "DND5E.SpellDC";
+  else if ( attr === "attributes.init.total" ) label = "VARLYN5E.InitiativeBonus";
+  else if ( (attr === "attributes.ac.value") || (attr === "attributes.ac.flat") ) label = "VARLYN5E.ArmorClass";
+  else if ( attr === "attributes.spell.attack" ) label = "VARLYN5E.SpellAttackBonus";
+  else if ( attr === "attributes.spell.dc" ) label = "VARLYN5E.SpellDC";
 
   // Abilities.
   else if ( attr.startsWith("abilities.") ) {
     const [, key] = attr.split(".");
-    label = _loc("DND5E.AbilityScoreL", { ability: CONFIG.DND5E.abilities[key].label });
+    label = _loc("VARLYN5E.AbilityScoreL", { ability: CONFIG.VARLYN5E.abilities[key].label });
   }
 
   // Senses
   else if ( attr.startsWith("attributes.senses.ranges.") ) {
     const key = attr.split(".")[3];
-    label = CONFIG.DND5E.senses[key]?.label;
+    label = CONFIG.VARLYN5E.senses[key]?.label;
   }
 
   // Resources
-  else if ( attr === "resources.legact.spent" ) label = "DND5E.LegendaryAction.LabelPl";
-  else if ( attr === "resources.legact.value" ) label = "DND5E.LegendaryAction.Remaining";
-  else if ( attr === "resources.legres.spent" ) label = "DND5E.LegendaryResistance.LabelPl";
-  else if ( attr === "resources.legres.value" ) label = "DND5E.LegendaryResistance.Remaining";
-  else if ( attr === "attributes.actions.value" ) label = "DND5E.VEHICLE.FIELDS.attributes.actions.label";
+  else if ( attr === "resources.legact.spent" ) label = "VARLYN5E.LegendaryAction.LabelPl";
+  else if ( attr === "resources.legact.value" ) label = "VARLYN5E.LegendaryAction.Remaining";
+  else if ( attr === "resources.legres.spent" ) label = "VARLYN5E.LegendaryResistance.LabelPl";
+  else if ( attr === "resources.legres.value" ) label = "VARLYN5E.LegendaryResistance.Remaining";
+  else if ( attr === "attributes.actions.value" ) label = "VARLYN5E.VEHICLE.FIELDS.attributes.actions.label";
 
   // Skills.
   else if ( attr.startsWith("skills.") ) {
     const [, key] = attr.split(".");
-    label = _loc("DND5E.SkillPassiveScore", { skill: CONFIG.DND5E.skills[key].label });
+    label = _loc("VARLYN5E.SkillPassiveScore", { skill: CONFIG.VARLYN5E.skills[key].label });
   }
 
   // Spell slots.
   else if ( attr.startsWith("spells.") ) {
     const [, key] = attr.split(".");
-    if ( !/spell\d+/.test(key) ) label = `DND5E.SpellSlots${key.capitalize()}`;
+    if ( !/spell\d+/.test(key) ) label = `VARLYN5E.SpellSlots${key.capitalize()}`;
     else {
       const plurals = new Intl.PluralRules(game.i18n.lang, { type: "ordinal" });
       const level = Number(key.slice(5));
-      label = _loc(`DND5E.SpellSlotsN.${plurals.select(level)}`, { n: level });
+      label = _loc(`VARLYN5E.SpellSlotsN.${plurals.select(level)}`, { n: level });
     }
   }
 
   // Currency
   else if ( attr.startsWith("currency.") ) {
     const [, key] = attr.split(".");
-    label = CONFIG.DND5E.currencies[key]?.label;
+    label = CONFIG.VARLYN5E.currencies[key]?.label;
   }
 
   // Attempt to find the attribute in a data model.
@@ -1593,7 +1593,7 @@ function ApplicationV2Mixin(Base, { handlebars=true }={}) {
     /** @inheritDoc */
     async _prepareContext(options) {
       const context = await super._prepareContext(options);
-      context.CONFIG = CONFIG.DND5E;
+      context.CONFIG = CONFIG.VARLYN5E;
       context.inputs = { ...foundry.applications.fields, ...varlyn5e.applications.fields };
       return context;
     }
@@ -1668,8 +1668,8 @@ function ApplicationV2Mixin(Base, { handlebars=true }={}) {
         toggle.checked = this.isEditMode;
         toggle.classList.add("mode-slider");
         toggle.dataset.action = "changeMode";
-        toggle.dataset.tooltip = "DND5E.SheetModeEdit";
-        toggle.setAttribute("aria-label", _loc("DND5E.SheetModeEdit"));
+        toggle.dataset.tooltip = "VARLYN5E.SheetModeEdit";
+        toggle.setAttribute("aria-label", _loc("VARLYN5E.SheetModeEdit"));
         toggle.addEventListener("dblclick", event => event.stopPropagation());
         toggle.addEventListener("pointerdown", event => event.stopPropagation());
         header.prepend(toggle);
@@ -1760,7 +1760,7 @@ function ApplicationV2Mixin(Base, { handlebars=true }={}) {
      */
     _disableFields() {
       const selector = `.window-content :is(${[
-        "INPUT", "SELECT", "TEXTAREA", "BUTTON", "DND5E-CHECKBOX", "COLOR-PICKER", "DOCUMENT-TAGS",
+        "INPUT", "SELECT", "TEXTAREA", "BUTTON", "VARLYN5E-CHECKBOX", "COLOR-PICKER", "DOCUMENT-TAGS",
         "FILE-PICKER", "HUE-SLIDER", "MULTI-SELECT", "PROSE-MIRROR", "RANGE-PICKER", "STRING-TAGS",
         "FORMULA-INPUT"
       ].join(", ")}):not(.always-interactive)`;
@@ -2040,7 +2040,7 @@ class BaseRestDialog extends Dialog5e {
     super(options);
     this.actor = options.document;
     this.#config = options.config;
-    this.options.window.title = CONFIG.DND5E.restTypes[options.config.type]?.label;
+    this.options.window.title = CONFIG.VARLYN5E.restTypes[options.config.type]?.label;
   }
 
   /* -------------------------------------------- */
@@ -2105,7 +2105,7 @@ class BaseRestDialog extends Dialog5e {
    * @type {number}
    */
   get duration() {
-    return this.config.duration ?? CONFIG.DND5E.restTypes[this.config.type]
+    return this.config.duration ?? CONFIG.VARLYN5E.restTypes[this.config.type]
       ?.duration?.[varlyn5e.settings.restVariant] ?? 0;
   }
 
@@ -2164,8 +2164,8 @@ class BaseRestDialog extends Dialog5e {
     if ( this.promptNewDay ) context.fields.push({
       disabled: !!this.config.request,
       field: new BooleanField$H({
-        label: _loc("DND5E.REST.NewDay.Label"),
-        hint: _loc("DND5E.REST.NewDay.Hint")
+        label: _loc("VARLYN5E.REST.NewDay.Label"),
+        hint: _loc("VARLYN5E.REST.NewDay.Hint")
       }),
       input: context.inputs.createCheckboxInput,
       name: "newDay",
@@ -2184,7 +2184,7 @@ class BaseRestDialog extends Dialog5e {
           {
             field: new StringField$1k({ required: true, blank: false }),
             name: "duration.unit",
-            options: Object.entries(CONFIG.DND5E.timeUnits)
+            options: Object.entries(CONFIG.VARLYN5E.timeUnits)
               .filter(([, c]) => !c.combat)
               .map(([value, { label }]) => ({ value, label })),
             value: duration.unit
@@ -2195,11 +2195,11 @@ class BaseRestDialog extends Dialog5e {
       context.fields.push({ template: "systems/dnd5e/templates/actors/rest/parts/duration.hbs" });
     }
 
-    const rest = CONFIG.DND5E.restTypes[this.config.type];
+    const rest = CONFIG.VARLYN5E.restTypes[this.config.type];
     if ( "recoverTemp" in rest ) context.hitPoints.push({
       disabled: !!this.config.request,
       field: new BooleanField$H({
-        label: _loc("DND5E.REST.RecoverTempHP.Label")
+        label: _loc("VARLYN5E.REST.RecoverTempHP.Label")
       }),
       input: context.inputs.createCheckboxInput,
       name: "recoverTemp",
@@ -2208,8 +2208,8 @@ class BaseRestDialog extends Dialog5e {
     if ( "recoverTempMax" in rest ) context.hitPoints.push({
       disabled: !!this.config.request,
       field: new BooleanField$H({
-        label: _loc("DND5E.REST.RecoverTempMaxHP.Label"),
-        hint: _loc("DND5E.REST.RecoverTempMaxHP.Hint")
+        label: _loc("VARLYN5E.REST.RecoverTempMaxHP.Label"),
+        hint: _loc("VARLYN5E.REST.RecoverTempMaxHP.Hint")
       }),
       input: context.inputs.createCheckboxInput,
       name: "recoverTempMax",
@@ -2217,10 +2217,10 @@ class BaseRestDialog extends Dialog5e {
     });
 
     if ( context.fields.length ) {
-      context.formSections.push({ legend: "DND5E.REST.Configuration", fields: context.fields });
+      context.formSections.push({ legend: "VARLYN5E.REST.Configuration", fields: context.fields });
     }
     if ( context.hitPoints.length ) {
-      context.formSections.push({ legend: "DND5E.HitPoints", fields: context.hitPoints });
+      context.formSections.push({ legend: "VARLYN5E.HitPoints", fields: context.hitPoints });
     }
 
     if ( this.isPartyGroup ) {
@@ -2228,8 +2228,8 @@ class BaseRestDialog extends Dialog5e {
       context.request = [
         {
           field: new BooleanField$H({
-            label: _loc("DND5E.REST.Request.AutoRest.Label"),
-            hint: _loc("DND5E.REST.Request.AutoRest.Hint")
+            label: _loc("VARLYN5E.REST.Request.AutoRest.Label"),
+            hint: _loc("VARLYN5E.REST.Request.AutoRest.Hint")
           }),
           name: "autoRest",
           input: context.inputs.createCheckboxInput,
@@ -2310,7 +2310,7 @@ class BaseRestDialog extends Dialog5e {
           {
             default: true,
             icon: "fa-solid fa-bed",
-            label: _loc("DND5E.REST.Label"),
+            label: _loc("VARLYN5E.REST.Label"),
             name: "rest",
             type: "submit"
           }
@@ -2331,7 +2331,7 @@ class LongRestDialog extends BaseRestDialog {
   static DEFAULT_OPTIONS = {
     classes: ["long-rest"],
     window: {
-      title: "DND5E.REST.Long.Label"
+      title: "VARLYN5E.REST.Long.Label"
     }
   };
 
@@ -2368,7 +2368,7 @@ class ShortRestDialog extends BaseRestDialog {
       rollHitDie: ShortRestDialog.#rollHitDie
     },
     window: {
-      title: "DND5E.REST.Short.Label"
+      title: "VARLYN5E.REST.Short.Label"
     }
   };
 
@@ -2400,8 +2400,8 @@ class ShortRestDialog extends BaseRestDialog {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.autoRoll = new BooleanField$G({
-      label: _loc("DND5E.REST.HitDice.AutoSpend.Label"),
-      hint: _loc("DND5E.REST.HitDice.AutoSpend.Hint")
+      label: _loc("VARLYN5E.REST.HitDice.AutoSpend.Label"),
+      hint: _loc("VARLYN5E.REST.HitDice.AutoSpend.Hint")
     });
 
     if ( this.actor.system.isNPC ) {
@@ -2411,7 +2411,7 @@ class ShortRestDialog extends BaseRestDialog {
         denomination: `d${hd.denomination}`,
         options: [{
           value: `d${hd.denomination}`,
-          label: `d${hd.denomination} (${_loc("DND5E.HITDICE.Available", { number: hd.value })})`
+          label: `d${hd.denomination} (${_loc("VARLYN5E.HITDICE.Available", { number: hd.value })})`
         }]
       };
     }
@@ -2420,7 +2420,7 @@ class ShortRestDialog extends BaseRestDialog {
       context.hitDice = {
         canRoll: this.actor.system.attributes.hd.value > 0,
         options: Object.entries(this.actor.system.attributes.hd.bySize).map(([value, number]) => ({
-          value, label: `${value} (${_loc("DND5E.HITDICE.Available", { number })})`, number
+          value, label: `${value} (${_loc("VARLYN5E.HITDICE.Available", { number })})`, number
         }))
       };
       context.denomination = (this.actor.system.attributes.hd.bySize[this.#denom] > 0)
@@ -2429,7 +2429,7 @@ class ShortRestDialog extends BaseRestDialog {
 
     else {
       if ( !context.fields.length ) {
-        context.formSections.unshift({ legend: "DND5E.REST.Configuration", fields: context.fields });
+        context.formSections.unshift({ legend: "VARLYN5E.REST.Configuration", fields: context.fields });
       }
       context.fields.unshift({
         field: context.autoRoll,
@@ -2649,7 +2649,7 @@ class CalendarData5e extends foundry.data.CalendarData {
     let formatter = "Mid";
     if ( seasonPercent <= 0.33 ) formatter = "Early";
     else if ( seasonPercent >= 0.66 ) formatter = "Late";
-    return _loc(`DND5E.CALENDAR.Formatters.ApproximateDate.${formatter}Season`, {
+    return _loc(`VARLYN5E.CALENDAR.Formatters.ApproximateDate.${formatter}Season`, {
       season: _loc(season.name)
     });
   }
@@ -2677,7 +2677,7 @@ class CalendarData5e extends foundry.data.CalendarData {
     else if ( (day > 0.5) && (day <= 0.85) ) formatter = "Afternoon";
     else if ( (day > 0.85) && (night < 0) ) formatter = "Evening";
     else formatter = "Night";
-    return _loc(`DND5E.CALENDAR.Formatters.ApproximateTime.${formatter}`);
+    return _loc(`VARLYN5E.CALENDAR.Formatters.ApproximateTime.${formatter}`);
   }
 
   /* -------------------------------------------- */
@@ -2691,7 +2691,7 @@ class CalendarData5e extends foundry.data.CalendarData {
    */
   static formatHoursMinutes(calendar, components, options) {
     return CalendarData5e.formatLocalized(
-      "DND5E.CALENDAR.Formatters.HoursMinutes.Format", calendar, components, options
+      "VARLYN5E.CALENDAR.Formatters.HoursMinutes.Format", calendar, components, options
     );
   }
 
@@ -2706,7 +2706,7 @@ class CalendarData5e extends foundry.data.CalendarData {
    */
   static formatHoursMinutesSeconds(calendar, components, options) {
     return CalendarData5e.formatLocalized(
-      "DND5E.CALENDAR.Formatters.HoursMinutesSeconds.Format", calendar, components, options
+      "VARLYN5E.CALENDAR.Formatters.HoursMinutesSeconds.Format", calendar, components, options
     );
   }
 
@@ -2735,7 +2735,7 @@ class CalendarData5e extends foundry.data.CalendarData {
    */
   static formatMonthDay(calendar, components, options) {
     return CalendarData5e.formatLocalized(
-      "DND5E.CALENDAR.Formatters.MonthDay.Format", calendar, components, options
+      "VARLYN5E.CALENDAR.Formatters.MonthDay.Format", calendar, components, options
     );
   }
 
@@ -2750,7 +2750,7 @@ class CalendarData5e extends foundry.data.CalendarData {
    */
   static formatMonthDayYear(calendar, components, options) {
     return CalendarData5e.formatLocalized(
-      "DND5E.CALENDAR.Formatters.MonthDayYear.Format", calendar, components, options
+      "VARLYN5E.CALENDAR.Formatters.MonthDayYear.Format", calendar, components, options
     );
   }
 
@@ -2944,7 +2944,7 @@ class SetDateDialog extends Dialog5e {
       width: 300
     },
     window: {
-      title: "DND5E.CALENDAR.Action.SetDate"
+      title: "VARLYN5E.CALENDAR.Action.SetDate"
     }
   };
 
@@ -2969,14 +2969,14 @@ class SetDateDialog extends Dialog5e {
       {
         classes: "label-top",
         field: new NumberField$M({ integer: true }),
-        label: _loc("DND5E.CALENDAR.Component.Year"),
+        label: _loc("VARLYN5E.CALENDAR.Component.Year"),
         name: "year",
         value: year + game.time.calendar.years.yearZero
       },
       {
         classes: "label-top",
         field: new NumberField$M({ required: true, blank: false }),
-        label: _loc("DND5E.CALENDAR.Component.Month"),
+        label: _loc("VARLYN5E.CALENDAR.Component.Month"),
         name: "month",
         options: game.time.calendar.months.values
           .map(({ name }, value) => ({ value, label: _loc(name) })),
@@ -2985,7 +2985,7 @@ class SetDateDialog extends Dialog5e {
       {
         classes: "label-top",
         field: new NumberField$M(),
-        label: _loc("DND5E.CALENDAR.Component.Day"),
+        label: _loc("VARLYN5E.CALENDAR.Component.Day"),
         name: "day",
         value: dayOfMonth + 1
       }
@@ -3097,13 +3097,13 @@ class CalendarHUD extends BaseCalendarHUD {
         dataset: defaultTime,
         icon: "fa-solid fa-angles-left",
         position: "start",
-        tooltip: _loc("DND5E.CALENDAR.Action.ReverseTime", { amount: defaultAmount }),
+        tooltip: _loc("VARLYN5E.CALENDAR.Action.ReverseTime", { amount: defaultAmount }),
         visible: game.user.isGM,
         additional: CalendarHUD.TIME_CONTROL_VALUES.map(({ value, unit }) => ({
           action: "reverse",
           dataset: { value, unit },
           label: `-${formatTime(value, unit, { unitDisplay: "narrow" })}`,
-          tooltip: _loc("DND5E.CALENDAR.Action.ReverseTime", {
+          tooltip: _loc("VARLYN5E.CALENDAR.Action.ReverseTime", {
             amount: formatTime(value, unit).titleCase()
           })
         }))
@@ -3112,14 +3112,14 @@ class CalendarHUD extends BaseCalendarHUD {
         action: "setDate",
         icon: "fa-solid fa-calendar-days",
         position: "start",
-        tooltip: _loc("DND5E.CALENDAR.Action.SetDate"),
+        tooltip: _loc("VARLYN5E.CALENDAR.Action.SetDate"),
         visible: game.user.isGM
       },
       {
         action: "openCharacterSheet",
         icon: "fa-solid fa-user",
         position: "start",
-        tooltip: _loc("DND5E.CALENDAR.Action.OpenCharacterSheet"),
+        tooltip: _loc("VARLYN5E.CALENDAR.Action.OpenCharacterSheet"),
         visible: !!game.user.character
       },
       {
@@ -3127,13 +3127,13 @@ class CalendarHUD extends BaseCalendarHUD {
         dataset: defaultTime,
         icon: "fa-solid fa-angles-right",
         position: "end",
-        tooltip: _loc("DND5E.CALENDAR.Action.AdvanceTime", { amount: defaultAmount }),
+        tooltip: _loc("VARLYN5E.CALENDAR.Action.AdvanceTime", { amount: defaultAmount }),
         visible: game.user.isGM,
         additional: CalendarHUD.TIME_CONTROL_VALUES.map(({ value, unit }) => ({
           action: "advance",
           dataset: { value, unit },
           label: `+${formatTime(value, unit, { unitDisplay: "narrow" })}`,
-          tooltip: _loc("DND5E.CALENDAR.Action.AdvanceTime", {
+          tooltip: _loc("VARLYN5E.CALENDAR.Action.AdvanceTime", {
             amount: formatTime(value, unit).titleCase()
           })
         }))
@@ -3142,7 +3142,7 @@ class CalendarHUD extends BaseCalendarHUD {
         action: "openPartySheet",
         icon: "fa-solid fa-users",
         position: "end",
-        tooltip: _loc("DND5E.CALENDAR.Action.OpenPartySheet"),
+        tooltip: _loc("VARLYN5E.CALENDAR.Action.OpenPartySheet"),
         visible: game.actors.party?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED)
       }
     ];
@@ -3216,11 +3216,11 @@ class CalendarHUD extends BaseCalendarHUD {
    */
   async renderCore(deltas={}) {
     const prefs = game.settings.get("dnd5e", "calendarPreferences");
-    const dateFormatter = CONFIG.DND5E.calendar.formatters.find(f => f.value === prefs.formatters.date);
+    const dateFormatter = CONFIG.VARLYN5E.calendar.formatters.find(f => f.value === prefs.formatters.date);
     this.element.querySelector(".calendar-date").innerText = dateFormatter ? game.time.calendar.format(
       game.time.components, dateFormatter.formatter
     ) : "";
-    const timeFormatter = CONFIG.DND5E.calendar.formatters.find(f => f.value === prefs.formatters.time);
+    const timeFormatter = CONFIG.VARLYN5E.calendar.formatters.find(f => f.value === prefs.formatters.time);
     this.element.querySelector(".calendar-time").innerText = timeFormatter ? game.time.calendar.format(
       game.time.components, timeFormatter.formatter
     ) : "";
@@ -3868,7 +3868,7 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
       default: return false;
     }
     if ( !recovery?.length ) return false;
-    return recovery.every(r => CONFIG.DND5E.limitedUsePeriods[r.period]?.type === "combat");
+    return recovery.every(r => CONFIG.VARLYN5E.limitedUsePeriods[r.period]?.type === "combat");
   }
 
   /* -------------------------------------------- */
@@ -3888,7 +3888,7 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
    * @type {FormSelectOption[]|null}
    */
   get validTargets() {
-    const config = CONFIG.DND5E.activityConsumptionTypes[this.type];
+    const config = CONFIG.VARLYN5E.activityConsumptionTypes[this.type];
     if ( !config?.validTargets || (!this.item.isEmbedded && (config.targetRequiresEmbedded === true)) ) return null;
     return config.validTargets.call(this);
   }
@@ -3904,7 +3904,7 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
    * @throws ConsumptionError
    */
   async consume(config, updates) {
-    const typeConfig = CONFIG.DND5E.activityConsumptionTypes[this.type];
+    const typeConfig = CONFIG.VARLYN5E.activityConsumptionTypes[this.type];
     if ( !typeConfig?.consume ) throw new Error("Consumption types must define consumption method.");
     await typeConfig.consume.call(this, config, updates);
   }
@@ -3921,7 +3921,7 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
   static async consumeActivityUses(config, updates) {
     const result = await this._usesConsumption(config, {
       uses: this.activity.uses,
-      type: _loc("DND5E.CONSUMPTION.Type.ActivityUses.Warning", {
+      type: _loc("VARLYN5E.CONSUMPTION.Type.ActivityUses.Warning", {
         activity: this.activity.name, item: this.item.name
       }),
       rolls: updates.rolls,
@@ -3945,18 +3945,18 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
 
     const attribute = getHumanReadableAttributeLabel(this.target, { actor: this.actor });
     if ( !foundry.utils.hasProperty(this.actor, keyPath) ) throw new ConsumptionError(
-      _loc("DND5E.CONSUMPTION.Warning.MissingAttribute", {
+      _loc("VARLYN5E.CONSUMPTION.Warning.MissingAttribute", {
         activity: this.activity.name, attribute, item: this.item.name
       })
     );
     let current = foundry.utils.getProperty(this.actor, keyPath);
 
     let warningMessage;
-    if ( (cost > 0) && !current ) warningMessage = "DND5E.CONSUMPTION.Warning.None";
-    else if ( current < cost ) warningMessage = "DND5E.CONSUMPTION.Warning.NotEnough";
+    if ( (cost > 0) && !current ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.None";
+    else if ( current < cost ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.NotEnough";
     if ( warningMessage ) throw new ConsumptionError(_loc(warningMessage, {
       available: formatNumber(current), cost: formatNumber(cost),
-      type: _loc("DND5E.CONSUMPTION.Type.Attribute.Warning", { attribute })
+      type: _loc("VARLYN5E.CONSUMPTION.Type.Attribute.Warning", { attribute })
     }));
 
     const adjustedKeyPath = keyPath.replace(/\.value$/, ".spent");
@@ -3992,14 +3992,14 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
     });
 
     let warningMessage;
-    if ( !validClasses.length ) warningMessage = "DND5E.CONSUMPTION.Warning.MissingHitDice";
-    else if ( (cost > 0) && !total ) warningMessage = "DND5E.CONSUMPTION.Warning.None";
-    else if ( total < cost ) warningMessage = "DND5E.CONSUMPTION.Warning.NotEnough";
+    if ( !validClasses.length ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.MissingHitDice";
+    else if ( (cost > 0) && !total ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.None";
+    else if ( total < cost ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.NotEnough";
     if ( warningMessage ) {
       const denomination = !["smallest", "largest"].includes(this.target) ? this.target : "";
       throw new ConsumptionError(_loc(warningMessage, {
         available: formatNumber(total), cost: formatNumber(cost), denomination,
-        type: _loc("DND5E.CONSUMPTION.Type.HitDice.Warning", { denomination })
+        type: _loc("VARLYN5E.CONSUMPTION.Type.HitDice.Warning", { denomination })
       }));
     }
 
@@ -4029,13 +4029,13 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
    */
   static async consumeItemUses(config, updates) {
     const item = this.target ? this.actor.items.get(this.target) : this.item;
-    if ( !item ) throw new ConsumptionError(_loc("DND5E.CONSUMPTION.Warning.MissingItem", {
+    if ( !item ) throw new ConsumptionError(_loc("VARLYN5E.CONSUMPTION.Warning.MissingItem", {
       activity: this.activity.name, item: this.item.name
     }));
 
     const result = await this._usesConsumption(config, {
       uses: item.system.uses,
-      type: _loc("DND5E.CONSUMPTION.Type.ItemUses.Warning", { name: this.item.name }),
+      type: _loc("VARLYN5E.CONSUMPTION.Type.ItemUses.Warning", { name: this.item.name }),
       rolls: updates.rolls,
       delta: { item: item.id, keyPath: "system.uses.spent" }
     });
@@ -4071,7 +4071,7 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
    */
   static async consumeMaterial(config, updates) {
     const item = this.actor.items.get(this.target);
-    if ( !item ) throw new ConsumptionError(_loc("DND5E.CONSUMPTION.Warning.MissingItem", {
+    if ( !item ) throw new ConsumptionError(_loc("VARLYN5E.CONSUMPTION.Warning.MissingItem", {
       activity: this.activity.name, item: this.item.name
     }));
 
@@ -4079,11 +4079,11 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
     const cost = (await this.resolveCost({ config, delta, rolls: updates.rolls })).total;
 
     let warningMessage;
-    if ( cost > 0 && !item.system.quantity ) warningMessage = "DND5E.CONSUMPTION.Warning.None";
-    else if ( cost > item.system.quantity ) warningMessage = "DND5E.CONSUMPTION.Warning.NotEnough";
+    if ( cost > 0 && !item.system.quantity ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.None";
+    else if ( cost > item.system.quantity ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.NotEnough";
     if ( warningMessage ) throw new ConsumptionError(_loc(warningMessage, {
       available: formatNumber(item.system.quantity), cost: formatNumber(cost),
-      type: _loc("DND5E.CONSUMPTION.Type.Material.Warning", { name: item.name })
+      type: _loc("VARLYN5E.CONSUMPTION.Type.Material.Warning", { name: item.name })
     }));
 
     const newQuantity = item.system.quantity - cost;
@@ -4108,7 +4108,7 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
    */
   static async consumeSpellSlots(config, updates) {
     const levelNumber = Math.clamp(
-      this.resolveLevel({ config, rolls: updates.rolls }), 1, Object.keys(CONFIG.DND5E.spellLevels).length - 1
+      this.resolveLevel({ config, rolls: updates.rolls }), 1, Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1
     );
     const keyPath = `system.spells.spell${levelNumber}.value`;
     const cost = (await this.resolveCost({ config, delta: { keyPath }, rolls: updates.rolls })).total;
@@ -4117,12 +4117,12 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
     const levelData = this.actor.system.spells?.[`spell${levelNumber}`];
     const newValue = (levelData?.value ?? 0) - cost;
     let warningMessage;
-    if ( !levelData?.max ) warningMessage = "DND5E.CONSUMPTION.Warning.MissingSpellSlot";
-    else if ( (cost > 0) && !levelData.value ) warningMessage = "DND5E.CONSUMPTION.Warning.None";
-    else if ( newValue < 0 ) warningMessage = "DND5E.CONSUMPTION.Warning.NotEnough";
+    if ( !levelData?.max ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.MissingSpellSlot";
+    else if ( (cost > 0) && !levelData.value ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.None";
+    else if ( newValue < 0 ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.NotEnough";
     if ( warningMessage ) {
-      const level = CONFIG.DND5E.spellLevels[levelNumber];
-      const type = _loc("DND5E.CONSUMPTION.Type.SpellSlots.Warning", { level });
+      const level = CONFIG.VARLYN5E.spellLevels[levelNumber];
+      const type = _loc("VARLYN5E.CONSUMPTION.Type.SpellSlots.Warning", { level });
       throw new ConsumptionError(_loc(warningMessage, {
         type, level, cost: formatNumber(cost), available: formatNumber(levelData.value)
       }));
@@ -4148,8 +4148,8 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
     const cost = (await this.resolveCost({ config, delta, rolls })).total;
 
     let warningMessage;
-    if ( cost > 0 && !uses.value ) warningMessage = "DND5E.CONSUMPTION.Warning.None";
-    else if ( cost > uses.value ) warningMessage = "DND5E.CONSUMPTION.Warning.NotEnough";
+    if ( cost > 0 && !uses.value ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.None";
+    else if ( cost > uses.value ) warningMessage = "VARLYN5E.CONSUMPTION.Warning.NotEnough";
     if ( warningMessage ) throw new ConsumptionError(
       _loc(warningMessage, { type, cost: formatNumber(cost), available: formatNumber(uses.value) })
     );
@@ -4169,7 +4169,7 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
    * @returns {ConsumptionLabels}
    */
   getConsumptionLabels(config, options={}) {
-    const typeConfig = CONFIG.DND5E.activityConsumptionTypes[this.type];
+    const typeConfig = CONFIG.VARLYN5E.activityConsumptionTypes[this.type];
     if ( !typeConfig?.consumptionLabels ) return "";
     return typeConfig.consumptionLabels.call(this, config, options);
   }
@@ -4189,14 +4189,14 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
     const uses = this.activity.uses;
     const usesPluralRule = new Intl.PluralRules(game.i18n.lang).select(uses.value);
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.ActivityUses.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.ActivityUses.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.ActivityUses.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.ActivityUses.PromptHint${increaseKey}`,
         {
           cost,
-          use: _loc(`DND5E.CONSUMPTION.Type.Use.${pluralRule}`),
+          use: _loc(`VARLYN5E.CONSUMPTION.Type.Use.${pluralRule}`),
           available: formatNumber(uses.value),
-          availableUse: _loc(`DND5E.CONSUMPTION.Type.Use.${usesPluralRule}`)
+          availableUse: _loc(`VARLYN5E.CONSUMPTION.Type.Use.${usesPluralRule}`)
         }
       ),
       warn: simplifiedCost > uses.value
@@ -4217,9 +4217,9 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
     const { cost, simplifiedCost, increaseKey } = this._resolveHintCost(config);
     const current = foundry.utils.getProperty(this.actor.system, this.target);
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.Attribute.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.Attribute.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.Attribute.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.Attribute.PromptHint${increaseKey}`,
         {
           cost,
           attribute: getHumanReadableAttributeLabel(this.target, { actor: this.actor }),
@@ -4243,18 +4243,18 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
   static consumptionLabelsHitDice(config, { consumed }={}) {
     const { cost, simplifiedCost, increaseKey, pluralRule } = this._resolveHintCost(config);
     let denomination;
-    if ( this.target === "smallest" ) denomination = _loc("DND5E.ConsumeHitDiceSmallest");
-    else if ( this.target === "largest" ) denomination = _loc("DND5E.ConsumeHitDiceLargest");
+    if ( this.target === "smallest" ) denomination = _loc("VARLYN5E.ConsumeHitDiceSmallest");
+    else if ( this.target === "largest" ) denomination = _loc("VARLYN5E.ConsumeHitDiceLargest");
     else denomination = this.target;
     const available = (["smallest", "largest"].includes(this.target)
       ? this.actor.system.attributes?.hd?.value : this.actor.system.attributes?.hd?.bySize?.[this.target]) ?? 0;
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.HitDice.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.HitDice.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.HitDice.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.HitDice.PromptHint${increaseKey}`,
         {
           cost, denomination: denomination.toLowerCase(),
-          die: _loc(`DND5E.CONSUMPTION.Type.HitDie.${pluralRule}`),
+          die: _loc(`VARLYN5E.CONSUMPTION.Type.HitDie.${pluralRule}`),
           available: formatNumber(available)
         }
       ),
@@ -4275,7 +4275,7 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
   static consumptionLabelsItemUses(config, { consumed }={}) {
     const { cost, simplifiedCost, increaseKey, pluralRule } = this._resolveHintCost(config);
     const item = this.actor.items.get(this.target);
-    const itemName = item ? item.name : _loc("DND5E.CONSUMPTION.Target.ThisItem").toLowerCase();
+    const itemName = item ? item.name : _loc("VARLYN5E.CONSUMPTION.Target.ThisItem").toLowerCase();
     const uses = (item ?? this.item).system.uses;
     const usesPluralRule = new Intl.PluralRules(game.i18n.lang).select(uses.value);
 
@@ -4284,18 +4284,18 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
     if ( simplifiedCost > uses.value ) warn = true;
     else if ( (simplifiedCost > 0) && (uses.value - simplifiedCost === 0) && uses.autoDestroy ) notes.push({
       type: "warn",
-      message: _loc("DND5E.CONSUMPTION.Warning.WillDestroy", { item: itemName })
+      message: _loc("VARLYN5E.CONSUMPTION.Warning.WillDestroy", { item: itemName })
     });
 
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.ItemUses.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.ItemUses.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.ItemUses.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.ItemUses.PromptHint${increaseKey}`,
         {
           cost,
-          use: _loc(`DND5E.CONSUMPTION.Type.Use.${pluralRule}`),
+          use: _loc(`VARLYN5E.CONSUMPTION.Type.Use.${pluralRule}`),
           available: formatNumber(uses.value),
-          availableUse: _loc(`DND5E.CONSUMPTION.Type.Use.${usesPluralRule}`),
+          availableUse: _loc(`VARLYN5E.CONSUMPTION.Type.Use.${usesPluralRule}`),
           item: item ? `<em>${itemName}</em>` : itemName
         }
       ),
@@ -4319,13 +4319,13 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
     const item = this.actor.items.get(this.target);
     const quantity = item?.system.quantity ?? 0;
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.Material.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.Material.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.Material.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.Material.PromptHint${increaseKey}`,
         {
           cost,
           item: item ? `<em>${item.name}</em>`
-            : _loc("DND5E.CONSUMPTION.Target.UnknownItem").toLowerCase(),
+            : _loc("VARLYN5E.CONSUMPTION.Target.UnknownItem").toLowerCase(),
           quantity: formatNumber(quantity)
         }
       ),
@@ -4345,16 +4345,16 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
    */
   static consumptionLabelsSpellSlots(config, { consumed }={}) {
     const { cost, simplifiedCost, increaseKey, pluralRule } = this._resolveHintCost(config);
-    const levelNumber = Math.clamp(this.resolveLevel({ config }), 1, Object.keys(CONFIG.DND5E.spellLevels).length - 1);
-    const level = CONFIG.DND5E.spellLevels[levelNumber].toLowerCase();
+    const levelNumber = Math.clamp(this.resolveLevel({ config }), 1, Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1);
+    const level = CONFIG.VARLYN5E.spellLevels[levelNumber].toLowerCase();
     const available = this.actor.system.spells?.[`spell${levelNumber}`]?.value ?? 0;
     return {
-      label: _loc(`DND5E.CONSUMPTION.Type.SpellSlots.Prompt${increaseKey}`),
+      label: _loc(`VARLYN5E.CONSUMPTION.Type.SpellSlots.Prompt${increaseKey}`),
       hint: _loc(
-        `DND5E.CONSUMPTION.Type.SpellSlots.PromptHint${increaseKey}`,
+        `VARLYN5E.CONSUMPTION.Type.SpellSlots.PromptHint${increaseKey}`,
         {
           cost,
-          slot: _loc(`DND5E.CONSUMPTION.Type.SpellSlot.${pluralRule}`, { level }),
+          slot: _loc(`VARLYN5E.CONSUMPTION.Type.SpellSlot.${pluralRule}`, { level }),
           available: formatNumber(available)
         }
       ),
@@ -4400,13 +4400,13 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
     if ( !this.actor ) return [];
     return TokenDocument.implementation.getConsumedAttributes(this.actor.type).map(attr => {
       let group;
-      if ( attr.startsWith("abilities.") ) group = _loc("DND5E.AbilityScorePl");
-      else if ( attr.startsWith("currency.") ) group = _loc("DND5E.Currency");
-      else if ( attr.startsWith("spells.") ) group = _loc("DND5E.CONSUMPTION.Type.SpellSlots.Label");
-      else if ( attr.startsWith("attributes.movement.") ) group = _loc("DND5E.Speed");
-      else if ( attr.startsWith("attributes.senses.") ) group = _loc("DND5E.Senses");
-      else if ( attr.startsWith("attributes.actions.") ) group = _loc("DND5E.Vehicle");
-      else if ( attr.startsWith("resources.") ) group = _loc("DND5E.Resources");
+      if ( attr.startsWith("abilities.") ) group = _loc("VARLYN5E.AbilityScorePl");
+      else if ( attr.startsWith("currency.") ) group = _loc("VARLYN5E.Currency");
+      else if ( attr.startsWith("spells.") ) group = _loc("VARLYN5E.CONSUMPTION.Type.SpellSlots.Label");
+      else if ( attr.startsWith("attributes.movement.") ) group = _loc("VARLYN5E.Speed");
+      else if ( attr.startsWith("attributes.senses.") ) group = _loc("VARLYN5E.Senses");
+      else if ( attr.startsWith("attributes.actions.") ) group = _loc("VARLYN5E.Vehicle");
+      else if ( attr.startsWith("resources.") ) group = _loc("VARLYN5E.Resources");
       return { group, value: attr, label: getHumanReadableAttributeLabel(attr, { actor: this.actor }) || attr };
     });
   }
@@ -4420,9 +4420,9 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
    */
   static validHitDiceTargets() {
     return [
-      { value: "smallest", label: _loc("DND5E.ConsumeHitDiceSmallest") },
-      ...CONFIG.DND5E.hitDieTypes.map(d => ({ value: d, label: d })),
-      { value: "largest", label: _loc("DND5E.ConsumeHitDiceLargest") }
+      { value: "smallest", label: _loc("VARLYN5E.ConsumeHitDiceSmallest") },
+      ...CONFIG.VARLYN5E.hitDieTypes.map(d => ({ value: d, label: d })),
+      { value: "largest", label: _loc("VARLYN5E.ConsumeHitDiceLargest") }
     ];
   }
 
@@ -4439,14 +4439,14 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
       const uses = item.system.uses;
       if ( uses.max && (uses.recovery?.length === 1) && (uses.recovery[0].type === "recoverAll")
         && (uses.recovery[0].period !== "recharge") ) {
-        const per = CONFIG.DND5E.limitedUsePeriods[uses.recovery[0].period]?.abbreviation;
-        label = _loc("DND5E.AbilityUseConsumableLabel", { max: uses.max, per });
+        const per = CONFIG.VARLYN5E.limitedUsePeriods[uses.recovery[0].period]?.abbreviation;
+        label = _loc("VARLYN5E.AbilityUseConsumableLabel", { max: uses.max, per });
       }
-      else label = _loc("DND5E.AbilityUseChargesLabel", { value: uses.value });
+      else label = _loc("VARLYN5E.AbilityUseChargesLabel", { value: uses.value });
       return `${name} (${label})`;
     };
     return [
-      { value: "", label: makeLabel(_loc("DND5E.CONSUMPTION.Target.ThisItem"), this.item) },
+      { value: "", label: makeLabel(_loc("VARLYN5E.CONSUMPTION.Target.ThisItem"), this.item) },
       { rule: true },
       ...(this.actor?.items ?? [])
         .filter(i => i.system.uses?.max && (i !== this.item))
@@ -4478,7 +4478,7 @@ class ConsumptionTargetData extends foundry.abstract.DataModel {
    * @returns {FormSelectOption[]}
    */
   static validSpellSlotsTargets() {
-    return Object.entries(CONFIG.DND5E.spellLevels).reduce((arr, [value, label]) => {
+    return Object.entries(CONFIG.VARLYN5E.spellLevels).reduce((arr, [value, label]) => {
       if ( value !== "0" ) arr.push({ value, label });
       return arr;
     }, []);
@@ -4718,7 +4718,7 @@ class UsesField extends SchemaField$X {
    * @param {object} [labels]                         Object in which to insert generated labels.
    */
   static prepareData(rollData, labels) {
-    prepareFormulaValue(this, "uses.max", "DND5E.USES.FIELDS.uses.max.label", rollData);
+    prepareFormulaValue(this, "uses.max", "VARLYN5E.USES.FIELDS.uses.max.label", rollData);
     this.uses.value = this.uses.max ? Math.clamp(this.uses.max - this.uses.spent, 0, this.uses.max) : 0;
 
     const periods = [];
@@ -4727,10 +4727,10 @@ class UsesField extends SchemaField$X {
         recovery.formula ??= "6";
         recovery.type = "recoverAll";
         recovery.recharge = { options: UsesField.rechargeOptions };
-        if ( labels ) labels.recharge ??= `${_loc("DND5E.Recharge")} [${
+        if ( labels ) labels.recharge ??= `${_loc("VARLYN5E.Recharge")} [${
           recovery.formula}${parseInt(recovery.formula) < 6 ? "+" : ""}]`;
-      } else if ( recovery.period in CONFIG.DND5E.limitedUsePeriods ) {
-        const config = CONFIG.DND5E.limitedUsePeriods[recovery.period];
+      } else if ( recovery.period in CONFIG.VARLYN5E.limitedUsePeriods ) {
+        const config = CONFIG.VARLYN5E.limitedUsePeriods[recovery.period];
         periods.push(config.abbreviation ?? config.label);
       }
     }
@@ -4753,7 +4753,7 @@ class UsesField extends SchemaField$X {
   static get rechargeOptions() {
     return Array.fromRange(5, 2).reverse().map(min => ({
       value: min,
-      label: _loc("DND5E.USES.Recovery.Recharge.Range", {
+      label: _loc("VARLYN5E.USES.Recovery.Recharge.Range", {
         range: min === 6 ? formatNumber(6) : formatRange(min, 6)
       })
     }));
@@ -4772,7 +4772,7 @@ class UsesField extends SchemaField$X {
     if ( (this.activation?.type === "legendary") || (this.activation?.type === "mythic") ) {
       if ( this.activation.value < 2 ) return "";
       const pr = getPluralRules();
-      return _loc(`DND5E.NPC.ActionCostCounted.${pr.select(this.activation.value)}`, {
+      return _loc(`VARLYN5E.NPC.ActionCostCounted.${pr.select(this.activation.value)}`, {
         number: formatNumber(this.activation.value)
       });
     }
@@ -4781,22 +4781,22 @@ class UsesField extends SchemaField$X {
     const recovery = this.uses.recovery[0];
 
     // Ignore combat & special recovery periods
-    const type = CONFIG.DND5E.limitedUsePeriods[recovery.period]?.type;
+    const type = CONFIG.VARLYN5E.limitedUsePeriods[recovery.period]?.type;
     if ( (type === "combat") || (type === "special") ) return "";
 
     // Recharge X–Y
     if ( recovery.period === "recharge" ) {
       const value = parseInt(recovery.formula);
-      return `${_loc("DND5E.Recharge")} ${value === 6 ? "6" : `${value}–6`}`;
+      return `${_loc("VARLYN5E.Recharge")} ${value === 6 ? "6" : `${value}–6`}`;
     }
 
     // Recharge after a Short or Long Rest
     if ( ["lr", "sr"].includes(recovery.period) && (this.uses.max === 1) ) {
-      return _loc(`DND5E.Recharge${recovery.period === "sr" ? "Short" : "Long"}`);
+      return _loc(`VARLYN5E.Recharge${recovery.period === "sr" ? "Short" : "Long"}`);
     }
 
     // X/Day
-    const period = CONFIG.DND5E.limitedUsePeriods[recovery.period === "sr" ? "sr" : "day"]?.label ?? "";
+    const period = CONFIG.VARLYN5E.limitedUsePeriods[recovery.period === "sr" ? "sr" : "day"]?.label ?? "";
     if ( !period ) return "";
     return `${this.uses.max}/${period}`;
   }
@@ -4850,7 +4850,7 @@ class UsesField extends SchemaField$X {
         total = (await roll.evaluate()).total;
       } catch(err) {
         Hooks.onError("UsesField#recoverUses", err, {
-          msg: _loc("DND5E.ItemRecoveryFormulaWarning", {
+          msg: _loc("VARLYN5E.ItemRecoveryFormulaWarning", {
             name: item.name, formula: profile.formula, uuid: this.uuid ?? item.uuid
           }),
           log: "error",
@@ -4912,9 +4912,9 @@ class UsesField extends SchemaField$X {
     const rolls = await CONFIG.Dice.BasicRoll.buildConfigure(rollConfig, dialogConfig, messageConfig);
     await CONFIG.Dice.BasicRoll.buildEvaluate(rolls, rollConfig, messageConfig);
     if ( !rolls.length ) return;
-    messageConfig.data.flavor = _loc("DND5E.ItemRechargeCheck", {
+    messageConfig.data.flavor = _loc("VARLYN5E.ItemRechargeCheck", {
       name: this.name,
-      result: _loc(`DND5E.ItemRecharge${rolls[0].isSuccess ? "Success" : "Failure"}`)
+      result: _loc(`VARLYN5E.ItemRecharge${rolls[0].isSuccess ? "Success" : "Failure"}`)
     });
     await CONFIG.Dice.BasicRoll.buildPost(rolls, rollConfig, messageConfig);
 
@@ -5346,30 +5346,30 @@ class ActivitySheet extends PseudoDocumentSheet {
     }
 
     context.activationTypes = [
-      ...Object.entries(CONFIG.DND5E.activityActivationTypes).map(([value, config]) => ({
+      ...Object.entries(CONFIG.VARLYN5E.activityActivationTypes).map(([value, config]) => ({
         value,
         label: _loc(config.label),
         group: _loc(config.group)
       })),
-      { value: "", label: _loc("DND5E.NoneActionLabel") }
+      { value: "", label: _loc("VARLYN5E.NoneActionLabel") }
     ];
     context.affectsPlaceholder = _loc(
-      `DND5E.TARGET.Count.${context.data.target?.template?.type ? "Every" : "Any"}`
+      `VARLYN5E.TARGET.Count.${context.data.target?.template?.type ? "Every" : "Any"}`
     );
     context.durationUnits = [
-      { value: "inst", label: _loc("DND5E.TimeInst") },
-      ...Object.entries(CONFIG.DND5E.scalarTimePeriods).map(([value, label]) => ({
-        value, label, group: _loc("DND5E.DurationTime")
+      { value: "inst", label: _loc("VARLYN5E.TimeInst") },
+      ...Object.entries(CONFIG.VARLYN5E.scalarTimePeriods).map(([value, label]) => ({
+        value, label, group: _loc("VARLYN5E.DurationTime")
       })),
-      ...Object.entries(CONFIG.DND5E.permanentTimePeriods).map(([value, label]) => ({
-        value, label, group: _loc("DND5E.DurationPermanent")
+      ...Object.entries(CONFIG.VARLYN5E.permanentTimePeriods).map(([value, label]) => ({
+        value, label, group: _loc("VARLYN5E.DurationPermanent")
       })),
-      { value: "spec", label: _loc("DND5E.Special") }
+      { value: "spec", label: _loc("VARLYN5E.Special") }
     ];
     context.rangeUnits = [
-      ...Object.entries(CONFIG.DND5E.rangeTypes).map(([value, label]) => ({ value, label })),
-      ...Object.entries(CONFIG.DND5E.movementUnits).map(([value, { label }]) => ({
-        value, label, group: _loc("DND5E.RangeDistance")
+      ...Object.entries(CONFIG.VARLYN5E.rangeTypes).map(([value, label]) => ({ value, label })),
+      ...Object.entries(CONFIG.VARLYN5E.movementUnits).map(([value, { label }]) => ({
+        value, label, group: _loc("VARLYN5E.RangeDistance")
       }))
     ];
 
@@ -5377,10 +5377,10 @@ class ActivitySheet extends PseudoDocumentSheet {
     const canScale = this.activity.canConfigureScaling;
     const consumptionTypeOptions = Array.from(this.activity.validConsumptionTypes).map(value => ({
       value,
-      label: CONFIG.DND5E.activityConsumptionTypes[value].label
+      label: CONFIG.VARLYN5E.activityConsumptionTypes[value].label
     }));
     context.consumptionTargets = context.source.consumption.targets.map((data, index) => {
-      const typeConfig = CONFIG.DND5E.activityConsumptionTypes[data.type] ?? {};
+      const typeConfig = CONFIG.VARLYN5E.activityConsumptionTypes[data.type] ?? {};
       const showTextTarget = typeConfig.targetRequiresEmbedded && !this.item.isEmbedded;
       const target = new ConsumptionTargetData(data, { parent: this.activity });
       return {
@@ -5391,15 +5391,15 @@ class ActivitySheet extends PseudoDocumentSheet {
         targetHint: this.item.isEmbedded ? undefined : typeConfig.nonEmbeddedHint,
         typeOptions: consumptionTypeOptions,
         scalingModes: canScale ? [
-          { value: "", label: _loc("DND5E.CONSUMPTION.Scaling.None") },
-          { value: "amount", label: _loc("DND5E.CONSUMPTION.Scaling.Amount") },
+          { value: "", label: _loc("VARLYN5E.CONSUMPTION.Scaling.None") },
+          { value: "amount", label: _loc("VARLYN5E.CONSUMPTION.Scaling.Amount") },
           ...(typeConfig.scalingModes ?? []).map(({ value, label }) => ({ value, label: _loc(label) }))
         ] : null,
         showTargets: "validTargets" in typeConfig,
         selectedTarget: ("validTargets" in typeConfig) && ["itemUses", "material"].includes(data.type)
           ? this.activity._remapConsumptionTarget(data.target)
           : data.target,
-        targetPlaceholder: data.type === "itemUses" ? _loc("DND5E.CONSUMPTION.Target.ThisItem") : "",
+        targetPlaceholder: data.type === "itemUses" ? _loc("VARLYN5E.CONSUMPTION.Target.ThisItem") : "",
         validTargets: showTextTarget ? null : target.validTargets
       };
     });
@@ -5407,11 +5407,11 @@ class ActivitySheet extends PseudoDocumentSheet {
     context.showScaling = !this.activity.isSpell || this.activity.isRider;
 
     // Uses recovery
-    context.recoveryPeriods = CONFIG.DND5E.limitedUsePeriods.recoveryOptions;
+    context.recoveryPeriods = CONFIG.VARLYN5E.limitedUsePeriods.recoveryOptions;
     context.recoveryTypes = [
-      { value: "recoverAll", label: _loc("DND5E.USES.Recovery.Type.RecoverAll") },
-      { value: "loseAll", label: _loc("DND5E.USES.Recovery.Type.LoseAll") },
-      { value: "formula", label: _loc("DND5E.USES.Recovery.Type.Formula") }
+      { value: "recoverAll", label: _loc("VARLYN5E.USES.Recovery.Type.RecoverAll") },
+      { value: "loseAll", label: _loc("VARLYN5E.USES.Recovery.Type.LoseAll") },
+      { value: "formula", label: _loc("VARLYN5E.USES.Recovery.Type.Formula") }
     ];
     context.usesRecovery = context.source.uses.recovery.map((data, index) => ({
       data,
@@ -5491,19 +5491,19 @@ class ActivitySheet extends PseudoDocumentSheet {
 
     context.denominationOptions = [
       { value: "", label: "" },
-      ...CONFIG.DND5E.dieSteps.map(value => ({ value, label: `d${value}` }))
+      ...CONFIG.VARLYN5E.dieSteps.map(value => ({ value, label: `d${value}` }))
     ];
     if ( context.activity.damage?.parts ) {
       const scaleKey = (this.item.type === "spell") && (this.item.system.level === 0) ? "labelCantrip" : "label";
       const scalingOptions = [
-        { value: "", label: _loc("DND5E.DAMAGE.Scaling.None") },
-        ...Object.entries(CONFIG.DND5E.damageScalingModes).map(([value, { [scaleKey]: label }]) => ({ value, label }))
+        { value: "", label: _loc("VARLYN5E.DAMAGE.Scaling.None") },
+        ...Object.entries(CONFIG.VARLYN5E.damageScalingModes).map(([value, { [scaleKey]: label }]) => ({ value, label }))
       ];
-      let typeOptions = Object.entries(CONFIG.DND5E.damageTypes).map(([value, config]) => ({ ...config, value }));
+      let typeOptions = Object.entries(CONFIG.VARLYN5E.damageTypes).map(([value, config]) => ({ ...config, value }));
       const [other, physical] = typeOptions.partition(config => !!config.isPhysical);
       typeOptions = [
         ...physical, { rule: true }, ...other, { rule: true },
-        { value: "maximum", label: "DND5E.HEAL.Type.Maximum" }
+        { value: "maximum", label: "VARLYN5E.HEAL.Type.Maximum" }
       ];
       const makePart = (data, index) => this._prepareDamagePartContext(context, {
         data, index, scalingOptions, typeOptions,
@@ -5585,29 +5585,29 @@ class ActivitySheet extends PseudoDocumentSheet {
     return this._markTabs({
       identity: {
         id: "identity", group: "sheet", icon: "fa-solid fa-tag",
-        label: "DND5E.ACTIVITY.SECTIONS.Identity"
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Identity"
       },
       activation: {
         id: "activation", group: "sheet", icon: "fa-solid fa-clapperboard",
-        label: "DND5E.ACTIVITY.SECTIONS.Activation",
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Activation",
         tabs: {
           time: {
             id: "time", group: "activation", icon: "fa-solid fa-clock",
-            label: "DND5E.ACTIVITY.SECTIONS.Time"
+            label: "VARLYN5E.ACTIVITY.SECTIONS.Time"
           },
           consumption: {
             id: "consumption", group: "activation", icon: "fa-solid fa-boxes-stacked",
-            label: "DND5E.CONSUMPTION.FIELDS.consumption.label"
+            label: "VARLYN5E.CONSUMPTION.FIELDS.consumption.label"
           },
           targeting: {
             id: "activation-targeting", group: "activation", icon: "fa-solid fa-bullseye",
-            label: "DND5E.TARGET.FIELDS.target.label"
+            label: "VARLYN5E.TARGET.FIELDS.target.label"
           }
         }
       },
       effect: {
         id: "effect", group: "sheet", icon: "fa-solid fa-sun",
-        label: "DND5E.ACTIVITY.SECTIONS.Effect"
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Effect"
       }
     });
   }
@@ -5740,7 +5740,7 @@ class ActivitySheet extends PseudoDocumentSheet {
    */
   static #addRecovery(event, target) {
     const periods = new Set(
-      Object.entries(CONFIG.DND5E.limitedUsePeriods).filter(([, config]) => !config.deprecated).map(([k]) => k)
+      Object.entries(CONFIG.VARLYN5E.limitedUsePeriods).filter(([, config]) => !config.deprecated).map(([k]) => k)
     );
     const existingPeriods = new Set(this.activity.uses.recovery.map(t => t.period));
     const filteredPeriods = periods.difference(existingPeriods);
@@ -6046,7 +6046,7 @@ class ActivityUsageDialog extends Dialog5e {
     context.notes = [];
 
     context.fields = [{
-      field: new BooleanField$F({ label: _loc("DND5E.Concentration") }),
+      field: new BooleanField$F({ label: _loc("VARLYN5E.Concentration") }),
       name: "concentration.begin",
       value: this.config.concentration?.begin,
       input: context.inputs.createCheckboxInput
@@ -6057,25 +6057,25 @@ class ActivityUsageDialog extends Dialog5e {
         return {
           value: effect.id,
           label: data?.data?.name ?? this.actor.items.get(data?.id)?.name
-            ?? _loc("DND5E.ConcentratingItemless")
+            ?? _loc("VARLYN5E.ConcentratingItemless")
         };
       });
       if ( existingConcentration.length ) {
         const optional = existingConcentration.length < (this.actor.system.attributes?.concentration?.limit ?? 0);
         context.fields.push({
           field: new StringField$1h({
-            required: true, label: _loc("DND5E.ConcentratingEnd"), blank: optional
+            required: true, label: _loc("VARLYN5E.ConcentratingEnd"), blank: optional
           }),
           name: "concentration.end",
           value: this.config.concentration?.end,
           options: optional ? [{ value: "", label: "—" }, ...existingConcentration] : existingConcentration
         });
         context.notes.push({
-          type: "info", message: _loc(`DND5E.ConcentratingWarnLimit${optional ? "Optional" : ""}`)
+          type: "info", message: _loc(`VARLYN5E.ConcentratingWarnLimit${optional ? "Optional" : ""}`)
         });
       } else if ( !this.actor.system.attributes?.concentration?.limit ) {
         context.notes.push({
-          type: "warn", message: _loc("DND5E.ConcentratingWarnLimitZero")
+          type: "warn", message: _loc("VARLYN5E.ConcentratingWarnLimitZero")
         });
       }
     }
@@ -6096,7 +6096,7 @@ class ActivityUsageDialog extends Dialog5e {
     context.fields = [];
     context.notes = [];
 
-    const activationConfig = CONFIG.DND5E.activityActivationTypes[this.activity.activation.type];
+    const activationConfig = CONFIG.VARLYN5E.activityActivationTypes[this.activity.activation.type];
     if ( activationConfig?.consume && this._shouldDisplay("consume.action") ) {
       const { property } = activationConfig.consume;
       const containsConsumption = this.activity.consumption.targets.find(t => {
@@ -6110,10 +6110,10 @@ class ActivityUsageDialog extends Dialog5e {
         context.fields.push({
           value, warn,
           field: new BooleanField$F({
-            label: _loc("DND5E.CONSUMPTION.Type.Action.Prompt", {
+            label: _loc("VARLYN5E.CONSUMPTION.Type.Action.Prompt", {
               type: activationConfig.label
             }),
-            hint: _loc("DND5E.CONSUMPTION.Type.Action.PromptHint", {
+            hint: _loc("VARLYN5E.CONSUMPTION.Type.Action.PromptHint", {
               available: _loc(`${activationConfig.counted}.${plurals.select(current.value)}`, {
                 number: `<strong>${formatNumber(current.value)}</strong>`
               }),
@@ -6130,7 +6130,7 @@ class ActivityUsageDialog extends Dialog5e {
 
     if ( this.activity.requiresSpellSlot && this.activity.consumption.spellSlot
       && this._shouldDisplay("consume.spellSlot") && !this.config.cause ) context.fields.push({
-      field: new BooleanField$F({ label: _loc("DND5E.SpellCastConsume") }),
+      field: new BooleanField$F({ label: _loc("VARLYN5E.SpellCastConsume") }),
       input: context.inputs.createCheckboxInput,
       name: "consume.spellSlot",
       value: this.config.consume?.spellSlot
@@ -6180,7 +6180,7 @@ class ActivityUsageDialog extends Dialog5e {
     if ( this.activity.target?.template?.type && this._shouldDisplay("create.measuredTemplate") ) {
       context.hasCreation = true;
       context.template = {
-        field: new BooleanField$F({ label: _loc("DND5E.TARGET.Action.PlaceTemplate") }),
+        field: new BooleanField$F({ label: _loc("VARLYN5E.TARGET.Action.PlaceTemplate") }),
         name: "create.measuredTemplate",
         value: this.config.create?.measuredTemplate
       };
@@ -6201,7 +6201,7 @@ class ActivityUsageDialog extends Dialog5e {
     context.buttons = [{
       action: "use",
       icon: this.options.button.icon ?? `fa-solid fa-${this.activity.isSpell ? "magic" : "fist-raised"}`,
-      label: this.options.button.label ?? `DND5E.AbilityUse${this.activity.isSpell ? "Cast" : "Use"}`,
+      label: this.options.button.label ?? `VARLYN5E.AbilityUse${this.activity.isSpell ? "Cast" : "Use"}`,
       type: "button"
     }];
     return context;
@@ -6231,12 +6231,12 @@ class ActivityUsageDialog extends Dialog5e {
       const max = simplifyBonus(scale.max, rollData);
       const minimumLevel = context.linkedActivity.spell?.level ?? this.item.system.level ?? 1;
       const maximumLevel = scale.allowed ? scale.max ? minimumLevel + max - 1 : Infinity : minimumLevel;
-      const spellSlotOptions = Object.entries(CONFIG.DND5E.spellLevels).map(([level, label]) => {
+      const spellSlotOptions = Object.entries(CONFIG.VARLYN5E.spellLevels).map(([level, label]) => {
         if ( (Number(level) < minimumLevel) || (Number(level) > maximumLevel) ) return null;
         return { value: `spell${level}`, label };
       }).filter(_ => _);
       context.spellSlots = {
-        field: new StringField$1h({ required: true, blank: false, label: _loc("DND5E.SpellCastUpcast") }),
+        field: new StringField$1h({ required: true, blank: false, label: _loc("VARLYN5E.SpellCastUpcast") }),
         name: "spell.slot",
         value: this.config.spell?.slot,
         options: spellSlotOptions
@@ -6247,7 +6247,7 @@ class ActivityUsageDialog extends Dialog5e {
       const minimumLevel = this.item.system.level ?? 1;
       const maximumLevel = Object.values(this.actor.system.spells)
         .reduce((max, d) => d.max ? Math.max(max, d.level) : max, 0);
-      const spellMethod = CONFIG.DND5E.spellcasting[this.item.system.method];
+      const spellMethod = CONFIG.VARLYN5E.spellcasting[this.item.system.method];
 
       const consumeSlot = (this.config.consume === true) || this.config.consume?.spellSlot;
       let spellSlotValue = this.actor.system.spells[this.config.spell?.slot]?.value || !consumeSlot
@@ -6255,9 +6255,9 @@ class ActivityUsageDialog extends Dialog5e {
       const spellSlotOptions = Object.entries(this.actor.system.spells).map(([value, slot]) => {
         if ( !slot.max || (slot.level < minimumLevel) || (slot.level > maximumLevel) || !slot.type ) return null;
         if ( spellMethod?.exclusive.spells && (this.item.system.method !== slot.type) ) return null;
-        const model = CONFIG.DND5E.spellcasting[slot.type];
+        const model = CONFIG.VARLYN5E.spellcasting[slot.type];
         if ( model?.exclusive.slots && (this.item.system.method !== slot.type) ) return null;
-        const label = _loc(`DND5E.SpellLevel${slot.type.capitalize()}`, {
+        const label = _loc(`VARLYN5E.SpellLevel${slot.type.capitalize()}`, {
           level: model?.isSingleLevel ? slot.level : slot.label,
           n: slot.value
         });
@@ -6268,14 +6268,14 @@ class ActivityUsageDialog extends Dialog5e {
       }).filter(_ => _);
 
       context.spellSlots = {
-        field: new StringField$1h({ required: true, blank: false, label: _loc("DND5E.SpellCastUpcast") }),
+        field: new StringField$1h({ required: true, blank: false, label: _loc("VARLYN5E.SpellCastUpcast") }),
         name: "spell.slot",
         value: spellSlotValue,
         options: spellSlotOptions
       };
 
       if ( !spellSlotOptions.some(o => !o.disabled) ) context.notes.push({
-        type: "warn", message: _loc("DND5E.SpellCastNoSlotsLeft", {
+        type: "warn", message: _loc("VARLYN5E.SpellCastNoSlotsLeft", {
           name: this.item.name
         })
       });
@@ -6284,7 +6284,7 @@ class ActivityUsageDialog extends Dialog5e {
     else if ( scale.allowed && (this.config.scaling !== false) ) {
       const max = scale.max ? simplifyBonus(scale.max, rollData) : Infinity;
       if ( max > 1 ) context.scaling = {
-        field: new NumberField$K({ min: 1, max, label: _loc("DND5E.ScalingValue") }),
+        field: new NumberField$K({ min: 1, max, label: _loc("VARLYN5E.ScalingValue") }),
         name: "scalingValue",
         // Config stores the scaling increase, but scaling value (increase + 1) is easier to understand in the UI
         value: Math.clamp((this.config.scaling ?? 0) + 1, 1, max),
@@ -7012,8 +7012,8 @@ class CreateDocumentDialog extends Dialog5e {
    * @param {FormDataExtended} formData  Data from the dialog.
    */
   static async #handleFormSubmission(event, form, formData) {
-    if ( !form.checkValidity() ) throw new Error(_loc("DOCUMENT.DND5E.Warning.SelectType", {
-      name: _loc(this.documentType.metadata.label ?? `DOCUMENT.DND5E.${this.documentType.documentName}`)
+    if ( !form.checkValidity() ) throw new Error(_loc("DOCUMENT.VARLYN5E.Warning.SelectType", {
+      name: _loc(this.documentType.metadata.label ?? `DOCUMENT.VARLYN5E.${this.documentType.documentName}`)
     }));
     foundry.utils.mergeObject(this.options.createData, formData.object);
     this.#submitted = true;
@@ -7038,7 +7038,7 @@ class CreateDocumentDialog extends Dialog5e {
    * @returns {Promise<Document>}
    */
   static async prompt(documentType, data={}, { folders, types, ...createOptions }={}, { ok={}, sheet, ...config }={}) {
-    const label = _loc(documentType.metadata.label ?? `DOCUMENT.DND5E.${documentType.documentName}`);
+    const label = _loc(documentType.metadata.label ?? `DOCUMENT.VARLYN5E.${documentType.documentName}`);
     const title = _loc("DOCUMENT.Create", { type: label });
 
     foundry.utils.mergeObject(config, {
@@ -7156,7 +7156,7 @@ function PseudoDocumentMixin(Base) {
      * @type {object}
      */
     static get documentConfig() {
-      return CONFIG.DND5E[`${this.documentName.toLowerCase()}Types`];
+      return CONFIG.VARLYN5E[`${this.documentName.toLowerCase()}Types`];
     }
 
     get documentConfig() {
@@ -7455,7 +7455,7 @@ function ActivityMixin(Base) {
      */
     static metadata = Object.freeze({
       name: "Activity",
-      label: "DOCUMENT.DND5E.Activity",
+      label: "DOCUMENT.VARLYN5E.Activity",
       sheetClass: ActivitySheet,
       usage: {
         actions: {},
@@ -7473,12 +7473,12 @@ function ActivityMixin(Base) {
       foundry.helpers.Localization.localizeDataModel(this);
       const fields = this.schema.fields;
       if ( fields.damage?.fields.parts ) {
-        localizeSchema(fields.damage.fields.parts.element, ["DND5E.DAMAGE.FIELDS.damage.parts"]);
+        localizeSchema(fields.damage.fields.parts.element, ["VARLYN5E.DAMAGE.FIELDS.damage.parts"]);
       }
       if ( fields.consumption ) {
-        localizeSchema(fields.consumption.fields.targets.element, ["DND5E.CONSUMPTION.FIELDS.consumption.targets"]);
+        localizeSchema(fields.consumption.fields.targets.element, ["VARLYN5E.CONSUMPTION.FIELDS.consumption.targets"]);
       }
-      if ( fields.uses ) localizeSchema(fields.uses.fields.recovery.element, ["DND5E.USES.FIELDS.uses.recovery"]);
+      if ( fields.uses ) localizeSchema(fields.uses.fields.recovery.element, ["VARLYN5E.USES.FIELDS.uses.recovery"]);
     }
 
     /* -------------------------------------------- */
@@ -7503,7 +7503,7 @@ function ActivityMixin(Base) {
      * @type {boolean}
      */
     get canConfigure() {
-      if ( CONFIG.DND5E.activityTypes[this.type]?.configurable === false ) return false;
+      if ( CONFIG.VARLYN5E.activityTypes[this.type]?.configurable === false ) return false;
       if ( this.visibility?.requireIdentification && !this.item.system.identified && !game.user.isGM ) return false;
       if ( this.dependentOrigin?.active === false ) return false;
       return true;
@@ -7535,7 +7535,7 @@ function ActivityMixin(Base) {
      * @type {string}
      */
     get damageFlavor() {
-      return _loc("DND5E.DamageRoll");
+      return _loc("VARLYN5E.DamageRoll");
     }
 
     /* -------------------------------------------- */
@@ -7579,7 +7579,7 @@ function ActivityMixin(Base) {
      * @type {Set<string>}
      */
     get validConsumptionTypes() {
-      const types = new Set(Object.keys(CONFIG.DND5E.activityConsumptionTypes));
+      const types = new Set(Object.keys(CONFIG.VARLYN5E.activityConsumptionTypes));
       if ( this.isSpell ) types.delete("spellSlots");
       return types;
     }
@@ -7598,11 +7598,11 @@ function ActivityMixin(Base) {
     async use(usage={}, dialog={}, message={}) {
       if ( !this.item.isEmbedded ) return;
       if ( !this.item.isOwner ) {
-        ui.notifications.error("DND5E.DocumentUseWarn");
+        ui.notifications.error("VARLYN5E.DocumentUseWarn");
         return;
       }
       if ( !this.canUse ) {
-        ui.notifications.error("DND5E.ACTIVITY.Warning.UsageNotAllowed");
+        ui.notifications.error("VARLYN5E.ACTIVITY.Warning.UsageNotAllowed");
         return;
       }
 
@@ -7845,7 +7845,7 @@ function ActivityMixin(Base) {
 
       const ignoreLinkedConsumption = this.isSpell && !this.consumption.spellSlot;
       if ( config.consume !== false ) {
-        const activationConfig = CONFIG.DND5E.activityActivationTypes[this.activation.type] ?? {};
+        const activationConfig = CONFIG.VARLYN5E.activityActivationTypes[this.activation.type] ?? {};
         const hasActionConsumption = activationConfig.consume
           && (activationConfig.consume.canConsume?.(this) !== false);
         const hasResourceConsumption = !!this.consumption.targets.find(c => !c.hasZeroCost(config));
@@ -7877,7 +7877,7 @@ function ActivityMixin(Base) {
 
         if ( this.requiresSpellSlot ) {
           const { level, method } = this.item.system;
-          const model = CONFIG.DND5E.spellcasting[method];
+          const model = CONFIG.VARLYN5E.spellcasting[method];
           config.spell ??= {};
           config.spell.slot ??= linked?.spell?.level
             ? `spell${linked.spell.level}`
@@ -7957,7 +7957,7 @@ function ActivityMixin(Base) {
       const errors = [];
 
       // Handle auto consumption.
-      const activationConfig = CONFIG.DND5E.activityActivationTypes[this.activation.type];
+      const activationConfig = CONFIG.VARLYN5E.activityActivationTypes[this.activation.type];
       if ( ((config.consume === true) || config.consume.action) && activationConfig?.consume ) {
         const { property } = activationConfig.consume;
         const valueProperty = `${property}.value`;
@@ -7968,8 +7968,8 @@ function ActivityMixin(Base) {
         const current = foundry.utils.getProperty(this.actor.system, property);
         if ( current && !containsConsumption ) {
           let message;
-          if ( current.value < 1 ) message = "DND5E.ACTIVATION.Warning.NoActions";
-          else if ( count > current.value ) message = "DND5E.ACTIVATION.Warning.NotEnoughActions";
+          if ( current.value < 1 ) message = "VARLYN5E.ACTIVATION.Warning.NoActions";
+          else if ( count > current.value ) message = "VARLYN5E.ACTIVATION.Warning.NotEnoughActions";
           if ( message ) {
             const err = new ConsumptionError(_loc(message, {
               type: activationConfig.label,
@@ -8032,7 +8032,7 @@ function ActivityMixin(Base) {
       // Handle spell slot consumption
       else if ( ((config.consume === true) || config.consume.spellSlot)
         && this.requiresSpellSlot && this.consumption.spellSlot ) {
-        const spellcasting = CONFIG.DND5E.spellcasting[this.item.system.method];
+        const spellcasting = CONFIG.VARLYN5E.spellcasting[this.item.system.method];
         const effectiveLevel = this.item.system.level + (config.scaling ?? 0);
         const slot = config.spell?.slot ?? spellcasting?.getSpellSlotKey(effectiveLevel) ?? this.item.system.method;
         const slotData = this.actor.system.spells?.[slot];
@@ -8041,7 +8041,7 @@ function ActivityMixin(Base) {
             const newValue = Math.max(slotData.value - 1, 0);
             foundry.utils.mergeObject(updates.actor, { [`system.spells.${slot}.value`]: newValue });
           } else {
-            const err = new ConsumptionError(_loc("DND5E.SpellCastNoSlots", {
+            const err = new ConsumptionError(_loc("VARLYN5E.SpellCastNoSlots", {
               name: this.item.name, level: slotData.label
             }));
             errors.push(err);
@@ -8056,13 +8056,13 @@ function ActivityMixin(Base) {
         if ( config.concentration.end ) {
           const replacedEffect = effects.find(i => i.id === config.concentration.end);
           if ( !replacedEffect ) errors.push(
-            new ConsumptionError(_loc("DND5E.ConcentratingMissingItem"))
+            new ConsumptionError(_loc("VARLYN5E.ConcentratingMissingItem"))
           );
         }
 
         // Cannot begin more concentrations than the limit
         else if ( effects.size >= this.actor.system.attributes?.concentration?.limit ) errors.push(
-          new ConsumptionError(_loc("DND5E.ConcentratingLimited"))
+          new ConsumptionError(_loc("VARLYN5E.ConcentratingLimited"))
         );
       }
 
@@ -8101,17 +8101,17 @@ function ActivityMixin(Base) {
       const properties = [...(data.tags ?? []), ...(data.properties ?? [])];
       const supplements = [];
       if ( this.activation.condition ) {
-        supplements.push(`<strong>${_loc("DND5E.Trigger")}</strong> ${this.activation.condition}`);
+        supplements.push(`<strong>${_loc("VARLYN5E.Trigger")}</strong> ${this.activation.condition}`);
       }
       if ( data.materials?.value ) {
-        supplements.push(`<strong>${_loc("DND5E.Materials")}</strong> ${data.materials.value}`);
+        supplements.push(`<strong>${_loc("VARLYN5E.Materials")}</strong> ${data.materials.value}`);
       }
       const buttons = this._usageChatButtons(message);
 
       // Include spell level in the subtitle.
       if ( this.item.type === "spell" ) {
         const spellLevel = foundry.utils.getProperty(message, "data.system.spellLevel");
-        const { spellLevels, spellSchools } = CONFIG.DND5E;
+        const { spellLevels, spellSchools } = CONFIG.VARLYN5E;
         data.subtitle = [spellLevels[spellLevel], spellSchools[this.item.system.school]?.label].filterJoin(" &bull; ");
       }
 
@@ -8155,7 +8155,7 @@ function ActivityMixin(Base) {
       const buttons = [];
 
       if ( this.target?.template?.type ) buttons.push({
-        label: _loc("DND5E.TARGET.Action.PlaceTemplate"),
+        label: _loc("VARLYN5E.TARGET.Action.PlaceTemplate"),
         icon: '<i class="fas fa-bullseye" inert></i>',
         dataset: {
           action: "placeTemplate"
@@ -8163,13 +8163,13 @@ function ActivityMixin(Base) {
       });
 
       if ( message.hasConsumption ) buttons.push({
-        label: _loc("DND5E.CONSUMPTION.Action.ConsumeResource"),
+        label: _loc("VARLYN5E.CONSUMPTION.Action.ConsumeResource"),
         icon: '<i class="fa-solid fa-cubes-stacked" inert></i>',
         dataset: {
           action: "consumeResource"
         }
       }, {
-        label: _loc("DND5E.CONSUMPTION.Action.RefundResource"),
+        label: _loc("VARLYN5E.CONSUMPTION.Action.RefundResource"),
         icon: '<i class="fa-solid fa-clock-rotate-left"></i>',
         dataset: {
           action: "refundResource"
@@ -8376,11 +8376,11 @@ function ActivityMixin(Base) {
 
       if ( this.item.isOwner && !compendiumLocked ) {
         entries.push({
-          label: "DND5E.ContextMenuActionEdit",
+          label: "VARLYN5E.ContextMenuActionEdit",
           icon: '<i class="fas fa-pen-to-square fa-fw"></i>',
           onClick: () => this.item.sheet._renderChild(this.sheet)
         }, {
-          label: "DND5E.ContextMenuActionDuplicate",
+          label: "VARLYN5E.ContextMenuActionDuplicate",
           icon: '<i class="fas fa-copy fa-fw"></i>',
           onClick: () => {
             const createData = this.toObject();
@@ -8388,13 +8388,13 @@ function ActivityMixin(Base) {
             this.item.createActivity(createData.type, createData, { renderSheet: false });
           }
         }, {
-          label: "DND5E.ContextMenuActionDelete",
+          label: "VARLYN5E.ContextMenuActionDelete",
           icon: '<i class="fas fa-trash fa-fw"></i>',
           onClick: () => this.deleteDialog({ sheet: this.item.sheet })
         });
       } else {
         entries.push({
-          label: "DND5E.ContextMenuActionView",
+          label: "VARLYN5E.ContextMenuActionView",
           icon: '<i class="fas fa-eye fa-fw"></i>',
           onClick: () => this.item.sheet._renderChild(this.sheet)
         });
@@ -8404,7 +8404,7 @@ function ActivityMixin(Base) {
         const uuid = `${foundry.utils.buildRelativeUuid(this.item, this.actor)}.Activity.${this.id}`;
         const isFavorited = this.actor.system.hasFavorite(uuid);
         entries.push({
-          label: isFavorited ? "DND5E.FavoriteRemove" : "DND5E.Favorite",
+          label: isFavorited ? "VARLYN5E.FavoriteRemove" : "VARLYN5E.Favorite",
           icon: '<i class="fas fa-bookmark fa-fw"></i>',
           group: "state",
           visible: () => this.item.isOwner && !compendiumLocked,
@@ -8537,7 +8537,7 @@ function ActivityMixin(Base) {
         }
       } catch(err) {
         Hooks.onError("Activity#placeTemplate", err, {
-          msg: _loc("DND5E.TARGET.Warning.PlaceTemplate"),
+          msg: _loc("VARLYN5E.TARGET.Warning.PlaceTemplate"),
           log: "error",
           notify: "error"
         });
@@ -8656,7 +8656,7 @@ function ActivityMixin(Base) {
 
     /** @override */
     static _createDialogTypes(parent) {
-      return Object.entries(CONFIG.DND5E.activityTypes)
+      return Object.entries(CONFIG.VARLYN5E.activityTypes)
         .filter(([, c]) => (c.configurable !== false) && c.documentClass.availableForItem(parent))
         .map(([k]) => k);
     }
@@ -8709,21 +8709,21 @@ class AttackSheet extends ActivitySheet {
     const availableAbilities = this.activity.availableAbilities;
     context.abilityOptions = [
       {
-        value: "", label: _loc("DND5E.DefaultSpecific", {
+        value: "", label: _loc("VARLYN5E.DefaultSpecific", {
           default: this.activity.attack.type.classification === "spell"
-            ? _loc("DND5E.Spellcasting").toLowerCase()
+            ? _loc("VARLYN5E.Spellcasting").toLowerCase()
             : availableAbilities.size
               ? game.i18n.getListFormatter({ style: "short", type: "disjunction" }).format(
-                Array.from(availableAbilities).map(a => CONFIG.DND5E.abilities[a].label.toLowerCase())
+                Array.from(availableAbilities).map(a => CONFIG.VARLYN5E.abilities[a].label.toLowerCase())
               )
-              : _loc("DND5E.None").toLowerCase()
+              : _loc("VARLYN5E.None").toLowerCase()
         })
       },
       { rule: true },
-      { value: "none", label: _loc("DND5E.None") },
-      { value: "spellcasting", label: _loc("DND5E.Spellcasting") },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, config]) => ({
-        value, label: config.label, group: _loc("DND5E.Abilities")
+      { value: "none", label: _loc("VARLYN5E.None") },
+      { value: "spellcasting", label: _loc("VARLYN5E.Spellcasting") },
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, config]) => ({
+        value, label: config.label, group: _loc("VARLYN5E.Abilities")
       }))
     ];
 
@@ -8738,23 +8738,23 @@ class AttackSheet extends ActivitySheet {
   async _prepareIdentityContext(context, options) {
     context = await super._prepareIdentityContext(context, options);
 
-    context.attackTypeOptions = Object.entries(CONFIG.DND5E.attackTypes)
+    context.attackTypeOptions = Object.entries(CONFIG.VARLYN5E.attackTypes)
       .map(([value, config]) => ({ value, label: config.label }));
     if ( this.item.system.validAttackTypes?.size ) context.attackTypeOptions.unshift({
       value: "",
-      label: _loc("DND5E.DefaultSpecific", {
+      label: _loc("VARLYN5E.DefaultSpecific", {
         default: game.i18n.getListFormatter({ type: "disjunction" }).format(
-          Array.from(this.item.system.validAttackTypes).map(t => CONFIG.DND5E.attackTypes[t].label.toLowerCase())
+          Array.from(this.item.system.validAttackTypes).map(t => CONFIG.VARLYN5E.attackTypes[t].label.toLowerCase())
         )
       })
     });
 
-    context.attackClassificationOptions = Object.entries(CONFIG.DND5E.attackClassifications)
+    context.attackClassificationOptions = Object.entries(CONFIG.VARLYN5E.attackClassifications)
       .map(([value, config]) => ({ value, label: config.label }));
     if ( this.item.system.attackClassification ) context.attackClassificationOptions.unshift({
       value: "",
-      label: _loc("DND5E.DefaultSpecific", {
-        default: CONFIG.DND5E.attackClassifications[this.item.system.attackClassification].label.toLowerCase()
+      label: _loc("VARLYN5E.DefaultSpecific", {
+        default: CONFIG.VARLYN5E.attackClassifications[this.item.system.attackClassification].label.toLowerCase()
       })
     });
 
@@ -8794,7 +8794,7 @@ class RollConfigurationDialog extends Dialog5e {
   static DEFAULT_OPTIONS = {
     classes: ["roll-configuration"],
     window: {
-      title: "DND5E.RollConfiguration.Title",
+      title: "VARLYN5E.RollConfiguration.Title",
       icon: "fa-solid fa-dice"
     },
     form: {
@@ -8974,7 +8974,7 @@ class RollConfigurationDialog extends Dialog5e {
       roll: {
         default: true,
         icon: '<i class="fa-solid fa-dice" inert></i>',
-        label: _loc("DND5E.Roll")
+        label: _loc("VARLYN5E.Roll")
       }
     };
     return context;
@@ -8992,7 +8992,7 @@ class RollConfigurationDialog extends Dialog5e {
   async _prepareConfigurationContext(context, options) {
     context.fields = [{
       field: new foundry.data.fields.StringField({
-        label: _loc("DND5E.RollMode"), blank: false, required: true
+        label: _loc("VARLYN5E.RollMode"), blank: false, required: true
       }),
       name: "rollMode",
       value: this.message.rollMode ?? this.options.default?.rollMode ?? CONFIG.Dice.BasicRoll.getMessageMode(),
@@ -9229,15 +9229,15 @@ class D20RollConfigurationDialog extends RollConfigurationDialog {
     context.buttons = {
       advantage: {
         default: defaultButton === "advantage",
-        label: _loc("DND5E.Advantage")
+        label: _loc("VARLYN5E.Advantage")
       },
       normal: {
         default: !["advantage", "disadvantage"].includes(defaultButton),
-        label: _loc("DND5E.Normal")
+        label: _loc("VARLYN5E.Normal")
       },
       disadvantage: {
         default: defaultButton === "disadvantage",
-        label: _loc("DND5E.Disadvantage")
+        label: _loc("VARLYN5E.Disadvantage")
       }
     };
     return context;
@@ -9284,9 +9284,9 @@ class AttackRollConfigurationDialog extends D20RollConfigurationDialog {
   async _prepareConfigurationContext(context, options) {
     context = await super._prepareConfigurationContext(context, options);
     const optionsFields = [
-      { key: "attackMode", label: "DND5E.ATTACK.Mode.Label", options: this.options.attackModeOptions },
-      { key: "ammunition", label: "DND5E.CONSUMABLE.Type.Ammunition.Label", options: this.options.ammunitionOptions },
-      { key: "mastery", label: "DND5E.WEAPON.Mastery.Label", options: this.options.masteryOptions }
+      { key: "attackMode", label: "VARLYN5E.ATTACK.Mode.Label", options: this.options.attackModeOptions },
+      { key: "ammunition", label: "VARLYN5E.CONSUMABLE.Type.Ammunition.Label", options: this.options.ammunitionOptions },
+      { key: "mastery", label: "VARLYN5E.WEAPON.Mastery.Label", options: this.options.masteryOptions }
     ];
     context.fields = [
       ...optionsFields.map(({ key, label, options }) => options.length ? {
@@ -9461,9 +9461,9 @@ class DamageData extends foundry.abstract.DataModel {
    * @returns {number|null}
    */
   steppedDenomination(steps=1) {
-    return CONFIG.DND5E.dieSteps[Math.min(
-      CONFIG.DND5E.dieSteps.indexOf(this.denomination) + steps,
-      CONFIG.DND5E.dieSteps.length - 1
+    return CONFIG.VARLYN5E.dieSteps[Math.min(
+      CONFIG.VARLYN5E.dieSteps.indexOf(this.denomination) + steps,
+      CONFIG.VARLYN5E.dieSteps.length - 1
     )] ?? null;
   }
 }
@@ -9518,7 +9518,7 @@ function chunkTerms(terms, type) {
     currentChunk = null;
     negative = false;
   };
-  const isValidType = t => ((t in CONFIG.DND5E.damageTypes) || (t in CONFIG.DND5E.healingTypes));
+  const isValidType = t => ((t in CONFIG.VARLYN5E.damageTypes) || (t in CONFIG.VARLYN5E.healingTypes));
   const chunks = [];
   let currentChunk;
   let negative = false;
@@ -9562,7 +9562,7 @@ class IdentifierField extends foundry.data.fields.StringField {
   /** @override */
   _validateType(value) {
     if ( !varlyn5e.utils.validators.isValidIdentifier(value, { allowType: this.allowType }) ) {
-      throw new Error(_loc("DND5E.IdentifierError"));
+      throw new Error(_loc("VARLYN5E.IdentifierError"));
     }
   }
 }
@@ -9598,14 +9598,14 @@ class ActivationField extends SchemaField$U {
    * @param {object} [labels]                         Object in which to insert generated labels.
    */
   static prepareData(rollData, labels) {
-    const config = CONFIG.DND5E.activityActivationTypes[this.activation.type];
+    const config = CONFIG.VARLYN5E.activityActivationTypes[this.activation.type];
     this.activation.scalar = config?.scalar ?? false;
     if ( !this.activation.scalar ) this.activation.value = null;
 
     this.activation.labels ??= {};
     if ( this.activation.type ) {
       let scalar;
-      if ( this.activation.type in CONFIG.DND5E.timeUnits ) {
+      if ( this.activation.type in CONFIG.VARLYN5E.timeUnits ) {
         scalar = formatTime(this.activation.value ?? 1, this.activation.type);
       }
       else if ( config?.counted ) scalar = _loc(
@@ -9618,7 +9618,7 @@ class ActivationField extends SchemaField$U {
       this.activation.labels.legacy = scalar.toLowerCase();
       const formatter = game.i18n.getListFormatter({ type: "disjunction" });
       this.activation.labels.ritual = this.properties?.has?.("ritual")
-        ? formatter.format([this.activation.labels.simple, _loc("DND5E.Ritual")])
+        ? formatter.format([this.activation.labels.simple, _loc("VARLYN5E.Ritual")])
         : this.activation.labels.simple;
     }
 
@@ -9661,17 +9661,17 @@ class DurationField extends SchemaField$T {
    * @param {object} [labels]                         Object in which to insert generated labels.
    */
   static prepareData(rollData, labels) {
-    this.duration.scalar = this.duration.units in CONFIG.DND5E.scalarTimePeriods;
+    this.duration.scalar = this.duration.units in CONFIG.VARLYN5E.scalarTimePeriods;
     if ( this.duration.scalar ) {
-      prepareFormulaValue(this, "duration.value", "DND5E.DURATION.FIELDS.duration.value.label", rollData);
+      prepareFormulaValue(this, "duration.value", "VARLYN5E.DURATION.FIELDS.duration.value.label", rollData);
     } else this.duration.value = null;
 
     if ( labels && this.duration.units ) {
-      if ( this.duration.value && (this.duration.units in CONFIG.DND5E.timeUnits) ) {
+      if ( this.duration.value && (this.duration.units in CONFIG.VARLYN5E.timeUnits) ) {
         labels.duration = formatTime(this.duration.value, this.duration.units);
-      } else labels.duration = CONFIG.DND5E.timePeriods[this.duration.units] ?? "";
+      } else labels.duration = CONFIG.VARLYN5E.timePeriods[this.duration.units] ?? "";
       labels.concentrationDuration = this.duration.concentration || this.properties?.has("concentration")
-        ? _loc("DND5E.ConcentrationDuration", { duration: labels.duration }) : labels.duration;
+        ? _loc("VARLYN5E.ConcentrationDuration", { duration: labels.duration }) : labels.duration;
     }
 
     Object.defineProperty(this.duration, "getEffectData", {
@@ -9735,9 +9735,9 @@ class RangeField extends SchemaField$S {
    * @param {object} [labels]                         Object in which to insert generated labels.
    */
   static prepareData(rollData, labels) {
-    this.range.scalar = this.range.units in CONFIG.DND5E.movementUnits;
+    this.range.scalar = this.range.units in CONFIG.VARLYN5E.movementUnits;
     if ( this.range.scalar ) {
-      prepareFormulaValue(this, "range.value", "DND5E.RANGE.FIELDS.range.value.label", rollData);
+      prepareFormulaValue(this, "range.value", "VARLYN5E.RANGE.FIELDS.range.value.label", rollData);
     } else this.range.value = null;
 
     this.range.labels ??= {};
@@ -9747,9 +9747,9 @@ class RangeField extends SchemaField$S {
         this.range.labels.rangeParts = formatLength(this.range.value, this.range.units, { parts: true });
         this.range.labels.description = formatLength(this.range.value, this.range.units, { unitDisplay: "long" });
       } else if ( !this.range.scalar ) {
-        this.range.labels.range = CONFIG.DND5E.distanceUnits[this.range.units];
+        this.range.labels.range = CONFIG.VARLYN5E.distanceUnits[this.range.units];
       }
-    } else this.range.labels.range = _loc("DND5E.DistSelf");
+    } else this.range.labels.range = _loc("VARLYN5E.DistSelf");
 
     if ( labels ) {
       labels.description ??= {};
@@ -9805,9 +9805,9 @@ class TargetField extends SchemaField$R {
    */
   static prepareData(rollData, labels) {
     this.target.affects.scalar = this.target.affects.type
-      && (CONFIG.DND5E.individualTargetTypes[this.target.affects.type]?.scalar !== false);
+      && (CONFIG.VARLYN5E.individualTargetTypes[this.target.affects.type]?.scalar !== false);
     if ( this.target.affects.scalar ) {
-      prepareFormulaValue(this, "target.affects.count", "DND5E.TARGET.FIELDS.target.affects.count.label", rollData);
+      prepareFormulaValue(this, "target.affects.count", "VARLYN5E.TARGET.FIELDS.target.affects.count.label", rollData);
     } else this.target.affects.count = null;
 
     const dimensions = this.target.template.dimensions = TargetField.templateDimensions(this.target.template.type);
@@ -9816,10 +9816,10 @@ class TargetField extends SchemaField$R {
       this.target.template.count ||= "1";
       if ( dimensions.width ) this.target.template.width ||= "5";
       if ( dimensions.height ) this.target.template.height ||= "5";
-      prepareFormulaValue(this, "target.template.count", "DND5E.TARGET.FIELDS.target.template.count.label", rollData);
-      prepareFormulaValue(this, "target.template.size", "DND5E.TARGET.FIELDS.target.template.size.label", rollData);
-      prepareFormulaValue(this, "target.template.width", "DND5E.TARGET.FIELDS.target.template.width.label", rollData);
-      prepareFormulaValue(this, "target.template.height", "DND5E.TARGET.FIELDS.target.template.height.label", rollData);
+      prepareFormulaValue(this, "target.template.count", "VARLYN5E.TARGET.FIELDS.target.template.count.label", rollData);
+      prepareFormulaValue(this, "target.template.size", "VARLYN5E.TARGET.FIELDS.target.template.size.label", rollData);
+      prepareFormulaValue(this, "target.template.width", "VARLYN5E.TARGET.FIELDS.target.template.width.label", rollData);
+      prepareFormulaValue(this, "target.template.height", "VARLYN5E.TARGET.FIELDS.target.template.height.label", rollData);
     } else {
       this.target.template.count = null;
       this.target.template.size = null;
@@ -9830,28 +9830,28 @@ class TargetField extends SchemaField$R {
     const pr = getPluralRules();
 
     // Generate the template labels
-    const templateConfig = CONFIG.DND5E.areaTargetTypes[this.target.template.type];
+    const templateConfig = CONFIG.VARLYN5E.areaTargetTypes[this.target.template.type];
     this.target.template.labels = {};
     if ( templateConfig ) {
       const parts = [];
       if ( this.target.template.count > 1 ) parts.push(`${this.target.template.count} ×`);
-      if ( this.target.template.units in CONFIG.DND5E.movementUnits ) {
+      if ( this.target.template.units in CONFIG.VARLYN5E.movementUnits ) {
         parts.push(formatLength(this.target.template.size, this.target.template.units));
       }
       this.target.template.labels.statblock = this.target.template.label = _loc(
         `${templateConfig.counted}.${pr.select(this.target.template.count || 1)}`, { number: parts.filterJoin(" ") }
       ).trim().capitalize();
 
-      const sizeUnit = CONFIG.DND5E.movementUnits[this.target.template.units]?.template ?? "";
+      const sizeUnit = CONFIG.VARLYN5E.movementUnits[this.target.template.units]?.template ?? "";
       if ( Object.keys(dimensions).length === 1 ) this.target.template.labels.size = _loc(
-        "DND5E.AreaOfEffect.Description.SizeSimple",
+        "VARLYN5E.AreaOfEffect.Description.SizeSimple",
         { number: formatNumber(this.target.template.size), unit: sizeUnit }
       );
       else this.target.template.labels.size = game.i18n.getListFormatter({ type: "unit" })
         .format(Object.entries(dimensions).map(([k, l]) =>
-          _loc("DND5E.AreaOfEffect.Description.SizeType", {
+          _loc("VARLYN5E.AreaOfEffect.Description.SizeType", {
             number: formatNumber(this.target.template[k]), unit: sizeUnit,
-            type: _loc(l.replace("DND5E.AreaOfEffect.Size.", "DND5E.AreaOfEffect.Description."))
+            type: _loc(l.replace("VARLYN5E.AreaOfEffect.Size.", "VARLYN5E.AreaOfEffect.Description."))
           })
         ));
 
@@ -9867,11 +9867,11 @@ class TargetField extends SchemaField$R {
     } else this.target.template.label = "";
 
     // Generate the affects labels
-    const affectsConfig = CONFIG.DND5E.individualTargetTypes[this.target.affects.type];
+    const affectsConfig = CONFIG.VARLYN5E.individualTargetTypes[this.target.affects.type];
     this.target.affects.labels = {
       description: _loc(
-        `${this.target.affects.special ? "DND5E.TARGET.Type.Special.Counted"
-          : affectsConfig?.counted ?? "DND5E.TARGET.Type.Target.Counted"}.${this.target.affects.count
+        `${this.target.affects.special ? "VARLYN5E.TARGET.Type.Special.Counted"
+          : affectsConfig?.counted ?? "VARLYN5E.TARGET.Type.Target.Counted"}.${this.target.affects.count
           ? pr.select(this.target.affects.count) : this.target.template.type ? "each" : "any"}`,
         {
           number: formatNumber(this.target.affects.count, { words: true }),
@@ -9881,11 +9881,11 @@ class TargetField extends SchemaField$R {
       sheet: affectsConfig?.counted ? _loc(
         `${affectsConfig.counted}.${this.target.affects.count ? pr.select(this.target.affects.count) : "other"}`, {
           number: this.target.affects.count ? formatNumber(this.target.affects.count)
-            : _loc(`DND5E.TARGET.Count.${this.target.template.type ? "Every" : "Any"}`)
+            : _loc(`VARLYN5E.TARGET.Count.${this.target.template.type ? "Every" : "Any"}`)
         }
       ).trim().capitalize() : (affectsConfig?.label ?? ""),
       statblock: _loc(
-        `${affectsConfig?.counted ?? "DND5E.TARGET.Type.Target.Counted"}.${pr.select(this.target.affects.count || 1)}`,
+        `${affectsConfig?.counted ?? "VARLYN5E.TARGET.Type.Target.Counted"}.${pr.select(this.target.affects.count || 1)}`,
         { number: formatNumber(this.target.affects.count || 1, { words: true }) }
       )
     };
@@ -9908,16 +9908,16 @@ class TargetField extends SchemaField$R {
    * @returns {{ size: string, [width]: string, [height]: string }}
    */
   static templateDimensions(type) {
-    const sizes = CONFIG.DND5E.areaTargetTypes[type]?.sizes;
-    const dimensions = { size: "DND5E.AreaOfEffect.Size.Label" };
+    const sizes = CONFIG.VARLYN5E.areaTargetTypes[type]?.sizes;
+    const dimensions = { size: "VARLYN5E.AreaOfEffect.Size.Label" };
     if ( sizes ) {
-      if ( sizes.includes("radius") ) dimensions.size = "DND5E.AreaOfEffect.Size.Radius";
-      else if ( sizes.includes("length") ) dimensions.size = "DND5E.AreaOfEffect.Size.Length";
-      else if ( sizes.includes("width") ) dimensions.size = "DND5E.AreaOfEffect.Size.Width";
+      if ( sizes.includes("radius") ) dimensions.size = "VARLYN5E.AreaOfEffect.Size.Radius";
+      else if ( sizes.includes("length") ) dimensions.size = "VARLYN5E.AreaOfEffect.Size.Length";
+      else if ( sizes.includes("width") ) dimensions.size = "VARLYN5E.AreaOfEffect.Size.Width";
       const hasWidth = sizes.includes("width") && (sizes.includes("length") || sizes.includes("radius"));
-      if ( sizes.includes("thickness") ) dimensions.width = "DND5E.AreaOfEffect.Size.Thickness";
-      else if ( hasWidth ) dimensions.width = "DND5E.AreaOfEffect.Size.Width";
-      if ( sizes.includes("height") ) dimensions.height = "DND5E.AreaOfEffect.Size.Height";
+      if ( sizes.includes("thickness") ) dimensions.width = "VARLYN5E.AreaOfEffect.Size.Thickness";
+      else if ( hasWidth ) dimensions.width = "VARLYN5E.AreaOfEffect.Size.Width";
+      if ( sizes.includes("height") ) dimensions.height = "VARLYN5E.AreaOfEffect.Size.Height";
     }
     return dimensions;
   }
@@ -9982,8 +9982,8 @@ class BaseActivityData extends foundry.abstract.DataModel {
 
   /** @override */
   static LOCALIZATION_PREFIXES = [
-    "DND5E.ACTIVITY", "DND5E.ACTIVATION", "DND5E.CONSUMPTION",
-    "DND5E.DURATION", "DND5E.RANGE", "DND5E.TARGET", "DND5E.USES"
+    "VARLYN5E.ACTIVITY", "VARLYN5E.ACTIVATION", "VARLYN5E.CONSUMPTION",
+    "VARLYN5E.DURATION", "VARLYN5E.RANGE", "VARLYN5E.TARGET", "VARLYN5E.USES"
   ];
 
   /* -------------------------------------------- */
@@ -10326,7 +10326,7 @@ class BaseActivityData extends foundry.abstract.DataModel {
     };
 
     const parsed = (formula ?? "").match(/^\s*(\d+)d(\d+)(?:\s*([+|-])\s*(@?[\w\d.-]+))?\s*$/i);
-    if ( parsed && CONFIG.DND5E.dieSteps.includes(Number(parsed[2])) ) {
+    if ( parsed && CONFIG.VARLYN5E.dieSteps.includes(Number(parsed[2])) ) {
       data.number = Number(parsed[1]);
       data.denomination = Number(parsed[2]);
       if ( parsed[4] ) data.bonus = parsed[3] === "-" ? `-${parsed[4]}` : parsed[4];
@@ -10441,7 +10441,7 @@ class BaseActivityData extends foundry.abstract.DataModel {
       prompt: source.system.target?.prompt ?? true
     };
 
-    if ( source.system.target?.type in CONFIG.DND5E.areaTargetTypes ) foundry.utils.mergeObject(data, {
+    if ( source.system.target?.type in CONFIG.VARLYN5E.areaTargetTypes ) foundry.utils.mergeObject(data, {
       template: {
         type: source.system.target?.type ?? "",
         size: source.system.target?.value ?? "",
@@ -10568,7 +10568,7 @@ class BaseActivityData extends foundry.abstract.DataModel {
 
       // If targeted item isn't found, display preparation warning
       if ( !actor.items.has(target.target) ) {
-        const message = _loc("DND5E.CONSUMPTION.Warning.MissingItem", {
+        const message = _loc("VARLYN5E.CONSUMPTION.Warning.MissingItem", {
           activity: this.name, item: this.item.name
         });
         actor._preparationWarnings.push({ message, link: this.uuid, type: "warning" });
@@ -10610,7 +10610,7 @@ class BaseActivityData extends foundry.abstract.DataModel {
       const types = roll.options.types ?? (roll.options.type ? [roll.options.type] : []);
       if ( types.length ) {
         label = `${formula} ${game.i18n.getListFormatter({ type: "conjunction" }).format(
-          types.map(p => CONFIG.DND5E.damageTypes[p]?.label ?? CONFIG.DND5E.healingTypes[p]?.label).filter(_ => _)
+          types.map(p => CONFIG.VARLYN5E.damageTypes[p]?.label ?? CONFIG.VARLYN5E.healingTypes[p]?.label).filter(_ => _)
         )}`;
       }
 
@@ -10722,7 +10722,7 @@ class BaseActivityData extends foundry.abstract.DataModel {
         type: (damage.types.has(lastType) ? lastType : null) ?? damage.types.first(),
         types: Array.from(damage.types),
         properties: Array.from(this.item.system.properties ?? [])
-          .filter(p => CONFIG.DND5E.itemProperties[p]?.isPhysical)
+          .filter(p => CONFIG.VARLYN5E.itemProperties[p]?.isPhysical)
       }
     };
   }
@@ -10823,7 +10823,7 @@ class BaseAttackActivityData extends BaseActivityData {
   get ability() {
     if ( this.attack.ability === "none" ) return null;
     if ( this.attack.ability === "spellcasting" ) return this.spellcastingAbility;
-    if ( this.attack.ability in CONFIG.DND5E.abilities ) return this.attack.ability;
+    if ( this.attack.ability in CONFIG.VARLYN5E.abilities ) return this.attack.ability;
 
     const availableAbilities = this.availableAbilities;
     if ( !availableAbilities?.size ) return null;
@@ -10881,8 +10881,8 @@ class BaseAttackActivityData extends BaseActivityData {
     );
 
     // Weapon & unarmed attacks uses melee or ranged ability depending on type, or both if actor is an NPC
-    const melee = CONFIG.DND5E.defaultAbilities.meleeAttack;
-    const ranged = CONFIG.DND5E.defaultAbilities.rangedAttack;
+    const melee = CONFIG.VARLYN5E.defaultAbilities.meleeAttack;
+    const ranged = CONFIG.VARLYN5E.defaultAbilities.rangedAttack;
     return new Set([this.attack.type.value === "melee" ? melee : ranged]);
   }
 
@@ -10999,21 +10999,21 @@ class BaseAttackActivityData extends BaseActivityData {
     let attackModeLabel;
     if ( attackMode ) {
       const key = attackMode.split("-").map(s => s.capitalize()).join("");
-      attackModeLabel = _loc(`DND5E.ATTACK.Mode.${key}`);
+      attackModeLabel = _loc(`VARLYN5E.ATTACK.Mode.${key}`);
     }
     const actionType = this.getActionType(attackMode);
-    let actionTypeLabel = _loc(`DND5E.Action${actionType.toUpperCase()}`);
+    let actionTypeLabel = _loc(`VARLYN5E.Action${actionType.toUpperCase()}`);
     const isLegacy = varlyn5e.settings.rulesVersion === "legacy";
     const isUnarmed = this.attack.type.classification === "unarmed";
-    if ( isUnarmed ) attackModeLabel = _loc("DND5E.ATTACK.Classification.Unarmed");
+    if ( isUnarmed ) attackModeLabel = _loc("VARLYN5E.ATTACK.Classification.Unarmed");
     const isSpell = (actionType === "rsak") || (actionType === "msak");
     if ( isLegacy || isSpell ) return [actionTypeLabel, attackModeLabel].filterJoin(" • ");
-    actionTypeLabel = _loc(`DND5E.ATTACK.Attack.${actionType}`);
+    actionTypeLabel = _loc(`VARLYN5E.ATTACK.Attack.${actionType}`);
     if ( isUnarmed ) return [actionTypeLabel, attackModeLabel].filterJoin(" • ");
-    const weaponType = CONFIG.DND5E.weaponTypeMap[this.item.system.type?.value];
+    const weaponType = CONFIG.VARLYN5E.weaponTypeMap[this.item.system.type?.value];
     const weaponTypeLabel = weaponType
-      ? _loc(`DND5E.ATTACK.Weapon.${weaponType.capitalize()}`)
-      : CONFIG.DND5E.weaponTypes[this.item.system.type?.value];
+      ? _loc(`VARLYN5E.ATTACK.Weapon.${weaponType.capitalize()}`)
+      : CONFIG.VARLYN5E.weaponTypes[this.item.system.type?.value];
     return [actionTypeLabel, weaponTypeLabel, attackModeLabel].filterJoin(" • ");
   }
 
@@ -11062,7 +11062,7 @@ class BaseAttackActivityData extends BaseActivityData {
     // Handle ammunition
     const ammo = config.ammunition?.system;
     if ( ammo ) {
-      const properties = Array.from(ammo.properties).filter(p => CONFIG.DND5E.itemProperties[p]?.isPhysical);
+      const properties = Array.from(ammo.properties).filter(p => CONFIG.VARLYN5E.itemProperties[p]?.isPhysical);
       if ( this.item.system.properties?.has("mgc") && !properties.includes("mgc") ) properties.push("mgc");
 
       // Add any new physical properties from the ammunition to the damage properties
@@ -11116,7 +11116,7 @@ class BaseAttackActivityData extends BaseActivityData {
     if ( this.validAttackTypes.has("melee") ) {
       let { reach, units } = this.item.system.range;
       if ( !reach ) reach = convertLength(5, "ft", units);
-      parts.push(_loc("DND5E.RANGE.Formatted.Reach", {
+      parts.push(_loc("VARLYN5E.RANGE.Formatted.Reach", {
         reach: formatLength(reach, units, { strict: false })
       }));
     }
@@ -11130,7 +11130,7 @@ class BaseAttackActivityData extends BaseActivityData {
         range = !long || (long === value) ? formatLength(value, units)
           : `${formatNumber(value)}/${formatLength(long, units)}`;
       }
-      if ( range ) parts.push(_loc("DND5E.RANGE.Formatted.Range", { range }));
+      if ( range ) parts.push(_loc("VARLYN5E.RANGE.Formatted.Range", { range }));
     }
 
     return game.i18n.getListFormatter({ type: "disjunction" }).format(parts.filter(_ => _));
@@ -11203,7 +11203,7 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.ATTACK"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.ATTACK"];
 
   /* -------------------------------------------- */
 
@@ -11212,8 +11212,8 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "attack",
       img: "systems/dnd5e/icons/svg/activity/attack.svg",
-      title: "DND5E.ATTACK.Title.one",
-      hint: "DND5E.ATTACK.Hint",
+      title: "VARLYN5E.ATTACK.Title.one",
+      hint: "VARLYN5E.ATTACK.Hint",
       sheetClass: AttackSheet,
       usage: {
         actions: {
@@ -11231,14 +11231,14 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
   /** @override */
   _usageChatButtons(message) {
     const buttons = [{
-      label: _loc("DND5E.Attack"),
+      label: _loc("VARLYN5E.Attack"),
       icon: '<i class="dnd5e-icon" data-src="systems/dnd5e/icons/svg/trait-weapon-proficiencies.svg" inert></i>',
       dataset: {
         action: "rollAttack"
       }
     }];
     if ( this.damage.parts.length || this.item.system.properties?.has("amm") ) buttons.push({
-      label: _loc("DND5E.Damage"),
+      label: _loc("VARLYN5E.Damage"),
       icon: '<i class="fa-solid fa-burst" inert></i>',
       dataset: {
         action: "rollDamage"
@@ -11269,7 +11269,7 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
     const targets = getTargetDescriptors();
 
     if ( (this.item.type === "weapon") && (this.item.system.quantity === 0) ) {
-      ui.notifications.warn("DND5E.ATTACK.Warning.NoQuantity");
+      ui.notifications.warn("VARLYN5E.ATTACK.Warning.NoQuantity");
     }
 
     const buildConfig = this._buildAttackConfig.bind(this);
@@ -11278,7 +11278,7 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
       ammunition: this.item.getFlag("dnd5e", `last.${this.id}.ammunition`),
       attackMode: this.item.getFlag("dnd5e", `last.${this.id}.attackMode`),
       elvenAccuracy: this.actor?.getFlag("dnd5e", "elvenAccuracy")
-        && CONFIG.DND5E.characterFlags.elvenAccuracy.abilities.includes(this.ability),
+        && CONFIG.VARLYN5E.characterFlags.elvenAccuracy.abilities.includes(this.ability),
       halflingLucky: this.actor?.getFlag("dnd5e", "halflingLucky"),
       mastery: this.item.getFlag("dnd5e", `last.${this.id}.mastery`),
       target: targets.length === 1 ? targets[0].ac : undefined
@@ -11322,7 +11322,7 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
           left: window.innerWidth - 710
         },
         window: {
-          title: _loc("DND5E.AttackRoll"),
+          title: _loc("VARLYN5E.AttackRoll"),
           subtitle: this.item.name,
           icon: this.item.img
         }
@@ -11332,7 +11332,7 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
     const messageConfig = foundry.utils.mergeObject({
       create: true,
       data: {
-        flavor: `${this.item.name} - ${_loc("DND5E.AttackRoll")}`,
+        flavor: `${this.item.name} - ${_loc("VARLYN5E.AttackRoll")}`,
         flags: {
           dnd5e: {
             ...this.messageFlags,
@@ -11545,18 +11545,18 @@ class CastSheet extends ActivitySheet {
 
     if ( context.spell ) {
       context.contentLink = context.spell.toAnchor().outerHTML;
-      if ( context.spell.system.level > 0 ) context.levelOptions = Object.entries(CONFIG.DND5E.spellLevels)
+      if ( context.spell.system.level > 0 ) context.levelOptions = Object.entries(CONFIG.VARLYN5E.spellLevels)
         .filter(([level]) => Number(level) >= context.spell.system.level)
         .map(([value, label]) => ({ value, label }));
     }
 
     context.abilityOptions = [
-      { value: "", label: _loc("DND5E.Spellcasting") },
+      { value: "", label: _loc("VARLYN5E.Spellcasting") },
       { rule: true },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label }))
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label }))
     ];
-    context.propertyOptions = Array.from(CONFIG.DND5E.validProperties.spell).map(value => ({
-      value, label: CONFIG.DND5E.itemProperties[value]?.label ?? ""
+    context.propertyOptions = Array.from(CONFIG.VARLYN5E.validProperties.spell).map(value => ({
+      value, label: CONFIG.VARLYN5E.itemProperties[value]?.label ?? ""
     }));
 
     return context;
@@ -11585,7 +11585,7 @@ class CastSheet extends ActivitySheet {
   /** @inheritDoc */
   _getTabs() {
     const tabs = super._getTabs();
-    tabs.effect.label = "DND5E.CAST.SECTIONS.Spell";
+    tabs.effect.label = "VARLYN5E.CAST.SECTIONS.Spell";
     tabs.effect.icon = "fa-solid fa-wand-sparkles";
     return tabs;
   }
@@ -11713,7 +11713,7 @@ class CastActivity extends ActivityMixin(BaseCastActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.CAST"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.CAST"];
 
   /* -------------------------------------------- */
 
@@ -11722,8 +11722,8 @@ class CastActivity extends ActivityMixin(BaseCastActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "cast",
       img: "systems/dnd5e/icons/svg/activity/cast.svg",
-      title: "DND5E.CAST.Title",
-      hint: "DND5E.CAST.Hint",
+      title: "VARLYN5E.CAST.Title",
+      hint: "VARLYN5E.CAST.Hint",
       sheetClass: CastSheet
     }, { inplace: false })
   );
@@ -11759,7 +11759,7 @@ class CastActivity extends ActivityMixin(BaseCastActivityData) {
   async use(usage={}, dialog={}, message={}) {
     if ( !this.item.isEmbedded || this.item.pack ) return;
     if ( !this.item.isOwner ) {
-      ui.notifications.error("DND5E.DocumentUseWarn");
+      ui.notifications.error("VARLYN5E.DocumentUseWarn");
       return;
     }
 
@@ -11812,7 +11812,7 @@ class CastActivity extends ActivityMixin(BaseCastActivityData) {
         {
           _id: this.constructor.ENCHANTMENT_ID,
           type: "enchantment",
-          name: _loc("DND5E.CAST.Enchantment.Name"),
+          name: _loc("VARLYN5E.CAST.Enchantment.Name"),
           img: "systems/dnd5e/icons/svg/activity/cast.svg",
           origin: this.uuid,
           changes: this.getSpellChanges()
@@ -12216,7 +12216,7 @@ function _innerLabel(data, config) {
 /**
  * Get the schema fields for this trait on the actor.
  * @param {Actor5e} actor  Actor for which to get the fields.
- * @param {string} trait   Trait as defined in `CONFIG.DND5E.traits`.
+ * @param {string} trait   Trait as defined in `CONFIG.VARLYN5E.traits`.
  * @returns {object|void}
  */
 function actorFields(actor, trait) {
@@ -12230,11 +12230,11 @@ function actorFields(actor, trait) {
 
 /**
  * Get the key path to the specified trait on an actor.
- * @param {string} trait  Trait as defined in `CONFIG.DND5E.traits`.
+ * @param {string} trait  Trait as defined in `CONFIG.VARLYN5E.traits`.
  * @returns {string}      Key path to this trait's object within an actor's system data.
  */
 function actorKeyPath(trait) {
-  const traitConfig = CONFIG.DND5E.traits[trait];
+  const traitConfig = CONFIG.VARLYN5E.traits[trait];
   if ( traitConfig.actorKeyPath ) return traitConfig.actorKeyPath;
   return `system.traits.${trait}`;
 }
@@ -12244,7 +12244,7 @@ function actorKeyPath(trait) {
 /**
  * Get the current trait values for the provided actor.
  * @param {Actor5e} actor  Actor from which to retrieve the values.
- * @param {string} trait   Trait as defined in `CONFIG.DND5E.traits`.
+ * @param {string} trait   Trait as defined in `CONFIG.VARLYN5E.traits`.
  * @returns {Object<number>}
  */
 async function actorValues(actor, trait) {
@@ -12279,14 +12279,14 @@ async function actorValues(actor, trait) {
 /**
  * Calculate the change key path for a provided trait key.
  * @param {string} key      Key for a trait to set.
- * @param {string} [trait]  Trait as defined in `CONFIG.DND5E.traits`, only needed if key isn't prefixed.
+ * @param {string} [trait]  Trait as defined in `CONFIG.VARLYN5E.traits`, only needed if key isn't prefixed.
  * @returns {string|void}
  */
 function changeKeyPath(key, trait) {
   const split = key.split(":");
   if ( !trait ) trait = split.shift();
 
-  const traitConfig = CONFIG.DND5E.traits[trait];
+  const traitConfig = CONFIG.VARLYN5E.traits[trait];
   if ( !traitConfig ) return;
 
   let keyPath = actorKeyPath(trait);
@@ -12306,18 +12306,18 @@ function changeKeyPath(key, trait) {
 
 /**
  * Build up a trait structure containing all of the children gathered from config & base items.
- * @param {string} trait       Trait as defined in `CONFIG.DND5E.traits`.
+ * @param {string} trait       Trait as defined in `CONFIG.VARLYN5E.traits`.
  * @returns {Promise<object>}  Object with trait categories and children.
  */
 async function categories(trait) {
-  const traitConfig = CONFIG.DND5E.traits[trait];
-  const config = foundry.utils.deepClone(CONFIG.DND5E[traitConfig.configKey ?? trait]);
+  const traitConfig = CONFIG.VARLYN5E.traits[trait];
+  const config = foundry.utils.deepClone(CONFIG.VARLYN5E[traitConfig.configKey ?? trait]);
 
   for ( const key of Object.keys(config) ) {
     if ( foundry.utils.getType(config[key]) !== "Object" ) config[key] = { label: config[key] };
     if ( traitConfig.children?.[key] ) {
       const children = config[key].children ??= {};
-      for ( const [childKey, value] of Object.entries(CONFIG.DND5E[traitConfig.children[key]]) ) {
+      for ( const [childKey, value] of Object.entries(CONFIG.VARLYN5E[traitConfig.children[key]]) ) {
         if ( foundry.utils.getType(value) !== "Object" ) children[childKey] = { label: value };
         else children[childKey] = { ...value };
       }
@@ -12325,11 +12325,11 @@ async function categories(trait) {
   }
 
   if ( traitConfig.subtypes ) {
-    const map = CONFIG.DND5E[`${trait}ProficienciesMap`];
+    const map = CONFIG.VARLYN5E[`${trait}ProficienciesMap`];
 
     // Merge all ID lists together
     const ids = traitConfig.subtypes.ids.reduce((obj, key) => {
-      foundry.utils.mergeObject(obj, CONFIG.DND5E[key] ?? {});
+      foundry.utils.mergeObject(obj, CONFIG.VARLYN5E[key] ?? {});
       return obj;
     }, {});
 
@@ -12366,7 +12366,7 @@ async function categories(trait) {
 
 /**
  * Get a list of choices for a specific trait.
- * @param {string} trait                      Trait as defined in `CONFIG.DND5E.traits`.
+ * @param {string} trait                      Trait as defined in `CONFIG.VARLYN5E.traits`.
  * @param {object} [options={}]
  * @param {Set<string>} [options.chosen=[]]   Optional list of keys to be marked as chosen.
  * @param {boolean} [options.prefixed=false]  Should keys be prefixed with trait type?
@@ -12374,7 +12374,7 @@ async function categories(trait) {
  * @returns {Promise<SelectChoices>}          Object mapping proficiency ids to choice objects.
  */
 async function choices(trait, { chosen=new Set(), prefixed=false, any=false }={}) {
-  const traitConfig = CONFIG.DND5E.traits[trait];
+  const traitConfig = CONFIG.VARLYN5E.traits[trait];
   if ( !traitConfig ) return new SelectChoices();
   if ( Array.isArray(chosen) ) chosen = new Set(chosen);
   const categoryData = await categories(trait);
@@ -12449,7 +12449,7 @@ async function mixedChoices(keys) {
 /**
  * Fetch an item for the provided ID. If the provided ID contains a compendium pack name
  * it will be fetched from that pack, otherwise it will be fetched from the compendium defined
- * in `DND5E.sourcePacks.ITEMS`.
+ * in `VARLYN5E.sourcePacks.ITEMS`.
  * @param {string} identifier            Simple ID or compendium name and ID separated by a dot.
  * @param {object} [options]
  * @param {boolean} [options.indexOnly]  If set to true, only the index data will be fetched (will never return
@@ -12504,7 +12504,7 @@ function getBaseItem(identifier, { indexOnly=false, fullItem=false }={}) {
  */
 function getBaseItemUUID(identifier) {
   if ( identifier.startsWith("Compendium.") ) return identifier;
-  let pack = CONFIG.DND5E.sourcePacks.ITEMS;
+  let pack = CONFIG.VARLYN5E.sourcePacks.ITEMS;
   let [scope, collection, id] = identifier.split(".");
   if ( scope && collection ) pack = `${scope}.${collection}`;
   if ( !id ) id = identifier;
@@ -12520,7 +12520,7 @@ function getBaseItemUUID(identifier) {
  */
 function traitIndexFields() {
   const fields = ["system.type.value"];
-  for ( const traitConfig of Object.values(CONFIG.DND5E.traits) ) {
+  for ( const traitConfig of Object.values(CONFIG.VARLYN5E.traits) ) {
     if ( !traitConfig.subtypes ) continue;
     fields.push(`system.${traitConfig.subtypes.keyPath}`);
   }
@@ -12533,15 +12533,15 @@ function traitIndexFields() {
 
 /**
  * Get the localized label for a specific trait type.
- * @param {string} trait    Trait as defined in `CONFIG.DND5E.traits`.
+ * @param {string} trait    Trait as defined in `CONFIG.VARLYN5E.traits`.
  * @param {number} [count]  Count used to determine pluralization. If no count is provided, will default to
  *                          the 'other' pluralization.
  * @returns {string}        Localized label.
  */
 function traitLabel(trait, count) {
-  const traitConfig = CONFIG.DND5E.traits[trait];
+  const traitConfig = CONFIG.VARLYN5E.traits[trait];
   const pluralRule = (count !== undefined) ? new Intl.PluralRules(game.i18n.lang).select(count) : "other";
-  if ( !traitConfig ) return _loc(`DND5E.TraitGenericPlural.${pluralRule}`);
+  if ( !traitConfig ) return _loc(`VARLYN5E.TraitGenericPlural.${pluralRule}`);
   return _loc(`${traitConfig.labels.localization}.${pluralRule}`);
 }
 
@@ -12551,7 +12551,7 @@ function traitLabel(trait, count) {
  * Retrieve the representative icon for a specific trait.
  * @param {string} key             Key for which to generate the icon.
  * @param {object} [config={}]
- * @param {string} [config.trait]  Trait as defined in `CONFIG.DND5E.traits` if not using a prefixed key.
+ * @param {string} [config.trait]  Trait as defined in `CONFIG.VARLYN5E.traits` if not using a prefixed key.
  * @returns {string|null}
  */
 function keyIcon(key, { trait }={}) {
@@ -12559,14 +12559,14 @@ function keyIcon(key, { trait }={}) {
   if ( !trait ) trait = parts.shift();
 
   // For simple traits, retrieve from config directly
-  const traitConfig = CONFIG.DND5E.traits[trait];
-  const traitIcon = CONFIG.DND5E[traitConfig?.configKey ?? trait]?.[parts[0]]?.icon;
+  const traitConfig = CONFIG.VARLYN5E.traits[trait];
+  const traitIcon = CONFIG.VARLYN5E[traitConfig?.configKey ?? trait]?.[parts[0]]?.icon;
   if ( traitIcon ) return traitIcon;
 
   // For other traits, try to find base item
   const lastKey = parts.pop();
   for ( const idsKey of traitConfig?.subtypes?.ids ?? [] ) {
-    let baseItemId = CONFIG.DND5E[idsKey]?.[lastKey];
+    let baseItemId = CONFIG.VARLYN5E[idsKey]?.[lastKey];
     if ( !baseItemId ) continue;
     if ( foundry.utils.getType(baseItemId) === "Object" ) baseItemId = baseItemId.id;
     const index = getBaseItem(baseItemId, { indexOnly: true });
@@ -12584,7 +12584,7 @@ function keyIcon(key, { trait }={}) {
  * @param {string} key              Key for which to generate the label.
  * @param {object} [config={}]
  * @param {number} [config.count]   Number to display, only if a wildcard is used as final part of key.
- * @param {string} [config.trait]   Trait as defined in `CONFIG.DND5E.traits` if not using a prefixed key.
+ * @param {string} [config.trait]   Trait as defined in `CONFIG.VARLYN5E.traits` if not using a prefixed key.
  * @param {boolean} [config.final]  Is this the final in a list?
  * @returns {string}                Retrieved label.
  *
@@ -12629,9 +12629,9 @@ function keyLabel(key, config={}) {
   const pluralRules = new Intl.PluralRules(game.i18n.lang);
 
   if ( !trait ) trait = parts.shift();
-  const traitConfig = CONFIG.DND5E.traits[trait];
+  const traitConfig = CONFIG.VARLYN5E.traits[trait];
   if ( !traitConfig ) return key;
-  const traitData = CONFIG.DND5E[traitConfig.configKey ?? trait] ?? {};
+  const traitData = CONFIG.VARLYN5E[traitConfig.configKey ?? trait] ?? {};
   let categoryLabel = _loc(`${traitConfig.labels.localization}.${
     pluralRules.select(count ?? 1)}`);
 
@@ -12653,7 +12653,7 @@ function keyLabel(key, config={}) {
       } while ( parts.length );
       type = _innerLabel(category, traitConfig);
     } else type = categoryLabel.toLowerCase();
-    const localization = `DND5E.TraitConfigChoose${final ? "Other" : `Any${count ? "Counted" : "Uncounted"}`}`;
+    const localization = `VARLYN5E.TraitConfigChoose${final ? "Other" : `Any${count ? "Counted" : "Uncounted"}`}`;
     return _loc(localization, { count: count ?? 1, type });
   }
 
@@ -12664,13 +12664,13 @@ function keyLabel(key, config={}) {
 
     // Child (e.g. "Land Vehicle")
     for ( const childrenKey of Object.values(traitConfig.children ?? {}) ) {
-      const childLabel = CONFIG.DND5E[childrenKey]?.[lastKey];
+      const childLabel = CONFIG.VARLYN5E[childrenKey]?.[lastKey];
       if ( childLabel ) return childLabel;
     }
 
     // Base item (e.g. "Shortsword")
     for ( const idsKey of traitConfig.subtypes?.ids ?? [] ) {
-      let baseItemId = CONFIG.DND5E[idsKey]?.[lastKey];
+      let baseItemId = CONFIG.VARLYN5E[idsKey]?.[lastKey];
       if ( !baseItemId ) continue;
       if ( foundry.utils.getType(baseItemId) === "Object" ) baseItemId = baseItemId.id;
       const index = getBaseItem(baseItemId, { indexOnly: true });
@@ -12748,7 +12748,7 @@ function choiceLabel(choice, { only=false, final=false }={}) {
 
   // Select from a list of options (e.g. "2 from Thieves' Tools or any skill proficiency")
   const choices = Array.from(choice.pool).map(key => keyLabel(key)).filter(_ => _);
-  return _loc("DND5E.TraitConfigChooseList", {
+  return _loc("VARLYN5E.TraitConfigChooseList", {
     count: choice.count,
     list: listFormatter.format(choices)
   });
@@ -12785,7 +12785,7 @@ function localizedList({ grants=new Set(), choices=[] }) {
 
   const listFormatter = new Intl.ListFormat(game.i18n.lang, { style: "long", type: "conjunction" });
   if ( !sections.length || grants.size ) return listFormatter.format(sections.filter(_ => _));
-  return _loc("DND5E.TraitConfigChooseWrapper", {
+  return _loc("VARLYN5E.TraitConfigChooseWrapper", {
     choices: listFormatter.format(sections)
   });
 }
@@ -12841,36 +12841,36 @@ class CheckSheet extends ActivitySheet {
   async _prepareEffectContext(context, options) {
     context = await super._prepareEffectContext(context, options);
 
-    const group = _loc("DND5E.Abilities");
+    const group = _loc("VARLYN5E.Abilities");
     context.abilityOptions = [
       { value: "", label: "" },
       { rule: true },
-      { value: "spellcasting", label: _loc("DND5E.SpellAbility") },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, config]) => ({ value, label: config.label, group }))
+      { value: "spellcasting", label: _loc("VARLYN5E.SpellAbility") },
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, config]) => ({ value, label: config.label, group }))
     ];
     let ability;
     const associated = this.activity.check.associated;
     if ( (this.item.type === "tool") && !associated.size ) {
-      ability = CONFIG.DND5E.abilities[this.item.system.ability]?.label?.toLowerCase();
-    } else if ( (associated.size === 1) && (associated.first() in CONFIG.DND5E.skills) ) {
-      ability = CONFIG.DND5E.abilities[CONFIG.DND5E.skills[associated.first()].ability]?.label?.toLowerCase();
+      ability = CONFIG.VARLYN5E.abilities[this.item.system.ability]?.label?.toLowerCase();
+    } else if ( (associated.size === 1) && (associated.first() in CONFIG.VARLYN5E.skills) ) {
+      ability = CONFIG.VARLYN5E.abilities[CONFIG.VARLYN5E.skills[associated.first()].ability]?.label?.toLowerCase();
     }
-    if ( ability ) context.abilityOptions[0].label = _loc("DND5E.DefaultSpecific", { default: ability });
+    if ( ability ) context.abilityOptions[0].label = _loc("VARLYN5E.DefaultSpecific", { default: ability });
 
     context.associatedOptions = [
-      ...Object.entries(CONFIG.DND5E.skills).map(([value, { label }]) => ({
-        value, label, group: _loc("DND5E.Skills")
+      ...Object.entries(CONFIG.VARLYN5E.skills).map(([value, { label }]) => ({
+        value, label, group: _loc("VARLYN5E.Skills")
       })),
-      ...Object.keys(CONFIG.DND5E.tools).map(value => ({
+      ...Object.keys(CONFIG.VARLYN5E.tools).map(value => ({
         value, label: keyLabel(value, { trait: "tool" }), group: _loc("TYPES.Item.toolPl")
       })).sort((lhs, rhs) => lhs.label.localeCompare(rhs.label, game.i18n.lang))
     ];
 
     context.calculationOptions = [
-      { value: "", label: _loc("DND5E.SAVE.FIELDS.save.dc.CustomFormula") },
+      { value: "", label: _loc("VARLYN5E.SAVE.FIELDS.save.dc.CustomFormula") },
       { rule: true },
-      { value: "spellcasting", label: _loc("DND5E.SpellAbility") },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, config]) => ({ value, label: config.label, group }))
+      { value: "spellcasting", label: _loc("VARLYN5E.SpellAbility") },
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, config]) => ({ value, label: config.label, group }))
     ];
 
     return context;
@@ -12925,7 +12925,7 @@ class BaseCheckActivityData extends BaseActivityData {
 
   /** @override */
   get ability() {
-    if ( this.check.dc.calculation in CONFIG.DND5E.abilities ) return this.check.dc.calculation;
+    if ( this.check.dc.calculation in CONFIG.VARLYN5E.abilities ) return this.check.dc.calculation;
     if ( this.check.dc.calculation === "spellcasting" ) return this.spellcastingAbility;
     return this.check.ability;
   }
@@ -12938,7 +12938,7 @@ class BaseCheckActivityData extends BaseActivityData {
   static transformTypeData(source, activityData, options) {
     return foundry.utils.mergeObject(activityData, {
       check: {
-        ability: source.system.ability ?? Object.keys(CONFIG.DND5E.abilities)[0]
+        ability: source.system.ability ?? Object.keys(CONFIG.VARLYN5E.abilities)[0]
       }
     });
   }
@@ -12974,10 +12974,10 @@ class BaseCheckActivityData extends BaseActivityData {
    */
   getAbility(associated) {
     if ( this.check.ability ) return this.check.ability;
-    if ( associated in CONFIG.DND5E.skills ) return CONFIG.DND5E.skills[associated]?.ability ?? null;
-    else if ( associated in CONFIG.DND5E.tools ) {
+    if ( associated in CONFIG.VARLYN5E.skills ) return CONFIG.VARLYN5E.skills[associated]?.ability ?? null;
+    else if ( associated in CONFIG.VARLYN5E.tools ) {
       if ( (this.item.type === "tool") && this.item.system.ability ) return this.item.system.ability;
-      return CONFIG.DND5E.tools[associated]?.ability ?? null;
+      return CONFIG.VARLYN5E.tools[associated]?.ability ?? null;
     }
     return null;
   }
@@ -12992,7 +12992,7 @@ class CheckActivity extends ActivityMixin(BaseCheckActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.CHECK"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.CHECK"];
 
   /* -------------------------------------------- */
 
@@ -13001,8 +13001,8 @@ class CheckActivity extends ActivityMixin(BaseCheckActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "check",
       img: "systems/dnd5e/icons/svg/activity/check.svg",
-      title: "DND5E.CHECK.Title",
-      hint: "DND5E.CHECK.Hint",
+      title: "VARLYN5E.CHECK.Title",
+      hint: "VARLYN5E.CHECK.Hint",
       sheetClass: CheckSheet,
       usage: {
         actions: {
@@ -13022,23 +13022,23 @@ class CheckActivity extends ActivityMixin(BaseCheckActivityData) {
     const dc = this.check.dc.value;
 
     const createButton = (abilityKey, associated) => {
-      const ability = CONFIG.DND5E.abilities[abilityKey]?.label;
-      const checkType = (associated in CONFIG.DND5E.skills) ? "skill"
-        : (associated in CONFIG.DND5E.tools) ? "tool": "ability";
+      const ability = CONFIG.VARLYN5E.abilities[abilityKey]?.label;
+      const checkType = (associated in CONFIG.VARLYN5E.skills) ? "skill"
+        : (associated in CONFIG.VARLYN5E.tools) ? "tool": "ability";
       const dataset = { ability: abilityKey, action: "rollCheck", visibility: this.check.visible ? "all" : undefined };
       if ( dc ) dataset.dc = dc;
       if ( checkType !== "ability" ) dataset[checkType] = associated;
 
       let label = ability;
       let type;
-      if ( checkType === "skill" ) type = CONFIG.DND5E.skills[associated]?.label;
+      if ( checkType === "skill" ) type = CONFIG.VARLYN5E.skills[associated]?.label;
       else if ( checkType === "tool" ) type = keyLabel(associated, { trait: "tool" });
-      if ( type ) label = _loc("EDITOR.DND5E.Inline.SpecificCheck", { ability, type });
+      if ( type ) label = _loc("EDITOR.VARLYN5E.Inline.SpecificCheck", { ability, type });
       else label = ability;
 
       buttons.push({
         label: dc ? `
-          <span class="visible-dc">${_loc("EDITOR.DND5E.Inline.DC", { dc, check: wrap(label) })}</span>
+          <span class="visible-dc">${_loc("EDITOR.VARLYN5E.Inline.DC", { dc, check: wrap(label) })}</span>
           <span class="hidden-dc">${wrap(label)}</span>
         ` : wrap(label),
         icon: checkType === "tool" ? '<i class="fa-solid fa-hammer" inert></i>'
@@ -13046,7 +13046,7 @@ class CheckActivity extends ActivityMixin(BaseCheckActivityData) {
         dataset
       });
     };
-    const wrap = check => _loc("EDITOR.DND5E.Inline.CheckShort", { check });
+    const wrap = check => _loc("EDITOR.VARLYN5E.Inline.CheckShort", { check });
 
     const associated = Array.from(this.check.associated);
     if ( !associated.length && (this.item.type === "tool") ) associated.push(this.item.system.type.baseItem);
@@ -13073,12 +13073,12 @@ class CheckActivity extends ActivityMixin(BaseCheckActivityData) {
   static async #rollCheck(event, target, message) {
     const targets = getSceneTargets();
     if ( !targets.length && game.user.character ) targets.push(game.user.character);
-    if ( !targets.length ) ui.notifications.warn("DND5E.ActionWarningNoToken");
+    if ( !targets.length ) ui.notifications.warn("VARLYN5E.ActionWarningNoToken");
     let { ability, dc, skill, tool } = target.dataset;
     dc = parseInt(dc);
     const rollData = { event, target: Number.isFinite(dc) ? dc : this.check.dc.value };
     const bonusData = CONFIG.Dice.BasicRoll.constructParts({ activityBonus: this.check.bonus }, this.getRollData());
-    if ( ability in CONFIG.DND5E.abilities ) rollData.ability = ability;
+    if ( ability in CONFIG.VARLYN5E.abilities ) rollData.ability = ability;
 
     for ( const token of targets ) {
       const actor = token instanceof Actor ? token : token.actor;
@@ -13209,7 +13209,7 @@ class DamageActivity extends ActivityMixin(BaseDamageActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.DAMAGE"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.DAMAGE"];
 
   /* -------------------------------------------- */
 
@@ -13218,8 +13218,8 @@ class DamageActivity extends ActivityMixin(BaseDamageActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "damage",
       img: "systems/dnd5e/icons/svg/activity/damage.svg",
-      title: "DND5E.DAMAGE.Title",
-      hint: "DND5E.DAMAGE.Hint",
+      title: "VARLYN5E.DAMAGE.Title",
+      hint: "VARLYN5E.DAMAGE.Hint",
       sheetClass: DamageSheet,
       usage: {
         actions: {
@@ -13237,7 +13237,7 @@ class DamageActivity extends ActivityMixin(BaseDamageActivityData) {
   _usageChatButtons(message) {
     if ( !this.damage.parts.length ) return super._usageChatButtons(message);
     return [{
-      label: _loc("DND5E.Damage"),
+      label: _loc("VARLYN5E.Damage"),
       icon: '<i class="fa-solid fa-burst" inert></i>',
       dataset: {
         action: "rollDamage"
@@ -13331,7 +13331,7 @@ class EnchantSheet extends ActivitySheet {
 
     const enchantableTypes = this.activity.enchantableTypes;
     context.typeOptions = [
-      { value: "", label: _loc("DND5E.ENCHANT.FIELDS.restrictions.type.Any"), rule: true },
+      { value: "", label: _loc("VARLYN5E.ENCHANT.FIELDS.restrictions.type.Any"), rule: true },
       ...Object.keys(CONFIG.Item.dataModels)
         .filter(t => enchantableTypes.has(t))
         .map(value => ({ value, label: _loc(CONFIG.Item.typeLabels[value]) }))
@@ -13344,8 +13344,8 @@ class EnchantSheet extends ActivitySheet {
     if ( typeDataModel ) context.categoryOptions = Object.entries(typeDataModel.itemCategories ?? {})
       .map(([value, config]) => ({ value, label: foundry.utils.getType(config) === "string" ? config : config.label }));
 
-    context.propertyOptions = (CONFIG.DND5E.validProperties[type] ?? [])
-      .map(value => ({ value, label: CONFIG.DND5E.itemProperties[value]?.label ?? value }));
+    context.propertyOptions = (CONFIG.VARLYN5E.validProperties[type] ?? [])
+      .map(value => ({ value, label: CONFIG.VARLYN5E.itemProperties[value]?.label ?? value }));
 
     return context;
   }
@@ -13368,16 +13368,16 @@ class EnchantSheet extends ActivitySheet {
   /** @inheritDoc */
   _getTabs() {
     const tabs = super._getTabs();
-    tabs.effect.label = "DND5E.ENCHANT.SECTIONS.Enchanting";
+    tabs.effect.label = "VARLYN5E.ENCHANT.SECTIONS.Enchanting";
     tabs.effect.icon = "fa-solid fa-wand-sparkles";
     tabs.effect.tabs = this._markTabs({
       enchantments: {
         id: "enchantments", group: "effect", icon: "fa-solid fa-star",
-        label: "DND5E.ENCHANT.SECTIONS.Enchantments"
+        label: "VARLYN5E.ENCHANT.SECTIONS.Enchantments"
       },
       restrictions: {
         id: "restrictions", group: "effect", icon: "fa-solid fa-ban",
-        label: "DND5E.ENCHANT.SECTIONS.Restrictions"
+        label: "VARLYN5E.ENCHANT.SECTIONS.Restrictions"
       }
     });
     return tabs;
@@ -13427,13 +13427,13 @@ class EnchantUsageDialog extends ActivityUsageDialog {
       const existingProfile = this.activity.existingEnchantment?.flags.dnd5e?.enchantmentProfile;
       context.hasCreation = true;
       context.enchantment = {
-        field: new StringField$16({ required: true, blank: false, label: _loc("DND5E.ENCHANTMENT.Label") }),
+        field: new StringField$16({ required: true, blank: false, label: _loc("VARLYN5E.ENCHANTMENT.Label") }),
         name: "enchantmentProfile",
         value: this.config.enchantmentProfile,
         options: enchantments.map(e => ({
           value: e._id,
           label: e._id === existingProfile
-            ? _loc("DND5E.ENCHANT.Enchantment.Active", { name: e.effect.name })
+            ? _loc("VARLYN5E.ENCHANT.Enchantment.Active", { name: e.effect.name })
             : e.effect.name
         }))
       };
@@ -13658,10 +13658,10 @@ class ActivityChoiceDialog extends Application5e {
   async _prepareContext(options) {
     let controlHint;
     if ( game.settings.get("dnd5e", "controlHints") ) {
-      controlHint = _loc("DND5E.Controls.Activity.FastForwardHint");
+      controlHint = _loc("VARLYN5E.Controls.Activity.FastForwardHint");
       controlHint = controlHint.replace(
         "<left-click>",
-        `<img src="systems/dnd5e/icons/svg/mouse-left.svg" alt="${_loc("DND5E.Controls.LeftClick")}">`
+        `<img src="systems/dnd5e/icons/svg/mouse-left.svg" alt="${_loc("VARLYN5E.Controls.LeftClick")}">`
       );
     }
     const activities = this.#item.system.activities
@@ -13779,9 +13779,9 @@ let AdvancementConfig$1 = class AdvancementConfig extends PseudoDocumentSheet {
 
   /** @inheritDoc */
   async _prepareContext(options) {
-    const levels = Array.fromRange(CONFIG.DND5E.maxLevel + 1).map(l => ({ value: l, label: l }));
+    const levels = Array.fromRange(CONFIG.VARLYN5E.maxLevel + 1).map(l => ({ value: l, label: l }));
     if ( ["class", "subclass"].includes(this.item.type) ) delete levels[0];
-    else levels[0].label = _loc("DND5E.ADVANCEMENT.Config.AnyLevel");
+    else levels[0].label = _loc("VARLYN5E.ADVANCEMENT.Config.AnyLevel");
     const context = {
       ...(await super._prepareContext(options)),
       advancement: this.advancement,
@@ -13798,9 +13798,9 @@ let AdvancementConfig$1 = class AdvancementConfig extends PseudoDocumentSheet {
       },
       levels,
       classRestrictionOptions: [
-        { value: "", label: _loc("DND5E.AdvancementClassRestrictionNone") },
-        { value: "primary", label: _loc("DND5E.AdvancementClassRestrictionPrimary") },
-        { value: "secondary", label: _loc("DND5E.AdvancementClassRestrictionSecondary") }
+        { value: "", label: _loc("VARLYN5E.AdvancementClassRestrictionNone") },
+        { value: "primary", label: _loc("VARLYN5E.AdvancementClassRestrictionPrimary") },
+        { value: "secondary", label: _loc("VARLYN5E.AdvancementClassRestrictionSecondary") }
       ],
       showClassRestrictions: this.item.type === "class",
       showLevelSelector: !this.advancement.metadata.multiLevel,
@@ -13928,13 +13928,13 @@ let AdvancementConfig$1 = class AdvancementConfig extends PseudoDocumentSheet {
 
     // Abort if this uuid is the parent item
     if ( item.uuid === this.item.uuid ) {
-      ui.notifications.error("DND5E.ADVANCEMENT.ItemGrant.Warning.Recursive");
+      ui.notifications.error("VARLYN5E.ADVANCEMENT.ItemGrant.Warning.Recursive");
       return;
     }
 
     // Abort if this uuid exists already
     if ( existingItems.find(i => i.uuid === item.uuid) ) {
-      ui.notifications.warn("DND5E.ADVANCEMENT.ItemGrant.Warning.Duplicate");
+      ui.notifications.warn("VARLYN5E.ADVANCEMENT.ItemGrant.Warning.Duplicate");
       return;
     }
 
@@ -14333,15 +14333,15 @@ class BaseAdvancementData extends SparseDataModel {
       flags: new DocumentFlagsField(),
       value: new AdvancementDataField(this, { required: true }),
       level: new NumberField$C({
-        integer: true, initial: this.metadata?.multiLevel ? undefined : 0, min: 0, label: "DND5E.Level"
+        integer: true, initial: this.metadata?.multiLevel ? undefined : 0, min: 0, label: "VARLYN5E.Level"
       }),
-      title: new StringField$14({ initial: undefined, label: "DND5E.AdvancementCustomTitle" }),
-      hint: new HTMLField$7({ label: "DND5E.AdvancementHint" }),
+      title: new StringField$14({ initial: undefined, label: "VARLYN5E.AdvancementCustomTitle" }),
+      hint: new HTMLField$7({ label: "VARLYN5E.AdvancementHint" }),
       icon: new FilePathField$1({
-        initial: undefined, categories: ["IMAGE"], label: "DND5E.AdvancementCustomIcon", base64: true
+        initial: undefined, categories: ["IMAGE"], label: "VARLYN5E.AdvancementCustomIcon", base64: true
       }),
       classRestriction: new StringField$14({
-        initial: undefined, choices: ["primary", "secondary"], label: "DND5E.AdvancementClassRestriction"
+        initial: undefined, choices: ["primary", "secondary"], label: "VARLYN5E.AdvancementClassRestriction"
       })
     };
   }
@@ -14424,11 +14424,11 @@ class Advancement extends PseudoDocumentMixin(BaseAdvancementData) {
   static get metadata() {
     return {
       name: "Advancement",
-      label: "DOCUMENT.DND5E.Advancement",
+      label: "DOCUMENT.VARLYN5E.Advancement",
       order: 100,
       icon: "icons/svg/upgrade.svg",
       typeIcon: "icons/svg/upgrade.svg",
-      title: _loc("DND5E.AdvancementTitle"),
+      title: _loc("VARLYN5E.AdvancementTitle"),
       hint: "",
       multiLevel: false,
       validItemTypes: new Set(["class", "race", "subclass"]),
@@ -14705,12 +14705,12 @@ class Advancement extends PseudoDocumentMixin(BaseAdvancementData) {
   getContextMenuOptions() {
     if ( this.item.isOwner && !this.item.collection?.locked ) return [
       {
-        label: "DND5E.ADVANCEMENT.Action.Edit",
+        label: "VARLYN5E.ADVANCEMENT.Action.Edit",
         icon: "<i class='fas fa-edit fa-fw'></i>",
         onClick: () => this.item.sheet._renderChild(this.sheet)
       },
       {
-        label: "DND5E.ADVANCEMENT.Action.Duplicate",
+        label: "VARLYN5E.ADVANCEMENT.Action.Duplicate",
         icon: "<i class='fas fa-copy fa-fw'></i>",
         visible: li => this?.constructor.availableForItem(this.item),
         onClick: () => {
@@ -14720,14 +14720,14 @@ class Advancement extends PseudoDocumentMixin(BaseAdvancementData) {
         }
       },
       {
-        label: "DND5E.ADVANCEMENT.Action.Delete",
+        label: "VARLYN5E.ADVANCEMENT.Action.Delete",
         icon: "<i class='fas fa-trash fa-fw'></i>",
         onClick: () => this.deleteDialog()
       }
     ];
 
     return [{
-      label: "DND5E.ADVANCEMENT.Action.View",
+      label: "VARLYN5E.ADVANCEMENT.Action.View",
       icon: "<i class='fas fa-eye fa-fw'></i>",
       onClick: () => this.item.sheet._renderChild(this.sheet)
     }];
@@ -14764,7 +14764,7 @@ class Advancement extends PseudoDocumentMixin(BaseAdvancementData) {
 
   /** @override */
   static _createDialogData(type, parent) {
-    const Advancement = CONFIG.DND5E.advancementTypes[type].documentClass;
+    const Advancement = CONFIG.VARLYN5E.advancementTypes[type].documentClass;
     return {
       type,
       disabled: !Advancement.availableForItem(parent),
@@ -14778,7 +14778,7 @@ class Advancement extends PseudoDocumentMixin(BaseAdvancementData) {
 
   /** @override */
   static _createDialogTypes(parent) {
-    return Object.entries(CONFIG.DND5E.advancementTypes)
+    return Object.entries(CONFIG.VARLYN5E.advancementTypes)
       .filter(([, { hidden, validItemTypes }]) => !hidden && validItemTypes?.has(parent.type))
       .map(([k]) => k);
   }
@@ -14815,7 +14815,7 @@ class AdvancementManager extends Application5e {
     classes: ["advancement", "manager"],
     window: {
       icon: "fa-solid fa-forward",
-      title: "DND5E.ADVANCEMENT.Manager.Title.Default"
+      title: "VARLYN5E.ADVANCEMENT.Manager.Title.Default"
     },
     actions: {
       complete: AdvancementManager.#process,
@@ -14878,12 +14878,12 @@ class AdvancementManager extends Application5e {
     // Class/Subclass level
     let level = this.step.flow.level;
     if ( this.step.class && ["class", "subclass"].includes(item.type) ) level = this.step.class.level;
-    if ( level ) parts.push(_loc("DND5E.AdvancementLevelHeader", { level }));
+    if ( level ) parts.push(_loc("VARLYN5E.AdvancementLevelHeader", { level }));
 
     // Step Count
     const visibleSteps = this.steps.filter(s => !s.automatic);
     const visibleIndex = visibleSteps.indexOf(this.step);
-    if ( visibleIndex >= 0 ) parts.push(_loc("DND5E.ADVANCEMENT.Manager.Steps", {
+    if ( visibleIndex >= 0 ) parts.push(_loc("VARLYN5E.ADVANCEMENT.Manager.Steps", {
       current: visibleIndex + 1,
       total: visibleSteps.length
     }));
@@ -15376,17 +15376,17 @@ class AdvancementManager extends Application5e {
     if ( !options.skipConfirmation ) {
       const result = await this._confirmDialog({
         window: {
-          title: `${_loc("DND5E.ADVANCEMENT.Manager.ClosePrompt.Title")}: ${this.actor.name}`
+          title: `${_loc("VARLYN5E.ADVANCEMENT.Manager.ClosePrompt.Title")}: ${this.actor.name}`
         },
         position: { width: 400 },
-        content: _loc("DND5E.ADVANCEMENT.Manager.ClosePrompt.Message"),
+        content: _loc("VARLYN5E.ADVANCEMENT.Manager.ClosePrompt.Message"),
         yes: {
           icon: "fas fa-times",
-          label: _loc("DND5E.ADVANCEMENT.Manager.ClosePrompt.Action.Stop")
+          label: _loc("VARLYN5E.ADVANCEMENT.Manager.ClosePrompt.Action.Stop")
         },
         no: {
           icon: "fas fa-chevron-right",
-          label: _loc("DND5E.ADVANCEMENT.Manager.ClosePrompt.Action.Continue")
+          label: _loc("VARLYN5E.ADVANCEMENT.Manager.ClosePrompt.Action.Continue")
         }
       });
       if ( result !== "yes" ) return;
@@ -15641,8 +15641,8 @@ class AdvancementManager extends Application5e {
    */
   async #restart(event) {
     const result = await this._confirmDialog({
-      window: { title: _loc("DND5E.ADVANCEMENT.Manager.RestartPrompt.Title") },
-      content: `<p>${_loc("DND5E.ADVANCEMENT.Manager.RestartPrompt.Message")}</p>`
+      window: { title: _loc("VARLYN5E.ADVANCEMENT.Manager.RestartPrompt.Title") },
+      content: `<p>${_loc("VARLYN5E.ADVANCEMENT.Manager.RestartPrompt.Message")}</p>`
     });
     if ( result !== "yes" ) return;
     // While there is still a renderable step.
@@ -15836,8 +15836,8 @@ class AdvancementConfirmationDialog extends Dialog5e {
   static forDelete(item, { sheet }={}) {
     return this.createDialog({
       item, sheet,
-      title: _loc("DND5E.ADVANCEMENT.Deletion.Delete.Title"),
-      message: _loc("DND5E.ADVANCEMENT.Deletion.Delete.Message"),
+      title: _loc("VARLYN5E.ADVANCEMENT.Deletion.Delete.Title"),
+      message: _loc("VARLYN5E.ADVANCEMENT.Deletion.Delete.Message"),
       continueButton: {
         icon: "fa-solid fa-trash",
         label: _loc("COMMON.Delete")
@@ -15857,11 +15857,11 @@ class AdvancementConfirmationDialog extends Dialog5e {
   static forLevelDown(item, { sheet }={}) {
     return this.createDialog({
       item, sheet,
-      title: _loc("DND5E.ADVANCEMENT.Deletion.LevelDown.Title"),
-      message: _loc("DND5E.ADVANCEMENT.Deletion.LevelDown.Message"),
+      title: _loc("VARLYN5E.ADVANCEMENT.Deletion.LevelDown.Title"),
+      message: _loc("VARLYN5E.ADVANCEMENT.Deletion.LevelDown.Message"),
       continueButton: {
         icon: "fa-solid fa-sort-numeric-down-alt",
-        label: _loc("DND5E.LevelActionDecrease")
+        label: _loc("VARLYN5E.LevelActionDecrease")
       }
     });
   }
@@ -15929,7 +15929,7 @@ class CreateScrollDialog extends Dialog5e {
   static DEFAULT_OPTIONS = {
     classes: ["create-scroll"],
     window: {
-      title: "DND5E.Scroll.CreateScroll",
+      title: "VARLYN5E.Scroll.CreateScroll",
       icon: "fa-solid fa-scroll"
     },
     form: {
@@ -15940,7 +15940,7 @@ class CreateScrollDialog extends Dialog5e {
     },
     buttons: [{
       action: "create",
-      label: "DND5E.Scroll.CreateScroll",
+      label: "VARLYN5E.Scroll.CreateScroll",
       icon: "fa-solid fa-check",
       default: true
     }],
@@ -15999,31 +15999,31 @@ class CreateScrollDialog extends Dialog5e {
     context.fields = [{
       field: new StringField$13({
         required: true, blank: false,
-        label: _loc("DND5E.Scroll.Explanation.Label"),
-        hint: _loc("DND5E.Scroll.Explanation.Hint")
+        label: _loc("VARLYN5E.Scroll.Explanation.Label"),
+        hint: _loc("VARLYN5E.Scroll.Explanation.Hint")
       }),
       name: "explanation",
       options: [
-        { value: "full", label: _loc("DND5E.Scroll.Explanation.Complete") },
-        { value: "reference", label: _loc("DND5E.Scroll.Explanation.Reference") },
-        { value: "none", label: _loc("DND5E.None") }
+        { value: "full", label: _loc("VARLYN5E.Scroll.Explanation.Complete") },
+        { value: "reference", label: _loc("VARLYN5E.Scroll.Explanation.Reference") },
+        { value: "none", label: _loc("VARLYN5E.None") }
       ],
       value: this.config.explanation ?? "reference"
     }, {
-      field: new NumberField$B({ label: _loc("DND5E.SpellLevel") }),
+      field: new NumberField$B({ label: _loc("VARLYN5E.SpellLevel") }),
       name: "level",
-      options: Object.entries(CONFIG.DND5E.spellLevels)
+      options: Object.entries(CONFIG.VARLYN5E.spellLevels)
         .map(([value, label]) => ({ value, label }))
         .filter(l => Number(l.value) >= this.spell.system.level),
       value: this.config.level ?? this.spell.system.level
     }];
     context.values = {
-      bonus: new NumberField$B({ label: _loc("DND5E.BonusAttack") }),
-      dc: new NumberField$B({ label: _loc("DND5E.Scroll.SaveDC") })
+      bonus: new NumberField$B({ label: _loc("VARLYN5E.BonusAttack") }),
+      dc: new NumberField$B({ label: _loc("VARLYN5E.Scroll.SaveDC") })
     };
     context.valuePlaceholders = {};
     for ( const level of Array.fromRange(this.config.level + 1).reverse() ) {
-      context.valuePlaceholders = CONFIG.DND5E.spellScrollValues[level];
+      context.valuePlaceholders = CONFIG.VARLYN5E.spellScrollValues[level];
       if ( context.valuePlaceholders ) break;
     }
     return context;
@@ -16203,12 +16203,12 @@ class TraitConfig extends AdvancementConfig$1 {
 
     const rep = this.advancement.representedTraits();
     context.disableAllowReplacements = rep.size > 1;
-    const traitConfig = rep.size === 1 ? CONFIG.DND5E.traits[rep.first()] : null;
+    const traitConfig = rep.size === 1 ? CONFIG.VARLYN5E.traits[rep.first()] : null;
     if ( traitConfig ) {
       context.default.title = traitConfig.labels.title;
       context.default.icon = traitConfig.icon;
     } else {
-      context.default.title = _loc("DND5E.TraitGenericPlural.other");
+      context.default.title = _loc("VARLYN5E.TraitGenericPlural.other");
       context.default.icon = this.advancement.constructor.metadata.icon;
     }
     context.default.hint = localizedList({ grants: this.config.grants, choices: this.config.choices });
@@ -16218,11 +16218,11 @@ class TraitConfig extends AdvancementConfig$1 {
       input: context.inputs.createCheckboxInput,
       options: await choices(this.trait, { chosen, prefixed: true, any: this.selected !== -1 }),
       selected: this.trait,
-      selectedHeader: `${CONFIG.DND5E.traits[this.trait].labels.localization}.other`,
+      selectedHeader: `${CONFIG.VARLYN5E.traits[this.trait].labels.localization}.other`,
       typeField: new StringField$12({
-        required: true, blank: false, label: _loc("DND5E.ADVANCEMENT.Trait.TraitType")
+        required: true, blank: false, label: _loc("VARLYN5E.ADVANCEMENT.Trait.TraitType")
       }),
-      typeOptions: Object.entries(CONFIG.DND5E.traits)
+      typeOptions: Object.entries(CONFIG.VARLYN5E.traits)
         .filter(([, config]) => ((this.config.mode === "default") || (this.config.mode === "mastery"
           ? config.mastery : config.expertise)) && (config.dataType !== Number))
         .map(([value, config]) => ({ value, label: config.labels.title }))
@@ -16234,8 +16234,8 @@ class TraitConfig extends AdvancementConfig$1 {
     }
 
     context.mode = {
-      hint: CONFIG.DND5E.traitModes[this.advancement.configuration.mode].hint,
-      options: Object.entries(CONFIG.DND5E.traitModes).map(([value, { label }]) => ({ value, label }))
+      hint: CONFIG.VARLYN5E.traitModes[this.advancement.configuration.mode].hint,
+      options: Object.entries(CONFIG.VARLYN5E.traitModes).map(([value, { label }]) => ({ value, label }))
     };
 
     return context;
@@ -16322,7 +16322,7 @@ class TraitConfig extends AdvancementConfig$1 {
       && (event.target.value !== "default")
       && (event.target.value !== this.config.mode) ) {
       const checkKey = event.target.value === "mastery" ? "mastery" : "expertise";
-      const validTraitTypes = filteredKeys(CONFIG.DND5E.traits, c => c[checkKey]);
+      const validTraitTypes = filteredKeys(CONFIG.VARLYN5E.traits, c => c[checkKey]);
       if ( !validTraitTypes.includes(this.trait) ) this.trait = validTraitTypes[0];
     }
 
@@ -16380,7 +16380,7 @@ class TraitConfig extends AdvancementConfig$1 {
     // If one of the expertise modes is selected, filter out any traits that are not of a valid type
     if ( (configuration.mode ?? this.config.mode) !== "default" ) {
       const checkKey = (configuration.mode ?? this.config.mode) === "mastery" ? "mastery" : "expertise";
-      const validTraitTypes = filteredKeys(CONFIG.DND5E.traits, c => c[checkKey]);
+      const validTraitTypes = filteredKeys(CONFIG.VARLYN5E.traits, c => c[checkKey]);
       configuration.grants = configuration.grants.filter(k => validTraitTypes.some(t => k.startsWith(t)));
       configuration.choices.forEach(c => c.pool = c.pool?.filter(k => validTraitTypes.some(t => k.startsWith(t))));
     }
@@ -16426,7 +16426,7 @@ class TraitFlow extends AdvancementFlow$1 {
    * @type {TraitConfiguration}
    */
   get traitConfig() {
-    return CONFIG.DND5E.traits[this.advancement.configuration.type];
+    return CONFIG.VARLYN5E.traits[this.advancement.configuration.type];
   }
 
   /* -------------------------------------------- */
@@ -16539,7 +16539,7 @@ class TraitConfigurationData extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.Trait"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.Trait"];
 
   /* -------------------------------------------- */
 
@@ -16622,8 +16622,8 @@ class TraitAdvancement extends Advancement {
       order: 30,
       icon: "icons/sundries/scrolls/scroll-yellow-teal.webp",
       typeIcon: "systems/dnd5e/icons/svg/trait.svg",
-      title: _loc("DND5E.ADVANCEMENT.Trait.Title"),
-      hint: _loc("DND5E.ADVANCEMENT.Trait.Hint"),
+      title: _loc("VARLYN5E.ADVANCEMENT.Trait.Title"),
+      hint: _loc("VARLYN5E.ADVANCEMENT.Trait.Hint"),
       apps: {
         config: TraitConfig,
         flow: TraitFlow
@@ -16640,7 +16640,7 @@ class TraitAdvancement extends Advancement {
     super.localize();
     localizeSchema(
       this.metadata.dataModels.configuration.schema.fields.choices.element,
-      ["DND5E.ADVANCEMENT.Trait.FIELDS.choices"]
+      ["VARLYN5E.ADVANCEMENT.Trait.FIELDS.choices"]
     );
   }
 
@@ -16663,7 +16663,7 @@ class TraitAdvancement extends Advancement {
   /** @override */
   prepareData() {
     const rep = this.representedTraits();
-    const traitConfig = rep.size === 1 ? CONFIG.DND5E.traits[rep.first()] : null;
+    const traitConfig = rep.size === 1 ? CONFIG.VARLYN5E.traits[rep.first()] : null;
     this.title = this.title || traitConfig?.labels.title || this._defaultTitle;
     this.icon = this.icon || traitConfig?.icon || this._defaultIcon;
   }
@@ -16681,8 +16681,8 @@ class TraitAdvancement extends Advancement {
 
   /** @inheritDoc */
   sortingValueForLevel(levels) {
-    const traitOrder = Object.keys(CONFIG.DND5E.traits).findIndex(k => k === this.representedTraits().first());
-    const modeOrder = Object.keys(CONFIG.DND5E.traitModes).findIndex(k => k === this.configuration.mode);
+    const traitOrder = Object.keys(CONFIG.VARLYN5E.traits).findIndex(k => k === this.representedTraits().first());
+    const modeOrder = Object.keys(CONFIG.VARLYN5E.traitModes).findIndex(k => k === this.configuration.mode);
     const order = traitOrder + (modeOrder * 100);
     return `${this.constructor.metadata.order.paddedString(4)} ${order.paddedString(4)} ${this.titleForLevel(levels)}`;
   }
@@ -16733,7 +16733,7 @@ class TraitAdvancement extends Advancement {
 
       if ( key.startsWith("tool") ) {
         const toolId = key.split(":").pop();
-        const ability = CONFIG.DND5E.tools[toolId]?.ability;
+        const ability = CONFIG.VARLYN5E.tools[toolId]?.ability;
         const kp = `system.tools.${toolId}.ability`;
         if ( ability && !foundry.utils.hasProperty(this.actor, kp) ) updates[kp] = ability;
       }
@@ -16813,8 +16813,8 @@ class TraitAdvancement extends Advancement {
 
     // If "default" mode is selected, return all traits
     // If any other mode is selected, only return traits that support expertise or mastery
-    const traitTypes = this.configuration.mode === "default" ? Object.keys(CONFIG.DND5E.traits).filter(k => k !== "dm")
-      : filteredKeys(CONFIG.DND5E.traits, t => t[this.configuration.mode === "mastery" ? "mastery" : "expertise"]);
+    const traitTypes = this.configuration.mode === "default" ? Object.keys(CONFIG.VARLYN5E.traits).filter(k => k !== "dm")
+      : filteredKeys(CONFIG.VARLYN5E.traits, t => t[this.configuration.mode === "mastery" ? "mastery" : "expertise"]);
 
     for ( const trait$1 of traitTypes ) {
       const actorValues$1 = await actorValues(this.actor, trait$1);
@@ -16885,7 +16885,7 @@ class TraitAdvancement extends Advancement {
       const rep = this.representedTraits();
       if ( rep.size === 1 ) return {
         choices: choices.filter(this.representedTraits().map(t => `${t}:*`), { inplace: false }),
-        label: _loc("DND5E.ADVANCEMENT.Trait.ChoicesRemaining", {
+        label: _loc("VARLYN5E.ADVANCEMENT.Trait.ChoicesRemaining", {
           count: unfilteredLength,
           type: traitLabel(rep.first(), unfilteredLength)
         })
@@ -16907,7 +16907,7 @@ class TraitAdvancement extends Advancement {
     const rep = this.representedTraits(available.map(a => a.choices.asSet()));
     return {
       choices,
-      label: _loc("DND5E.ADVANCEMENT.Trait.ChoicesRemaining", {
+      label: _loc("VARLYN5E.ADVANCEMENT.Trait.ChoicesRemaining", {
         count: available.length,
         type: traitLabel(rep.size === 1 ? rep.first() : null, available.length)
       })
@@ -17155,7 +17155,7 @@ class SystemDataModel extends foundry.abstract.TypeDataModel {
     const actor = this.parent.actor;
     if ( !actor?.system.isCharacter || !this.metadata?.singleton ) return;
     if ( actor.itemTypes[data.type]?.length ) {
-      ui.notifications.error("DND5E.ACTOR.Warning.Singleton", {
+      ui.notifications.error("VARLYN5E.ACTOR.Warning.Singleton", {
         format: {
           itemType: _loc(CONFIG.Item.typeLabels[data.type]),
           actorType: _loc(CONFIG.Actor.typeLabels[actor.type])
@@ -17502,7 +17502,7 @@ class ItemDataModel extends SystemDataModel {
     enrichmentOptions = { rollData, relativeTo: this.parent, ...enrichmentOptions };
     const context = {
       name, type, img, price, weight, uses, school, materials,
-      config: CONFIG.DND5E,
+      config: CONFIG.VARLYN5E,
       controlHints: game.settings.get("dnd5e", "controlHints"),
       labels: foundry.utils.deepClone((activity ?? this.parent).labels),
       tags: this.parent.labels?.components?.tags,
@@ -17554,7 +17554,7 @@ class ItemDataModel extends SystemDataModel {
 
     // Mundane Items
     if ( !this.properties.has("mgc") || !rarity ) {
-      const { mundane } = CONFIG.DND5E.crafting;
+      const { mundane } = CONFIG.VARLYN5E.crafting;
       const valueInGP = price.valueInGP ?? 0;
       return { days: Math.ceil(valueInGP * mundane.days), gold: Math.floor(valueInGP * mundane.gold) };
     }
@@ -17569,7 +17569,7 @@ class ItemDataModel extends SystemDataModel {
       }
     }
 
-    const { magic } = CONFIG.DND5E.crafting;
+    const { magic } = CONFIG.VARLYN5E.crafting;
     if ( !(rarity in magic) ) return { days, gold };
     const costs = magic[rarity];
     return { days: days + costs.days, gold: gold + costs.gold };
@@ -17628,16 +17628,16 @@ class SpellcastingField extends SchemaField$I {
         required: true,
         initial: "none",
         blank: false,
-        label: "DND5E.SpellProgression"
+        label: "VARLYN5E.SpellProgression"
       }),
-      ability: new StringField$$({ label: "DND5E.SpellAbility" }),
+      ability: new StringField$$({ label: "VARLYN5E.SpellAbility" }),
       preparation: new SchemaField$I({
-        formula: new FormulaField({ label: "DND5E.SpellPreparation.Formula" })
+        formula: new FormulaField({ label: "VARLYN5E.SpellPreparation.Formula" })
       }),
       ...fields
     };
     Object.entries(fields).forEach(([k, v]) => !v ? delete fields[k] : null);
-    super(fields, { label: "DND5E.Spellcasting", ...options });
+    super(fields, { label: "VARLYN5E.Spellcasting", ...options });
   }
 
   /* -------------------------------------------- */
@@ -17653,8 +17653,8 @@ class SpellcastingField extends SchemaField$I {
     this.spellcasting.preparation.max = simplifyBonus(this.spellcasting.preparation.formula, rollData);
 
     // Temp method for determining spellcasting type until this data is available directly using advancement
-    this.spellcasting.type = CONFIG.DND5E.spellProgression[this.spellcasting.progression]?.type;
-    this.spellcasting.slots = CONFIG.DND5E.spellcasting[this.spellcasting.type]?.slots;
+    this.spellcasting.type = CONFIG.VARLYN5E.spellProgression[this.spellcasting.progression]?.type;
+    this.spellcasting.slots = CONFIG.VARLYN5E.spellcasting[this.spellcasting.type]?.slots;
 
     const actor = this.parent.actor;
     if ( !actor ) return;
@@ -17683,7 +17683,7 @@ class AdvancementField extends foundry.data.fields.ObjectField {
    * @returns {typeof BaseAdvancement|null}  The BaseAdvancement class, or null.
    */
   getModelForType(type) {
-    return CONFIG.DND5E.advancementTypes[type]?.documentClass ?? null;
+    return CONFIG.VARLYN5E.advancementTypes[type]?.documentClass ?? null;
   }
 
   /* -------------------------------------------- */
@@ -17791,7 +17791,7 @@ class AdvancementTemplate extends SystemDataModel {
   /** @inheritDoc */
   static defineSchema() {
     return {
-      advancement: new AdvancementCollectionField({ label: "DND5E.AdvancementTitle" })
+      advancement: new AdvancementCollectionField({ label: "VARLYN5E.AdvancementTitle" })
     };
   }
 
@@ -17837,7 +17837,7 @@ class AdvancementTemplate extends SystemDataModel {
     if ( toCreate.length ) this.parent.updateSource({
       "system.advancement": toCreate.reduce((obj, c) => {
         const baseData = foundry.utils.deepClone(c);
-        const config = CONFIG.DND5E.advancementTypes[c.type];
+        const config = CONFIG.VARLYN5E.advancementTypes[c.type];
         const cls = config.documentClass ?? config;
         const advancement = new cls(c, { parent: this.parent });
         if ( advancement._preCreate(baseData) === false ) return obj;
@@ -17883,7 +17883,7 @@ class SourceField extends SchemaField$H {
       ...fields
     };
     Object.entries(fields).forEach(([k, v]) => !v ? delete fields[k] : null);
-    super(fields, { label: "DND5E.SOURCE.FIELDS.source.label", ...options });
+    super(fields, { label: "VARLYN5E.SOURCE.FIELDS.source.label", ...options });
   }
 
   /* -------------------------------------------- */
@@ -17904,8 +17904,8 @@ class SourceField extends SchemaField$H {
     if ( this.custom ) this.label = this.custom;
     else {
       const page = Number.isNumeric(this.page)
-        ? _loc("DND5E.SOURCE.Display.Page", { page: this.page }) : (this.page ?? "");
-      this.label = _loc("DND5E.SOURCE.Display.Full", { book: this.book, page }).trim();
+        ? _loc("VARLYN5E.SOURCE.Display.Page", { page: this.page }) : (this.page ?? "");
+      this.label = _loc("VARLYN5E.SOURCE.Display.Full", { book: this.book, page }).trim();
     }
 
     this.value = this.book || (pkg?.title ?? "");
@@ -17970,10 +17970,10 @@ class ItemDescriptionTemplate extends SystemDataModel {
   static defineSchema() {
     return {
       description: new SchemaField$G({
-        value: new HTMLField$6({ required: true, nullable: true, label: "DND5E.Description" }),
-        chat: new HTMLField$6({ required: true, nullable: true, label: "DND5E.DescriptionChat" })
+        value: new HTMLField$6({ required: true, nullable: true, label: "VARLYN5E.Description" }),
+        chat: new HTMLField$6({ required: true, nullable: true, label: "VARLYN5E.DescriptionChat" })
       }),
-      identifier: new IdentifierField({ required: true, label: "DND5E.Identifier" }),
+      identifier: new IdentifierField({ required: true, label: "VARLYN5E.Identifier" }),
       source: new SourceField()
     };
   }
@@ -17987,7 +17987,7 @@ class ItemDescriptionTemplate extends SystemDataModel {
    * @returns {Set<string>}
    */
   get validProperties() {
-    const valid = new Set(CONFIG.DND5E.validProperties[this.parent.type] ?? []);
+    const valid = new Set(CONFIG.VARLYN5E.validProperties[this.parent.type] ?? []);
     if ( this.parent.actor?.system.isNPC && this.schema.has("quantity") ) valid.add("gear");
     return valid;
   }
@@ -18038,11 +18038,11 @@ class ItemDescriptionTemplate extends SystemDataModel {
    */
   static compendiumBrowserPropertiesFilter(type) {
     return {
-      label: "DND5E.Properties",
+      label: "VARLYN5E.Properties",
       type: "set",
       config: {
-        choices: Object.entries(CONFIG.DND5E.itemProperties).reduce((obj, [k, v]) => {
-          if ( CONFIG.DND5E.validProperties[type]?.has(k) ) obj[k] = v;
+        choices: Object.entries(CONFIG.VARLYN5E.itemProperties).reduce((obj, [k, v]) => {
+          if ( CONFIG.VARLYN5E.validProperties[type]?.has(k) ) obj[k] = v;
           return obj;
         }, {}),
         keyPath: "system.properties",
@@ -18089,7 +18089,7 @@ class ActivityField extends foundry.data.fields.ObjectField {
    * @returns {typeof Activity|null}  Activity document type.
    */
   getModel(value) {
-    return CONFIG.DND5E.activityTypes[value?.type]?.documentClass ?? null;
+    return CONFIG.VARLYN5E.activityTypes[value?.type]?.documentClass ?? null;
   }
 
   /* -------------------------------------------- */
@@ -18236,7 +18236,7 @@ class AdvantageModeField extends foundry.data.fields.NumberField {
     return foundry.utils.mergeObject(super._defaults, {
       choices: AdvantageModeField.#values,
       initial: 0,
-      label: "DND5E.AdvantageMode"
+      label: "VARLYN5E.AdvantageMode"
     });
   }
 
@@ -18538,8 +18538,8 @@ class StartingEquipmentTemplate extends SystemDataModel {
   static defineSchema() {
     return {
       startingEquipment: new ArrayField$e(new EmbeddedDataField$3(EquipmentEntryData), {required: true}),
-      wealth: new FormulaField({ label: "DND5E.StartingEquipment.Wealth.Label",
-        hint: "DND5E.StartingEquipment.Wealth.Hint" })
+      wealth: new FormulaField({ label: "VARLYN5E.StartingEquipment.Wealth.Label",
+        hint: "VARLYN5E.StartingEquipment.Wealth.Hint" })
     };
   }
 
@@ -18580,7 +18580,7 @@ class StartingEquipmentTemplate extends SystemDataModel {
     if ( modernStyle ) {
       const entries = topLevel[0].type === "OR" ? topLevel[0].children : topLevel;
       if ( this.wealth ) entries.push(new EquipmentEntryData({
-        type: "currency", key: CONFIG.DND5E.defaultCurrency, count: this.wealth
+        type: "currency", key: CONFIG.VARLYN5E.defaultCurrency, count: this.wealth
       }));
       if ( entries.length > 1 ) {
         const usedPrefixes = [];
@@ -18588,7 +18588,7 @@ class StartingEquipmentTemplate extends SystemDataModel {
           entries.map(e => e.generateLabel({ modernStyle, depth: 2 })), { modernStyle, usedPrefixes }
         );
         const formatter = game.i18n.getListFormatter({ type: "disjunction" });
-        return `<p>${_loc("DND5E.StartingEquipment.ChooseList", {
+        return `<p>${_loc("VARLYN5E.StartingEquipment.ChooseList", {
           prefixes: formatter.format(usedPrefixes), choices: formatter.format(choices)
         })}</p>`;
       }
@@ -18619,8 +18619,8 @@ class EquipmentEntryData extends foundry.abstract.DataModel {
    * @enum {string}
    */
   static GROUPING_TYPES = {
-    OR: "DND5E.StartingEquipment.Operator.OR",
-    AND: "DND5E.StartingEquipment.Operator.AND"
+    OR: "VARLYN5E.StartingEquipment.Operator.OR",
+    AND: "VARLYN5E.StartingEquipment.Operator.AND"
   };
 
   /**
@@ -18629,16 +18629,16 @@ class EquipmentEntryData extends foundry.abstract.DataModel {
    */
   static OPTION_TYPES = {
     // Category types
-    armor: "DND5E.StartingEquipment.Choice.Armor",
-    tool: "DND5E.StartingEquipment.Choice.Tool",
-    weapon: "DND5E.StartingEquipment.Choice.Weapon",
-    focus: "DND5E.StartingEquipment.Choice.Focus",
+    armor: "VARLYN5E.StartingEquipment.Choice.Armor",
+    tool: "VARLYN5E.StartingEquipment.Choice.Tool",
+    weapon: "VARLYN5E.StartingEquipment.Choice.Weapon",
+    focus: "VARLYN5E.StartingEquipment.Choice.Focus",
 
     // Currency
-    currency: "DND5E.StartingEquipment.Currency",
+    currency: "VARLYN5E.StartingEquipment.Currency",
 
     // Generic item type
-    linked: "DND5E.StartingEquipment.SpecificItem"
+    linked: "VARLYN5E.StartingEquipment.SpecificItem"
   };
 
   /**
@@ -18652,19 +18652,19 @@ class EquipmentEntryData extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /**
-   * Where in `CONFIG.DND5E` to find the type category labels.
+   * Where in `CONFIG.VARLYN5E` to find the type category labels.
    * @enum {{ label: string, config: string }}
    */
   static CATEGORIES = {
     armor: {
-      label: "DND5E.Armor",
+      label: "VARLYN5E.Armor",
       config: "armorTypes"
     },
     currency: {
       config: "currencies"
     },
     focus: {
-      label: "DND5E.Focus.Label",
+      label: "VARLYN5E.Focus.Label",
       config: "focusTypes"
     },
     tool: {
@@ -18736,7 +18736,7 @@ class EquipmentEntryData extends foundry.abstract.DataModel {
     let label = configEntry?.label ?? configEntry;
     if ( !label ) return this.blankLabel.toLowerCase();
 
-    if ( this.type === "weapon" ) label = _loc("DND5E.WeaponCategory", { category: label });
+    if ( this.type === "weapon" ) label = _loc("VARLYN5E.WeaponCategory", { category: label });
     return label.toLowerCase();
   }
 
@@ -18747,8 +18747,8 @@ class EquipmentEntryData extends foundry.abstract.DataModel {
    * @returns {Record<string, string>}
    */
   get keyOptions() {
-    const config = foundry.utils.deepClone(CONFIG.DND5E[this.constructor.CATEGORIES[this.type]?.config]);
-    if ( this.type === "weapon" ) foundry.utils.mergeObject(config, CONFIG.DND5E.weaponTypes);
+    const config = foundry.utils.deepClone(CONFIG.VARLYN5E[this.constructor.CATEGORIES[this.type]?.config]);
+    if ( this.type === "weapon" ) foundry.utils.mergeObject(config, CONFIG.VARLYN5E.weaponTypes);
     return Object.entries(config).reduce((obj, [k, v]) => {
       obj[k] = foundry.utils.getType(v) === "Object" ? v.label : v;
       return obj;
@@ -18783,7 +18783,7 @@ class EquipmentEntryData extends foundry.abstract.DataModel {
           .format(entries);
 
       case "currency":
-        const currencyConfig = CONFIG.DND5E.currencies[this.key];
+        const currencyConfig = CONFIG.VARLYN5E.currencies[this.key];
         if ( this.count && currencyConfig ) label = `${this.count} ${currencyConfig.abbreviation.toUpperCase()}`;
         break;
 
@@ -18801,9 +18801,9 @@ class EquipmentEntryData extends foundry.abstract.DataModel {
     if ( !label ) return "";
     if ( this.type === "currency" ) return label;
     if ( this.count > 1 ) label = `${formatNumber(this.count)}&times; ${label}`;
-    else if ( this.type !== "linked" ) label = _loc("DND5E.TraitConfigChooseAnyUncounted", { type: label });
+    else if ( this.type !== "linked" ) label = _loc("VARLYN5E.TraitConfigChooseAnyUncounted", { type: label });
     if ( (this.type === "linked") && this.requiresProficiency ) {
-      label += ` (${_loc("DND5E.StartingEquipment.IfProficient").toLowerCase()})`;
+      label += ` (${_loc("VARLYN5E.StartingEquipment.IfProficient").toLowerCase()})`;
     }
     return label;
   }
@@ -18820,7 +18820,7 @@ class EquipmentEntryData extends foundry.abstract.DataModel {
    * @returns {string[]}
    */
   static prefixOrEntries(entries, { depth=1, modernStyle=true, usedPrefixes }={}) {
-    let letters = _loc("DND5E.StartingEquipment.Prefixes");
+    let letters = _loc("VARLYN5E.StartingEquipment.Prefixes");
     if ( !letters ) return entries;
     if ( (modernStyle && (depth === 1)) || (!modernStyle && (depth === 2)) ) letters = letters.toUpperCase();
     return entries.map((e, idx) => {
@@ -18864,7 +18864,7 @@ class ClassData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.CLASS", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.CLASS", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -18895,7 +18895,7 @@ class ClassData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["hasSpellcasting", {
-        label: "DND5E.CompendiumBrowser.Filters.HasSpellcasting",
+        label: "VARLYN5E.CompendiumBrowser.Filters.HasSpellcasting",
         type: "boolean",
         createFilter: (filters, value, def) => {
           if ( value === 0 ) return;
@@ -19072,8 +19072,8 @@ class ClassData extends ItemDataModel.mixin(
     context.singleDescription = true;
 
     context.parts = ["dnd5e.details-class", "dnd5e.details-spellcasting", "dnd5e.details-starting-equipment"];
-    context.hitDieOptions = CONFIG.DND5E.hitDieTypes.map(d => ({ value: d, label: d }));
-    context.primaryAbilities = Object.entries(CONFIG.DND5E.abilities).map(([value, data]) => ({
+    context.hitDieOptions = CONFIG.VARLYN5E.hitDieTypes.map(d => ({ value: d, label: d }));
+    context.primaryAbilities = Object.entries(CONFIG.VARLYN5E.abilities).map(([value, data]) => ({
       value, label: data.label, selected: this.primaryAbility.value.has(value)
     }));
   }
@@ -19130,23 +19130,23 @@ class ClassData extends ItemDataModel.mixin(
 
     // Check to make sure the updated class level isn't below zero
     if ( changed.system.levels <= 0 ) {
-      ui.notifications.warn("DND5E.MaxClassLevelMinimumWarn");
+      ui.notifications.warn("VARLYN5E.MaxClassLevelMinimumWarn");
       changed.system.levels = 1;
     }
 
     // Check to make sure the updated class level doesn't exceed level cap
-    if ( changed.system.levels > CONFIG.DND5E.maxLevel ) {
-      ui.notifications.warn("DND5E.MaxClassLevelExceededWarn", { format: { max: CONFIG.DND5E.maxLevel } });
-      changed.system.levels = CONFIG.DND5E.maxLevel;
+    if ( changed.system.levels > CONFIG.VARLYN5E.maxLevel ) {
+      ui.notifications.warn("VARLYN5E.MaxClassLevelExceededWarn", { format: { max: CONFIG.VARLYN5E.maxLevel } });
+      changed.system.levels = CONFIG.VARLYN5E.maxLevel;
     }
 
     if ( !this.parent.actor?.system.isCharacter ) return;
 
     // Check to ensure the updated character doesn't exceed level cap
     const newCharacterLevel = this.parent.actor.system.details.level + (changed.system.levels - this.levels);
-    if ( newCharacterLevel > CONFIG.DND5E.maxLevel ) {
-      ui.notifications.warn("DND5E.MaxCharacterLevelExceededWarn", { format: { max: CONFIG.DND5E.maxLevel } });
-      changed.system.levels -= newCharacterLevel - CONFIG.DND5E.maxLevel;
+    if ( newCharacterLevel > CONFIG.VARLYN5E.maxLevel ) {
+      ui.notifications.warn("VARLYN5E.MaxCharacterLevelExceededWarn", { format: { max: CONFIG.VARLYN5E.maxLevel } });
+      changed.system.levels -= newCharacterLevel - CONFIG.VARLYN5E.maxLevel;
     }
   }
 
@@ -19172,7 +19172,7 @@ class CurrencyTemplate extends SystemDataModel {
     return {
       currency: new MappingField(new foundry.data.fields.NumberField({
         required: true, nullable: false, min: 0, initial: 0
-      }), { initialKeys: CONFIG.DND5E.currencies, initialKeysOnly: true, label: "DND5E.Currency" })
+      }), { initialKeys: CONFIG.VARLYN5E.currencies, initialKeysOnly: true, label: "VARLYN5E.Currency" })
     };
   }
 
@@ -19188,8 +19188,8 @@ class CurrencyTemplate extends SystemDataModel {
     if ( !game.settings.get("dnd5e", "currencyWeight") ) return 0;
     const count = Object.values(this.currency).reduce((count, value) => count + value, 0);
     const currencyPerWeight = game.settings.get("dnd5e", "metricWeightUnits")
-      ? CONFIG.DND5E.encumbrance.currencyPerWeight.metric
-      : CONFIG.DND5E.encumbrance.currencyPerWeight.imperial;
+      ? CONFIG.VARLYN5E.encumbrance.currencyPerWeight.metric
+      : CONFIG.VARLYN5E.encumbrance.currencyPerWeight.imperial;
     return count / currencyPerWeight;
   }
 
@@ -19223,9 +19223,9 @@ class EquippableItemTemplate extends SystemDataModel {
   /** @inheritDoc */
   static defineSchema() {
     return {
-      attunement: new StringField$X({required: true, label: "DND5E.Attunement"}),
-      attuned: new BooleanField$s({label: "DND5E.Attuned"}),
-      equipped: new BooleanField$s({required: true, label: "DND5E.Equipped"})
+      attunement: new StringField$X({required: true, label: "VARLYN5E.Attunement"}),
+      attuned: new BooleanField$s({label: "VARLYN5E.Attuned"}),
+      equipped: new BooleanField$s({required: true, label: "VARLYN5E.Equipped"})
     };
   }
 
@@ -19237,7 +19237,7 @@ class EquippableItemTemplate extends SystemDataModel {
    */
   static get compendiumBrowserAttunementFilter() {
     return {
-      label: "DND5E.Attunement",
+      label: "VARLYN5E.Attunement",
       type: "boolean",
       createFilter: (filters, value, def) => {
         if ( value === 0 ) return;
@@ -19268,10 +19268,10 @@ class EquippableItemTemplate extends SystemDataModel {
    */
   get equippableItemCardProperties() {
     return [
-      this.attuned ? _loc("DND5E.AttunementAttuned")
-        : CONFIG.DND5E.attunementTypes[this.attunement] ?? null,
-      _loc(this.equipped ? "DND5E.Equipped" : "DND5E.Unequipped"),
-      ("proficient" in this) ? CONFIG.DND5E.proficiencyLevels[this.prof?.multiplier || 0] : null
+      this.attuned ? _loc("VARLYN5E.AttunementAttuned")
+        : CONFIG.VARLYN5E.attunementTypes[this.attunement] ?? null,
+      _loc(this.equipped ? "VARLYN5E.Equipped" : "VARLYN5E.Unequipped"),
+      ("proficient" in this) ? CONFIG.VARLYN5E.proficiencyLevels[this.prof?.multiplier || 0] : null
     ];
   }
 
@@ -19371,10 +19371,10 @@ class IdentifiableTemplate extends SystemDataModel {
   /** @inheritDoc */
   static defineSchema() {
     return {
-      identified: new BooleanField$r({ required: true, initial: true, label: "DND5E.Identified" }),
+      identified: new BooleanField$r({ required: true, initial: true, label: "VARLYN5E.Identified" }),
       unidentified: new SchemaField$E({
-        name: new StringField$W({ label: "DND5E.NameUnidentified" }),
-        description: new HTMLField$5({ label: "DND5E.DescriptionUnidentified" })
+        name: new StringField$W({ label: "VARLYN5E.NameUnidentified" }),
+        description: new HTMLField$5({ label: "VARLYN5E.DescriptionUnidentified" })
       })
     };
   }
@@ -19445,7 +19445,7 @@ class IdentifiableTemplate extends SystemDataModel {
     if ( baseItem ) {
       if ( fetchName ) {
         foundry.utils.setProperty(changed, "system.unidentified.name", _loc(
-          "DND5E.Unidentified.DefaultName", { name: baseItem.name }
+          "VARLYN5E.Unidentified.DefaultName", { name: baseItem.name }
         ));
       }
       if ( fetchDesc ) {
@@ -19456,7 +19456,7 @@ class IdentifiableTemplate extends SystemDataModel {
 
     // Otherwise, set the name to match the item type
     if ( fetchName ) foundry.utils.setProperty(changed, "system.unidentified.name", _loc(
-      "DND5E.Unidentified.DefaultName", { name: _loc(CONFIG.Item.typeLabels[this.parent.type]) }
+      "VARLYN5E.Unidentified.DefaultName", { name: _loc(CONFIG.Item.typeLabels[this.parent.type]) }
     ));
   }
 }
@@ -19478,28 +19478,28 @@ class PhysicalItemTemplate extends SystemDataModel {
   static defineSchema() {
     return {
       container: new ForeignDocumentField$5(foundry.documents.BaseItem, {
-        idOnly: true, label: "DND5E.Container"
+        idOnly: true, label: "VARLYN5E.Container"
       }),
       quantity: new NumberField$w({
-        required: true, nullable: false, integer: true, initial: 1, min: 0, label: "DND5E.Quantity"
+        required: true, nullable: false, integer: true, initial: 1, min: 0, label: "VARLYN5E.Quantity"
       }),
       weight: new SchemaField$D({
         value: new NumberField$w({
-          required: true, nullable: false, initial: 0, min: 0, label: "DND5E.Weight"
+          required: true, nullable: false, initial: 0, min: 0, label: "VARLYN5E.Weight"
         }),
         units: new StringField$V({
-          required: true, blank: false, label: "DND5E.UNITS.WEIGHT.Label", initial: () => defaultUnits("weight")
+          required: true, blank: false, label: "VARLYN5E.UNITS.WEIGHT.Label", initial: () => defaultUnits("weight")
         })
-      }, { label: "DND5E.Weight" }),
+      }, { label: "VARLYN5E.Weight" }),
       price: new SchemaField$D({
         value: new NumberField$w({
-          required: true, nullable: false, initial: 0, min: 0, label: "DND5E.Price"
+          required: true, nullable: false, initial: 0, min: 0, label: "VARLYN5E.Price"
         }),
         denomination: new StringField$V({
-          required: true, blank: false, initial: () => CONFIG.DND5E.defaultCurrency, label: "DND5E.Currency"
+          required: true, blank: false, initial: () => CONFIG.VARLYN5E.defaultCurrency, label: "VARLYN5E.Currency"
         })
-      }, { label: "DND5E.Price" }),
-      rarity: new StringField$V({ required: true, blank: true, label: "DND5E.Rarity" })
+      }, { label: "VARLYN5E.Price" }),
+      rarity: new StringField$V({ required: true, blank: true, label: "VARLYN5E.Rarity" })
     };
   }
 
@@ -19520,18 +19520,18 @@ class PhysicalItemTemplate extends SystemDataModel {
   static get compendiumBrowserPhysicalItemFilters() {
     return [
       ["price", {
-        label: "DND5E.Price",
+        label: "VARLYN5E.Price",
         type: "range",
         config: {
           keyPath: "system.price.value"
         }
       }],
       ["rarity", {
-        label: "DND5E.Rarity",
+        label: "VARLYN5E.Rarity",
         type: "set",
         config: {
-          blank: _loc("DND5E.ItemRarityMundane").capitalize(),
-          choices: Object.entries(CONFIG.DND5E.itemRarity).reduce((obj, [key, label]) => {
+          blank: _loc("VARLYN5E.ItemRarityMundane").capitalize(),
+          choices: Object.entries(CONFIG.VARLYN5E.itemRarity).reduce((obj, [key, label]) => {
             obj[key] = { label: label.capitalize() };
             return obj;
           }, {}),
@@ -19551,8 +19551,8 @@ class PhysicalItemTemplate extends SystemDataModel {
    */
   get priceLabel() {
     const { value, denomination } = this.price;
-    const hasPrice = value && (denomination in CONFIG.DND5E.currencies);
-    return hasPrice ? `${value} ${CONFIG.DND5E.currencies[denomination].label}` : null;
+    const hasPrice = value && (denomination in CONFIG.VARLYN5E.currencies);
+    return hasPrice ? `${value} ${CONFIG.VARLYN5E.currencies[denomination].label}` : null;
   }
 
   /* -------------------------------------------- */
@@ -19573,12 +19573,12 @@ class PhysicalItemTemplate extends SystemDataModel {
    */
   get physicalItemSheetFields() {
     return [{
-      label: CONFIG.DND5E.itemRarity[this.rarity],
+      label: CONFIG.VARLYN5E.itemRarity[this.rarity],
       value: this._source.rarity,
       requiresIdentification: true,
       field: this.schema.getField("rarity"),
-      choices: CONFIG.DND5E.itemRarity,
-      blank: "DND5E.Rarity",
+      choices: CONFIG.VARLYN5E.itemRarity,
+      blank: "VARLYN5E.Rarity",
       classes: "item-rarity"
     }];
   }
@@ -19617,9 +19617,9 @@ class PhysicalItemTemplate extends SystemDataModel {
    * @param {object} source  The candidate source data from which the model will be constructed.
    */
   static #migrateRarity(source) {
-    if ( !("rarity" in source) || CONFIG.DND5E.itemRarity[source.rarity] ) return;
-    source.rarity = Object.keys(CONFIG.DND5E.itemRarity).find(key =>
-      CONFIG.DND5E.itemRarity[key].toLowerCase() === source.rarity.toLowerCase()
+    if ( !("rarity" in source) || CONFIG.VARLYN5E.itemRarity[source.rarity] ) return;
+    source.rarity = Object.keys(CONFIG.VARLYN5E.itemRarity).find(key =>
+      CONFIG.VARLYN5E.itemRarity[key].toLowerCase() === source.rarity.toLowerCase()
     ) ?? "";
   }
 
@@ -19645,10 +19645,10 @@ class PhysicalItemTemplate extends SystemDataModel {
    * Prepare physical item properties.
    */
   preparePhysicalData() {
-    if ( !(CONFIG.DND5E.defaultCurrency in CONFIG.DND5E.currencies) ) return;
+    if ( !(CONFIG.VARLYN5E.defaultCurrency in CONFIG.VARLYN5E.currencies) ) return;
     const { value, denomination } = this.price;
-    const { conversion } = CONFIG.DND5E.currencies[denomination] ?? {};
-    const defaultCurrency = CONFIG.DND5E.currencies[CONFIG.DND5E.defaultCurrency];
+    const { conversion } = CONFIG.VARLYN5E.currencies[denomination] ?? {};
+    const defaultCurrency = CONFIG.VARLYN5E.currencies[CONFIG.VARLYN5E.defaultCurrency];
     if ( conversion ) {
       const multiplier = defaultCurrency.conversion / conversion;
       this.price.valueInGP = Math.floor(value * multiplier);
@@ -19888,7 +19888,7 @@ class ContainerData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.CONTAINER", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.CONTAINER", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -20085,11 +20085,11 @@ class ContainerData extends ItemDataModel.mixin(
     if ( this.capacity.count ) {
       context.value = await this.contentsCount;
       context.max = this.capacity.count;
-      context.units = _loc("DND5E.Items");
+      context.units = _loc("VARLYN5E.Items");
     } else if ( this.capacity.weight.value ) {
       context.value = await this.contentsWeight;
       context.max = this.capacity.weight.value;
-      context.units = CONFIG.DND5E.weightUnits[this.capacity.weight.units]?.label ?? "";
+      context.units = CONFIG.VARLYN5E.weightUnits[this.capacity.weight.units]?.label ?? "";
     }
     context.value = context.value.toNearest(0.1);
     context.pct = Math.clamp(context.max ? (context.value / context.max) * 100 : 0, 0, 100);
@@ -20258,7 +20258,7 @@ class ActivitiesTemplate extends SystemDataModel {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.USES"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.USES"];
 
   /* -------------------------------------------- */
 
@@ -20443,7 +20443,7 @@ class ActivitiesTemplate extends SystemDataModel {
 
     // If period is not blank, set an appropriate recovery type
     else if ( source.uses?.per ) {
-      if ( CONFIG.DND5E.limitedUsePeriods[source.uses.per]?.formula && source.uses.recovery ) {
+      if ( CONFIG.VARLYN5E.limitedUsePeriods[source.uses.per]?.formula && source.uses.recovery ) {
         source.uses.recovery = [{ period: source.uses.per, type: "formula", formula: source.uses.recovery }];
       }
       else source.uses.recovery = [{ period: source.uses.per, type: "recoverAll" }];
@@ -20520,17 +20520,17 @@ class ActivitiesTemplate extends SystemDataModel {
     if ( (type === "utility") && source.system.damage?.parts?.length ) type = "damage";
     if ( source.type === "tool" ) type = "check";
 
-    const cls = CONFIG.DND5E.activityTypes[type].documentClass;
+    const cls = CONFIG.VARLYN5E.activityTypes[type].documentClass;
     cls.createInitialActivity(source);
 
     if ( (type !== "save") && source.system.save?.ability ) {
-      CONFIG.DND5E.activityTypes.save.documentClass.createInitialActivity(source, { offset: 1 });
+      CONFIG.VARLYN5E.activityTypes.save.documentClass.createInitialActivity(source, { offset: 1 });
     }
     if ( (source.type !== "weapon") && source.system.damage?.versatile ) {
-      CONFIG.DND5E.activityTypes.damage.documentClass.createInitialActivity(source, { offset: 2, versatile: true });
+      CONFIG.VARLYN5E.activityTypes.damage.documentClass.createInitialActivity(source, { offset: 2, versatile: true });
     }
     if ( (type !== "utility") && source.system.formula ) {
-      CONFIG.DND5E.activityTypes.utility.documentClass.createInitialActivity(source, { offset: 3 });
+      CONFIG.VARLYN5E.activityTypes.utility.documentClass.createInitialActivity(source, { offset: 3 });
     }
   }
 
@@ -20831,13 +20831,13 @@ class ItemTypeField extends SchemaField$z {
   constructor(options={}, schemaOptions={}) {
     const fields = {
       value: new StringField$S({
-        required: true, blank: true, initial: options.value ?? "", label: "DND5E.Type"
+        required: true, blank: true, initial: options.value ?? "", label: "VARLYN5E.Type"
       }),
       subtype: new StringField$S({
-        required: true, blank: true, initial: options.subtype ?? "", label: "DND5E.Subtype"
+        required: true, blank: true, initial: options.subtype ?? "", label: "VARLYN5E.Subtype"
       }),
       baseItem: new StringField$S({
-        required: true, blank: true, initial: options.baseItem ?? "", label: "DND5E.BaseItem"
+        required: true, blank: true, initial: options.baseItem ?? "", label: "VARLYN5E.BaseItem"
       })
     };
     if ( options.subtype === false ) delete fields.subtype;
@@ -20882,7 +20882,7 @@ class EquipmentData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.VEHICLE.MOUNTABLE", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.VEHICLE.MOUNTABLE", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -20890,16 +20890,16 @@ class EquipmentData extends ItemDataModel.mixin(
   static defineSchema() {
     return this.mergeSchema(super.defineSchema(), {
       armor: new SchemaField$y({
-        value: new NumberField$t({ required: true, integer: true, min: 0, label: "DND5E.ArmorClass" }),
-        magicalBonus: new FormulaField({ deterministic: true, label: "DND5E.MagicalBonus" }),
-        dex: new NumberField$t({ required: true, integer: true, label: "DND5E.ItemEquipmentDexMod" })
+        value: new NumberField$t({ required: true, integer: true, min: 0, label: "VARLYN5E.ArmorClass" }),
+        magicalBonus: new FormulaField({ deterministic: true, label: "VARLYN5E.MagicalBonus" }),
+        dex: new NumberField$t({ required: true, integer: true, label: "VARLYN5E.ItemEquipmentDexMod" })
       }),
       proficient: new NumberField$t({
-        required: true, min: 0, max: 1, integer: true, initial: null, label: "DND5E.ProficiencyLevel"
+        required: true, min: 0, max: 1, integer: true, initial: null, label: "VARLYN5E.ProficiencyLevel"
       }),
-      properties: new SetField$u(new StringField$R(), { label: "DND5E.ItemEquipmentProperties" }),
-      strength: new NumberField$t({ required: true, integer: true, min: 0, label: "DND5E.ItemRequiredStr" }),
-      type: new ItemTypeField({ subtype: false }, { label: "DND5E.ItemEquipmentType" })
+      properties: new SetField$u(new StringField$R(), { label: "VARLYN5E.ItemEquipmentProperties" }),
+      strength: new NumberField$t({ required: true, integer: true, min: 0, label: "VARLYN5E.ItemRequiredStr" }),
+      type: new ItemTypeField({ subtype: false }, { label: "VARLYN5E.ItemEquipmentType" })
     });
   }
 
@@ -20918,10 +20918,10 @@ class EquipmentData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["type", {
-        label: "DND5E.ItemEquipmentType",
+        label: "VARLYN5E.ItemEquipmentType",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.equipmentTypes,
+          choices: CONFIG.VARLYN5E.equipmentTypes,
           keyPath: "system.type.value"
         }
       }],
@@ -20959,7 +20959,7 @@ class EquipmentData extends ItemDataModel.mixin(
     return [
       this.type.label,
       (this.isArmor || this.isMountable) ? (this.parent.labels?.armor ?? null) : null,
-      this.properties.has("stealthDisadvantage") ? _loc("DND5E.ITEM.Property.StealthDisadvantage") : null
+      this.properties.has("stealthDisadvantage") ? _loc("VARLYN5E.ITEM.Property.StealthDisadvantage") : null
     ];
   }
 
@@ -20972,7 +20972,7 @@ class EquipmentData extends ItemDataModel.mixin(
   get cardProperties() {
     return [
       (this.isArmor || this.isMountable) ? (this.parent.labels?.armor ?? null) : null,
-      this.properties.has("stealthDisadvantage") ? _loc("DND5E.ITEM.Property.StealthDisadvantage") : null
+      this.properties.has("stealthDisadvantage") ? _loc("VARLYN5E.ITEM.Property.StealthDisadvantage") : null
     ];
   }
 
@@ -20983,7 +20983,7 @@ class EquipmentData extends ItemDataModel.mixin(
    * @type {boolean}
    */
   get isArmor() {
-    return this.type.value in CONFIG.DND5E.armorTypes;
+    return this.type.value in CONFIG.VARLYN5E.armorTypes;
   }
 
   /* -------------------------------------------- */
@@ -21001,7 +21001,7 @@ class EquipmentData extends ItemDataModel.mixin(
 
   /** @override */
   static get itemCategories() {
-    return CONFIG.DND5E.equipmentTypes;
+    return CONFIG.VARLYN5E.equipmentTypes;
   }
 
   /* -------------------------------------------- */
@@ -21015,7 +21015,7 @@ class EquipmentData extends ItemDataModel.mixin(
     const actor = this.parent.actor;
     if ( !actor ) return 0;
     if ( actor.system.isNPC ) return 1; // NPCs are always considered proficient with any armor in their stat block.
-    const config = CONFIG.DND5E.armorProficienciesMap;
+    const config = CONFIG.VARLYN5E.armorProficienciesMap;
     const itemProf = config[this.type.value];
     const actorProfs = actor.system.traits?.armorProf?.value ?? new Set();
     const isProficient = (itemProf === true) || actorProfs.has(itemProf) || actorProfs.has(this.type.baseItem);
@@ -21119,14 +21119,14 @@ class EquipmentData extends ItemDataModel.mixin(
     this.prepareMountableData();
     const magicalBonus = simplifyBonus(this.armor.magicalBonus, this.parent.getRollData());
     if ( this.magicAvailable && magicalBonus ) this.armor.value += magicalBonus;
-    this.type.label = CONFIG.DND5E.equipmentTypes[this.type.value]
+    this.type.label = CONFIG.VARLYN5E.equipmentTypes[this.type.value]
       ?? _loc(CONFIG.Item.typeLabels.equipment);
     this.type.identifier = this.type.value === "shield"
-      ? CONFIG.DND5E.shieldIds[this.type.baseItem]
-      : CONFIG.DND5E.armorIds[this.type.baseItem];
+      ? CONFIG.VARLYN5E.shieldIds[this.type.baseItem]
+      : CONFIG.VARLYN5E.armorIds[this.type.baseItem];
 
     const labels = this.parent.labels ??= {};
-    labels.armor = this.armor.value ? `${this.armor.value} ${_loc("DND5E.AC")}` : "";
+    labels.armor = this.armor.value ? `${this.armor.value} ${_loc("VARLYN5E.AC")}` : "";
   }
 
   /* -------------------------------------------- */
@@ -21158,14 +21158,14 @@ class EquipmentData extends ItemDataModel.mixin(
 
     context.parts = ["dnd5e.details-equipment", "dnd5e.field-uses"];
     context.equipmentTypeOptions = [
-      ...Object.entries(CONFIG.DND5E.miscEquipmentTypes).map(([value, label]) => ({ value, label })),
-      ...Object.entries(CONFIG.DND5E.armorTypes).map(([value, label]) => ({ value, label, group: "DND5E.Armor" }))
+      ...Object.entries(CONFIG.VARLYN5E.miscEquipmentTypes).map(([value, label]) => ({ value, label })),
+      ...Object.entries(CONFIG.VARLYN5E.armorTypes).map(([value, label]) => ({ value, label, group: "VARLYN5E.Armor" }))
     ];
     context.hasDexModifier = this.isArmor && (this.type.value !== "shield");
     if ( this.armor.value && (this.isArmor || (this.type.value === "shield")) ) {
       context.properties.active.shift();
       context.info = [{
-        label: "DND5E.ArmorClass",
+        label: "VARLYN5E.ArmorClass",
         classes: "info-lg",
         value: this.type.value === "shield" ? varlyn5e.utils.formatModifier(this.armor.value) : this.armor.value
       }];
@@ -21219,7 +21219,7 @@ class Award extends Application5e {
     },
     tag: "form",
     window: {
-      title: "DND5E.Award.Title"
+      title: "VARLYN5E.Award.Title"
     }
   };
 
@@ -21287,7 +21287,7 @@ class Award extends Application5e {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
 
-    context.currency = Object.entries(CONFIG.DND5E.currencies).reduce((obj, [k, { label, icon }]) => {
+    context.currency = Object.entries(CONFIG.VARLYN5E.currencies).reduce((obj, [k, { label, icon }]) => {
       obj[k] = {
         label, icon,
         value: this.award.currency ? this.award.currency[k] : this.origin?.system.currency[k]
@@ -21481,7 +21481,7 @@ class Award extends Application5e {
     for ( const [destination, result] of results ) {
       const entries = [];
       for ( const [key, amount] of Object.entries(result.currency ?? {}) ) {
-        const label = CONFIG.DND5E.currencies[key].label;
+        const label = CONFIG.VARLYN5E.currencies[key].label;
         entries.push(`
           <span class="award-entry">
             ${formatNumber(amount)} <i class="currency ${key}" data-tooltip aria-label="${label}"></i>
@@ -21490,12 +21490,12 @@ class Award extends Application5e {
       }
       if ( result.xp ) entries.push(`
         <span class="award-entry">
-          ${formatNumber(result.xp)} ${_loc("DND5E.ExperiencePoints.Abbreviation")}
+          ${formatNumber(result.xp)} ${_loc("VARLYN5E.ExperiencePoints.Abbreviation")}
         </span>
       `);
       if ( !entries.length ) continue;
 
-      const content = _loc("DND5E.Award.Message", {
+      const content = _loc("VARLYN5E.Award.Message", {
         name: destination.name, award: `<span class="dnd5e2">${game.i18n.getListFormatter().format(entries)}</span>`
       });
 
@@ -21549,7 +21549,7 @@ class Award extends Application5e {
    */
   static async handleAward(message) {
     if ( !game.user.isGM ) {
-      ui.notifications.error("DND5E.Award.NotGMError");
+      ui.notifications.error("VARLYN5E.Award.NotGMError");
       return;
     }
 
@@ -21604,7 +21604,7 @@ class Award extends Application5e {
       label = label?.toLowerCase();
       try {
         new Roll(amount);
-        if ( label in CONFIG.DND5E.currencies ) currency[label] = amount;
+        if ( label in CONFIG.VARLYN5E.currencies ) currency[label] = amount;
         else if ( label === "xp" ) xp = Number(amount);
         else if ( part === "each" ) each = true;
         else if ( part === "party" ) party = true;
@@ -21615,7 +21615,7 @@ class Award extends Application5e {
     }
 
     // Display warning about an unrecognized commands
-    if ( unrecognized.length ) throw new Error(_loc("DND5E.Award.UnrecognizedWarning", {
+    if ( unrecognized.length ) throw new Error(_loc("VARLYN5E.Award.UnrecognizedWarning", {
       commands: game.i18n.getListFormatter().format(unrecognized.map(u => `"${u}"`))
     }));
 
@@ -21977,23 +21977,23 @@ async function enrichAttack(config, label, options) {
   const span = document.createElement("span");
   span.className = "roll-link-group";
   _addDataset(span, config);
-  span.innerHTML = _loc(`EDITOR.DND5E.Inline.Attack${config._rules === "2014" ? "Long" : "Short"}`, {
+  span.innerHTML = _loc(`EDITOR.VARLYN5E.Inline.Attack${config._rules === "2014" ? "Long" : "Short"}`, {
     formula: createRollLink(displayFormula).outerHTML
   });
 
   if ( config.format === "extended" ) {
-    const type = _loc(`DND5E.ATTACK.Formatted.${config._rules}`, {
+    const type = _loc(`VARLYN5E.ATTACK.Formatted.${config._rules}`, {
       type: game.i18n.getListFormatter({ type: "disjunction" }).format(
-        Array.from(activity?.validAttackTypes ?? []).map(t => CONFIG.DND5E.attackTypes[t]?.label)
+        Array.from(activity?.validAttackTypes ?? []).map(t => CONFIG.VARLYN5E.attackTypes[t]?.label)
       ),
-      classification: CONFIG.DND5E.attackClassifications[activity?.attack.type.classification]?.label ?? ""
+      classification: CONFIG.VARLYN5E.attackClassifications[activity?.attack.type.classification]?.label ?? ""
     }).trim();
     const parts = [span.outerHTML, activity?.getRangeLabel(config.attackMode)];
     if ( config._rules === "2014" ) parts.push(activity?.target?.affects.labels?.statblock);
 
     const full = document.createElement("span");
     full.className = "attack-extended";
-    full.innerHTML = _loc("EDITOR.DND5E.Inline.AttackExtended", {
+    full.innerHTML = _loc("EDITOR.VARLYN5E.Inline.AttackExtended", {
       type, parts: game.i18n.getListFormatter({ type: "unit" }).format(parts.filter(_ => _))
     });
     return full;
@@ -22024,7 +22024,7 @@ function parseAttackConfig(config, options={}) {
   const formulaParts = [];
   if ( config.formula ) formulaParts.push(config.formula);
   for ( const value of config.values ) {
-    if ( value in CONFIG.DND5E.attackModes ) config.attackMode = value;
+    if ( value in CONFIG.VARLYN5E.attackModes ) config.attackMode = value;
     else if ( value === "extended" ) config.format = "extended";
     else formulaParts.push(value);
   }
@@ -22074,7 +22074,7 @@ async function rollAttack(config, event) {
           roll: { type: "attack" }
         }
       },
-      flavor: _loc("DND5E.AttackRoll"),
+      flavor: _loc("VARLYN5E.AttackRoll"),
       speaker: ChatMessage.implementation.getSpeaker()
     }
   };
@@ -22114,7 +22114,7 @@ async function enrichAward(config, label, options) {
 
   const entries = [];
   for ( let [key, amount] of Object.entries(parsed.currency) ) {
-    const label = CONFIG.DND5E.currencies[key].label;
+    const label = CONFIG.VARLYN5E.currencies[key].label;
     amount = Number.isNumeric(amount) ? formatNumber(amount) : amount;
     entries.push(`
       <span class="award-entry">
@@ -22124,17 +22124,17 @@ async function enrichAward(config, label, options) {
   }
   if ( parsed.xp ) entries.push(`
     <span class="award-entry">
-      ${formatNumber(parsed.xp)} ${_loc("DND5E.ExperiencePoints.Abbreviation")}
+      ${formatNumber(parsed.xp)} ${_loc("VARLYN5E.ExperiencePoints.Abbreviation")}
     </span>
   `);
 
   let award = game.i18n.getListFormatter({ type: "unit" }).format(entries);
-  if ( parsed.each ) award = _loc("EDITOR.DND5E.Inline.AwardEach", { award });
+  if ( parsed.each ) award = _loc("EDITOR.VARLYN5E.Inline.AwardEach", { award });
 
   block.innerHTML += `
     ${award}
     <a class="award-link" data-action="awardRequest">
-      <i class="fa-solid fa-trophy"></i> ${label ?? _loc("DND5E.Award.Action")}
+      <i class="fa-solid fa-trophy"></i> ${label ?? _loc("VARLYN5E.Award.Action")}
     </a>
   `;
 
@@ -22271,21 +22271,21 @@ async function enrichCheck(config, label, options) {
     config.skill = [];
     config.tool = [];
     for ( const associated of activity.check.associated ) {
-      if ( associated in CONFIG.DND5E.skills ) config.skill.push(associated);
-      else if ( associated in CONFIG.DND5E.tools ) config.tool.push(associated);
+      if ( associated in CONFIG.VARLYN5E.skills ) config.skill.push(associated);
+      else if ( associated in CONFIG.VARLYN5E.tools ) config.tool.push(associated);
     }
     delete config.activity;
   }
 
   // TODO: Support "spellcasting" ability
-  let abilityConfig = CONFIG.DND5E.abilities[config.ability];
+  let abilityConfig = CONFIG.VARLYN5E.abilities[config.ability];
   if ( config.ability && !abilityConfig ) {
     logWarning(`Ability "${config.ability}" not found while enriching ${config._input}.`, options);
     invalid = true;
   } else if ( abilityConfig?.key ) config.ability = abilityConfig.key;
 
   for ( let [index, skill] of config.skill.entries() ) {
-    const skillConfig = CONFIG.DND5E.skills[skill];
+    const skillConfig = CONFIG.VARLYN5E.skills[skill];
     if ( skillConfig ) {
       if ( skillConfig.key ) skill = config.skill[index] = skillConfig.key;
       const ability = config.ability || skillConfig.ability;
@@ -22299,7 +22299,7 @@ async function enrichCheck(config, label, options) {
 
   let usingTool;
   for ( const tool of config.tool ) {
-    const toolConfig = CONFIG.DND5E.enrichmentLookup.tools[slugify(tool)];
+    const toolConfig = CONFIG.VARLYN5E.enrichmentLookup.tools[slugify(tool)];
     const toolIndex = getBaseItem(toolConfig?.id ?? "", { indexOnly: true });
     const toolLabel = toolIndex?.name ?? toolConfig?.label;
     if ( toolLabel ) {
@@ -22348,8 +22348,8 @@ async function enrichCheck(config, label, options) {
 
       // Multiple associated proficiencies, link each individually
       if ( associated.length > 1 ) parts.push(
-        _loc("EDITOR.DND5E.Inline.SpecificCheck", {
-          ability: CONFIG.DND5E.abilities[ability].label,
+        _loc("EDITOR.VARLYN5E.Inline.SpecificCheck", {
+          ability: CONFIG.VARLYN5E.abilities[ability].label,
           type: formatter.format(associated.map(a => createRollLink(a.label, makeConfig(a)).outerHTML ))
         })
       );
@@ -22367,10 +22367,10 @@ async function enrichCheck(config, label, options) {
     }
     label = formatter.format(parts);
     if ( config.dc && !config.hideDC ) {
-      label = _loc("EDITOR.DND5E.Inline.DC", { dc: config.dc, check: label });
+      label = _loc("EDITOR.VARLYN5E.Inline.DC", { dc: config.dc, check: label });
     }
-    label = _loc(`EDITOR.DND5E.Inline.Check${config.format === "long" ? "Long" : "Short"}`, { check: label });
-    if ( usingTool ) label = _loc("EDITOR.DND5E.Inline.CheckUsing", {
+    label = _loc(`EDITOR.VARLYN5E.Inline.Check${config.format === "long" ? "Long" : "Short"}`, { check: label });
+    if ( usingTool ) label = _loc("EDITOR.VARLYN5E.Inline.CheckUsing", {
       check: label, tool: usingTool.label
     });
 
@@ -22419,8 +22419,8 @@ function createCheckRequestButtons(dataset) {
   const tools = foundry.utils.getType(dataset.tool) === "string" ? dataset.tool.split("|") : dataset.tool ?? [];
   if ( ((skills.length + tools.length) <= 1) && !dataset.usingTool ) {
     if ( !dataset.ability ) {
-      if ( skills.length === 1 ) dataset.ability = CONFIG.DND5E.skills[skills[0]]?.ability;
-      else if ( tools.length === 1 ) dataset.ability = CONFIG.DND5E.tools[tools[0]]?.ability;
+      if ( skills.length === 1 ) dataset.ability = CONFIG.VARLYN5E.skills[skills[0]]?.ability;
+      else if ( tools.length === 1 ) dataset.ability = CONFIG.VARLYN5E.tools[tools[0]]?.ability;
     }
     return [createRequestButton(dataset)];
   }
@@ -22429,10 +22429,10 @@ function createCheckRequestButtons(dataset) {
   delete baseDataset.tool;
   return [
     ...skills.map(skill => createRequestButton({
-      ability: CONFIG.DND5E.skills[skill].ability, ...baseDataset, format: "short", skill, type: "skill"
+      ability: CONFIG.VARLYN5E.skills[skill].ability, ...baseDataset, format: "short", skill, type: "skill"
     })),
     ...dataset.usingTool ? [] : tools.map(tool => createRequestButton({
-      ability: CONFIG.DND5E.tools[tool]?.ability, ...baseDataset, format: "short", tool, type: "tool"
+      ability: CONFIG.VARLYN5E.tools[tool]?.ability, ...baseDataset, format: "short", tool, type: "tool"
     }))
   ];
 }
@@ -22446,7 +22446,7 @@ function createCheckRequestButtons(dataset) {
  * @returns {object}
  */
 function parseCheckConfig(config, options={}) {
-  const lookup = CONFIG.DND5E.enrichmentLookup;
+  const lookup = CONFIG.VARLYN5E.enrichmentLookup;
   config.skill = config.skill?.replaceAll("/", "|").split("|") ?? [];
   config.tool = config.tool?.replaceAll("/", "|").split("|") ?? [];
   for ( let value of config.values ) {
@@ -22564,9 +22564,9 @@ async function enrichSave(config, label, options) {
       createRollLink(createRollLabel({ type: "save", ability }), { ability }).outerHTML
     ));
     if ( config.dc && !config.hideDC ) {
-      label = _loc("EDITOR.DND5E.Inline.DC", { dc: config.dc, check: label });
+      label = _loc("EDITOR.VARLYN5E.Inline.DC", { dc: config.dc, check: label });
     }
-    label = _loc(`EDITOR.DND5E.Inline.Save${config.format === "long" ? "Long" : "Short"}`, { save: label });
+    label = _loc(`EDITOR.VARLYN5E.Inline.Save${config.format === "long" ? "Long" : "Short"}`, { save: label });
     const template = document.createElement("template");
     template.innerHTML = label;
     label = template;
@@ -22611,7 +22611,7 @@ function createSaveRequestButtons(dataset) {
  * @returns {object}
  */
 function parseSaveConfig(config, options={}) {
-  const lookup = CONFIG.DND5E.enrichmentLookup;
+  const lookup = CONFIG.VARLYN5E.enrichmentLookup;
   config.ability = config.ability?.replace("/", "|").split("|") ?? [];
   for ( let value of config.values ) {
     const slug = foundry.utils.getType(value) === "string" ? slugify(value) : value;
@@ -22619,7 +22619,7 @@ function parseSaveConfig(config, options={}) {
     else if ( Number.isNumeric(value) ) config.dc = Number(value);
     else config[value] = true;
   }
-  config.ability = config.ability.filter(a => a in CONFIG.DND5E.enrichmentLookup.abilities);
+  config.ability = config.ability.filter(a => a in CONFIG.VARLYN5E.enrichmentLookup.abilities);
 
   return config;
 }
@@ -22635,13 +22635,13 @@ function parseSaveConfig(config, options={}) {
 async function rollCheckSave(config, event) {
   const { type, ability, skill, tool, dc } = config;
   const options = { event };
-  if ( ability in CONFIG.DND5E.abilities ) options.ability = ability;
+  if ( ability in CONFIG.VARLYN5E.abilities ) options.ability = ability;
   if ( dc ) options.target = Number(dc);
 
   const actors = getSceneTargets().map(t => t.actor);
   if ( !actors.length && game.user.character ) actors.push(game.user.character);
   if ( !actors.length ) {
-    ui.notifications.warn("EDITOR.DND5E.Inline.Warning.NoActor");
+    ui.notifications.warn("EDITOR.VARLYN5E.Inline.Warning.NoActor");
     return;
   }
 
@@ -22805,7 +22805,7 @@ async function enrichDamage(configs, label, options) {
   for ( const [idx, formula] of config.formulas.entries() ) {
     const type = config.damageTypes[idx];
     const types = type?.split("|")
-      .map(t => CONFIG.DND5E.damageTypes[t]?.label ?? CONFIG.DND5E.healingTypes[t]?.label)
+      .map(t => CONFIG.VARLYN5E.damageTypes[t]?.label ?? CONFIG.VARLYN5E.healingTypes[t]?.label)
       .filter(_ => _);
     const localizationData = {
       formula: createRollLink(formula, {}, { tag: "span" }).outerHTML,
@@ -22828,7 +22828,7 @@ async function enrichDamage(configs, label, options) {
       if ( String(localizationData.average) === formula ) localizationType = "Short";
     }
 
-    parts.push(_loc(`EDITOR.DND5E.Inline.Damage${localizationType}`, localizationData));
+    parts.push(_loc(`EDITOR.VARLYN5E.Inline.Damage${localizationType}`, localizationData));
   }
 
   const link = document.createElement("a");
@@ -22836,7 +22836,7 @@ async function enrichDamage(configs, label, options) {
   link.dataset.action = "roll";
   _addDataset(link, { ...config, formulas, damageTypes });
   if ( config.average && (parts.length === 2) ) {
-    link.innerHTML = _loc("EDITOR.DND5E.Inline.DamageDouble", { first: parts[0], second: parts[1] });
+    link.innerHTML = _loc("EDITOR.VARLYN5E.Inline.DamageDouble", { first: parts[0], second: parts[1] });
   } else {
     link.innerHTML = game.i18n.getListFormatter().format(parts);
   }
@@ -22844,7 +22844,7 @@ async function enrichDamage(configs, label, options) {
   if ( config.format === "extended" ) {
     const span = document.createElement("span");
     span.className = "damage-extended";
-    span.innerHTML = _loc("EDITOR.DND5E.Inline.DamageExtended", { damage: link.outerHTML });
+    span.innerHTML = _loc("EDITOR.VARLYN5E.Inline.DamageExtended", { damage: link.outerHTML });
     return span;
   }
 
@@ -22870,7 +22870,7 @@ function handleDamageCommand(configs) {
  */
 function parseDamageConfig(configs, options={}) {
   const config = { type: "damage", formulas: [], damageTypes: [], rollType: configs._isHealing ? "healing" : "damage" };
-  const lookup = CONFIG.DND5E.enrichmentLookup;
+  const lookup = CONFIG.VARLYN5E.enrichmentLookup;
   for ( const c of configs ) {
     const formulaParts = [];
     if ( c.activity ) config.activity = c.activity;
@@ -22882,7 +22882,7 @@ function parseDamageConfig(configs, options={}) {
     for ( const value of c.values ) {
       const slug = foundry.utils.getType(value) === "string" ? slugify(value) : value;
       if ( slug in lookup.damageTypes ) c.type.push(lookup.damageTypes[slug]);
-      else if ( slug in CONFIG.DND5E.attackModes ) config.attackMode = slug;
+      else if ( slug in CONFIG.VARLYN5E.attackModes ) config.attackMode = slug;
       else if ( slug === "average" ) config.average = true;
       else if ( slug === "extended" ) config.format = "extended";
       else if ( slug === "temp" ) c.type.push("temphp");
@@ -22947,7 +22947,7 @@ async function rollDamage(config, event) {
           targets: getTargetDescriptors()
         }
       },
-      flavor: _loc(`DND5E.${rollType === "healing" ? "Healing" : "Damage"}Roll`),
+      flavor: _loc(`VARLYN5E.${rollType === "healing" ? "Healing" : "Damage"}Roll`),
       speaker: ChatMessage.implementation.getSpeaker()
     }
   };
@@ -22972,17 +22972,17 @@ async function rollDamage(config, event) {
 function enrichLanguage(config, label, options) {
   for ( const value of config.values ) {
     const slug = foundry.utils.getType(value) === "string" ? slugify(value) : value;
-    if ( slug in CONFIG.DND5E.enrichmentLookup.languages ) config.language = slug;
+    if ( slug in CONFIG.VARLYN5E.enrichmentLookup.languages ) config.language = slug;
   }
   delete config.values;
 
-  if ( !(config.language in CONFIG.DND5E.enrichmentLookup.languages) ) {
+  if ( !(config.language in CONFIG.VARLYN5E.enrichmentLookup.languages) ) {
     logWarning(`No language found while enriching ${config._input}.`, options);
     return null;
   }
 
   config.type = "language";
-  return createPassiveTag(label ?? CONFIG.DND5E.enrichmentLookup.languages[config.language], config);
+  return createPassiveTag(label ?? CONFIG.VARLYN5E.enrichmentLookup.languages[config.language], config);
 }
 
 /* -------------------------------------------- */
@@ -23080,15 +23080,15 @@ function enrichLookup(config, fallback, options) {
 async function enrichReference(config, label, options) {
   let key;
   let source;
-  let type = Object.keys(config).find(k => k in CONFIG.DND5E.ruleTypes);
+  let type = Object.keys(config).find(k => k in CONFIG.VARLYN5E.ruleTypes);
   if ( type ) {
     key = slugify(config[type]);
-    const { references } = CONFIG.DND5E.ruleTypes[type] ?? {};
-    source = foundry.utils.getProperty(CONFIG.DND5E, references)?.[key];
+    const { references } = CONFIG.VARLYN5E.ruleTypes[type] ?? {};
+    source = foundry.utils.getProperty(CONFIG.VARLYN5E, references)?.[key];
   } else if ( config.values.length ) {
     key = slugify(config.values.join(""));
-    for ( const [t, { references }] of Object.entries(CONFIG.DND5E.ruleTypes) ) {
-      source = foundry.utils.getProperty(CONFIG.DND5E, references)?.[key];
+    for ( const [t, { references }] of Object.entries(CONFIG.VARLYN5E.ruleTypes) ) {
+      source = foundry.utils.getProperty(CONFIG.VARLYN5E, references)?.[key];
       if ( source ) {
         type = t;
         break;
@@ -23111,7 +23111,7 @@ async function enrichReference(config, label, options) {
     apply.dataset.action = "applyStatus";
     apply.dataset.status = key;
     apply.dataset.tooltip = "";
-    apply.setAttribute("aria-label", _loc("EDITOR.DND5E.Inline.ApplyStatus"));
+    apply.setAttribute("aria-label", _loc("EDITOR.VARLYN5E.Inline.ApplyStatus"));
     apply.innerHTML = '<i class="fas fa-fw fa-reply-all fa-flip-horizontal"></i>';
     span.append(apply);
   }
@@ -23204,7 +23204,7 @@ async function enrichItem(config, label, options) {
     }
     if ( !label ) {
       if ( doc instanceof Item ) label = doc.name;
-      else label = _loc("EDITOR.DND5E.Inline.ItemActivity", { item: doc.item.name, activity: doc.name });
+      else label = _loc("EDITOR.VARLYN5E.Inline.ItemActivity", { item: doc.item.name, activity: doc.name });
     }
     return makeLink(label, { type: "item", rollItemActor: ownerActor, [`roll${doc.documentName}Uuid`]: doc.uuid });
   }
@@ -23232,7 +23232,7 @@ async function enrichItem(config, label, options) {
         logWarning(`Activity ${config.activity} not found on ${foundItem.name} while enriching ${config._input}.`, options);
         return null;
       }
-      if ( !label ) label = _loc("EDITOR.DND5E.Inline.ItemActivity", {
+      if ( !label ) label = _loc("EDITOR.VARLYN5E.Inline.ItemActivity", {
         item: foundItem.name, activity: foundActivity.name
       });
       return makeLink(label, { type: "item", rollActivityUuid: foundActivity.uuid });
@@ -23243,7 +23243,7 @@ async function enrichItem(config, label, options) {
   }
 
   // Finally, if config is an item name
-  if ( !label ) label = config.activity ? _loc("EDITOR.DND5E.Inline.ItemActivity", {
+  if ( !label ) label = config.activity ? _loc("EDITOR.VARLYN5E.Inline.ItemActivity", {
     item: foundItem?.name ?? givenItem, activity: foundActivity?.name ?? config.activity
   }) : givenItem;
   return makeLink(label, {
@@ -23297,7 +23297,7 @@ async function useItem({ rollActivityUuid, rollActivityName, rollItemUuid, rollI
       if ( activity ) return activity.use({ event });
 
       // If no activity could be found at all, display a warning
-      else ui.notifications.warn("EDITOR.DND5E.Inline.Warning.NoActivityOnItem", {
+      else ui.notifications.warn("EDITOR.VARLYN5E.Inline.Warning.NoActivityOnItem", {
         format: { activity: rollActivityName, actor: actor.name, item: rollItemName }
       });
     }
@@ -23306,7 +23306,7 @@ async function useItem({ rollActivityUuid, rollActivityName, rollItemUuid, rollI
   }
 
   // If no item could be found at all, display a warning
-  else ui.notifications.warn("EDITOR.DND5E.Inline.Warning.NoItemOnActor", {
+  else ui.notifications.warn("EDITOR.VARLYN5E.Inline.Warning.NoItemOnActor", {
     format: { actor: actor.name, item: rollItemName }
   });
 }
@@ -23342,9 +23342,9 @@ function createPassiveTag(label, dataset) {
  * @returns {string}
  */
 function createRollLabel(config) {
-  const { label: ability, abbreviation } = CONFIG.DND5E.abilities[config.ability] ?? {};
-  const skill = CONFIG.DND5E.skills[config.skill]?.label;
-  const toolUUID = CONFIG.DND5E.enrichmentLookup.tools[config.tool];
+  const { label: ability, abbreviation } = CONFIG.VARLYN5E.abilities[config.ability] ?? {};
+  const skill = CONFIG.VARLYN5E.skills[config.skill]?.label;
+  const toolUUID = CONFIG.VARLYN5E.enrichmentLookup.tools[config.tool];
   const tool = toolUUID?.id ? getBaseItem(toolUUID.id, { indexOnly: true })?.name : toolUUID?.label ?? null;
   const longSuffix = config.format === "long" ? "Long" : "Short";
   const showDC = config.dc && !config.hideDC;
@@ -23355,25 +23355,25 @@ function createRollLabel(config) {
     case "skill":
     case "tool":
       if ( ability && (skill || tool) ) {
-        label = _loc("EDITOR.DND5E.Inline.SpecificCheck", { ability, type: skill ?? tool });
+        label = _loc("EDITOR.VARLYN5E.Inline.SpecificCheck", { ability, type: skill ?? tool });
       } else {
         label = ability;
       }
       if ( config.passive ) {
         label = _loc(
-          `EDITOR.DND5E.Inline.${showDC ? "DC" : ""}Passive${longSuffix}`, { dc: config.dc, check: label }
+          `EDITOR.VARLYN5E.Inline.${showDC ? "DC" : ""}Passive${longSuffix}`, { dc: config.dc, check: label }
         );
       } else {
-        if ( showDC ) label = _loc("EDITOR.DND5E.Inline.DC", { dc: config.dc, check: label });
-        label = _loc(`EDITOR.DND5E.Inline.Check${longSuffix}`, { check: label });
+        if ( showDC ) label = _loc("EDITOR.VARLYN5E.Inline.DC", { dc: config.dc, check: label });
+        label = _loc(`EDITOR.VARLYN5E.Inline.Check${longSuffix}`, { check: label });
       }
       break;
     case "concentration":
     case "save":
       if ( config.type === "save" ) label = ability;
-      else label = `${_loc("DND5E.Concentration")} ${ability ? `(${abbreviation})` : ""}`;
-      if ( showDC ) label = _loc("EDITOR.DND5E.Inline.DC", { dc: config.dc, check: label });
-      label = _loc(`EDITOR.DND5E.Inline.Save${longSuffix}`, { save: label });
+      else label = `${_loc("VARLYN5E.Concentration")} ${ability ? `(${abbreviation})` : ""}`;
+      if ( showDC ) label = _loc("EDITOR.VARLYN5E.Inline.DC", { dc: config.dc, check: label });
+      label = _loc(`EDITOR.VARLYN5E.Inline.Save${longSuffix}`, { save: label });
       break;
     default:
       return "";
@@ -23418,7 +23418,7 @@ function createRequestLink(label, dataset) {
     const gmLink = document.createElement("a");
     gmLink.classList.add("enricher-action");
     gmLink.dataset.action = "postRequest";
-    gmLink.dataset.tooltip = "EDITOR.DND5E.Inline.RequestRoll";
+    gmLink.dataset.tooltip = "EDITOR.VARLYN5E.Inline.RequestRoll";
     gmLink.setAttribute("aria-label", _loc(gmLink.dataset.tooltip));
     gmLink.insertAdjacentHTML("afterbegin", '<i class="fa-solid fa-comment-dots"></i>');
     span.insertAdjacentElement("beforeend", gmLink);
@@ -23567,7 +23567,7 @@ async function handlePostRequest(dataset, target) {
     content: await foundry.applications.handlebars.renderTemplate(
       "systems/dnd5e/templates/chat/roll-request-card.hbs", { buttons }
     ),
-    flavor: _loc("EDITOR.DND5E.Inline.RollRequest"),
+    flavor: _loc("EDITOR.VARLYN5E.Inline.RollRequest"),
     speaker: MessageClass.getSpeaker({ user: game.user })
   };
   MessageClass.create(chatData);
@@ -23708,7 +23708,7 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
 
   /** @override */
   static LOCALIZATION_PREFIXES = [
-    "DND5E.ACTIVATION", "DND5E.DURATION", "DND5E.RANGE", "DND5E.SOURCE", "DND5E.TARGET"
+    "VARLYN5E.ACTIVATION", "VARLYN5E.DURATION", "VARLYN5E.RANGE", "VARLYN5E.SOURCE", "VARLYN5E.TARGET"
   ];
 
   /* -------------------------------------------- */
@@ -23716,22 +23716,22 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
   /** @inheritDoc */
   static defineSchema() {
     return this.mergeSchema(super.defineSchema(), {
-      ability: new StringField$Q({ label: "DND5E.SpellAbility" }),
+      ability: new StringField$Q({ label: "VARLYN5E.SpellAbility" }),
       activation: new ActivationField(),
       duration: new DurationField(),
-      level: new NumberField$s({ required: true, integer: true, initial: 1, min: 0, label: "DND5E.SpellLevel" }),
+      level: new NumberField$s({ required: true, integer: true, initial: 1, min: 0, label: "VARLYN5E.SpellLevel" }),
       materials: new SchemaField$x({
-        value: new StringField$Q({ required: true, label: "DND5E.SpellMaterialsDescription" }),
-        consumed: new BooleanField$q({ required: true, label: "DND5E.SpellMaterialsConsumed" }),
-        cost: new NumberField$s({ required: true, initial: 0, min: 0, label: "DND5E.SpellMaterialsCost" }),
-        supply: new NumberField$s({ required: true, initial: 0, min: 0, label: "DND5E.SpellMaterialsSupply" })
-      }, { label: "DND5E.SpellMaterials" }),
-      method: new StringField$Q({ required: true, initial: "", label: "DND5E.SpellPreparation.Method" }),
+        value: new StringField$Q({ required: true, label: "VARLYN5E.SpellMaterialsDescription" }),
+        consumed: new BooleanField$q({ required: true, label: "VARLYN5E.SpellMaterialsConsumed" }),
+        cost: new NumberField$s({ required: true, initial: 0, min: 0, label: "VARLYN5E.SpellMaterialsCost" }),
+        supply: new NumberField$s({ required: true, initial: 0, min: 0, label: "VARLYN5E.SpellMaterialsSupply" })
+      }, { label: "VARLYN5E.SpellMaterials" }),
+      method: new StringField$Q({ required: true, initial: "", label: "VARLYN5E.SpellPreparation.Method" }),
       prepared: new NumberField$s({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
-      properties: new SetField$t(new StringField$Q(), { label: "DND5E.SpellComponents" }),
+      properties: new SetField$t(new StringField$Q(), { label: "VARLYN5E.SpellComponents" }),
       range: new RangeField(),
-      school: new StringField$Q({ required: true, label: "DND5E.SpellSchool" }),
-      sourceItem: new IdentifierField({ allowType: true, label: "DND5E.SourceItem.Label" }),
+      school: new StringField$Q({ required: true, label: "VARLYN5E.SpellSchool" }),
+      sourceItem: new IdentifierField({ allowType: true, label: "VARLYN5E.SourceItem.Label" }),
       target: new TargetField()
     });
   }
@@ -23750,19 +23750,19 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
   static get compendiumBrowserFilters() {
     return new Map([
       ["level", {
-        label: "DND5E.Level",
+        label: "VARLYN5E.Level",
         type: "range",
         config: {
           keyPath: "system.level",
           min: 0,
-          max: Object.keys(CONFIG.DND5E.spellLevels).length - 1
+          max: Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1
         }
       }],
       ["school", {
-        label: "DND5E.School",
+        label: "VARLYN5E.School",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.spellSchools,
+          choices: CONFIG.VARLYN5E.spellSchools,
           keyPath: "system.school"
         }
       }],
@@ -23786,11 +23786,11 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
             const [type, identifier] = entry.value.split(":");
             const list = varlyn5e.registry.spellLists.forType(type, identifier);
             if ( list?.identifiers.size ) obj[entry.value] = {
-              label: entry.label, group: CONFIG.DND5E.spellListTypes[type]
+              label: entry.label, group: CONFIG.VARLYN5E.spellListTypes[type]
             };
             return obj;
           }, {}),
-          collapseGroup: group => group !== CONFIG.DND5E.spellListTypes.class
+          collapseGroup: group => group !== CONFIG.VARLYN5E.spellListTypes.class
         }
       }],
       ["properties", this.compendiumBrowserPropertiesFilter("spell")]
@@ -23849,14 +23849,14 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
    * @type {boolean}
    */
   get canPrepare() {
-    return !!CONFIG.DND5E.spellcasting[this.method]?.prepares;
+    return !!CONFIG.VARLYN5E.spellcasting[this.method]?.prepares;
   }
 
   /* -------------------------------------------- */
 
   /** @override */
   get canScale() {
-    return (this.level > 0) && !!CONFIG.DND5E.spellcasting[this.method]?.slots;
+    return (this.level > 0) && !!CONFIG.VARLYN5E.spellcasting[this.method]?.slots;
   }
 
   /* -------------------------------------------- */
@@ -23888,9 +23888,9 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
    * @type {boolean}
    */
   get countsPrepared() {
-    return !!CONFIG.DND5E.spellcasting[this.method]?.prepares
+    return !!CONFIG.VARLYN5E.spellcasting[this.method]?.prepares
       && (this.level > 0)
-      && (this.prepared === CONFIG.DND5E.spellPreparationStates.prepared.value);
+      && (this.prepared === CONFIG.VARLYN5E.spellPreparationStates.prepared.value);
   }
 
   /* -------------------------------------------- */
@@ -23948,7 +23948,7 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
 
   /** @override */
   get tooltipSubtitle() {
-    return [this.parent.labels.level, CONFIG.DND5E.spellSchools[this.school]?.label];
+    return [this.parent.labels.level, CONFIG.VARLYN5E.spellSchools[this.school]?.label];
   }
 
   /* -------------------------------------------- */
@@ -24006,10 +24006,10 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
     if ( "width" in source.target ) source.target.template.width = source.target.width;
 
     const type = source.target.type ?? source.target.template.type ?? source.target.affects.type;
-    if ( type in CONFIG.DND5E.areaTargetTypes ) {
+    if ( type in CONFIG.VARLYN5E.areaTargetTypes ) {
       if ( "type" in source.target ) source.target.template.type = type;
       if ( "value" in source.target ) source.target.template.size = source.target.value;
-    } else if ( type in CONFIG.DND5E.individualTargetTypes ) {
+    } else if ( type in CONFIG.VARLYN5E.individualTargetTypes ) {
       if ( "type" in source.target ) source.target.affects.type = type;
       if ( "value" in source.target ) source.target.affects.count = source.target.value;
     }
@@ -24065,12 +24065,12 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
     this.duration.concentration = this.properties.has("concentration");
 
     const labels = this.parent.labels ??= {};
-    labels.level = CONFIG.DND5E.spellLevels[this.level];
-    labels.school = CONFIG.DND5E.spellSchools[this.school]?.label;
+    labels.level = CONFIG.VARLYN5E.spellLevels[this.level];
+    labels.school = CONFIG.VARLYN5E.spellSchools[this.school]?.label;
     if ( this.properties.has("material") ) labels.materials = this.materials.value;
 
     labels.components = this.properties.reduce((obj, c) => {
-      const config = this.validProperties.has(c) ? CONFIG.DND5E.itemProperties[c] : null;
+      const config = this.validProperties.has(c) ? CONFIG.VARLYN5E.itemProperties[c] : null;
       if ( !config ) return obj;
       const { abbreviation: abbr, label, icon } = config;
       // Only add properties to display arrays if they have displayable content
@@ -24087,7 +24087,7 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
       return obj;
     }, { all: [], vsm: [], tags: [] });
     labels.components.vsm = game.i18n.getListFormatter({ style: "narrow" }).format(labels.components.vsm);
-    labels.components.full = labels.materials ? _loc("DND5E.SpellComponentsMaterial", {
+    labels.components.full = labels.materials ? _loc("VARLYN5E.SpellComponentsMaterial", {
       components: labels.components.vsm, materials: labels.materials
     }) : labels.components.vsm;
 
@@ -24156,7 +24156,7 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
     context.subtitles = [
       { label: context.labels.level },
       { label: context.labels.school },
-      { label: CONFIG.DND5E.spellcasting[this.method]?.label }
+      { label: CONFIG.VARLYN5E.spellcasting[this.method]?.label }
     ];
 
     context.parts = ["dnd5e.details-spell", "dnd5e.field-uses"];
@@ -24169,12 +24169,12 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
         ? this.parent.actor.identifiedItems.get(this.sourceItem)?.first()
         : null;
 
-      const ability = CONFIG.DND5E.abilities[
+      const ability = CONFIG.VARLYN5E.abilities[
         this.parent.actor.spellcastingClasses[this.classIdentifier]?.spellcasting.ability
           ?? this.parent.actor.system.attributes?.spellcasting
       ]?.label?.toLowerCase();
-      if ( ability ) context.defaultAbility = _loc("DND5E.DefaultSpecific", { default: ability });
-      else context.defaultAbility = _loc("DND5E.Default");
+      if ( ability ) context.defaultAbility = _loc("VARLYN5E.DefaultSpecific", { default: ability });
+      else context.defaultAbility = _loc("VARLYN5E.Default");
       context.spellcastingClasses = Object.entries(this.parent.actor.spellcastingClasses ?? {})
         .map(([value, cls]) => ({ value: `class:${value}`, label: cls.name }));
 
@@ -24204,60 +24204,60 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
           if ( !this.sourceItem ) context.source.sourceItem = `${grantingItem.type}:${grantingItem.identifier}`;
 
           context.sourceItemLocked = true;
-          context.sourceItemHint = "DND5E.SourceItem.LockedHint";
+          context.sourceItemHint = "VARLYN5E.SourceItem.LockedHint";
         }
       }
     }
 
     // Activation
     context.activationTypes = [
-      ...Object.entries(CONFIG.DND5E.activityActivationTypes).map(([value, { label, group }]) => {
+      ...Object.entries(CONFIG.VARLYN5E.activityActivationTypes).map(([value, { label, group }]) => {
         return { value, label, group };
       }),
-      { value: "", label: "DND5E.NoneActionLabel" }
+      { value: "", label: "VARLYN5E.NoneActionLabel" }
     ];
 
     // Duration
     context.durationUnits = [
-      ...Object.entries(CONFIG.DND5E.specialTimePeriods).map(([value, label]) => ({ value, label })),
-      ...Object.entries(CONFIG.DND5E.scalarTimePeriods).map(([value, label]) => {
-        return { value, label, group: "DND5E.DurationTime" };
+      ...Object.entries(CONFIG.VARLYN5E.specialTimePeriods).map(([value, label]) => ({ value, label })),
+      ...Object.entries(CONFIG.VARLYN5E.scalarTimePeriods).map(([value, label]) => {
+        return { value, label, group: "VARLYN5E.DurationTime" };
       }),
-      ...Object.entries(CONFIG.DND5E.permanentTimePeriods).map(([value, label]) => {
-        return { value, label, group: "DND5E.DurationPermanent" };
+      ...Object.entries(CONFIG.VARLYN5E.permanentTimePeriods).map(([value, label]) => {
+        return { value, label, group: "VARLYN5E.DurationPermanent" };
       })
     ];
 
     // Targets
     context.targetTypes = [
-      ...Object.entries(CONFIG.DND5E.individualTargetTypes).map(([value, { label }]) => {
-        return { value, label, group: "DND5E.TargetTypeIndividual" };
+      ...Object.entries(CONFIG.VARLYN5E.individualTargetTypes).map(([value, { label }]) => {
+        return { value, label, group: "VARLYN5E.TargetTypeIndividual" };
       }),
-      ...Object.entries(CONFIG.DND5E.areaTargetTypes).map(([value, { label }]) => {
-        return { value, label, group: "DND5E.TargetTypeArea" };
+      ...Object.entries(CONFIG.VARLYN5E.areaTargetTypes).map(([value, { label }]) => {
+        return { value, label, group: "VARLYN5E.TargetTypeArea" };
       })
     ];
     context.scalarTarget = this.target.affects.type
-      && (CONFIG.DND5E.individualTargetTypes[this.target.affects.type]?.scalar !== false);
-    context.affectsPlaceholder = _loc(`DND5E.TARGET.Count.${
+      && (CONFIG.VARLYN5E.individualTargetTypes[this.target.affects.type]?.scalar !== false);
+    context.affectsPlaceholder = _loc(`VARLYN5E.TARGET.Count.${
       this.target?.template?.type ? "Every" : "Any"}`);
     context.dimensions = this.target.template.dimensions;
     // TODO: Ensure this behaves properly with enchantments, will probably need source target data
 
     // Range
     context.rangeTypes = [
-      ...Object.entries(CONFIG.DND5E.rangeTypes).map(([value, label]) => ({ value, label })),
-      ...Object.entries(CONFIG.DND5E.movementUnits).map(([value, { label }]) => {
-        return { value, label, group: "DND5E.RangeDistance" };
+      ...Object.entries(CONFIG.VARLYN5E.rangeTypes).map(([value, label]) => ({ value, label })),
+      ...Object.entries(CONFIG.VARLYN5E.movementUnits).map(([value, { label }]) => {
+        return { value, label, group: "VARLYN5E.RangeDistance" };
       })
     ];
 
     // Spellcasting
     context.canPrepare = this.canPrepare;
-    context.spellcastingMethods = Object.values(CONFIG.DND5E.spellcasting).map(({ key, label }) => {
+    context.spellcastingMethods = Object.values(CONFIG.VARLYN5E.spellcasting).map(({ key, label }) => {
       return { label, value: key };
     });
-    if ( this.method && !(this.method in CONFIG.DND5E.spellcasting) ) {
+    if ( this.method && !(this.method in CONFIG.VARLYN5E.spellcasting) ) {
       context.spellcastingMethods.push({ label: this.method, value: this.method });
     }
   }
@@ -24279,7 +24279,7 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
     const { method } = header?.closest("[data-level]")?.dataset ?? {};
 
     // Determine the actor's spell slot progressions, if any.
-    const spellcastKeys = Object.keys(CONFIG.DND5E.spellcasting);
+    const spellcastKeys = Object.keys(CONFIG.VARLYN5E.spellcasting);
     const progs = Object.values(actor.classes).reduce((acc, cls) => {
       const type = cls.spellcasting?.type;
       if ( spellcastKeys.includes(type) ) acc.add(type);
@@ -24287,7 +24287,7 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
     }, new Set());
 
     const { system } = itemData;
-    const methods = CONFIG.DND5E.spellcasting;
+    const methods = CONFIG.VARLYN5E.spellcasting;
     if ( methods[method] ) system.method = method;
     else if ( progs.size ) system.method = progs.first();
     else if ( actor.system.attributes.spell?.level ) system.method = "spell";
@@ -24322,17 +24322,17 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
     tag.classList.add("item-entry-tag");
     const classes = labels.classes;
     tag.innerText = _loc(
-      `DND5E.SPELL.Embed.Tag.${!this.level ? "Cantrip" : "Leveled"}${rulesVersion === "2014" ? "Legacy" : ""}`,
+      `VARLYN5E.SPELL.Embed.Tag.${!this.level ? "Cantrip" : "Leveled"}${rulesVersion === "2014" ? "Legacy" : ""}`,
       {
         level: formatNumber(this.level),
         levelOrdinal: formatNumber(this.level, { ordinal: true }),
-        school: CONFIG.DND5E.spellSchools[this.school]?.label ?? ""
+        school: CONFIG.VARLYN5E.spellSchools[this.school]?.label ?? ""
       }
     );
     if ( (rulesVersion === "2014") && this.properties.has("ritual") ) {
-      tag.innerText = _loc("DND5E.SPELL.Embed.Tag.Ritual", { levelSchool: tag.innerText });
+      tag.innerText = _loc("VARLYN5E.SPELL.Embed.Tag.Ritual", { levelSchool: tag.innerText });
     } else if ( (rulesVersion === "2024") && classes?.length ) {
-      tag.innerText = _loc("DND5E.SPELL.Embed.Tag.Classes", {
+      tag.innerText = _loc("VARLYN5E.SPELL.Embed.Tag.Classes", {
         classes: game.i18n.getListFormatter({ type: "unit" }).format(classes),
         levelSchool: tag.innerText
       });
@@ -24341,13 +24341,13 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
 
     let castingTime = rulesVersion === "2014" ? labels.legacyActivation : labels.ritualActivation;
     if ( (this.activation.type === "reaction") && this.activation.condition ) castingTime = _loc(
-      "DND5E.SPELL.Embed.CastingTimeTrigger", { castingTime, trigger: this.activation.condition }
+      "VARLYN5E.SPELL.Embed.CastingTimeTrigger", { castingTime, trigger: this.activation.condition }
     );
     const specifics = [
-      ["DND5E.SpellCastTime", castingTime],
-      ["DND5E.SpellHeader.Range", labels.description.range || labels.range],
-      ["DND5E.Components", labels.components.full],
-      ["DND5E.Duration", labels.concentrationDuration]
+      ["VARLYN5E.SpellCastTime", castingTime],
+      ["VARLYN5E.SpellHeader.Range", labels.description.range || labels.range],
+      ["VARLYN5E.Components", labels.components.full],
+      ["VARLYN5E.Duration", labels.concentrationDuration]
     ];
     const dl = document.createElement("dl");
     dl.classList.add("item-entry-specifics");
@@ -24404,7 +24404,7 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
     };
 
     // If preparation mode matches an alt spellcasting type and matching class exists, set as that class
-    if ( (system.method !== "spell") && (system.method in CONFIG.DND5E.spellcasting) ) {
+    if ( (system.method !== "spell") && (system.method in CONFIG.VARLYN5E.spellcasting) ) {
       const altClasses = classes.filter(i => this.parent.actor.classes[i].spellcasting.type === system.method);
       if ( altClasses.size === 1 ) setClass(altClasses.first());
       return;
@@ -24679,7 +24679,7 @@ class Item5e extends SystemDocumentMixin(Item) {
     }, {});
     const choices = makeChoices(generalTypes);
     choices.physical = {
-      label: _loc("DND5E.ITEM.Category.Physical"),
+      label: _loc("VARLYN5E.ITEM.Category.Physical"),
       children: makeChoices(physicalTypes, chosen.has("physical"))
     };
     return new SelectChoices(choices);
@@ -25204,8 +25204,8 @@ class Item5e extends SystemDocumentMixin(Item) {
         if ( (prop === "concentration") && !this.requiresConcentration ) return acc;
         acc.push({
           abbr: prop,
-          label: CONFIG.DND5E.itemProperties[prop]?.label,
-          icon: CONFIG.DND5E.itemProperties[prop]?.icon
+          label: CONFIG.VARLYN5E.itemProperties[prop]?.label,
+          icon: CONFIG.VARLYN5E.itemProperties[prop]?.icon
         });
         return acc;
       }, []);
@@ -25226,7 +25226,7 @@ class Item5e extends SystemDocumentMixin(Item) {
     this.advancement = {
       byId: {},
       byLevel: Object.fromEntries(
-        Array.fromRange(CONFIG.DND5E.maxLevel + 1).slice(minAdvancementLevel).map(l => [l, []])
+        Array.fromRange(CONFIG.VARLYN5E.maxLevel + 1).slice(minAdvancementLevel).map(l => [l, []])
       ),
       byType: {},
       needingConfiguration: []
@@ -25368,7 +25368,7 @@ class Item5e extends SystemDocumentMixin(Item) {
   async displayCard(message={}) {
     const context = {
       actor: this.actor,
-      config: CONFIG.DND5E,
+      config: CONFIG.VARLYN5E,
       tokenId: this.actor.token?.uuid || null,
       item: this,
       data: await this.system.getCardData(),
@@ -25545,8 +25545,8 @@ class Item5e extends SystemDocumentMixin(Item) {
   async createActivity(type, data={}, { renderSheet=true }={}) {
     if ( !this.system.activities ) return;
 
-    const config = CONFIG.DND5E.activityTypes[type];
-    if ( !config ) throw new Error(`${type} not found in CONFIG.DND5E.activityTypes`);
+    const config = CONFIG.VARLYN5E.activityTypes[type];
+    if ( !config ) throw new Error(`${type} not found in CONFIG.VARLYN5E.activityTypes`);
     const cls = config.documentClass;
 
     const createData = foundry.utils.deepClone(data);
@@ -25604,8 +25604,8 @@ class Item5e extends SystemDocumentMixin(Item) {
   createAdvancement(type, data={}, { renderSheet=true, source=false }={}) {
     if ( !this.system.advancement ) return this;
 
-    const config = CONFIG.DND5E.advancementTypes[type];
-    if ( !config ) throw new Error(`${type} not found in CONFIG.DND5E.advancementTypes`);
+    const config = CONFIG.VARLYN5E.advancementTypes[type];
+    if ( !config ) throw new Error(`${type} not found in CONFIG.VARLYN5E.advancementTypes`);
     const cls = config.documentClass;
 
     if ( !config.validItemTypes.has(this.type) || !cls.availableForItem(this) ) {
@@ -25806,7 +25806,7 @@ class Item5e extends SystemDocumentMixin(Item) {
     // Display custom delete dialog when deleting a container with contents
     const count = await this.system.contentsCount;
     if ( count ) {
-      const type = _loc("DND5E.Container");
+      const type = _loc("VARLYN5E.Container");
       const config = foundry.utils.mergeObject({
         window: {
           icon: "fa-solid fa-trash",
@@ -25816,10 +25816,10 @@ class Item5e extends SystemDocumentMixin(Item) {
         content: `
           <p>
             <strong>${_loc("COMMON.AreYouSure")}</strong>
-            ${_loc("DND5E.ContainerDeleteMessage", { count })}
+            ${_loc("VARLYN5E.ContainerDeleteMessage", { count })}
           </p>
           <label class="checkbox">
-            <span>${_loc("DND5E.ContainerDeleteContents")}</span>
+            <span>${_loc("VARLYN5E.ContainerDeleteContents")}</span>
             <input type="checkbox" name="deleteContents">
           </label>
         `,
@@ -25859,7 +25859,7 @@ class Item5e extends SystemDocumentMixin(Item) {
    */
   static addDirectoryContextOptions(app, entryOptions) {
     entryOptions.push({
-      label: "DND5E.Scroll.CreateScroll",
+      label: "VARLYN5E.Scroll.CreateScroll",
       icon: '<i class="fa-solid fa-scroll"></i>',
       group: "system",
       visible: li => {
@@ -25898,7 +25898,7 @@ class Item5e extends SystemDocumentMixin(Item) {
     if ( container ) {
       initialDepth = 1 + (await container.system.allContainers()).length;
       if ( initialDepth > PhysicalItemTemplate.MAX_DEPTH ) {
-        ui.notifications.warn("DND5E.ContainerMaxDepth", { format: { depth: PhysicalItemTemplate.MAX_DEPTH } });
+        ui.notifications.warn("VARLYN5E.ContainerMaxDepth", { format: { depth: PhysicalItemTemplate.MAX_DEPTH } });
         return;
       }
     }
@@ -25992,9 +25992,9 @@ class Item5e extends SystemDocumentMixin(Item) {
 
     // Get scroll data
     let scrollUuid;
-    const id = CONFIG.DND5E.spellScrollIds[level];
+    const id = CONFIG.VARLYN5E.spellScrollIds[level];
     if ( foundry.data.validators.isValidId(id) ) {
-      scrollUuid = game.packs.get(CONFIG.DND5E.sourcePacks.ITEMS).index.get(id).uuid;
+      scrollUuid = game.packs.get(CONFIG.VARLYN5E.sourcePacks.ITEMS).index.get(id).uuid;
     } else {
       scrollUuid = id;
     }
@@ -26005,7 +26005,7 @@ class Item5e extends SystemDocumentMixin(Item) {
     const desc = this._createScrollDescription(scrollItem, itemData, null, config);
 
     for ( const level of Array.fromRange(itemData.system.level + 1).reverse() ) {
-      const values = CONFIG.DND5E.spellScrollValues[level];
+      const values = CONFIG.VARLYN5E.spellScrollValues[level];
       if ( values ) {
         config.values.bonus ??= values.bonus;
         config.values.dc ??= values.dc;
@@ -26032,7 +26032,7 @@ class Item5e extends SystemDocumentMixin(Item) {
 
     // Create the spell scroll data
     const spellScrollData = foundry.utils.mergeObject(scrollData, {
-      name: `${_loc("DND5E.SpellScroll")}: ${itemData.name}`,
+      name: `${_loc("VARLYN5E.SpellScroll")}: ${itemData.name}`,
       effects: itemData.effects ?? [],
       flags,
       system: {
@@ -26099,9 +26099,9 @@ class Item5e extends SystemDocumentMixin(Item) {
 
     // Get scroll data
     let scrollUuid;
-    const id = CONFIG.DND5E.spellScrollIds[spell.system.level];
+    const id = CONFIG.VARLYN5E.spellScrollIds[spell.system.level];
     if ( foundry.data.validators.isValidId(id) ) {
-      scrollUuid = game.packs.get(CONFIG.DND5E.sourcePacks.ITEMS).index.get(id).uuid;
+      scrollUuid = game.packs.get(CONFIG.VARLYN5E.sourcePacks.ITEMS).index.get(id).uuid;
     } else {
       scrollUuid = id;
     }
@@ -26109,7 +26109,7 @@ class Item5e extends SystemDocumentMixin(Item) {
     const scrollData = game.items.fromCompendium(scrollItem);
 
     for ( const level of Array.fromRange(spell.system.level + 1).reverse() ) {
-      const values = CONFIG.DND5E.spellScrollValues[level];
+      const values = CONFIG.VARLYN5E.spellScrollValues[level];
       if ( values ) {
         config.values.bonus ??= values.bonus;
         config.values.dc ??= values.dc;
@@ -26136,7 +26136,7 @@ class Item5e extends SystemDocumentMixin(Item) {
 
     // Create the spell scroll data
     const spellScrollData = foundry.utils.mergeObject(scrollData, {
-      name: `${_loc("DND5E.SpellScroll")}: ${spell.name}`,
+      name: `${_loc("VARLYN5E.SpellScroll")}: ${spell.name}`,
       system: {
         activities: { ...(scrollData.system.activities ?? {}), [activity._id]: activity },
         description: {
@@ -26183,18 +26183,18 @@ class Item5e extends SystemDocumentMixin(Item) {
         const scrollDetails = scrollDescription.slice(scrollIntroEnd + pdel.length);
         return [
           scrollDetails ? scrollIntro : null,
-          `<h3>${spell.name} (${_loc("DND5E.LevelNumber", { level })})</h3>`,
-          isConc ? `<p><em>${_loc("DND5E.Scroll.RequiresConcentration")}</em></p>` : null,
+          `<h3>${spell.name} (${_loc("VARLYN5E.LevelNumber", { level })})</h3>`,
+          isConc ? `<p><em>${_loc("VARLYN5E.Scroll.RequiresConcentration")}</em></p>` : null,
           spellDescription,
-          `<h3>${_loc("DND5E.Scroll.Details")}</h3>`,
+          `<h3>${_loc("VARLYN5E.Scroll.Details")}</h3>`,
           scrollDetails || scrollIntro
         ].filterJoin("");
       case "reference":
         return [
           "<p><em>",
-          CONFIG.DND5E.spellLevels[level] ?? level,
+          CONFIG.VARLYN5E.spellLevels[level] ?? level,
           " &Reference[Spell Scroll]",
-          isConc ? `, ${_loc("DND5E.Scroll.RequiresConcentration")}` : null,
+          isConc ? `, ${_loc("VARLYN5E.Scroll.RequiresConcentration")}` : null,
           "</em></p>",
           spellDescription
         ].filterJoin("");
@@ -26228,7 +26228,7 @@ class Item5e extends SystemDocumentMixin(Item) {
   static getDefaultArtwork(itemData={}) {
     const { type } = itemData;
     const { img } = super.getDefaultArtwork(itemData);
-    return { img: CONFIG.DND5E.defaultArtwork.Item[type] ?? img };
+    return { img: CONFIG.VARLYN5E.defaultArtwork.Item[type] ?? img };
   }
 }
 
@@ -26241,7 +26241,7 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.ENCHANT"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.ENCHANT"];
 
   /* -------------------------------------------- */
 
@@ -26250,8 +26250,8 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "enchant",
       img: "systems/dnd5e/icons/svg/activity/enchant.svg",
-      title: "DND5E.ENCHANT.Title",
-      hint: "DND5E.ENCHANT.Hint",
+      title: "VARLYN5E.ENCHANT.Title",
+      hint: "VARLYN5E.ENCHANT.Hint",
       sheetClass: EnchantSheet,
       usage: {
         dialog: EnchantUsageDialog
@@ -26390,7 +26390,7 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
     // If concentration is required, ensure it is still being maintained & GM is present
     if ( !game.user.isGM && concentration && !concentration.isOwner ) {
       if ( strict ) {
-        ui.notifications.error("DND5E.EffectApplyWarningConcentration", { console: false });
+        ui.notifications.error("VARLYN5E.EffectApplyWarningConcentration", { console: false });
         return null;
       } else {
         concentration = null;
@@ -26418,7 +26418,7 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
     if ( item.inCompendium ) {
       const actor = this.actor.isOwner ? this.actor : (getSceneTargets()[0]?.actor ?? game.user.character);
       if ( !actor ) {
-        ui.notifications.warn("DND5E.ENCHANT.Warning.NoTargetActor");
+        ui.notifications.warn("VARLYN5E.ENCHANT.Warning.NoTargetActor");
         return null;
       }
       enchantmentData._id = foundry.utils.randomID();
@@ -26461,11 +26461,11 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
 
     if ( !this.restrictions.allowMagical && item.system.properties?.has("mgc")
       && ("quantity" in item.system) ) {
-      errors.push(new EnchantmentError(_loc("DND5E.ENCHANT.Warning.NoMagicalItems")));
+      errors.push(new EnchantmentError(_loc("VARLYN5E.ENCHANT.Warning.NoMagicalItems")));
     }
 
     if ( this.restrictions.type && (item.type !== this.restrictions.type) ) {
-      errors.push(new EnchantmentError(_loc("DND5E.ENCHANT.Warning.WrongType", {
+      errors.push(new EnchantmentError(_loc("VARLYN5E.ENCHANT.Warning.WrongType", {
         incorrectType: _loc(CONFIG.Item.typeLabels[item.type]),
         allowedType: _loc(CONFIG.Item.typeLabels[this.restrictions.type])
       })));
@@ -26479,7 +26479,7 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
         return config.label;
       };
       errors.push(new EnchantmentError(_loc(
-        `DND5E.ENCHANT.Warning.${item.system.type?.value ? "WrongType" : "NoSubtype"}`,
+        `VARLYN5E.ENCHANT.Warning.${item.system.type?.value ? "WrongType" : "NoSubtype"}`,
         {
           allowedType: game.i18n.getListFormatter({ type: "disjunction" }).format(
             Array.from(this.restrictions.categories).map(c => getLabel(c).toLowerCase())
@@ -26491,9 +26491,9 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
 
     if ( this.restrictions.properties.size
       && !this.restrictions.properties.intersection(item.system.properties ?? new Set()).size ) {
-      errors.push(new EnchantmentError(_loc("DND5E.ENCHANT.Warning.MissingProperty", {
+      errors.push(new EnchantmentError(_loc("VARLYN5E.ENCHANT.Warning.MissingProperty", {
         validProperties: game.i18n.getListFormatter({ type: "disjunction" }).format(
-          Array.from(this.restrictions.properties).map(p => CONFIG.DND5E.itemProperties[p]?.label ?? p)
+          Array.from(this.restrictions.properties).map(p => CONFIG.VARLYN5E.itemProperties[p]?.label ?? p)
         )
       })));
     }
@@ -26572,7 +26572,7 @@ class ForwardSheet extends ActivitySheet {
     context.activityOptions = [
       { value: "", label: "" },
       ...this.item.system.activities.contents
-        .filter(a => (a.type !== "forward") && (CONFIG.DND5E.activityTypes[a.type] !== false))
+        .filter(a => (a.type !== "forward") && (CONFIG.VARLYN5E.activityTypes[a.type] !== false))
         .map(activity => ({ value: activity.id, label: activity.name }))
     ];
     return context;
@@ -26598,15 +26598,15 @@ class ForwardSheet extends ActivitySheet {
     return this._markTabs({
       identity: {
         id: "identity", group: "sheet", icon: "fa-solid fa-tag",
-        label: "DND5E.ACTIVITY.SECTIONS.Identity"
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Identity"
       },
       activation: {
         id: "activation", group: "sheet", icon: "fa-solid fa-clapperboard",
-        label: "DND5E.ACTIVITY.SECTIONS.Activation"
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Activation"
       },
       effect: {
         id: "effect", group: "sheet", icon: "fa-solid fa-sun",
-        label: "DND5E.ACTIVITY.SECTIONS.Effect"
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Effect"
       }
     });
   }
@@ -26667,7 +26667,7 @@ class ForwardActivity extends ActivityMixin(BaseForwardActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.FORWARD"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.FORWARD"];
 
   /* -------------------------------------------- */
 
@@ -26676,8 +26676,8 @@ class ForwardActivity extends ActivityMixin(BaseForwardActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "forward",
       img: "systems/dnd5e/icons/svg/activity/forward.svg",
-      title: "DND5E.FORWARD.Title",
-      hint: "DND5E.FORWARD.Hint",
+      title: "VARLYN5E.FORWARD.Title",
+      hint: "VARLYN5E.FORWARD.Hint",
       sheetClass: ForwardSheet
     }, { inplace: false })
   );
@@ -26699,7 +26699,7 @@ class ForwardActivity extends ActivityMixin(BaseForwardActivityData) {
     }, usage);
 
     const activity = this.item.system.activities.get(this.activity.id);
-    if ( !activity ) ui.notifications.error("DND5E.FORWARD.Warning.NoActivity");
+    if ( !activity ) ui.notifications.error("VARLYN5E.FORWARD.Warning.NoActivity");
     return activity?.use(usageConfig, dialog, message);
   }
 }
@@ -26736,13 +26736,13 @@ class HealSheet extends ActivitySheet {
   /** @inheritDoc */
   async _prepareEffectContext(context, options) {
     context = await super._prepareEffectContext(context, options);
-    context.typeOptions = Object.entries(CONFIG.DND5E.healingTypes).map(([value, config]) => ({
+    context.typeOptions = Object.entries(CONFIG.VARLYN5E.healingTypes).map(([value, config]) => ({
       value, label: config.label, selected: context.activity.healing.types.has(value)
     }));
     const scaleKey = (this.item.type === "spell" && this.item.system.level === 0) ? "labelCantrip" : "label";
     context.scalingOptions = [
-      { value: "", label: _loc("DND5E.DAMAGE.Scaling.None") },
-      ...Object.entries(CONFIG.DND5E.damageScalingModes).map(([value, { [scaleKey]: label }]) => ({ value, label }))
+      { value: "", label: _loc("VARLYN5E.DAMAGE.Scaling.None") },
+      ...Object.entries(CONFIG.VARLYN5E.damageScalingModes).map(([value, { [scaleKey]: label }]) => ({ value, label }))
     ];
     return context;
   }
@@ -26813,7 +26813,7 @@ class HealActivity extends ActivityMixin(BaseHealActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.HEAL"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.HEAL"];
 
   /* -------------------------------------------- */
 
@@ -26822,8 +26822,8 @@ class HealActivity extends ActivityMixin(BaseHealActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "heal",
       img: "systems/dnd5e/icons/svg/activity/heal.svg",
-      title: "DND5E.HEAL.Title",
-      hint: "DND5E.HEAL.Hint",
+      title: "VARLYN5E.HEAL.Title",
+      hint: "VARLYN5E.HEAL.Hint",
       sheetClass: HealSheet,
       usage: {
         actions: {
@@ -26839,7 +26839,7 @@ class HealActivity extends ActivityMixin(BaseHealActivityData) {
 
   /** @override */
   get damageFlavor() {
-    return _loc("DND5E.HEAL.HealingRoll");
+    return _loc("VARLYN5E.HEAL.HealingRoll");
   }
 
   /* -------------------------------------------- */
@@ -26850,7 +26850,7 @@ class HealActivity extends ActivityMixin(BaseHealActivityData) {
   _usageChatButtons(message) {
     if ( !this.healing.formula ) return super._usageChatButtons(message);
     return [{
-      label: _loc("DND5E.HEAL.HealingButton"),
+      label: _loc("VARLYN5E.HEAL.HealingButton"),
       icon: '<i class="dnd5e-icon" data-src="systems/dnd5e/icons/svg/damage/healing.svg"></i>',
       dataset: {
         action: "rollHealing"
@@ -26937,21 +26937,21 @@ class SaveSheet extends ActivitySheet {
   async _prepareEffectContext(context, options) {
     context = await super._prepareEffectContext(context, options);
 
-    context.abilityOptions = Object.entries(CONFIG.DND5E.abilities).map(([value, config]) => ({
+    context.abilityOptions = Object.entries(CONFIG.VARLYN5E.abilities).map(([value, config]) => ({
       value, label: config.label
     }));
     context.calculationOptions = [
-      { value: "", label: _loc("DND5E.SAVE.FIELDS.save.dc.CustomFormula") },
+      { value: "", label: _loc("VARLYN5E.SAVE.FIELDS.save.dc.CustomFormula") },
       { rule: true },
-      { value: "spellcasting", label: _loc("DND5E.SpellAbility") },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, config]) => ({
-        value, label: config.label, group: _loc("DND5E.Abilities")
+      { value: "spellcasting", label: _loc("VARLYN5E.SpellAbility") },
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, config]) => ({
+        value, label: config.label, group: _loc("VARLYN5E.Abilities")
       }))
     ];
     context.onSaveOptions = [
-      { value: "none", label: _loc("DND5E.SAVE.FIELDS.damage.onSave.None") },
-      { value: "half", label: _loc("DND5E.SAVE.FIELDS.damage.onSave.Half") },
-      { value: "full", label: _loc("DND5E.SAVE.FIELDS.damage.onSave.Full") }
+      { value: "none", label: _loc("VARLYN5E.SAVE.FIELDS.damage.onSave.None") },
+      { value: "half", label: _loc("VARLYN5E.SAVE.FIELDS.damage.onSave.Half") },
+      { value: "full", label: _loc("VARLYN5E.SAVE.FIELDS.damage.onSave.Full") }
     ];
 
     return context;
@@ -27013,7 +27013,7 @@ class BaseSaveActivityData extends BaseActivityData {
 
   /** @override */
   get ability() {
-    if ( this.save.dc.calculation in CONFIG.DND5E.abilities ) return this.save.dc.calculation;
+    if ( this.save.dc.calculation in CONFIG.VARLYN5E.abilities ) return this.save.dc.calculation;
     if ( this.save.dc.calculation === "spellcasting" ) return this.spellcastingAbility;
     return this.save.ability.first() ?? null;
   }
@@ -27046,7 +27046,7 @@ class BaseSaveActivityData extends BaseActivityData {
         parts: source.system.damage?.parts?.map(part => this.transformDamagePartData(source, part)) ?? []
       },
       save: {
-        ability: [source.system.save?.ability || Object.keys(CONFIG.DND5E.abilities)[0]],
+        ability: [source.system.save?.ability || Object.keys(CONFIG.VARLYN5E.abilities)[0]],
         dc: {
           calculation,
           formula: String(source.system.save?.dc ?? "")
@@ -27082,9 +27082,9 @@ class BaseSaveActivityData extends BaseActivityData {
       ?? 8 + (this.actor?.system.attributes?.prof ?? 0);
     this.save.dc.value += bonus;
 
-    if ( this.save.dc.value ) this.labels.save = _loc("DND5E.SaveDC", {
+    if ( this.save.dc.value ) this.labels.save = _loc("VARLYN5E.SaveDC", {
       dc: this.save.dc.value,
-      ability: CONFIG.DND5E.abilities[ability]?.label ?? ""
+      ability: CONFIG.VARLYN5E.abilities[ability]?.label ?? ""
     });
   }
 
@@ -27124,7 +27124,7 @@ class SaveActivity extends ActivityMixin(BaseSaveActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.SAVE"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.SAVE"];
 
   /* -------------------------------------------- */
 
@@ -27133,8 +27133,8 @@ class SaveActivity extends ActivityMixin(BaseSaveActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "save",
       img: "systems/dnd5e/icons/svg/activity/save.svg",
-      title: "DND5E.SAVE.Title.one",
-      hint: "DND5E.SAVE.Hint",
+      title: "VARLYN5E.SAVE.Title.one",
+      hint: "VARLYN5E.SAVE.Hint",
       sheetClass: SaveSheet,
       usage: {
         actions: {
@@ -27155,11 +27155,11 @@ class SaveActivity extends ActivityMixin(BaseSaveActivityData) {
     const dc = this.save.dc.value;
 
     for ( const abilityId of this.save.ability ) {
-      const ability = CONFIG.DND5E.abilities[abilityId]?.label ?? "";
-      const promptTitle = _loc("DND5E.SavePromptTitle", { ability });
+      const ability = CONFIG.VARLYN5E.abilities[abilityId]?.label ?? "";
+      const promptTitle = _loc("VARLYN5E.SavePromptTitle", { ability });
       buttons.push({
         label: dc ? `
-          <span class="visible-dc">${_loc("DND5E.SavingThrowDC", { dc, ability })}</span>
+          <span class="visible-dc">${_loc("VARLYN5E.SavingThrowDC", { dc, ability })}</span>
           <span class="hidden-dc">${promptTitle}</span>
         ` : promptTitle,
         icon: '<i class="fa-solid fa-shield-heart" inert></i>',
@@ -27173,7 +27173,7 @@ class SaveActivity extends ActivityMixin(BaseSaveActivityData) {
     }
 
     if ( this.damage.parts.length ) buttons.push({
-      label: _loc("DND5E.Damage"),
+      label: _loc("VARLYN5E.Damage"),
       icon: '<i class="fas fa-burst" inert></i>',
       dataset: {
         action: "rollDamage"
@@ -27223,7 +27223,7 @@ class SaveActivity extends ActivityMixin(BaseSaveActivityData) {
   static async #rollSave(event, target, message) {
     const targets = getSceneTargets();
     if ( !targets.length && game.user.character ) targets.push(game.user.character);
-    if ( !targets.length ) ui.notifications.warn("DND5E.ActionWarningNoToken");
+    if ( !targets.length ) ui.notifications.warn("VARLYN5E.ActionWarningNoToken");
     const dc = parseInt(target.dataset.dc);
     const bonusData = CONFIG.Dice.BasicRoll.constructParts({ activityBonus: this.save.bonus }, this.getRollData());
     for ( const token of targets ) {
@@ -27303,24 +27303,24 @@ class SummonSheet extends ActivitySheet {
     context.abilityOptions = [
       {
         value: "", rule: true,
-        label: _loc("DND5E.DefaultSpecific", {
-          default: this.activity.isSpell ? _loc("DND5E.Spellcasting").toLowerCase()
-            : CONFIG.DND5E.abilities[this.activity.ability]?.label.toLowerCase()
-              ?? _loc("DND5E.None").toLowerCase()
+        label: _loc("VARLYN5E.DefaultSpecific", {
+          default: this.activity.isSpell ? _loc("VARLYN5E.Spellcasting").toLowerCase()
+            : CONFIG.VARLYN5E.abilities[this.activity.ability]?.label.toLowerCase()
+              ?? _loc("VARLYN5E.None").toLowerCase()
         })
       },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label }))
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label }))
     ];
-    context.creatureSizeOptions = Object.entries(CONFIG.DND5E.actorSizes).map(([value, config]) => ({
+    context.creatureSizeOptions = Object.entries(CONFIG.VARLYN5E.actorSizes).map(([value, config]) => ({
       value, label: config.label, selected: this.activity.creatureSizes.has(value)
     }));
-    context.creatureTypeOptions = Object.entries(CONFIG.DND5E.creatureTypes).map(([value, config]) => ({
+    context.creatureTypeOptions = Object.entries(CONFIG.VARLYN5E.creatureTypes).map(([value, config]) => ({
       value, label: config.label, selected: this.activity.creatureTypes.has(value)
     }));
 
     context.profileModes = [
-      { value: "", label: _loc("DND5E.SUMMON.FIELDS.summon.mode.Direct") },
-      { value: "cr", label: _loc("DND5E.SUMMON.FIELDS.summon.mode.CR") }
+      { value: "", label: _loc("VARLYN5E.SUMMON.FIELDS.summon.mode.Direct") },
+      { value: "cr", label: _loc("VARLYN5E.SUMMON.FIELDS.summon.mode.CR") }
     ];
     context.profiles = this.activity.profiles.map((data, index) => ({
       data, index,
@@ -27358,16 +27358,16 @@ class SummonSheet extends ActivitySheet {
   /** @inheritDoc */
   _getTabs() {
     const tabs = super._getTabs();
-    tabs.effect.label = "DND5E.SUMMON.SECTIONS.Summoning";
+    tabs.effect.label = "VARLYN5E.SUMMON.SECTIONS.Summoning";
     tabs.effect.icon = "fa-solid fa-spaghetti-monster-flying";
     tabs.effect.tabs = this._markTabs({
       profiles: {
         id: "profiles", group: "effect", icon: "fa-solid fa-address-card",
-        label: "DND5E.SUMMON.SECTIONS.Profiles"
+        label: "VARLYN5E.SUMMON.SECTIONS.Profiles"
       },
       changes: {
         id: "changes", group: "effect", icon: "fa-solid fa-sliders",
-        label: "DND5E.SUMMON.SECTIONS.Changes"
+        label: "VARLYN5E.SUMMON.SECTIONS.Changes"
       }
     });
     return tabs;
@@ -27473,7 +27473,7 @@ class SummonUsageDialog extends ActivityUsageDialog {
       context.summonsFields = [];
 
       if ( !foundry.utils.hasProperty(this.options.display, "create.summons") ) context.summonsFields.push({
-        field: new BooleanField$o({ label: _loc("DND5E.SUMMON.Action.Place") }),
+        field: new BooleanField$o({ label: _loc("VARLYN5E.SUMMON.Action.Place") }),
         name: "create.summons",
         value: this.config.create?.summons,
         input: context.inputs.createCheckboxInput
@@ -27490,7 +27490,7 @@ class SummonUsageDialog extends ActivityUsageDialog {
           }
           context.summonsFields.push({
             field: new StringField$O({
-              required: true, blank: false, label: _loc("DND5E.SUMMON.Profile.Label")
+              required: true, blank: false, label: _loc("VARLYN5E.SUMMON.Profile.Label")
             }),
             name: "summons.profile",
             value: this.config.summons?.profile,
@@ -27499,20 +27499,20 @@ class SummonUsageDialog extends ActivityUsageDialog {
         } else context.summonsProfile = profiles[0]._id;
 
         if ( this.activity.creatureSizes.size > 1 ) context.summonsFields.push({
-          field: new StringField$O({ label: _loc("DND5E.Size") }),
+          field: new StringField$O({ label: _loc("VARLYN5E.Size") }),
           name: "summons.creatureSize",
           value: this.config.summons?.creatureSize,
           options: Array.from(this.activity.creatureSizes)
-            .map(value => ({ value, label: CONFIG.DND5E.actorSizes[value]?.label }))
+            .map(value => ({ value, label: CONFIG.VARLYN5E.actorSizes[value]?.label }))
             .filter(k => k)
         });
 
         if ( this.activity.creatureTypes.size > 1 ) context.summonsFields.push({
-          field: new StringField$O({ label: _loc("DND5E.CreatureType") }),
+          field: new StringField$O({ label: _loc("VARLYN5E.CreatureType") }),
           name: "summons.creatureType",
           value: this.config.summons?.creatureType,
           options: Array.from(this.activity.creatureTypes)
-            .map(value => ({ value, label: CONFIG.DND5E.creatureTypes[value]?.label }))
+            .map(value => ({ value, label: CONFIG.VARLYN5E.creatureTypes[value]?.label }))
             .filter(k => k)
         });
       }
@@ -27536,7 +27536,7 @@ class SummonUsageDialog extends ActivityUsageDialog {
       switch ( this.activity.summon.mode ) {
         case "cr":
           const cr = simplifyBonus(profile.cr, rollData);
-          label = _loc("DND5E.SUMMON.Profile.ChallengeRatingLabel", { cr: formatCR(cr) });
+          label = _loc("VARLYN5E.SUMMON.Profile.ChallengeRatingLabel", { cr: formatCR(cr) });
           break;
         default:
           const doc = fromUuidSync(profile.uuid);
@@ -27946,7 +27946,7 @@ class CompendiumBrowserSettingsConfig extends Application5e {
     classes: ["dialog-lg"],
     tag: "form",
     window: {
-      title: "DND5E.CompendiumBrowser.Sources.Label",
+      title: "VARLYN5E.CompendiumBrowser.Sources.Label",
       icon: "fas fa-book-open-reader",
       resizable: true
     },
@@ -28313,7 +28313,7 @@ class CompendiumBrowser extends Application5e {
     classes: ["compendium-browser", "vertical-tabs", "dialog-lg"],
     tag: "form",
     window: {
-      title: "DND5E.CompendiumBrowser.Title",
+      title: "VARLYN5E.CompendiumBrowser.Title",
       minimizable: true,
       resizable: true
     },
@@ -28423,14 +28423,14 @@ class CompendiumBrowser extends Application5e {
     },
     {
       tab: "feats",
-      label: "DND5E.CompendiumBrowser.Tabs.Feat.other",
+      label: "VARLYN5E.CompendiumBrowser.Tabs.Feat.other",
       icon: "fas fa-star",
       documentClass: "Item",
       types: ["feat"]
     },
     {
       tab: "physical",
-      label: "DND5E.CompendiumBrowser.Tabs.Item.other",
+      label: "VARLYN5E.CompendiumBrowser.Tabs.Item.other",
       svg: "systems/dnd5e/icons/svg/backpack.svg",
       documentClass: "Item",
       types: ["physical"]
@@ -28444,7 +28444,7 @@ class CompendiumBrowser extends Application5e {
     },
     {
       tab: "monsters",
-      label: "DND5E.CompendiumBrowser.Tabs.Monster.other",
+      label: "VARLYN5E.CompendiumBrowser.Tabs.Monster.other",
       svg: "systems/dnd5e/icons/svg/actors/npc.svg",
       documentClass: "Actor",
       types: ["npc"]
@@ -28644,14 +28644,14 @@ class CompendiumBrowser extends Application5e {
       .map(([, d]) => d.compendiumBrowserFilters ?? new Map())
       .reduce((final, second) => CompendiumBrowser.intersectFilters(second, final, context.filters), null) ?? new Map();
     context.filterDefinitions.set("source", {
-      label: "DND5E.SOURCE.FIELDS.source.label",
+      label: "VARLYN5E.SOURCE.FIELDS.source.label",
       type: "set",
       config: {
         keyPath: "system.source.slug",
         choices: foundry.utils.mergeObject(
           this.#sources ?? {},
           Object.fromEntries(Object.keys(this.options.filters?.locked?.additional?.source ?? {}).map(k => {
-            return [k.slugify({ strict: true }), CONFIG.DND5E.sourceBooks[k] ?? k];
+            return [k.slugify({ strict: true }), CONFIG.VARLYN5E.sourceBooks[k] ?? k];
           })), { inplace: false }
         )
       }
@@ -28694,12 +28694,12 @@ class CompendiumBrowser extends Application5e {
     context.invalid = (value < (min || -Infinity)) || (value > (max || Infinity));
     const suffix = this.#selectionLocalizationSuffix;
     context.summary = suffix ? _loc(
-      `DND5E.CompendiumBrowser.Selection.Summary.${suffix}`, { max, min, value }
+      `VARLYN5E.CompendiumBrowser.Selection.Summary.${suffix}`, { max, min, value }
     ) : value;
     const pr = getPluralRules();
-    context.invalidTooltip = _loc(`DND5E.CompendiumBrowser.Selection.Warning.${suffix}`, {
+    context.invalidTooltip = _loc(`VARLYN5E.CompendiumBrowser.Selection.Warning.${suffix}`, {
       max, min, value,
-      document: _loc(`DND5E.CompendiumBrowser.Selection.Warning.Document.${pr.select(max || min)}`)
+      document: _loc(`VARLYN5E.CompendiumBrowser.Selection.Warning.Document.${pr.select(max || min)}`)
     });
     return context;
   }
@@ -28807,7 +28807,7 @@ class CompendiumBrowser extends Application5e {
             ...data,
             expandId: `${key}-${group}`,
             expanded: this.expandedSections.get(`${key}-${group}`) ?? !data.config.collapseGroup?.(group),
-            label: _loc("DND5E.CompendiumBrowser.Filters.Grouped", {
+            label: _loc("VARLYN5E.CompendiumBrowser.Filters.Grouped", {
               type: _loc(data.label), group
             }),
             config: { ...data.config, choices }
@@ -28887,7 +28887,7 @@ class CompendiumBrowser extends Application5e {
     if ( game.user.isGM ) {
       frame.querySelector('[data-action="close"]').insertAdjacentHTML("beforebegin", `
         <button type="button" class="header-control fas fa-cog icon" data-action="configureSources"
-                data-tooltip aria-label="${_loc("DND5E.CompendiumBrowser.Sources.Label")}"></button>
+                data-tooltip aria-label="${_loc("VARLYN5E.CompendiumBrowser.Sources.Label")}"></button>
       `);
     }
     return frame;
@@ -28960,7 +28960,7 @@ class CompendiumBrowser extends Application5e {
       const source = foundry.utils.getProperty(result, "system.source");
       if ( foundry.utils.getType(source) !== "Object" ) continue;
       const { slug, value } = source;
-      sources.push({ slug, value: CONFIG.DND5E.sourceBooks[value] ?? value });
+      sources.push({ slug, value: CONFIG.VARLYN5E.sourceBooks[value] ?? value });
     }
     sources.sort((a, b) => a.value.localeCompare(b.value, game.i18n.lang));
     this.#sources = Object.fromEntries(sources.map(({ slug, value }) => [slug, value]));
@@ -28982,7 +28982,7 @@ class CompendiumBrowser extends Application5e {
         value: lockExclusive && (lockedSource !== undefined) ? {} : locked,
         key: "source",
         expandId: "source",
-        label: "DND5E.SOURCE.FIELDS.source.label",
+        label: "VARLYN5E.SOURCE.FIELDS.source.label",
         config: { choices: this.#sources },
         partId: `${this.id}-filters`
       }
@@ -29222,9 +29222,9 @@ class CompendiumBrowser extends Application5e {
     if ( (value < (min || -Infinity)) || (value > (max || Infinity)) ) {
       const suffix = this.#selectionLocalizationSuffix;
       const pr = getPluralRules();
-      throw new Error(_loc(`DND5E.CompendiumBrowser.Selection.Warning.${suffix}`, {
+      throw new Error(_loc(`VARLYN5E.CompendiumBrowser.Selection.Warning.${suffix}`, {
         max, min, value,
-        document: _loc(`DND5E.CompendiumBrowser.Selection.Warning.Document.${pr.select(max || min)}`)
+        document: _loc(`VARLYN5E.CompendiumBrowser.Selection.Warning.Document.${pr.select(max || min)}`)
       }));
     }
 
@@ -29505,7 +29505,7 @@ class CompendiumBrowser extends Application5e {
     button.classList.add("open-compendium-browser");
     button.innerHTML = `
       <i class="fa-solid fa-book-open-reader" inert></i>
-      ${_loc("DND5E.CompendiumBrowser.Action.Open")}
+      ${_loc("VARLYN5E.CompendiumBrowser.Action.Open")}
     `;
     button.addEventListener("click", event => (new CompendiumBrowser()).render({ force: true }));
 
@@ -30002,7 +30002,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.SUMMON"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.SUMMON"];
 
   /* -------------------------------------------- */
 
@@ -30011,8 +30011,8 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "summon",
       img: "systems/dnd5e/icons/svg/activity/summon.svg",
-      title: "DND5E.SUMMON.Title",
-      hint: "DND5E.SUMMON.Hint",
+      title: "VARLYN5E.SUMMON.Title",
+      hint: "VARLYN5E.SUMMON.Hint",
       sheetClass: SummonSheet,
       usage: {
         actions: {
@@ -30068,7 +30068,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
   _usageChatButtons(message) {
     if ( !this.availableProfiles.length ) return super._usageChatButtons(message);
     return [{
-      label: _loc("DND5E.SUMMON.Action.Summon"),
+      label: _loc("VARLYN5E.SUMMON.Action.Summon"),
       icon: '<i class="fa-solid fa-spaghetti-monster-flying" inert></i>',
       dataset: {
         action: "placeSummons"
@@ -30113,7 +30113,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
 
     const profile = this.profiles.find(p => p._id === options?.profile);
     if ( !profile ) throw new Error(
-      _loc("DND5E.SUMMON.Warning.NoProfile", { profileId: options.profile, item: this.item.name })
+      _loc("VARLYN5E.SUMMON.Warning.NoProfile", { profileId: options.profile, item: this.item.name })
     );
 
     /**
@@ -30138,7 +30138,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
 
     // Verify ownership of actor
     if ( !actor.isOwner ) {
-      throw new Error(_loc("DND5E.SUMMON.Warning.NoOwnership", { actor: actor.name }));
+      throw new Error(_loc("VARLYN5E.SUMMON.Warning.NoOwnership", { actor: actor.name }));
     }
 
     const tokensData = [];
@@ -30267,7 +30267,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
         }],
         disabled: false,
         icon: "icons/skills/targeting/crosshair-bars-yellow.webp",
-        name: _loc("DND5E.SUMMON.FIELDS.match.proficiency.label")
+        name: _loc("VARLYN5E.SUMMON.FIELDS.match.proficiency.label")
       });
       actorUpdates.effects.push(proficiencyEffect.toObject());
     }
@@ -30295,7 +30295,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
             }],
             disabled: false,
             icon: "icons/magic/defensive/shield-barrier-blue.webp",
-            name: _loc("DND5E.SUMMON.FIELDS.bonuses.ac.label")
+            name: _loc("VARLYN5E.SUMMON.FIELDS.bonuses.ac.label")
           })).toObject());
         }
       }
@@ -30315,7 +30315,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
           }],
           disabled: false,
           icon: "icons/sundries/gaming/dice-runed-brown.webp",
-          name: _loc("DND5E.SUMMON.FIELDS.bonuses.hd.label")
+          name: _loc("VARLYN5E.SUMMON.FIELDS.bonuses.hd.label")
         })).toObject());
       }
     }
@@ -30340,7 +30340,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
             }],
             disabled: false,
             icon: "icons/magic/life/heart-glowing-red.webp",
-            name: _loc("DND5E.SUMMON.FIELDS.bonuses.hp.label")
+            name: _loc("VARLYN5E.SUMMON.FIELDS.bonuses.hp.label")
           })).toObject();
         };
 
@@ -30369,7 +30369,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
     // Change creature size
     if ( this.creatureSizes.size ) {
       const size = this.creatureSizes.has(options.creatureSize) ? options.creatureSize : this.creatureSizes.first();
-      const config = CONFIG.DND5E.actorSizes[size];
+      const config = CONFIG.VARLYN5E.actorSizes[size];
       if ( config ) {
         actorUpdates["system.traits.size"] = size;
         tokenUpdates.width = config.token ?? 1;
@@ -30452,7 +30452,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
           changes,
           disabled: false,
           icon: "icons/skills/melee/strike-slashes-orange.webp",
-          name: _loc("DND5E.SUMMON.ItemChanges.Label"),
+          name: _loc("VARLYN5E.SUMMON.ItemChanges.Label"),
           origin: this.uuid,
           type: "enchantment"
         })).toObject();
@@ -30479,7 +30479,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
     // Ensure the token matches the final size
     if ( this.creatureSizes.size ) {
       const size = this.creatureSizes.has(options.creatureSize) ? options.creatureSize : this.creatureSizes.first();
-      const config = CONFIG.DND5E.actorSizes[size];
+      const config = CONFIG.VARLYN5E.actorSizes[size];
       if ( config ) token = token.clone({ width: config.token ?? 1, height: config.token ?? 1 });
     }
 
@@ -30502,7 +30502,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
     if ( actor.prototypeToken.randomImg && !game.user.can("FILES_BROWSE") ) {
       tokenUpdates.texture ??= {};
       tokenUpdates.texture.src ??= actor.img;
-      ui.notifications.warn("DND5E.SUMMON.Warning.Wildcard");
+      ui.notifications.warn("VARLYN5E.SUMMON.Warning.Wildcard");
     }
 
     delete placement.prototypeToken;
@@ -30562,7 +30562,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
         await SummonUsageDialog.create(this, config, {
           button: {
             icon: "fa-solid fa-spaghetti-monster-flying",
-            label: "DND5E.SUMMON.Action.Summon"
+            label: "VARLYN5E.SUMMON.Action.Summon"
           },
           display: {
             all: false,
@@ -30674,7 +30674,7 @@ const { BooleanField: BooleanField$m, SetField: SetField$q, StringField: StringF
 class TransformationSetting extends foundry.abstract.DataModel {
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.TRANSFORM.Setting"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.TRANSFORM.Setting"];
 
   /* -------------------------------------------- */
 
@@ -30709,7 +30709,7 @@ class TransformationSetting extends foundry.abstract.DataModel {
    * @returns {string[]}
    */
   static #initial(category) {
-    return Object.entries(CONFIG.DND5E.transformation[category])
+    return Object.entries(CONFIG.VARLYN5E.transformation[category])
       .filter(([, config]) => config.default)
       .map(([key]) => key);
   }
@@ -30728,8 +30728,8 @@ class TransformationSetting extends foundry.abstract.DataModel {
   createFormCategories({ host, prefix="" }={}) {
     const disabledFields = TransformationSetting.BOOLEAN_CATEGORIES.reduce((fields, cat) => {
       for ( const value of this[cat] ) {
-        for ( const disable of CONFIG.DND5E.transformation[cat][value]?.disables ?? [] ) {
-          if ( disable.includes("*") ) Object.keys(CONFIG.DND5E.transformation[disable.replace(".*", "")] ?? {})
+        for ( const disable of CONFIG.VARLYN5E.transformation[cat][value]?.disables ?? [] ) {
+          if ( disable.includes("*") ) Object.keys(CONFIG.VARLYN5E.transformation[disable.replace(".*", "")] ?? {})
             .filter(k => k !== value).forEach(k => fields.add(`${cat}.${k}`));
           else fields.add(disable);
         }
@@ -30744,11 +30744,11 @@ class TransformationSetting extends foundry.abstract.DataModel {
 
     return TransformationSetting.BOOLEAN_CATEGORIES.map(cat => ({
       category: cat,
-      title: `DND5E.TRANSFORM.Setting.FIELDS.${cat}.label`,
-      hint: game.i18n.has(`DND5E.TRANSFORM.Setting.FIELDS.${cat}.hint`)
-        ? `DND5E.TRANSFORM.Setting.FIELDS.${cat}.hint` : "",
+      title: `VARLYN5E.TRANSFORM.Setting.FIELDS.${cat}.label`,
+      hint: game.i18n.has(`VARLYN5E.TRANSFORM.Setting.FIELDS.${cat}.hint`)
+        ? `VARLYN5E.TRANSFORM.Setting.FIELDS.${cat}.hint` : "",
       settings: [
-        ...Object.entries(CONFIG.DND5E.transformation[cat]).map(([name, config]) => ({
+        ...Object.entries(CONFIG.VARLYN5E.transformation[cat]).map(([name, config]) => ({
           field: new BooleanField$m({ label: config.label, hint: config.hint }),
           disabled: disabledFields.has(`${cat}.${name}`),
           input: createCheckboxInput,
@@ -30840,27 +30840,27 @@ class TransformSheet extends ActivitySheet {
 
     const settings = new TransformationSetting({
       ...(context.source.transform.customize ? context.source.settings
-        : CONFIG.DND5E.transformation.presets[context.source.transform.preset]?.settings ?? {}),
+        : CONFIG.VARLYN5E.transformation.presets[context.source.transform.preset]?.settings ?? {}),
       preset: context.source.transform.preset
     });
     context.categories = settings.createFormCategories({ prefix: "settings." });
     context.presetOptions = [
-      { value: "", label: _loc("DND5E.TRANSFORM.Preset.Default") },
+      { value: "", label: _loc("VARLYN5E.TRANSFORM.Preset.Default") },
       { rule: true },
-      ...Object.entries(CONFIG.DND5E.transformation.presets)
+      ...Object.entries(CONFIG.VARLYN5E.transformation.presets)
         .map(([value, { label }]) => ({ value, label }))
     ];
 
-    context.creatureSizeOptions = Object.entries(CONFIG.DND5E.actorSizes)
+    context.creatureSizeOptions = Object.entries(CONFIG.VARLYN5E.actorSizes)
       .map(([value, { label }]) => ({ value, label }));
-    context.creatureTypeOptions = Object.entries(CONFIG.DND5E.creatureTypes)
+    context.creatureTypeOptions = Object.entries(CONFIG.VARLYN5E.creatureTypes)
       .map(([value, { label }]) => ({ value, label }));
-    context.movementTypeOptions = Object.entries(CONFIG.DND5E.movementTypes)
+    context.movementTypeOptions = Object.entries(CONFIG.VARLYN5E.movementTypes)
       .map(([value, { label }]) => ({ value, label }));
 
     context.profileModes = [
-      { value: "", label: _loc("DND5E.TRANSFORM.FIELDS.transform.mode.Direct") },
-      { value: "cr", label: _loc("DND5E.TRANSFORM.FIELDS.transform.mode.CR") }
+      { value: "", label: _loc("VARLYN5E.TRANSFORM.FIELDS.transform.mode.Direct") },
+      { value: "cr", label: _loc("VARLYN5E.TRANSFORM.FIELDS.transform.mode.CR") }
     ];
     context.profiles = context.source.profiles.map((data, index) => ({
       data, index,
@@ -30879,16 +30879,16 @@ class TransformSheet extends ActivitySheet {
   /** @inheritDoc */
   _getTabs() {
     const tabs = super._getTabs();
-    tabs.effect.label = "DND5E.TRANSFORM.SECTIONS.Transformation";
+    tabs.effect.label = "VARLYN5E.TRANSFORM.SECTIONS.Transformation";
     tabs.effect.icon = "fa-solid fa-frog";
     tabs.effect.tabs = this._markTabs({
       profiles: {
         id: "profiles", group: "effect", icon: "fa-solid fa-address-card",
-        label: "DND5E.TRANSFORM.SECTIONS.Profiles"
+        label: "VARLYN5E.TRANSFORM.SECTIONS.Profiles"
       },
       settings: {
         id: "settings", group: "effect", icon: "fa-solid fa-sliders",
-        label: "DND5E.TRANSFORM.SECTIONS.Settings"
+        label: "VARLYN5E.TRANSFORM.SECTIONS.Settings"
       }
     });
     return tabs;
@@ -30953,7 +30953,7 @@ class TransformSheet extends ActivitySheet {
     if ( submitData.transform?.customize && !this.activity._source.settings ) {
       const preset = submitData.transform.preset ?? this.activity.transform.preset;
       submitData.settings = new TransformationSetting(foundry.utils.mergeObject({
-        ...(CONFIG.DND5E.transformation.presets[preset]?.settings ?? {}),
+        ...(CONFIG.VARLYN5E.transformation.presets[preset]?.settings ?? {}),
         preset: this.activity.transform.preset
       }, submitData.settings ?? {}, { inplace: false })).toObject();
     }
@@ -31030,7 +31030,7 @@ class TransformUsageDialog extends ActivityUsageDialog {
       context.hasCreation = true;
       context.transformFields = [{
         field: new StringField$L({
-          required: true, blank: false, label: _loc("DND5E.TRANSFORM.Profile.Label")
+          required: true, blank: false, label: _loc("VARLYN5E.TRANSFORM.Profile.Label")
         }),
         name: "transform.profile",
         value: this.config.transform?.profile,
@@ -31056,7 +31056,7 @@ class TransformUsageDialog extends ActivityUsageDialog {
     switch ( this.activity.transform.mode ) {
       case "cr":
         const cr = simplifyBonus(profile.cr, rollData);
-        return _loc("DND5E.TRANSFORM.Profile.ChallengeRatingLabel", { cr: formatCR(cr) });
+        return _loc("VARLYN5E.TRANSFORM.Profile.ChallengeRatingLabel", { cr: formatCR(cr) });
       default:
         const doc = fromUuidSync(profile.uuid);
         if ( doc ) return doc.name;
@@ -31151,7 +31151,7 @@ class BaseTransformActivityData extends BaseActivityData {
       this.settings = new TransformationSetting({ preset: this.transform.preset });
     }
     else if ( !this.transform.customize ) this.settings = new TransformationSetting({
-      ...(CONFIG.DND5E.transformation.presets[this.transform.preset]?.settings ?? {}),
+      ...(CONFIG.VARLYN5E.transformation.presets[this.transform.preset]?.settings ?? {}),
       preset: this.transform.preset
     });
   }
@@ -31170,7 +31170,7 @@ class TransformActivity extends ActivityMixin(BaseTransformActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.TRANSFORM"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.TRANSFORM"];
 
   /* -------------------------------------------- */
 
@@ -31179,8 +31179,8 @@ class TransformActivity extends ActivityMixin(BaseTransformActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "transform",
       img: "systems/dnd5e/icons/svg/activity/transform.svg",
-      title: "DND5E.TRANSFORM.Title",
-      hint: "DND5E.TRANSFORM.Hint",
+      title: "VARLYN5E.TRANSFORM.Title",
+      hint: "VARLYN5E.TRANSFORM.Hint",
       sheetClass: TransformSheet,
       usage: {
         actions: {
@@ -31238,7 +31238,7 @@ class TransformActivity extends ActivityMixin(BaseTransformActivityData) {
   _usageChatButtons(message) {
     if ( !this.availableProfiles.length ) return super._usageChatButtons(message);
     return [{
-      label: _loc("DND5E.TRANSFORM.Action.Transform"),
+      label: _loc("VARLYN5E.TRANSFORM.Action.Transform"),
       icon: '<i class="fa-solid fa-frog" inert></i>',
       dataset: {
         action: "transformActor"
@@ -31306,7 +31306,7 @@ class TransformActivity extends ActivityMixin(BaseTransformActivityData) {
     const targets = getSceneTargets();
     if ( !targets.length && game.user.character ) targets.push(game.user.character);
     if ( !targets.length ) {
-      ui.notifications.warn("DND5E.ActionWarningNoToken");
+      ui.notifications.warn("VARLYN5E.ActionWarningNoToken");
       return;
     }
 
@@ -31315,7 +31315,7 @@ class TransformActivity extends ActivityMixin(BaseTransformActivityData) {
     const uuid = message.getFlag("dnd5e", "transform.uuid") ?? await this.queryActor(profile);
     const source = await fromUuid(uuid);
     if ( !source ) {
-      ui.notifications.warn("DND5E.TRANSFORM.Warning.SourceActor");
+      ui.notifications.warn("VARLYN5E.TRANSFORM.Warning.SourceActor");
       return;
     }
 
@@ -31425,7 +31425,7 @@ class UtilityActivity extends ActivityMixin(BaseUtilityActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.UTILITY"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.UTILITY"];
 
   /* -------------------------------------------- */
 
@@ -31434,8 +31434,8 @@ class UtilityActivity extends ActivityMixin(BaseUtilityActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "utility",
       img: "systems/dnd5e/icons/svg/activity/utility.svg",
-      title: "DND5E.UTILITY.Title",
-      hint: "DND5E.UTILITY.Hint",
+      title: "VARLYN5E.UTILITY.Title",
+      hint: "VARLYN5E.UTILITY.Hint",
       sheetClass: UtilitySheet,
       usage: {
         actions: {
@@ -31453,7 +31453,7 @@ class UtilityActivity extends ActivityMixin(BaseUtilityActivityData) {
   _usageChatButtons(message) {
     if ( !this.roll.formula ) return super._usageChatButtons(message);
     return [{
-      label: this.roll.name || _loc("DND5E.Roll"),
+      label: this.roll.name || _loc("VARLYN5E.Roll"),
       icon: '<i class="fa-solid fa-dice" inert></i>',
       dataset: {
         action: "rollFormula",
@@ -31489,7 +31489,7 @@ class UtilityActivity extends ActivityMixin(BaseUtilityActivityData) {
       options: {
         window: {
           title: this.item.name,
-          subtitle: "DND5E.RollConfiguration.Title",
+          subtitle: "VARLYN5E.RollConfiguration.Title",
           icon: this.item.img
         }
       }
@@ -31498,7 +31498,7 @@ class UtilityActivity extends ActivityMixin(BaseUtilityActivityData) {
     const messageConfig = foundry.utils.mergeObject({
       create: true,
       data: {
-        flavor: `${this.item.name} - ${this.roll.label || _loc("DND5E.OtherFormula")}`,
+        flavor: `${this.item.name} - ${this.roll.label || _loc("VARLYN5E.OtherFormula")}`,
         flags: {
           dnd5e: {
             ...this.messageFlags,
@@ -31582,10 +31582,10 @@ class SkillToolRollConfigurationDialog extends D20RollConfigurationDialog {
     context = await super._prepareConfigurationContext(context, options);
     if ( this.options.chooseAbility ) context.fields.unshift({
       field: new foundry.data.fields.StringField({
-        required: true, blank: false, label: _loc("DND5E.Abilities")
+        required: true, blank: false, label: _loc("VARLYN5E.Abilities")
       }),
       name: "ability",
-      options: Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label })),
+      options: Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label })),
       value: this.config.ability
     });
     return context;
@@ -31599,10 +31599,10 @@ class SkillToolRollConfigurationDialog extends D20RollConfigurationDialog {
   _onChangeForm(formConfig, event) {
     super._onChangeForm(formConfig, event);
     if ( this.config.skill && (event.target?.name === "ability") ) {
-      const skillLabel = CONFIG.DND5E.skills[this.config.skill]?.label ?? "";
+      const skillLabel = CONFIG.VARLYN5E.skills[this.config.skill]?.label ?? "";
       const ability = event.target.value ?? this.config.ability;
-      const abilityLabel = CONFIG.DND5E.abilities[ability]?.label ?? "";
-      const flavor = _loc("DND5E.SkillPromptTitle", { skill: skillLabel, ability: abilityLabel });
+      const abilityLabel = CONFIG.VARLYN5E.abilities[ability]?.label ?? "";
+      const flavor = _loc("VARLYN5E.SkillPromptTitle", { skill: skillLabel, ability: abilityLabel });
       foundry.utils.setProperty(this.message, "data.flavor", flavor);
       this._updateFrame({ window: { title: flavor } });
     }
@@ -31710,11 +31710,11 @@ class PropertyAttribution extends Application5e {
   getPropertyLabel(property) {
     const parts = property.split(".");
     if ( parts[0] === "abilities" && parts[1] ) {
-      return CONFIG.DND5E.abilities[parts[1]]?.label ?? property;
-    } else if ( (property === "attributes.ac.dex") && CONFIG.DND5E.abilities.dex ) {
-      return CONFIG.DND5E.abilities.dex.label;
+      return CONFIG.VARLYN5E.abilities[parts[1]]?.label ?? property;
+    } else if ( (property === "attributes.ac.dex") && CONFIG.VARLYN5E.abilities.dex ) {
+      return CONFIG.VARLYN5E.abilities.dex.label;
     } else if ( (parts[0] === "prof") || (property === "attributes.prof") ) {
-      return _loc("DND5E.Proficiency");
+      return _loc("VARLYN5E.Proficiency");
     }
     return property;
   }
@@ -31734,21 +31734,21 @@ class TravelField extends foundry.data.fields.SchemaField {
   constructor(fields={}, { initialTime=8, initialUnits=null, ...options }={}) {
     fields = {
       pace: new StringField$I({
-        required: true, blank: false, initial: "normal", choices: () => CONFIG.DND5E.travelPace,
-        label: "DND5E.TRAVEL.Label"
+        required: true, blank: false, initial: "normal", choices: () => CONFIG.VARLYN5E.travelPace,
+        label: "VARLYN5E.TRAVEL.Label"
       }),
       paces: new MappingField(new FormulaField({ deterministic: true }), {
-        initialKeys: CONFIG.DND5E.travelTypes, initialKeysOnly: true
+        initialKeys: CONFIG.VARLYN5E.travelTypes, initialKeysOnly: true
       }),
       speeds: new MappingField(new FormulaField({ deterministic: true }), {
-        initialKeys: CONFIG.DND5E.travelTypes, initialKeysOnly: true
+        initialKeys: CONFIG.VARLYN5E.travelTypes, initialKeysOnly: true
       }),
       time: new NumberField$p({
         positive: true, integer: true, initial: initialTime,
-        label: "DND5E.TRAVEL.FIELDS.time.label", hint: "DND5E.TRAVEL.FIELDS.time.hint"
+        label: "VARLYN5E.TRAVEL.FIELDS.time.label", hint: "VARLYN5E.TRAVEL.FIELDS.time.hint"
       }),
       units: new StringField$I({
-        required: true, nullable: true, blank: false, initial: initialUnits, label: "DND5E.UNITS.TRAVEL.Label"
+        required: true, nullable: true, blank: false, initial: initialUnits, label: "VARLYN5E.UNITS.TRAVEL.Label"
       }),
       ...fields
     };
@@ -31782,18 +31782,18 @@ class TravelField extends foundry.data.fields.SchemaField {
       if ( pace && !speed ) travel.speeds[type] = Math.floor(pace / travel.time);
       if ( pace && paceMode ) {
         travel.prePace[type] = pace;
-        travel.paces[type] = TravelField.applyPaceMultiplier(pace, paceMode, CONFIG.DND5E.travelUnits[units]?.type);
+        travel.paces[type] = TravelField.applyPaceMultiplier(pace, paceMode, CONFIG.VARLYN5E.travelUnits[units]?.type);
       }
       if ( pace > travel.paces.max ) travel.paces.max = pace;
       if ( speed > travel.speeds.max ) travel.speeds.max = speed;
     }
 
     if ( !movement ) return;
-    for ( const [type, { travel: travelType="land" }] of Object.entries(CONFIG.DND5E.movementTypes) ) {
+    for ( const [type, { travel: travelType="land" }] of Object.entries(CONFIG.VARLYN5E.movementTypes) ) {
       if ( !movement[type] ) continue;
       const speed = TravelField.convertMovementToTravel(movement[type], movement.units, units);
       const pace = travel.paces[travelType] ||= TravelField.applyPaceMultiplier(
-        speed * travel.time, paceMode, CONFIG.DND5E.movementUnits[movement.units]?.type
+        speed * travel.time, paceMode, CONFIG.VARLYN5E.movementUnits[movement.units]?.type
       );
       travel.speeds[travelType] ||= speed;
       if ( pace > travel.paces.max ) travel.paces.max = pace;
@@ -31814,10 +31814,10 @@ class TravelField extends foundry.data.fields.SchemaField {
    * @returns {number}
    */
   static applyPaceMultiplier(value, pace, unitType) {
-    const { normal } = CONFIG.DND5E.travelPace;
-    const config = CONFIG.DND5E.travelPace[pace];
+    const { normal } = CONFIG.VARLYN5E.travelPace;
+    const config = CONFIG.VARLYN5E.travelPace[pace];
     if ( (unitType === "imperial") && (value === normal.standard) && config?.standard ) return config.standard;
-    value *= CONFIG.DND5E.travelPace[pace]?.multiplier ?? 1;
+    value *= CONFIG.VARLYN5E.travelPace[pace]?.multiplier ?? 1;
     if ( config?.round === "down" ) value = Math.floor(value);
     else if ( config?.round === "up" ) value = Math.ceil(value);
     return value;
@@ -31833,8 +31833,8 @@ class TravelField extends foundry.data.fields.SchemaField {
    * @returns {number}
    */
   static convertMovementToTravel(value, initialUnit, finalUnit) {
-    const fromConfig = CONFIG.DND5E.movementUnits[initialUnit];
-    const toConfig = CONFIG.DND5E.movementUnits[finalUnit];
+    const fromConfig = CONFIG.VARLYN5E.movementUnits[initialUnit];
+    const toConfig = CONFIG.VARLYN5E.movementUnits[finalUnit];
     if ( (fromConfig?.type === "metric") && (toConfig?.type === "metric") ) {
       value = convertLength(value, initialUnit, "m", { strict: false });
       return convertTravelSpeed(value / 2, "kph", { strict: false, to: finalUnit }).value;
@@ -31853,7 +31853,7 @@ class TravelField extends foundry.data.fields.SchemaField {
    * @returns {{ advantage: boolean, disadvantage: boolean }}
    */
   static getTravelPaceMode(pace, skill) {
-    const config = CONFIG.DND5E.skills[skill];
+    const config = CONFIG.VARLYN5E.skills[skill];
     return {
       advantage: config?.pace?.advantage?.has(pace) ?? false,
       disadvantage: config?.pace?.disadvantage?.has(pace) ?? false
@@ -31971,7 +31971,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
   /* -------------------------------------------- */
 
   /** @inheritdoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.ACTIVEEFFECT"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.ACTIVEEFFECT"];
 
   /* -------------------------------------------- */
   /*  Properties                                  */
@@ -32265,7 +32265,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
    */
   _prepareFlagChange(actor, change) {
     const { key, value } = change;
-    const data = CONFIG.DND5E.characterFlags[key.replace("flags.dnd5e.", "")];
+    const data = CONFIG.VARLYN5E.characterFlags[key.replace("flags.dnd5e.", "")];
     if ( !data ) return change;
 
     // Set flag to initial value if it isn't present
@@ -32312,14 +32312,14 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
    * @protected
    */
   _prepareExhaustionLevel() {
-    const config = CONFIG.DND5E.conditionTypes.exhaustion;
+    const config = CONFIG.VARLYN5E.conditionTypes.exhaustion;
     let level = this.getFlag("dnd5e", "exhaustionLevel");
     if ( !Number.isFinite(level) ) level = 1;
     this.img = this.constructor._getExhaustionImage(level);
-    this.name = `${_loc("DND5E.Exhaustion")} ${level}`;
+    this.name = `${_loc("VARLYN5E.Exhaustion")} ${level}`;
     if ( level >= config.levels ) {
       this.statuses.add("dead");
-      CONFIG.DND5E.statusEffects.dead.statuses?.forEach(s => this.statuses.add(s));
+      CONFIG.VARLYN5E.statusEffects.dead.statuses?.forEach(s => this.statuses.add(s));
     }
   }
 
@@ -32474,7 +32474,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
 
     // Enchantments cannot be added directly to actors
     if ( (this.type === "enchantment") && (this.parent instanceof Actor) ) {
-      ui.notifications.error("DND5E.ENCHANTMENT.Warning.NotOnActor");
+      ui.notifications.error("VARLYN5E.ENCHANTMENT.Warning.NotOnActor");
       return false;
     }
 
@@ -32548,7 +32548,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
       if ( newEncumbrance === originalEncumbrance ) return;
       const increase = !originalEncumbrance || ((originalEncumbrance === "encumbered") && newEncumbrance)
         || (newEncumbrance === "exceedingCarryingCapacity");
-      if ( !increase ) this.name = CONFIG.DND5E.encumbrance.effects[originalEncumbrance].name;
+      if ( !increase ) this.name = CONFIG.VARLYN5E.encumbrance.effects[originalEncumbrance].name;
       this._displayScrollingStatus(increase);
       this.name = name;
     }
@@ -32560,7 +32560,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
   async _preDelete(options, user) {
     const dependents = this.getDependents();
     if ( dependents.length && !game.users.activeGM ) {
-      ui.notifications.warn("DND5E.ConcentrationBreakWarning");
+      ui.notifications.warn("VARLYN5E.ConcentrationBreakWarning");
       return false;
     }
     return super._preDelete(options, user);
@@ -32604,8 +32604,8 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
     const statusEffect = CONFIG.statusEffects.find(e => e.id === CONFIG.specialStatusEffects.CONCENTRATING);
     const effectData = foundry.utils.mergeObject({
       ...statusEffect,
-      name: `${_loc("EFFECT.DND5E.StatusConcentrating")}: ${item.name}`,
-      description: `<p>${_loc("DND5E.ConcentratingOn", {
+      name: `${_loc("EFFECT.VARLYN5E.StatusConcentrating")}: ${item.name}`,
+      description: `<p>${_loc("VARLYN5E.ConcentratingOn", {
         name: item.name,
         type: _loc(`TYPES.Item.${item.type}`)
       })}</p><hr><p>@Embed[${item.uuid} inline]</p>`,
@@ -32663,8 +32663,8 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
    */
   static onRenderActiveEffectConfig(app, html, context) {
     const element = new foundry.data.fields.SetField(new foundry.data.fields.StringField(), {}).toFormGroup({
-      label: _loc("DND5E.CONDITIONS.RiderConditions.label"),
-      hint: _loc("DND5E.CONDITIONS.RiderConditions.hint")
+      label: _loc("VARLYN5E.CONDITIONS.RiderConditions.label"),
+      hint: _loc("VARLYN5E.CONDITIONS.RiderConditions.hint")
     }, {
       name: "flags.dnd5e.riders.statuses",
       value: app.document.getFlag("dnd5e", "riders.statuses") ?? [],
@@ -32676,7 +32676,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
     // Add tooltip with link to wiki for effects/enchantments
     const helpIconElement = document.createElement("i");
     helpIconElement.classList.add("fa-solid", "fa-circle-question");
-    const tooltipText = _loc("DND5E.ACTIVEEFFECT.AttributeKeyTooltip", {
+    const tooltipText = _loc("VARLYN5E.ACTIVEEFFECT.AttributeKeyTooltip", {
       url: app.document.type === "enchantment"
         ? "https://github.com/foundryvtt/dnd5e/wiki/Enchantment"
         : "https://github.com/foundryvtt/dnd5e/wiki/Active-Effect-Guide"
@@ -32714,7 +32714,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
    * @returns {string}
    */
   static _getExhaustionImage(level) {
-    const { img } = CONFIG.DND5E.conditionTypes.exhaustion;
+    const { img } = CONFIG.VARLYN5E.conditionTypes.exhaustion;
     const split = img.split(".");
     const ext = split.pop();
     const path = split.join(".");
@@ -32753,7 +32753,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
     event.stopPropagation();
     if ( event.button === 0 ) level++;
     else level--;
-    const max = CONFIG.DND5E.conditionTypes.exhaustion.levels;
+    const max = CONFIG.VARLYN5E.conditionTypes.exhaustion.levels;
     actor.update({ "system.attributes.exhaustion": Math.clamp(level, 0, max) });
   }
 
@@ -32774,23 +32774,23 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
     }
     const choices = effects.reduce((acc, effect) => {
       const data = effect.getFlag("dnd5e", "item");
-      acc[effect.id] = data?.name ?? actor.items.get(data?.id)?.name ?? _loc("DND5E.ConcentratingItemless");
+      acc[effect.id] = data?.name ?? actor.items.get(data?.id)?.name ?? _loc("VARLYN5E.ConcentratingItemless");
       return acc;
     }, {});
     const options = HandlebarsHelpers.selectOptions(choices, { hash: { sort: true } });
     const content = `
-    <p>${_loc("DND5E.ConcentratingEndChoice")}</p>
+    <p>${_loc("VARLYN5E.ConcentratingEndChoice")}</p>
     <div class="form-group">
-      <label>${_loc("DND5E.SOURCE.FIELDS.source.label")}</label>
+      <label>${_loc("VARLYN5E.SOURCE.FIELDS.source.label")}</label>
       <div class="form-fields">
         <select name="source">${options}</select>
       </div>
     </div>`;
     foundry.applications.api.Dialog.prompt({
       content,
-      window: { title: _loc("DND5E.Concentration") },
+      window: { title: _loc("VARLYN5E.Concentration") },
       ok: {
-        label: _loc("DND5E.Confirm"),
+        label: _loc("VARLYN5E.Confirm"),
         callback: (event, button, dialog) => {
           const source = new foundry.applications.ux.FormDataExtended(button.form).object.source;
           if ( source ) actor.endConcentration(source);
@@ -32854,7 +32854,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
    */
   static getDefaultArtwork(effectData={}) {
     const type = effectData.type !== "base" ? effectData.type : "standard";
-    return { img: CONFIG.DND5E.defaultArtwork.ActiveEffect[type] ?? this.DEFAULT_ICON };
+    return { img: CONFIG.VARLYN5E.defaultArtwork.ActiveEffect[type] ?? this.DEFAULT_ICON };
   }
 
   /* -------------------------------------------- */
@@ -32886,11 +32886,11 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
    */
   async richTooltip(enrichmentOptions={}) {
     let properties = [];
-    if ( this.isSuppressed ) properties.push("DND5E.EffectType.Unavailable");
-    else if ( this.disabled ) properties.push("DND5E.EffectType.Inactive");
-    else if ( this.isTemporary ) properties.push("DND5E.EffectType.Temporary");
-    else properties.push("DND5E.EffectType.Passive");
-    if ( this.type === "enchantment" ) properties.push("DND5E.ENCHANTMENT.Label");
+    if ( this.isSuppressed ) properties.push("VARLYN5E.EffectType.Unavailable");
+    else if ( this.disabled ) properties.push("VARLYN5E.EffectType.Inactive");
+    else if ( this.isTemporary ) properties.push("VARLYN5E.EffectType.Temporary");
+    else properties.push("VARLYN5E.EffectType.Passive");
+    if ( this.type === "enchantment" ) properties.push("VARLYN5E.ENCHANTMENT.Label");
     properties = properties.map(p => _loc(p));
     properties.unshift(...this.statuses.map(id => CONFIG.statusEffects[id]?.name).filter(_ => _));
 
@@ -33031,7 +33031,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @type {number}     The cover bonus to AC and dexterity saving throws.
    */
   get coverBonus() {
-    const { coverHalf, coverThreeQuarters } = CONFIG.DND5E.statusEffects;
+    const { coverHalf, coverThreeQuarters } = CONFIG.VARLYN5E.statusEffects;
     if ( this.statuses.has("coverThreeQuarters") ) return coverThreeQuarters?.coverBonus;
     else if ( this.statuses.has("coverHalf") ) return coverHalf?.coverBonus;
     return 0;
@@ -33197,14 +33197,14 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     if ( typeof typeData === "string" ) return typeData; // Backwards compatibility
     let localizedType;
     if ( typeData.value === "custom" ) localizedType = typeData.custom;
-    else if ( typeData.value in CONFIG.DND5E.creatureTypes ) {
-      const code = CONFIG.DND5E.creatureTypes[typeData.value];
+    else if ( typeData.value in CONFIG.VARLYN5E.creatureTypes ) {
+      const code = CONFIG.VARLYN5E.creatureTypes[typeData.value];
       localizedType = _loc(typeData.swarm ? code.plural : code.label);
     }
     let type = localizedType;
     if ( typeData.swarm ) {
-      type = _loc("DND5E.CreatureSwarmPhrase", {
-        size: _loc(CONFIG.DND5E.actorSizes[typeData.swarm].label),
+      type = _loc("VARLYN5E.CreatureSwarmPhrase", {
+        size: _loc(CONFIG.VARLYN5E.actorSizes[typeData.swarm].label),
         type: localizedType
       });
     }
@@ -33300,7 +33300,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   static async fetchExisting(uuid, options={}) {
     const { origin, folderId } = options;
     const actor = await fromUuid(uuid);
-    if ( !actor ) throw new Error(_loc("DND5E.ACTOR.Warning.NoActor", { uuid }));
+    if ( !actor ) throw new Error(_loc("VARLYN5E.ACTOR.Warning.NoActor", { uuid }));
 
     const { actorLink } = actor.prototypeToken;
     const matchesOrigin = !origin || (foundry.utils.getProperty(actor, origin.key) === origin.value);
@@ -33322,7 +33322,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     if ( localActor ) return localActor;
 
     // Check permissions to create actors.
-    if ( !game.user.can("ACTOR_CREATE") ) throw new Error(_loc("DND5E.ACTOR.Warning.CreateActor"));
+    if ( !game.user.can("ACTOR_CREATE") ) throw new Error(_loc("VARLYN5E.ACTOR.Warning.CreateActor"));
 
     // No suitable world actor was found, create one.
     if ( actor.pack ) {
@@ -33401,7 +33401,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @returns {number}      The XP required.
    */
   getLevelExp(level) {
-    const levels = CONFIG.DND5E.CHARACTER_EXP_LEVELS;
+    const levels = CONFIG.VARLYN5E.CHARACTER_EXP_LEVELS;
     return levels[Math.min(level, levels.length - 1)];
   }
 
@@ -33415,7 +33415,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   getCRExp(cr) {
     if ( cr === null ) return null;
     if ( cr < 1.0 ) return Math.max(200 * cr, 10);
-    return CONFIG.DND5E.CR_EXP_LEVELS[cr] ?? Object.values(CONFIG.DND5E.CR_EXP_LEVELS).pop();
+    return CONFIG.VARLYN5E.CR_EXP_LEVELS[cr] ?? Object.values(CONFIG.VARLYN5E.CR_EXP_LEVELS).pop();
   }
 
   /* -------------------------------------------- */
@@ -33444,11 +33444,11 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
   /**
    * Is this actor under the effect of this property from some status or due to its level of exhaustion?
-   * @param {string} key      A key in `DND5E.conditionEffects`.
+   * @param {string} key      A key in `VARLYN5E.conditionEffects`.
    * @returns {boolean}       Whether the actor is affected.
    */
   hasConditionEffect(key) {
-    const props = CONFIG.DND5E.conditionEffects[key] ?? new Set();
+    const props = CONFIG.VARLYN5E.conditionEffects[key] ?? new Set();
     const level = this.system.attributes?.exhaustion ?? null;
     const imms = this.system.traits?.ci?.value ?? new Set();
     const applyExhaustion = (level !== null) && !imms.has("exhaustion")
@@ -33459,7 +33459,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       return (statuses.has(k) && !imms.has(k)) || (applyExhaustion && Number.isInteger(l) && (level >= l));
     };
     const applyDodging = !statuses.has("incapacitated")
-      && !(CONFIG.DND5E.conditionEffects.noMovement?.some(isActiveSource) ?? false);
+      && !(CONFIG.VARLYN5E.conditionEffects.noMovement?.some(isActiveSource) ?? false);
     return props.some(k => {
       if ( (k === "dodging") && !applyDodging ) return false;
       return isActiveSource(k);
@@ -33479,7 +33479,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     if ( !this.system.spells ) return;
 
     // Translate the list of classes into spellcasting progression
-    const progression = Object.values(CONFIG.DND5E.spellcasting).reduce((acc, model) => {
+    const progression = Object.values(CONFIG.VARLYN5E.spellcasting).reduce((acc, model) => {
       if ( model.slots ) acc[model.key] = 0;
       return acc;
     }, {});
@@ -33502,7 +33502,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       if ( level ) this.system.attributes.spell.level = level;
       else if ( this.system.attributes.spell.level > 0 ) {
         const methods = this.itemTypes.spell.reduce((m, s) => {
-          if ( s.system.level && CONFIG.DND5E.spellcasting[s.system.method]?.slots ) m.add(s.system.method);
+          if ( s.system.level && CONFIG.VARLYN5E.spellcasting[s.system.method]?.slots ) m.add(s.system.method);
           return m;
         }, new Set());
         if ( methods.size ) methods.forEach(k => progression[k] = this.system.attributes.spell.level);
@@ -33510,7 +33510,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       }
     }
 
-    for ( const [type, model] of Object.entries(CONFIG.DND5E.spellcasting) ) {
+    for ( const [type, model] of Object.entries(CONFIG.VARLYN5E.spellcasting) ) {
       if ( !model.slots ) continue;
       // Assume spellcasting methods without progression are based on character level rather than class level.
       if ( foundry.utils.isEmpty(model.progression) ) model.computeProgression(progression, this);
@@ -33548,7 +33548,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const allowed = Hooks.call(
       `dnd5e.compute${type.capitalize()}Progression`, progression, actor, cls, spellcasting, count
     );
-    const model = CONFIG.DND5E.spellcasting[type];
+    const model = CONFIG.VARLYN5E.spellcasting[type];
     if ( (allowed === false) || !model.slots ) return;
 
     // Otherwise proceed with calculation.
@@ -33578,7 +33578,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      */
     const allowed = Hooks.call(`dnd5e.prepare${type.capitalize()}Slots`, spells, actor, progression);
     if ( allowed === false ) return;
-    const model = CONFIG.DND5E.spellcasting[type];
+    const model = CONFIG.VARLYN5E.spellcasting[type];
 
     // Otherwise proceed with calculation.
     model.prepareSlots(spells, actor, progression);
@@ -33705,8 +33705,8 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     const skipped = type => {
       if ( type === "maximum" ) return options.only ? options.only !== treatAs : false;
-      if ( options.only === "damage" ) return type in CONFIG.DND5E.healingTypes;
-      if ( options.only === "healing" ) return type in CONFIG.DND5E.damageTypes;
+      if ( options.only === "damage" ) return type in CONFIG.VARLYN5E.healingTypes;
+      if ( options.only === "healing" ) return type in CONFIG.VARLYN5E.damageTypes;
       return false;
     };
 
@@ -33736,10 +33736,10 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       }
 
       // Apply damage modification
-      if ( !CONFIG.DND5E.damageTypes[d.type]?.isPhysical || !d.properties?.size
+      if ( !CONFIG.VARLYN5E.damageTypes[d.type]?.isPhysical || !d.properties?.size
         || !dm.bypasses?.intersection(d.properties).size ) {
         applyModification(d);
-        if ( !(d.type in CONFIG.DND5E.healingTypes) ) applyModification(d, "ALL");
+        if ( !(d.type in CONFIG.VARLYN5E.healingTypes) ) applyModification(d, "ALL");
       }
 
       let damageMultiplier = multiplier;
@@ -33821,7 +33821,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       return true;
     };
     const type = typeof damage === "string" ? damage : damage.type;
-    const isHealingType = type in CONFIG.DND5E.healingTypes;
+    const isHealingType = type in CONFIG.VARLYN5E.healingTypes;
 
     // If category is resistance, check for downgraded immunities
     if ( category === "resistance" ) {
@@ -33834,7 +33834,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     }
 
     // If damage type is physical and bypass present in properties, skip further checks
-    if ( CONFIG.DND5E.damageTypes[type]?.isPhysical && damage.properties?.size
+    if ( CONFIG.VARLYN5E.damageTypes[type]?.isPhysical && damage.properties?.size
       && config?.bypasses?.intersection(damage.properties)?.size ) return false;
 
     // If all damage resistance is present and not ignored (healing types are excluded from "All Damage")
@@ -34019,7 +34019,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       action: "concentration",
       dc: dc
     };
-    if ( ability in CONFIG.DND5E.abilities ) dataset.ability = ability;
+    if ( ability in CONFIG.VARLYN5E.abilities ) dataset.ability = ability;
 
     const config = {
       type: "concentration",
@@ -34054,7 +34054,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     if ( !isConcentrating ) return null;
 
     const label = `<i class="fa-solid fa-ban" inert></i>${
-      _loc("DND5E.ConcentrationBreak")
+      _loc("VARLYN5E.ConcentrationBreak")
     }`;
 
     return ChatMessage.implementation.create({
@@ -34083,7 +34083,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    */
   _isRemarkableAthlete(ability) {
     return (varlyn5e.settings.rulesVersion === "legacy") && this.getFlag("dnd5e", "remarkableAthlete")
-      && CONFIG.DND5E.characterFlags.remarkableAthlete.abilities.includes(ability);
+      && CONFIG.VARLYN5E.characterFlags.remarkableAthlete.abilities.includes(ability);
   }
 
   /* -------------------------------------------- */
@@ -34098,7 +34098,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   addRollExhaustion(parts, data) {
     if ( (varlyn5e.settings.rulesVersion !== "modern") || !this.system.attributes?.exhaustion
       || this.system.traits?.ci?.value?.has("exhaustion") ) return;
-    const amount = this.system.attributes.exhaustion * (CONFIG.DND5E.conditionTypes.exhaustion?.reduction?.rolls ?? 0);
+    const amount = this.system.attributes.exhaustion * (CONFIG.VARLYN5E.conditionTypes.exhaustion?.reduction?.rolls ?? 0);
     if ( amount ) {
       parts.push("@exhaustion");
       data.exhaustion = -amount;
@@ -34135,13 +34135,13 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     if ( (typeof this.system.rollSkill === "function")
       && (await this.system.rollSkill(config, dialog, message) === false) ) return null;
     if ( !this.system.skills ) return null;
-    const skillLabel = CONFIG.DND5E.skills[config.skill]?.label ?? "";
-    const ability = config.ability ?? this.system.skills[config.skill]?.ability ?? CONFIG.DND5E.skills[config.skill]?.ability ?? "";
-    const abilityLabel = CONFIG.DND5E.abilities[ability]?.label ?? "";
+    const skillLabel = CONFIG.VARLYN5E.skills[config.skill]?.label ?? "";
+    const ability = config.ability ?? this.system.skills[config.skill]?.ability ?? CONFIG.VARLYN5E.skills[config.skill]?.ability ?? "";
+    const abilityLabel = CONFIG.VARLYN5E.abilities[ability]?.label ?? "";
     const dialogConfig = foundry.utils.mergeObject({
       options: {
         window: {
-          title: _loc("DND5E.SkillPromptTitle", { skill: skillLabel, ability: abilityLabel }),
+          title: _loc("VARLYN5E.SkillPromptTitle", { skill: skillLabel, ability: abilityLabel }),
           subtitle: this.name
         }
       }
@@ -34163,7 +34163,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const dialogConfig = foundry.utils.mergeObject({
       options: {
         window: {
-          title: _loc("DND5E.ToolPromptTitle", { tool: toolLabel }),
+          title: _loc("VARLYN5E.ToolPromptTitle", { tool: toolLabel }),
           subtitle: this.name
         }
       }
@@ -34185,8 +34185,8 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     let oldFormat = false;
     const name = type === "skill" ? "Skill" : "ToolCheck";
 
-    const skillConfig = CONFIG.DND5E.skills[config.skill];
-    const toolConfig = CONFIG.DND5E.tools[config.tool];
+    const skillConfig = CONFIG.VARLYN5E.skills[config.skill];
+    const toolConfig = CONFIG.VARLYN5E.tools[config.tool];
     if ( ((type === "skill") && !skillConfig) || ((type === "tool") && !toolConfig) ) {
       return this.rollAbilityCheck(config, dialog, message);
     }
@@ -34232,7 +34232,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       }
     }, dialog);
 
-    const abilityLabel = CONFIG.DND5E.abilities[abilityId]?.label ?? "";
+    const abilityLabel = CONFIG.VARLYN5E.abilities[abilityId]?.label ?? "";
 
     const messageConfig = foundry.utils.mergeObject({
       create: true,
@@ -34247,8 +34247,8 @@ class Actor5e extends SystemDocumentMixin(Actor) {
           }
         },
         flavor: type === "skill"
-          ? _loc("DND5E.SkillPromptTitle", { skill: skillConfig.label, ability: abilityLabel })
-          : _loc("DND5E.ToolPromptTitle", { tool: keyLabel(config.tool, { trait: "tool" }) ?? "" }),
+          ? _loc("VARLYN5E.SkillPromptTitle", { skill: skillConfig.label, ability: abilityLabel })
+          : _loc("VARLYN5E.ToolPromptTitle", { tool: keyLabel(config.tool, { trait: "tool" }) ?? "" }),
         speaker: ChatMessage.getSpeaker({ actor: this })
       }
     }, message);
@@ -34263,9 +34263,9 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @memberof hookEvents
      * @param {D20Roll[]} rolls       The resulting rolls.
      * @param {object} data
-     * @param {string} data.ability   Ability used as defined in `CONFIG.DND5E.abilities`.
-     * @param {string} [data.skill]   ID of the skill that was rolled as defined in `CONFIG.DND5E.skills`.
-     * @param {string} [data.tool]    ID of the tool that was rolled as defined in `CONFIG.DND5E.tools`.
+     * @param {string} data.ability   Ability used as defined in `CONFIG.VARLYN5E.abilities`.
+     * @param {string} [data.skill]   ID of the skill that was rolled as defined in `CONFIG.VARLYN5E.skills`.
+     * @param {string} [data.tool]    ID of the tool that was rolled as defined in `CONFIG.VARLYN5E.tools`.
      * @param {Actor5e} data.subject  Actor for which the roll has been performed.
      */
     const data = { ability: rollConfig.ability, [type]: rollConfig[type], subject: this };
@@ -34326,20 +34326,20 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    */
   rollAbility(config={}, dialog={}, message={}) {
     const abilityId = config.ability;
-    const label = CONFIG.DND5E.abilities[abilityId]?.label ?? "";
+    const label = CONFIG.VARLYN5E.abilities[abilityId]?.label ?? "";
     new foundry.applications.api.Dialog({
-      window: { title: `${_loc("DND5E.AbilityPromptTitle", { ability: label })}: ${this.name}` },
+      window: { title: `${_loc("VARLYN5E.AbilityPromptTitle", { ability: label })}: ${this.name}` },
       position: { width: 400 },
-      content: `<p>${_loc("DND5E.AbilityPromptText", { ability: label })}</p>`,
+      content: `<p>${_loc("VARLYN5E.AbilityPromptText", { ability: label })}</p>`,
       buttons: [
         {
           action: "test",
-          label: _loc("DND5E.ActionAbil"),
+          label: _loc("VARLYN5E.ActionAbil"),
           callback: () => this.rollAbilityCheck(config, dialog, message)
         },
         {
           action: "save",
-          label: _loc("DND5E.ActionSave"),
+          label: _loc("VARLYN5E.ActionSave"),
           callback: () => this.rollSavingThrow(config, dialog, message)
         }
       ]
@@ -34356,11 +34356,11 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @returns {Promise<D20Roll[]|null>}                        A Promise which resolves to the created Roll instance.
    */
   async rollAbilityCheck(config={}, dialog={}, message={}) {
-    const abilityLabel = CONFIG.DND5E.abilities[config.ability]?.label ?? "";
+    const abilityLabel = CONFIG.VARLYN5E.abilities[config.ability]?.label ?? "";
     const dialogConfig = foundry.utils.mergeObject({
       options: {
         window: {
-          title: _loc("DND5E.AbilityPromptTitle", { ability: abilityLabel }),
+          title: _loc("VARLYN5E.AbilityPromptTitle", { ability: abilityLabel }),
           subtitle: this.name
         }
       }
@@ -34378,11 +34378,11 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @returns {Promise<D20Roll[]|null>}                        A Promise which resolves to the created Roll instances.
    */
   async rollSavingThrow(config={}, dialog={}, message={}) {
-    const abilityLabel = CONFIG.DND5E.abilities[config.ability]?.label ?? "";
+    const abilityLabel = CONFIG.VARLYN5E.abilities[config.ability]?.label ?? "";
     const dialogConfig = foundry.utils.mergeObject({
       options: {
         window: {
-          title: _loc("DND5E.SavePromptTitle", { ability: abilityLabel }),
+          title: _loc("VARLYN5E.SavePromptTitle", { ability: abilityLabel }),
           subtitle: this.name
         }
       }
@@ -34405,7 +34405,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const name = type === "check" ? "AbilityCheck" : "SavingThrow";
 
     const ability = this.system.abilities?.[config.ability];
-    const abilityConfig = CONFIG.DND5E.abilities[config.ability];
+    const abilityConfig = CONFIG.VARLYN5E.abilities[config.ability];
 
     const rollData = this.getRollData();
     let { parts, data } = CONFIG.Dice.D20Roll.constructParts({
@@ -34447,7 +34447,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
           }
         },
         flavor: _loc(
-          `DND5E.${type === "check" ? "Ability" : "Save"}PromptTitle`, { ability: abilityConfig?.label ?? "" }
+          `VARLYN5E.${type === "check" ? "Ability" : "Save"}PromptTitle`, { ability: abilityConfig?.label ?? "" }
         ),
         speaker: ChatMessage.getSpeaker({ actor: this })
       }
@@ -34468,7 +34468,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @memberof hookEvents
      * @param {D20Roll[]} rolls       The resulting rolls.
      * @param {object} data
-     * @param {string} data.ability   ID of the ability that was rolled as defined in `CONFIG.DND5E.abilities`.
+     * @param {string} data.ability   ID of the ability that was rolled as defined in `CONFIG.VARLYN5E.abilities`.
      * @param {Actor5e} data.subject  Actor for which the roll has been performed.
      */
     Hooks.callAll(`dnd5e.roll${name}`, rolls, { ability: config.ability, subject: this });
@@ -34492,7 +34492,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     // Display a warning if we are not at zero HP or if we already have reached 3
     if ( (this.system.attributes.hp.value > 0) || (death.failure >= 3) || (death.success >= 3) ) {
-      ui.notifications.warn("DND5E.DeathSaveUnnecessary");
+      ui.notifications.warn("VARLYN5E.DeathSaveUnnecessary");
       return null;
     }
 
@@ -34531,7 +34531,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
             }
           }
         },
-        flavor: _loc("DND5E.DeathSavingThrow")
+        flavor: _loc("VARLYN5E.DeathSavingThrow")
       }
     }, message);
 
@@ -34554,7 +34554,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
           "system.attributes.death.failure": 0,
           "system.attributes.hp.value": 1
         };
-        details.chatString = "DND5E.DeathSaveCriticalSuccess";
+        details.chatString = "VARLYN5E.DeathSaveCriticalSuccess";
       }
 
       // 3 Successes = survive and reset checks
@@ -34563,7 +34563,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
           "system.attributes.death.success": 0,
           "system.attributes.death.failure": 0
         };
-        details.chatString = "DND5E.DeathSaveSuccess";
+        details.chatString = "VARLYN5E.DeathSaveSuccess";
       }
 
       // Increment successes
@@ -34575,7 +34575,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       let failures = (death.failure || 0) + (roll.isFumble ? 2 : 1);
       details.updates = {"system.attributes.death.failure": Math.clamp(failures, 0, 3)};
       if ( failures >= 3 ) {  // 3 Failures = death
-        details.chatString = "DND5E.DeathSaveFailure";
+        details.chatString = "VARLYN5E.DeathSaveFailure";
       }
     }
 
@@ -34651,7 +34651,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     if ( conc.bonuses.save ) parts.push(conc.bonuses.save);
 
     const rollConfig = foundry.utils.mergeObject({
-      ability: (conc.ability in CONFIG.DND5E.abilities) ? conc.ability : CONFIG.DND5E.defaultAbilities.concentration,
+      ability: (conc.ability in CONFIG.VARLYN5E.abilities) ? conc.ability : CONFIG.VARLYN5E.defaultAbilities.concentration,
       isConcentration: true,
       target: 10
     }, config);
@@ -34663,7 +34663,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const dialogConfig = foundry.utils.mergeObject({
       options: {
         window: {
-          title: _loc("DND5E.SavePromptTitle", { ability: _loc("DND5E.Concentration") })
+          title: _loc("VARLYN5E.SavePromptTitle", { ability: _loc("VARLYN5E.Concentration") })
         }
       }
     }, dialog);
@@ -34720,7 +34720,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   getInitiativeRollConfig(options={}) {
     const init = this.system.attributes?.init;
     const flags = this.flags.dnd5e ?? {};
-    const abilityId = init?.ability || CONFIG.DND5E.defaultAbilities.initiative;
+    const abilityId = init?.ability || CONFIG.VARLYN5E.defaultAbilities.initiative;
     const ability = this.system.abilities?.[abilityId];
 
     const rollData = this.getRollData();
@@ -34752,7 +34752,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     options = foundry.utils.mergeObject({
       advantage, disadvantage,
       fixed: useScore ? init.score : undefined,
-      flavor: options.flavor ?? _loc("DND5E.Initiative"),
+      flavor: options.flavor ?? _loc("VARLYN5E.Initiative"),
       halflingLucky: flags.halflingLucky ?? false,
       maximum: Math.min(init.roll.max ?? Infinity, ability?.check.roll.max ?? Infinity),
       minimum: Math.max(init.roll.min ?? -Infinity, ability?.check.roll.min ?? -Infinity)
@@ -34794,7 +34794,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const messageOptions = { rollMode: CONFIG.Dice.BasicRoll.getMessageMode() };
     if ( config.rolls[0].options?.fixed === undefined ) {
       const dialogConfig = foundry.utils.mergeObject({
-        options: { title: _loc("DND5E.InitiativeRoll") }
+        options: { title: _loc("VARLYN5E.InitiativeRoll") }
       }, dialog);
       const rolls = await CONFIG.Dice.D20Roll.build(config, dialogConfig, messageOptions);
       if ( !rolls.length ) return;
@@ -34866,7 +34866,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
       // If no hit dice are available, display an error notification
       if ( !this.system.attributes.hd.value ) {
-        ui.notifications.error("DND5E.HitDiceNPCWarn", { format: { name: this.name } });
+        ui.notifications.error("VARLYN5E.HitDiceNPCWarn", { format: { name: this.name } });
         return null;
       }
     }
@@ -34887,7 +34887,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
       // If no class is available, display an error notification
       if ( !cls ) {
-        ui.notifications.error("DND5E.HitDiceWarn", { format: { name: this.name, formula: config.denomination } });
+        ui.notifications.error("VARLYN5E.HitDiceWarn", { format: { name: this.name, formula: config.denomination } });
         return null;
       }
     }
@@ -34903,7 +34903,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       configure: false
     }, dialog);
 
-    const flavor = _loc("DND5E.HitDiceRoll");
+    const flavor = _loc("VARLYN5E.HitDiceRoll");
     const messageConfig = foundry.utils.mergeObject({
       rollMode: CONFIG.Dice.BasicRoll.getMessageMode(),
       data: {
@@ -34980,7 +34980,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       data: item.getRollData(),
       chatMessage
     };
-    const flavor = _loc("DND5E.ADVANCEMENT.HitPoints.Action.RollClass", { class: item.name });
+    const flavor = _loc("VARLYN5E.ADVANCEMENT.HitPoints.Action.RollClass", { class: item.name });
     const messageData = {
       title: `${flavor}: ${this.name}`,
       flavor,
@@ -35033,7 +35033,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       data: this.getRollData(),
       chatMessage
     };
-    const flavor = _loc("DND5E.HPFormulaRollMessage");
+    const flavor = _loc("VARLYN5E.HPFormulaRollMessage");
     const messageData = {
       title: `${flavor}: ${this.name}`,
       flavor,
@@ -35081,12 +35081,12 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   async initiateRest(config={}) {
     if ( this.system.isVehicle ) return;
     if ( !game.user.isGM && !game.settings.get("dnd5e", "allowRests") && !config.request ) {
-      ui.notifications.warn("DND5E.REST.Warning.OnlyByRequest", { console: false });
+      ui.notifications.warn("VARLYN5E.REST.Warning.OnlyByRequest", { console: false });
       return;
     }
 
     const clone = this.clone();
-    const restConfig = CONFIG.DND5E.restTypes[config.type];
+    const restConfig = CONFIG.VARLYN5E.restTypes[config.type];
     config = foundry.utils.mergeObject({
       dialog: true, chat: restConfig.chat !== false,
       duration: restConfig.duration[game.settings.get("dnd5e", "restVariant")],
@@ -35278,16 +35278,16 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const healthRestored = dhp !== 0;
     const longRest = config.type === "long";
     const length = longRest ? "Long" : "Short";
-    const typeConfig = CONFIG.DND5E.restTypes[config.type] ?? {};
+    const typeConfig = CONFIG.VARLYN5E.restTypes[config.type] ?? {};
 
     // Determine the chat message to display
     let message;
     if ( typeof typeConfig.chat === "string" ) message = typeConfig.chat;
     if ( !message ) {
-      if ( diceRestored && healthRestored ) message = `DND5E.REST.${length}.Result.Full`;
-      else if ( longRest && !diceRestored && healthRestored ) message = "DND5E.REST.Long.Result.HitPoints";
-      else if ( longRest && diceRestored && !healthRestored ) message = "DND5E.REST.Long.Result.HitDice";
-      else message = `DND5E.REST.${length}.Result.Short`;
+      if ( diceRestored && healthRestored ) message = `VARLYN5E.REST.${length}.Result.Full`;
+      else if ( longRest && !diceRestored && healthRestored ) message = "VARLYN5E.REST.Long.Result.HitPoints";
+      else if ( longRest && diceRestored && !healthRestored ) message = "VARLYN5E.REST.Long.Result.HitDice";
+      else message = `VARLYN5E.REST.${length}.Result.Short`;
     }
 
     // Create a chat message
@@ -35295,8 +35295,8 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     let chatData = {
       content: _loc(message, {
         name: this.name,
-        dice: _loc(`DND5E.HITDICE.Counted.${pr.select(dhd)}`, { number: formatNumber(dhd) }),
-        health: _loc(`DND5E.HITPOINTS.Counted.${pr.select(dhp)}`, { number: formatNumber(dhp) })
+        dice: _loc(`VARLYN5E.HITDICE.Counted.${pr.select(dhd)}`, { number: formatNumber(dhd) }),
+        health: _loc(`VARLYN5E.HITPOINTS.Counted.${pr.select(dhp)}`, { number: formatNumber(dhp) })
       }),
       flavor: this.createRestFlavor(config, result),
       type: "rest",
@@ -35327,10 +35327,10 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @returns {string}
    */
   createRestFlavor(config, result) {
-    const typeConfig = CONFIG.DND5E.restTypes[config.type] ?? {};
+    const typeConfig = CONFIG.VARLYN5E.restTypes[config.type] ?? {};
     const duration = convertTime(config.duration, "minute");
     const parts = [formatTime(duration.value, duration.unit)];
-    if ( result?.newDay ?? config.newDay ) parts.push(_loc("DND5E.REST.NewDay.Label").toLowerCase());
+    if ( result?.newDay ?? config.newDay ) parts.push(_loc("VARLYN5E.REST.NewDay.Label").toLowerCase());
     return `${typeConfig.label} (${game.i18n.getListFormatter({ type: "unit" }).format(parts)})`;
   }
 
@@ -35368,7 +35368,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @protected
    */
   _getRestHitDiceRecovery({ maxHitDice, fraction, ...config }={}, result={}) {
-    const restConfig = CONFIG.DND5E.restTypes[config.type];
+    const restConfig = CONFIG.VARLYN5E.restTypes[config.type];
     if ( !this.system.attributes.hd || !restConfig?.recoverHitDice ) return;
     fraction ??= varlyn5e.settings.rulesVersion === "modern" ? 1 : 0.5;
 
@@ -35403,7 +35403,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @protected
    */
   _getRestHitPointRecovery({ recoverTemp, recoverTempMax, ...config }={}, result={}) {
-    const restConfig = CONFIG.DND5E.restTypes[config.type ?? "long"];
+    const restConfig = CONFIG.VARLYN5E.restTypes[config.type ?? "long"];
     const hp = this.system.attributes?.hp;
     if ( !hp || !restConfig.recoverHitPoints ) return;
 
@@ -35449,7 +35449,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @protected
    */
   _getRestSpellRecovery({ recoverShort, recoverLong, ...config }={}, result={}) {
-    const restConfig = CONFIG.DND5E.restTypes[config.type];
+    const restConfig = CONFIG.VARLYN5E.restTypes[config.type];
     if ( !this.system.spells ) return;
     const types = restConfig.recoverSpellSlotTypes;
     if ( !types?.size ) return;
@@ -35473,7 +35473,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   async _getRestItemUsesRecovery({
     recoverShortRestUses, recoverLongRestUses, recoverDailyUses, ...config
   }={}, result={}) {
-    const restConfig = CONFIG.DND5E.restTypes[config.type];
+    const restConfig = CONFIG.VARLYN5E.restTypes[config.type];
     const recovery = Array.from(restConfig.recoverPeriods ?? []);
     if ( recoverShortRestUses ) recovery.unshift("sr");
     if ( recoverLongRestUses ) recovery.unshift("lr");
@@ -35525,15 +35525,15 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   _prepareMovementAttribution() {
     const { movement } = this.system.attributes;
     const units = movement.units || defaultUnits("length");
-    const unit = CONFIG.DND5E.movementUnits[units]?.formattingUnit;
+    const unit = CONFIG.VARLYN5E.movementUnits[units]?.formattingUnit;
     const formatValue = value => `<span class="value">${
       unit ? formatLength(value ?? 0, unit, { parts: true })
         : `${value ?? 0} <span class="units">${units}</span>`
     }</span>`;
-    return Object.entries(CONFIG.DND5E.movementTypes).reduce((html, [k, { hidden, label }]) => {
+    return Object.entries(CONFIG.VARLYN5E.movementTypes).reduce((html, [k, { hidden, label }]) => {
       if ( hidden ) return html;
       const value = movement[k];
-      if ( (k === "fly") && movement.hover ) label = _loc("DND5E.MOVEMENT.HoverSpeed", { speed: label });
+      if ( (k === "fly") && movement.hover ) label = _loc("VARLYN5E.MOVEMENT.HoverSpeed", { speed: label });
       if ( value || (k === "walk") ) html += `
         <div class="row">
           <i class="fas ${k}"></i>
@@ -35557,12 +35557,12 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   async _prepareArmorClassAttribution({ title }={}) {
     const rollData = this.getRollData({ deterministic: true });
     const ac = rollData.attributes.ac;
-    const cfg = CONFIG.DND5E.armorClasses[ac.calc];
+    const cfg = CONFIG.VARLYN5E.armorClasses[ac.calc];
     const attribution = [];
 
     if ( ac.calc === "flat" ) {
       attribution.push({
-        label: _loc("DND5E.ArmorClassFlat"),
+        label: _loc("VARLYN5E.ArmorClassFlat"),
         type: "override",
         value: ac.flat
       });
@@ -35575,7 +35575,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       // Natural armor
       case "natural":
         attribution.push({
-          label: _loc("DND5E.ArmorClassNatural"),
+          label: _loc("VARLYN5E.ArmorClassNatural"),
           type: "override",
           value: ac.flat
         });
@@ -35596,8 +35596,8 @@ class Actor5e extends SystemDocumentMixin(Actor) {
           });
         }
         const armorInFormula = formula.includes("@attributes.ac.armor");
-        let label = _loc("DND5E.PropertyBase");
-        if ( armorInFormula ) label = this.armor?.name ?? _loc("DND5E.ArmorClassUnarmored");
+        let label = _loc("VARLYN5E.PropertyBase");
+        if ( armorInFormula ) label = this.armor?.name ?? _loc("VARLYN5E.ArmorClassUnarmored");
         attribution.unshift({
           label,
           type: "override",
@@ -35608,7 +35608,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     // Shield
     if ( ac.shield !== 0 ) attribution.push({
-      label: this.shield?.name ?? _loc("DND5E.EquipmentShield"),
+      label: this.shield?.name ?? _loc("VARLYN5E.EquipmentShield"),
       type: "add",
       value: ac.shield
     });
@@ -35618,7 +35618,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     // Cover
     if ( ac.cover !== 0 ) attribution.push({
-      label: _loc("DND5E.Cover"),
+      label: _loc("VARLYN5E.Cover"),
       type: "add",
       value: ac.cover
     });
@@ -35693,7 +35693,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     // Ensure the player is allowed to polymorph
     const allowed = game.settings.get("dnd5e", "allowPolymorphing");
     if ( !allowed && !game.user.isGM ) {
-      ui.notifications.warn("DND5E.TRANSFORM.Warning.NoPermission");
+      ui.notifications.warn("VARLYN5E.TRANSFORM.Warning.NoPermission");
       return null;
     }
 
@@ -35710,7 +35710,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     if ( settings.keep.has("self") ) {
       o.img = sourceData.img;
-      o.name = `${o.name} (${_loc("DND5E.TRANSFORM.Preset.Appearance.Label")})`;
+      o.name = `${o.name} (${_loc("VARLYN5E.TRANSFORM.Preset.Appearance.Label")})`;
     }
 
     // Prepare new data to merge from the source
@@ -35774,7 +35774,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       for ( let k of Object.keys(abilities) ) {
         const oa = o.system.abilities[k];
         const prof = abilities[k].proficient;
-        const type = CONFIG.DND5E.abilities[k]?.type;
+        const type = CONFIG.VARLYN5E.abilities[k]?.type;
         if ( settings.keep.has("physical") && (type === "physical") ) abilities[k] = oa;
         else if ( settings.keep.has("mental") && (type === "mental") ) abilities[k] = oa;
 
@@ -35839,7 +35839,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
           let profOverride = d.effects.findSplice(e => e._id === staticID("dnd5eTransformProf"));
           if ( !profOverride ) profOverride = new ActiveEffect.implementation({
             _id: staticID("dnd5eTransformProf"),
-            name: _loc("DND5E.Proficiency"),
+            name: _loc("VARLYN5E.Proficiency"),
             img: "icons/skills/social/diplomacy-peace-alliance.webp",
             disabled: false
           }).toObject();
@@ -35853,7 +35853,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
           const cls = new varlyn5e.dataModels.item.ClassData({ levels: d.system.details.cr });
           d.items.push({
             type: "class",
-            name: _loc("DND5E.TRANSFORM.TemporaryClass"),
+            name: _loc("VARLYN5E.TRANSFORM.TemporaryClass"),
             system: cls.toObject()
           });
         }
@@ -35955,7 +35955,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
         tokenData[k] = this.token[k];
       }
       if ( settings.keep.has("self") ) {
-        tokenData.name = `${this.token.name} (${_loc("DND5E.TRANSFORM.Preset.Appearance.Label")})`;
+        tokenData.name = `${this.token.name} (${_loc("VARLYN5E.TRANSFORM.Preset.Appearance.Label")})`;
       } else {
         tokenData.name = `${this.token.name} (${sourceData.name})`;
       }
@@ -36022,7 +36022,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
         newTokenData[k] = t.document[k];
       }
       if ( settings.keep.has("self") ) {
-        newTokenData.name = `${t.document.name} (${_loc("DND5E.TRANSFORM.Preset.Appearance.Label")})`;
+        newTokenData.name = `${t.document.name} (${_loc("VARLYN5E.TRANSFORM.Preset.Appearance.Label")})`;
       } else {
         newTokenData.name = `${t.document.name} (${sourceData.name})`;
       }
@@ -36058,7 +36058,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   async revertOriginalForm(options={}) {
     if ( !this.isPolymorphed ) return;
     if ( !this.isOwner ) {
-      ui.notifications.warn("DND5E.TRANSFORM.Warning.NoOwnership");
+      ui.notifications.warn("VARLYN5E.TRANSFORM.Warning.NoOwnership");
       return null;
     }
 
@@ -36098,7 +36098,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     if ( this.isToken ) {
       const baseActor = original ? original : game.actors.get(this.token.actorId);
       if ( !baseActor ) {
-        ui.notifications.warn("DND5E.TRANSFORM.Warning.OriginalActor", {
+        ui.notifications.warn("VARLYN5E.TRANSFORM.Warning.OriginalActor", {
           format: { reference: this.getFlag("dnd5e", "originalActor") }
         });
         return;
@@ -36124,7 +36124,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     }
 
     if ( !original ) {
-      ui.notifications.warn("DND5E.TRANSFORM.Warning.OriginalActor", {
+      ui.notifications.warn("VARLYN5E.TRANSFORM.Warning.OriginalActor", {
         format: { reference: this.getFlag("dnd5e", "originalActor") }
       });
       return;
@@ -36182,7 +36182,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   static addDirectoryContextOptions(app, entryOptions) {
     if ( app instanceof foundry.applications.sidebar.apps.Compendium ) return;
     entryOptions.push({
-      label: "DND5E.TRANSFORM.Action.Restore",
+      label: "VARLYN5E.TRANSFORM.Action.Restore",
       icon: '<i class="fa-solid fa-backward"></i>',
       group: "system",
       visible: li => {
@@ -36359,7 +36359,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     if ( !tokens.length ) return;
 
     const pct = Math.clamp(Math.abs(value) / this.system.attributes.hp.max, 0, 1);
-    const fill = CONFIG.DND5E.tokenHPColors[key];
+    const fill = CONFIG.VARLYN5E.tokenHPColors[key];
 
     for ( const token of tokens ) {
       if ( !token.object?.visible || token.isSecret ) continue;
@@ -36429,14 +36429,14 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     if ( !hp?.effectiveMax || (game.settings.get("dnd5e", "bloodied") === "none") ) return;
 
     const effect = this.effects.get(ActiveEffect5e.ID.BLOODIED);
-    if ( hp.value > hp.effectiveMax * CONFIG.DND5E.bloodied.threshold ) return effect?.delete();
+    if ( hp.value > hp.effectiveMax * CONFIG.VARLYN5E.bloodied.threshold ) return effect?.delete();
     if ( effect ) return;
 
     return ActiveEffect.implementation.create({
       _id: ActiveEffect5e.ID.BLOODIED,
-      img: CONFIG.DND5E.bloodied.img,
+      img: CONFIG.VARLYN5E.bloodied.img,
       flags: { dnd5e: { isTemporary: true } },
-      name: _loc(CONFIG.DND5E.bloodied.name),
+      name: _loc(CONFIG.VARLYN5E.bloodied.name),
       statuses: ["bloodied"],
       showIcon: CONST.ACTIVE_EFFECT_SHOW_ICON?.CONDITIONAL
     }, { parent: this, keepId: true });
@@ -36461,7 +36461,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const effect = this.effects.get(ActiveEffect5e.ID.ENCUMBERED);
     if ( !statuses.length ) return effect?.delete();
 
-    const effectData = { ...CONFIG.DND5E.encumbrance.effects[statuses[0]], statuses };
+    const effectData = { ...CONFIG.VARLYN5E.encumbrance.effects[statuses[0]], statuses };
     if ( effect ) {
       const originalEncumbrance = effect.statuses.first();
       return effect.update(effectData, { dnd5e: { originalEncumbrance } });
@@ -36477,7 +36477,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
   /** @inheritDoc */
   static getDefaultArtwork(actorData={}) {
-    const img = CONFIG.DND5E.defaultArtwork.Actor[actorData.type];
+    const img = CONFIG.VARLYN5E.defaultArtwork.Actor[actorData.type];
     return img ? { img, texture: { src: img } } : super.getDefaultArtwork(actorData);
   }
 }
@@ -36583,7 +36583,7 @@ class AbilityScoreImprovementConfig extends AdvancementConfig$1 {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
 
-    context.abilities = Object.entries(CONFIG.DND5E.abilities).reduce((obj, [key, data]) => {
+    context.abilities = Object.entries(CONFIG.VARLYN5E.abilities).reduce((obj, [key, data]) => {
       if ( !this.advancement.canImprove(key) ) return obj;
       const fixed = this.advancement.configuration.fixed[key] ?? 0;
       const locked = this.advancement.configuration.locked.has(key);
@@ -36593,7 +36593,7 @@ class AbilityScoreImprovementConfig extends AdvancementConfig$1 {
         label: data.label,
         locked: {
           value: locked,
-          hint: `DND5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.locked.${locked ? "locked" : "unlocked"}`
+          hint: `VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.locked.${locked ? "locked" : "unlocked"}`
         },
         value: fixed,
         canIncrease: true,
@@ -36605,7 +36605,7 @@ class AbilityScoreImprovementConfig extends AdvancementConfig$1 {
     context.points = {
       key: "points",
       name: "configuration.points",
-      label: _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.label"),
+      label: _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.label"),
       min: 0,
       value: this.advancement.configuration.points,
       canIncrease: true,
@@ -36715,7 +36715,7 @@ class AbilityScoreImprovementFlow extends AdvancementFlow$1 {
   get points() {
     const { configuration, value } = this.advancement;
     const points = {
-      assigned: Object.keys(CONFIG.DND5E.abilities).reduce((assigned, key) => {
+      assigned: Object.keys(CONFIG.VARLYN5E.abilities).reduce((assigned, key) => {
         if ( !this.advancement.canImprove(key) || configuration.locked.has(key) ) return assigned;
         return assigned + Math.max(0, (value.assignments?.[key] ?? 0) - (configuration.fixed[key] ?? 0));
       }, 0),
@@ -36751,7 +36751,7 @@ class AbilityScoreImprovementFlow extends AdvancementFlow$1 {
     const formatter = new Intl.NumberFormat(game.i18n.lang, { signDisplay: "always" });
 
     context.lockImprovement = value.type === "feat";
-    context.abilities = Object.entries(CONFIG.DND5E.abilities).reduce((obj, [key, data]) => {
+    context.abilities = Object.entries(CONFIG.VARLYN5E.abilities).reduce((obj, [key, data]) => {
       if ( !this.advancement.canImprove(key) ) return obj;
       const ability = actor.system.abilities[key];
       const sourceValue = actor.system._source.abilities[key]?.value ?? ability.value;
@@ -36795,11 +36795,11 @@ class AbilityScoreImprovementFlow extends AdvancementFlow$1 {
     const modernRules = varlyn5e.settings.rulesVersion === "modern";
     const pluralRules = new Intl.PluralRules(game.i18n.lang);
     context.pointCap = _loc(
-      `DND5E.ADVANCEMENT.AbilityScoreImprovement.CapDisplay.${pluralRules.select(context.points.cap)}`,
+      `VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.CapDisplay.${pluralRules.select(context.points.cap)}`,
       { points: context.points.cap }
     );
     context.pointsRemaining = _loc(
-      `DND5E.ADVANCEMENT.AbilityScoreImprovement.PointsRemaining.${pluralRules.select(context.points.available)}`,
+      `VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.PointsRemaining.${pluralRules.select(context.points.available)}`,
       { points: context.points.available }
     );
     context.showASIFeat = modernRules && this.advancement.allowFeat;
@@ -36912,7 +36912,7 @@ class AbilityScoreImprovementFlow extends AdvancementFlow$1 {
 
     const abilities = this.advancement.actor.system._source.abilities ?? {};
     const { available, cap } = this.points;
-    const assignments = Object.keys(CONFIG.DND5E.abilities).reduce((obj, key) => {
+    const assignments = Object.keys(CONFIG.VARLYN5E.abilities).reduce((obj, key) => {
       const value = formData.object[`abilities.${key}`];
       if ( (value === undefined) || this.advancement.configuration.locked.has(key) ) return obj;
       const abilityMax = Math.max(abilities[key]?.max ?? 20, this.advancement.configuration.max ?? -Infinity);
@@ -36950,7 +36950,7 @@ class AbilityScoreImprovementFlow extends AdvancementFlow$1 {
     const item = await Item.implementation.fromDropData(data);
 
     if ( (item.type !== "feat") || (item.system.type.value !== "feat") ) {
-      ui.notifications.error("DND5E.ADVANCEMENT.AbilityScoreImprovement.Warning.Type");
+      ui.notifications.error("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Warning.Type");
       return null;
     }
 
@@ -36980,7 +36980,7 @@ const { DocumentUUIDField: DocumentUUIDField$4, NumberField: NumberField$o, SetF
 class AbilityScoreImprovementConfigurationData extends foundry.abstract.DataModel {
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.AbilityScoreImprovement"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.AbilityScoreImprovement"];
 
   /* -------------------------------------------- */
 
@@ -37010,7 +37010,7 @@ class AbilityScoreImprovementValueData extends SparseDataModel {
       assignments: new MappingField(new NumberField$o({
         nullable: false, integer: true
       }), { required: false, initial: undefined }),
-      feat: new MappingField(new StringField$F(), { required: false, initial: undefined, label: "DND5E.Feature.Feat" })
+      feat: new MappingField(new StringField$F(), { required: false, initial: undefined, label: "VARLYN5E.Feature.Feat" })
     };
   }
 }
@@ -37034,8 +37034,8 @@ class AbilityScoreImprovementAdvancement extends Advancement {
       order: 20,
       icon: "icons/magic/symbols/star-solid-gold.webp",
       typeIcon: "systems/dnd5e/icons/svg/ability-score-improvement.svg",
-      title: _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.Title"),
-      hint: _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.Hint"),
+      title: _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Title"),
+      hint: _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Hint"),
       apps: {
         config: AbilityScoreImprovementConfig,
         flow: AbilityScoreImprovementFlow
@@ -37057,7 +37057,7 @@ class AbilityScoreImprovementAdvancement extends Advancement {
 
   /** @inheritDoc */
   get _defaultTitle() {
-    if ( this.isEpicBoon ) return _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.TitleEpic");
+    if ( this.isEpicBoon ) return _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.TitleEpic");
     return super._defaultTitle;
   }
 
@@ -37125,7 +37125,7 @@ class AbilityScoreImprovementAdvancement extends Advancement {
    * @returns {boolean}
    */
   canImprove(ability) {
-    return CONFIG.DND5E.abilities[ability]?.improvement !== false;
+    return CONFIG.VARLYN5E.abilities[ability]?.improvement !== false;
   }
 
   /* -------------------------------------------- */
@@ -37135,7 +37135,7 @@ class AbilityScoreImprovementAdvancement extends Advancement {
   /** @inheritDoc */
   titleForLevel(level, { configMode=false }={}) {
     if ( this.value.selected !== "feat" ) return this.title;
-    return _loc("DND5E.Feature.Feat");
+    return _loc("VARLYN5E.Feature.Feat");
   }
 
   /* -------------------------------------------- */
@@ -37150,11 +37150,11 @@ class AbilityScoreImprovementAdvancement extends Advancement {
     else if ( configMode ) {
       const entries = Object.entries(this.configuration.fixed).map(([key, value]) => {
         if ( !value ) return null;
-        const name = CONFIG.DND5E.abilities[key]?.label ?? key;
+        const name = CONFIG.VARLYN5E.abilities[key]?.label ?? key;
         return `<span class="tag">${name} <strong>${formatter.format(value)}</strong></span>`;
       });
       if ( this.configuration.points ) entries.push(`<span class="tag">${
-        _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.label")}: <strong>${
+        _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.label")}: <strong>${
         this.configuration.points}</strong></span>`
       );
       return entries.filterJoin("\n");
@@ -37168,7 +37168,7 @@ class AbilityScoreImprovementAdvancement extends Advancement {
 
     else if ( (this.value.type === "asi") && this.value.assignments ) {
       return Object.entries(this.value.assignments).reduce((html, [key, value]) => {
-        const name = CONFIG.DND5E.abilities[key]?.label ?? key;
+        const name = CONFIG.VARLYN5E.abilities[key]?.label ?? key;
         html += `<span class="tag">${name} <strong>${formatter.format(value)}</strong></span>\n`;
         return html;
       }, "");
@@ -37327,7 +37327,7 @@ class HitPointsFlow extends AdvancementFlow$1 {
     const source = this.advancement.value;
     const value = source[this.level];
     const hp = this.advancement.actor.system.attributes.hp;
-    const abilityId = CONFIG.DND5E.defaultAbilities.hitPoints || "con";
+    const abilityId = CONFIG.VARLYN5E.defaultAbilities.hitPoints || "con";
     const mod = this.advancement.actor.system.abilities[abilityId]?.mod ?? 0;
     const bonus = simplifyBonus(hp.bonuses?.level ?? "", this.advancement.actor.getRollData());
 
@@ -37342,7 +37342,7 @@ class HitPointsFlow extends AdvancementFlow$1 {
         bonus,
         max: this.advancement.hitDieValue,
         modifier: {
-          label: CONFIG.DND5E.abilities[abilityId]?.abbreviation ?? "",
+          label: CONFIG.VARLYN5E.abilities[abilityId]?.abbreviation ?? "",
           value: mod
         },
         previous: Object.keys(this.advancement.value).reduce((total, level) => {
@@ -37394,7 +37394,7 @@ class HitPointsFlow extends AdvancementFlow$1 {
         if ( !useAverage && !Number.isInteger(value) ) {
           const errorType = value === null ? "Empty" : "Invalid";
           throw new Advancement.ERROR(
-            _loc(`DND5E.ADVANCEMENT.HitPoints.Warning.${errorType}`),
+            _loc(`VARLYN5E.ADVANCEMENT.HitPoints.Warning.${errorType}`),
             { selector: ".roll-result" }
           );
         }
@@ -37422,8 +37422,8 @@ class HitPointsAdvancement extends Advancement {
       order: 10,
       icon: "icons/magic/life/heart-pink.webp",
       typeIcon: "systems/dnd5e/icons/svg/hit-points.svg",
-      title: _loc("DND5E.ADVANCEMENT.HitPoints.Title"),
-      hint: _loc("DND5E.ADVANCEMENT.HitPoints.Hint"),
+      title: _loc("VARLYN5E.ADVANCEMENT.HitPoints.Title"),
+      hint: _loc("VARLYN5E.ADVANCEMENT.HitPoints.Hint"),
       multiLevel: true,
       apps: {
         config: HitPointsConfig$1,
@@ -37448,7 +37448,7 @@ class HitPointsAdvancement extends Advancement {
 
   /** @inheritDoc */
   get levels() {
-    return Array.fromRange(CONFIG.DND5E.maxLevel + 1).slice(1);
+    return Array.fromRange(CONFIG.VARLYN5E.maxLevel + 1).slice(1);
   }
 
   /* -------------------------------------------- */
@@ -37561,7 +37561,7 @@ class HitPointsAdvancement extends Advancement {
    * @returns {number}      Hit points adjusted with ability modifier and per-level bonuses.
    */
   #getApplicableValue(value) {
-    const abilityId = CONFIG.DND5E.defaultAbilities.hitPoints || "con";
+    const abilityId = CONFIG.VARLYN5E.defaultAbilities.hitPoints || "con";
     value = Math.max(value + (this.actor.system.abilities[abilityId]?.mod ?? 0), 1);
     value += simplifyBonus(this.actor.system.attributes.hp.bonuses?.level, this.actor.getRollData());
     return value;
@@ -37669,7 +37669,7 @@ class ItemChoiceConfig extends AdvancementConfig$1 {
       index: fromUuidSync(data.uuid)
     }));
 
-    context.abilityOptions = Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label }));
+    context.abilityOptions = Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label }));
     context.choices = context.levels.reduce((obj, { value, label }) => {
       obj[value] = { label, ...this.advancement.configuration.choices[value] };
       return obj;
@@ -37678,46 +37678,46 @@ class ItemChoiceConfig extends AdvancementConfig$1 {
       { value: "", label: "" },
       {
         value: "available",
-        label: _loc("DND5E.ADVANCEMENT.ItemChoice.FIELDS.restriction.level.Available")
+        label: _loc("VARLYN5E.ADVANCEMENT.ItemChoice.FIELDS.restriction.level.Available")
       },
       {
         value: "availableNoCantrips",
-        label: _loc("DND5E.ADVANCEMENT.ItemChoice.FIELDS.restriction.level.AvailableNoCantrips")
+        label: _loc("VARLYN5E.ADVANCEMENT.ItemChoice.FIELDS.restriction.level.AvailableNoCantrips")
       },
       { rule: true },
-      ...Object.entries(CONFIG.DND5E.spellLevels).map(([value, label]) => ({ value, label }))
+      ...Object.entries(CONFIG.VARLYN5E.spellLevels).map(([value, label]) => ({ value, label }))
     ];
     context.listRestrictionOptions = varlyn5e.registry.spellLists.options;
     context.showContainerWarning = context.items.some(i => i.index?.type === "container");
     context.showSpellConfig = this.advancement.configuration.type === "spell";
 
     const { spell } = this.advancement.configuration;
-    const model = CONFIG.DND5E.spellcasting[spell?.method];
+    const model = CONFIG.VARLYN5E.spellcasting[spell?.method];
     context.showRequireSpellSlot = !spell?.method || model?.slots;
     context.canPrepare = model?.prepares;
-    context.spellcastingMethods = Object.values(CONFIG.DND5E.spellcasting).map(({ key, label }) => {
+    context.spellcastingMethods = Object.values(CONFIG.VARLYN5E.spellcasting).map(({ key, label }) => {
       return { label, value: key };
     });
-    if ( spell?.method && !(spell.method in CONFIG.DND5E.spellcasting) ) {
+    if ( spell?.method && !(spell.method in CONFIG.VARLYN5E.spellcasting) ) {
       context.spellcastingMethods.push({ label: spell.method, value: spell.method });
     }
 
     context.typeOptions = [
-      { value: "", label: _loc("DND5E.ADVANCEMENT.ItemChoice.FIELDS.type.Any") },
+      { value: "", label: _loc("VARLYN5E.ADVANCEMENT.ItemChoice.FIELDS.type.Any") },
       { rule: true },
       ...this.advancement.constructor.VALID_TYPES
         .map(value => ({ value, label: _loc(CONFIG.Item.typeLabels[value]) }))
     ];
 
     if ( this.advancement.configuration.type === "feat" ) {
-      const selectedType = CONFIG.DND5E.featureTypes[this.advancement.configuration.restriction.type];
+      const selectedType = CONFIG.VARLYN5E.featureTypes[this.advancement.configuration.restriction.type];
       context.typeRestriction = {
-        typeLabel: _loc("DND5E.ItemFeatureType"),
+        typeLabel: _loc("VARLYN5E.ItemFeatureType"),
         typeOptions: [
           { value: "", label: "" },
-          ...Object.entries(CONFIG.DND5E.featureTypes).map(([value, { label }]) => ({ value, label }))
+          ...Object.entries(CONFIG.VARLYN5E.featureTypes).map(([value, { label }]) => ({ value, label }))
         ],
-        subtypeLabel: _loc("DND5E.ItemFeatureSubtype", {category: selectedType?.label}),
+        subtypeLabel: _loc("VARLYN5E.ItemFeatureSubtype", {category: selectedType?.label}),
         subtypeOptions: selectedType?.subtypes ? [
           { value: "", label: "" },
           ...Object.entries(selectedType.subtypes).map(([value, label]) => ({ value, label }))
@@ -37806,8 +37806,8 @@ let ItemGrantFlow$1 = class ItemGrantFlow extends AdvancementFlow$1 {
   getSelectAbilities() {
     const config = this.advancement.configuration;
     return config.spell?.ability.size > 1 ? {
-      field: new StringField$E({ required: true, blank: false, label: _loc("DND5E.SpellAbility") }),
-      options: config.spell.ability.map(value => ({ value, label: CONFIG.DND5E.abilities[value]?.label })),
+      field: new StringField$E({ required: true, blank: false, label: _loc("VARLYN5E.SpellAbility") }),
+      options: config.spell.ability.map(value => ({ value, label: CONFIG.VARLYN5E.abilities[value]?.label })),
       value: this.advancement.value.ability
     } : null;
   }
@@ -37820,7 +37820,7 @@ let ItemGrantFlow$1 = class ItemGrantFlow extends AdvancementFlow$1 {
   async _handleForm(event, form, formData) {
     if ( event.target?.name === "ability" ) {
       await this.advancement.apply(this.level, { ability: event.target.value });
-    } else if ( event.target?.tagName === "DND5E-CHECKBOX" ) {
+    } else if ( event.target?.tagName === "VARLYN5E-CHECKBOX" ) {
       if ( event.target.checked ) await this.advancement.apply(this.level, { selected: [event.target.name] });
       else await this.advancement.reverse(this.level, { uuid: event.target.name });
     } else {
@@ -37934,7 +37934,7 @@ class ItemChoiceFlow extends ItemGrantFlow$1 {
     for ( const level of Array.fromRange(this.level) ) {
       const added = value.added[level];
       if ( added ) context.sections.set(level, {
-        header: _loc(`DND5E.AdvancementLevel${level === "0" ? "AnyHeader" : "Header"}`, { level }),
+        header: _loc(`VARLYN5E.AdvancementLevel${level === "0" ? "AnyHeader" : "Header"}`, { level }),
         items: Object.entries(added).map(([id, uuid]) => {
           const { name, img } = actor.items.get(id) ?? fromUuidSync(uuid);
           previouslySelected.add(uuid);
@@ -37975,7 +37975,7 @@ class ItemChoiceFlow extends ItemGrantFlow$1 {
     const removed = counts.replaced ? actor.items.get(value.replaced[this.level]?.original) : [];
 
     if ( counts.max ) context.sections.set(this.level, {
-      header: _loc("DND5E.ADVANCEMENT.ItemChoice.Chosen", counts),
+      header: _loc("VARLYN5E.ADVANCEMENT.ItemChoice.Chosen", counts),
       isCurrentLevel: true,
       items: [...this.pool, ...dropped].reduce((arr, item) => {
         const { id, name, img } = item;
@@ -38009,14 +38009,14 @@ class ItemChoiceFlow extends ItemGrantFlow$1 {
     if ( config.type ) {
       let type = _loc(CONFIG.Item.typeLabels[config.type]);
       if ( (config.type === "feat") && config.restriction.type ) {
-        const typeConfig = CONFIG.DND5E.featureTypes[config.restriction.type];
+        const typeConfig = CONFIG.VARLYN5E.featureTypes[config.restriction.type];
         const subtype = typeConfig.subtypes?.[config.restriction.subtype];
         if ( subtype ) type = subtype;
         else type = typeConfig.label;
       }
-      context.selectLabel = _loc("DND5E.ADVANCEMENT.ItemChoice.Action.SelectSpecific", { type });
+      context.selectLabel = _loc("VARLYN5E.ADVANCEMENT.ItemChoice.Action.SelectSpecific", { type });
     } else {
-      context.selectLabel = _loc("DND5E.ADVANCEMENT.ItemChoice.Action.SelectGeneric");
+      context.selectLabel = _loc("VARLYN5E.ADVANCEMENT.ItemChoice.Action.SelectGeneric");
     }
 
     context.showBrowseButton = config.allowDrops && !counts.full;
@@ -38055,7 +38055,7 @@ class ItemChoiceFlow extends ItemGrantFlow$1 {
     const config = this.advancement.configuration;
     const { current, max } = this.counts;
     if ( current >= max ) {
-      ui.notifications.warn("DND5E.ADVANCEMENT.ItemChoice.Warning.MaxSelected");
+      ui.notifications.warn("VARLYN5E.ADVANCEMENT.ItemChoice.Warning.MaxSelected");
       return;
     }
 
@@ -38065,7 +38065,7 @@ class ItemChoiceFlow extends ItemGrantFlow$1 {
     if ( config.type ) {
       filters.locked.types = new Set([config.type]);
       if ( (config.type === "feat") && config.restriction.type ) {
-        const typeConfig = CONFIG.DND5E.featureTypes[config.restriction.type];
+        const typeConfig = CONFIG.VARLYN5E.featureTypes[config.restriction.type];
         const subtype = typeConfig.subtypes?.[config.restriction.subtype];
         filters.locked.additional.category = { [config.restriction.type]: 1 };
         if ( subtype ) filters.locked.additional.subtype = { [config.restriction.subtype]: 1 };
@@ -38131,7 +38131,7 @@ class ItemChoiceFlow extends ItemGrantFlow$1 {
   async _handleForm(event, form, formData) {
     if ( event.target?.name === "ability" ) {
       await this.advancement.apply(this.level, { ability: event.target.value });
-    } else if ( event.target?.tagName === "DND5E-CHECKBOX" ) {
+    } else if ( event.target?.tagName === "VARLYN5E-CHECKBOX" ) {
       if ( event.target.checked ) await this.advancement.apply(this.level, { selected: [event.target.name] });
       else await this.advancement.reverse(this.level, { uuid: event.target.name });
     } else if ( event.target?.type === "radio" ) {
@@ -38179,8 +38179,8 @@ class ItemChoiceFlow extends ItemGrantFlow$1 {
       const maxSlot = this._maxSpellSlotLevel();
       const minSlot = spellLevel === "availableNoCantrips" ? 1 : 0;
       if ( (item.system.level < minSlot) || (item.system.level > maxSlot) ) {
-        ui.notifications.error("DND5E.ADVANCEMENT.ItemChoice.Warning.SpellLevelAvailable", {
-          format: { level: CONFIG.DND5E.spellLevels[maxSlot] }
+        ui.notifications.error("VARLYN5E.ADVANCEMENT.ItemChoice.Warning.SpellLevelAvailable", {
+          format: { level: CONFIG.VARLYN5E.spellLevels[maxSlot] }
         });
         return null;
       }
@@ -38204,8 +38204,8 @@ class ItemChoiceFlow extends ItemGrantFlow$1 {
 
     // For advancements on classes or subclasses, use the largest slot available for that class
     if ( spellcasting?.type ) {
-      const progression = Object.fromEntries(Object.keys(CONFIG.DND5E.spellcasting).map(k => [k, 0]));
-      const maxSpellLevel = Object.keys(CONFIG.DND5E.spellLevels).length - 1;
+      const progression = Object.fromEntries(Object.keys(CONFIG.VARLYN5E.spellcasting).map(k => [k, 0]));
+      const maxSpellLevel = Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1;
       spells = Object.fromEntries(Array.fromRange(maxSpellLevel, 1).map(l => [`spell${l}`, {}]));
       Actor5e.computeClassProgression(progression, this.advancement.item, { spellcasting });
       Actor5e.prepareSpellcastingSlots(spells, spellcasting.type, progression);
@@ -38313,7 +38313,7 @@ class SpellConfigurationData extends foundry.abstract.DataModel {
       itemData.system.uses.recovery ??= [];
       itemData.system.uses.recovery.push({ period: this.uses.per, type: "recoverAll" });
 
-      const spellcasting = CONFIG.DND5E.spellcasting[itemData.system.method];
+      const spellcasting = CONFIG.VARLYN5E.spellcasting[itemData.system.method];
       const createForwardActivity = !this.uses.requireSlot && spellcasting?.slots;
 
       for ( const activity of Object.values(itemData.system.activities ?? {}) ) {
@@ -38325,8 +38325,8 @@ class SpellConfigurationData extends foundry.abstract.DataModel {
             _id: foundry.utils.randomID(),
             type: "forward",
             name: `${activity.name ?? _loc(
-              CONFIG.DND5E.activityTypes[activity.type]?.documentClass.metadata.title
-            )} (${_loc("DND5E.ADVANCEMENT.SPELLCONFIG.FreeCasting").toLowerCase()})`,
+              CONFIG.VARLYN5E.activityTypes[activity.type]?.documentClass.metadata.title
+            )} (${_loc("VARLYN5E.ADVANCEMENT.SPELLCONFIG.FreeCasting").toLowerCase()})`,
             sort: (activity.sort ?? 0) + 1,
             activity: {
               id: activity._id
@@ -38370,7 +38370,7 @@ class ItemChoiceConfigurationData extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.ItemChoice", "DND5E.ADVANCEMENT.SPELLCONFIG"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.ItemChoice", "VARLYN5E.ADVANCEMENT.SPELLCONFIG"];
 
   /* -------------------------------------------- */
 
@@ -38475,18 +38475,18 @@ class ItemGrantConfig extends AdvancementConfig$1 {
       index: fromUuidSync(data.uuid)
     }));
 
-    context.abilityOptions = Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label }));
+    context.abilityOptions = Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label }));
     context.showContainerWarning = context.items.some(i => i.index?.type === "container");
     context.showSpellConfig = context.items.some(i => i.index?.type === "spell");
 
     const { spell } = this.advancement.configuration;
-    const model = CONFIG.DND5E.spellcasting[spell?.method];
+    const model = CONFIG.VARLYN5E.spellcasting[spell?.method];
     context.showRequireSpellSlot = !spell?.method || model?.slots;
     context.canPrepare = model?.prepares;
-    context.spellcastingMethods = Object.values(CONFIG.DND5E.spellcasting).map(({ key, label }) => {
+    context.spellcastingMethods = Object.values(CONFIG.VARLYN5E.spellcasting).map(({ key, label }) => {
       return { label, value: key };
     });
-    if ( spell?.method && !(spell.method in CONFIG.DND5E.spellcasting) ) {
+    if ( spell?.method && !(spell.method in CONFIG.VARLYN5E.spellcasting) ) {
       context.spellcastingMethods.push({ label: spell.method, value: spell.method });
     }
 
@@ -38531,7 +38531,7 @@ class ItemGrantConfigurationData extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.ItemGrant", "DND5E.ADVANCEMENT.SPELLCONFIG"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.ItemGrant", "VARLYN5E.ADVANCEMENT.SPELLCONFIG"];
 
   /* -------------------------------------------- */
 
@@ -38586,8 +38586,8 @@ class ItemGrantAdvancement extends Advancement {
       order: 40,
       icon: "icons/sundries/books/book-open-purple.webp",
       typeIcon: "systems/dnd5e/icons/svg/item-grant.svg",
-      title: _loc("DND5E.ADVANCEMENT.ItemGrant.Title"),
-      hint: _loc("DND5E.ADVANCEMENT.ItemGrant.Hint"),
+      title: _loc("VARLYN5E.ADVANCEMENT.ItemGrant.Title"),
+      hint: _loc("VARLYN5E.ADVANCEMENT.ItemGrant.Hint"),
       apps: {
         config: ItemGrantConfig,
         flow: ItemGrantFlow$1
@@ -38761,7 +38761,7 @@ class ItemGrantAdvancement extends Advancement {
     if ( !item ) return false;
     if ( this.constructor.VALID_TYPES.has(item.type) ) return true;
     const type = _loc(CONFIG.Item.typeLabels[item.type]);
-    if ( strict ) throw new Error(_loc("DND5E.AdvancementItemTypeInvalidWarning", {type}));
+    if ( strict ) throw new Error(_loc("VARLYN5E.AdvancementItemTypeInvalidWarning", {type}));
     return false;
   }
 }
@@ -38788,8 +38788,8 @@ class ItemChoiceAdvancement extends ItemGrantAdvancement {
       order: 50,
       icon: "icons/magic/symbols/cog-orange-red.webp",
       typeIcon: "systems/dnd5e/icons/svg/item-choice.svg",
-      title: _loc("DND5E.ADVANCEMENT.ItemChoice.Title"),
-      hint: _loc("DND5E.ADVANCEMENT.ItemChoice.Hint"),
+      title: _loc("VARLYN5E.ADVANCEMENT.ItemChoice.Title"),
+      hint: _loc("VARLYN5E.ADVANCEMENT.ItemChoice.Hint"),
       multiLevel: true,
       apps: {
         config: ItemChoiceConfig,
@@ -38822,8 +38822,8 @@ class ItemChoiceAdvancement extends ItemGrantAdvancement {
   titleForLevel(level, { configMode=false }={}) {
     const data = this.configuration.choices[level] ?? {};
     let tag;
-    if ( data.count ) tag = _loc("DND5E.ADVANCEMENT.ItemChoice.Choose", { count: data.count });
-    else if ( data.replacement ) tag = _loc("DND5E.ADVANCEMENT.ItemChoice.Replacement.Title");
+    if ( data.count ) tag = _loc("VARLYN5E.ADVANCEMENT.ItemChoice.Choose", { count: data.count });
+    else if ( data.replacement ) tag = _loc("VARLYN5E.ADVANCEMENT.ItemChoice.Replacement.Title");
     else return this.title;
     return `${this.title} <em>(${tag})</em>`;
   }
@@ -38929,7 +38929,7 @@ class ItemChoiceAdvancement extends ItemGrantAdvancement {
 
     if ( data.replaced ) {
       if ( !original ) {
-        throw new ItemChoiceAdvancement.ERROR(_loc("DND5E.ADVANCEMENT.ItemChoice.Warning.NoOriginal"));
+        throw new ItemChoiceAdvancement.ERROR(_loc("VARLYN5E.ADVANCEMENT.ItemChoice.Warning.NoOriginal"));
       }
       this.actor.items.delete(data.replaced.original);
       this.actor.reset();
@@ -39045,24 +39045,24 @@ class ItemChoiceAdvancement extends ItemGrantAdvancement {
     // Type restriction is set and the item type does not match the selected type
     if ( type && (type !== item.type) ) {
       type = _loc(CONFIG.Item.typeLabels[restriction.type]);
-      return handleError("DND5E.ADVANCEMENT.ItemChoice.Warning.InvalidType", { type });
+      return handleError("VARLYN5E.ADVANCEMENT.ItemChoice.Warning.InvalidType", { type });
     }
 
     // If additional type restrictions applied, make sure they are valid
     if ( (type === "feat") && restriction.type ) {
-      const typeConfig = CONFIG.DND5E.featureTypes[restriction.type];
+      const typeConfig = CONFIG.VARLYN5E.featureTypes[restriction.type];
       const subtype = typeConfig.subtypes?.[restriction.subtype];
       let errorLabel;
       if ( restriction.type !== item.system.type.value ) errorLabel = typeConfig.label;
       else if ( subtype && (restriction.subtype !== item.system.type.subtype) ) errorLabel = subtype;
-      if ( errorLabel ) return handleError("DND5E.ADVANCEMENT.ItemChoice.Warning.InvalidType", { type: errorLabel });
+      if ( errorLabel ) return handleError("VARLYN5E.ADVANCEMENT.ItemChoice.Warning.InvalidType", { type: errorLabel });
     }
 
     // If spell level is restricted, ensure the spell is of the appropriate level
     const l = parseInt(restriction.level);
     if ( (type === "spell") && !Number.isNaN(l) && (item.system.level !== l) ) {
-      const level = CONFIG.DND5E.spellLevels[l];
-      return handleError("DND5E.ADVANCEMENT.ItemChoice.Warning.SpellLevelSpecific", { level });
+      const level = CONFIG.VARLYN5E.spellLevels[l];
+      return handleError("VARLYN5E.ADVANCEMENT.ItemChoice.Warning.SpellLevelSpecific", { level });
     }
 
     // If spell list is specified, ensure the spell is on that list
@@ -39070,7 +39070,7 @@ class ItemChoiceAdvancement extends ItemGrantAdvancement {
       const lists = Array.from(restriction.list)
         .map(l => varlyn5e.registry.spellLists.forType(l))
         .filter(_ => _);
-      if ( !lists.some(l => l.has(item)) ) return handleError("DND5E.ADVANCEMENT.ItemChoice.Warning.SpellList", {
+      if ( !lists.some(l => l.has(item)) ) return handleError("VARLYN5E.ADVANCEMENT.ItemChoice.Warning.SpellList", {
         lists: game.i18n.getListFormatter({ type: "disjunction" }).format(lists.map(l => l.name))
       });
     }
@@ -39261,7 +39261,7 @@ class ModifyItemConfigurationData extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.ModifyItem"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.ModifyItem"];
 
   /* -------------------------------------------- */
 
@@ -39312,8 +39312,8 @@ class ModifyItemAdvancement extends Advancement {
       order: 55,
       icon: "icons/skills/trades/smithing-anvil-silver-red.webp",
       typeIcon: "systems/dnd5e/icons/svg/advancement/modify-item.svg",
-      title: game.i18n.localize("DND5E.ADVANCEMENT.ModifyItem.Title"),
-      hint: game.i18n.localize("DND5E.ADVANCEMENT.ModifyItem.Hint"),
+      title: game.i18n.localize("VARLYN5E.ADVANCEMENT.ModifyItem.Title"),
+      hint: game.i18n.localize("VARLYN5E.ADVANCEMENT.ModifyItem.Hint"),
       apps: {
         config: ModifyItemConfig,
         flow: ModifyItemFlow
@@ -39414,7 +39414,7 @@ class ScaleValueConfigurationData extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.ScaleValue"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.ScaleValue"];
 
   /* -------------------------------------------- */
 
@@ -39493,7 +39493,7 @@ class ScaleValueType extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.ScaleValue.Type.String"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.ScaleValue.Type.String"];
 
   /* -------------------------------------------- */
 
@@ -39512,9 +39512,9 @@ class ScaleValueType extends foundry.abstract.DataModel {
    */
   static get metadata() {
     return {
-      label: "DND5E.ADVANCEMENT.ScaleValue.Type.String.Label",
-      hint: "DND5E.ADVANCEMENT.ScaleValue.Type.String.Hint",
-      identifier: "DND5E.ADVANCEMENT.ScaleValue.Type.String.Identifier",
+      label: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.String.Label",
+      hint: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.String.Hint",
+      identifier: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.String.Identifier",
       isNumeric: false
     };
   }
@@ -39623,8 +39623,8 @@ class ScaleValueTypeNumber extends ScaleValueType {
   /** @inheritDoc */
   static get metadata() {
     return foundry.utils.mergeObject(super.metadata, {
-      label: "DND5E.ADVANCEMENT.ScaleValue.Type.Number.Label",
-      hint: "DND5E.ADVANCEMENT.ScaleValue.Type.Number.Hint",
+      label: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.Number.Label",
+      hint: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.Number.Hint",
       isNumeric: true
     });
   }
@@ -39652,7 +39652,7 @@ class ScaleValueTypeCR extends ScaleValueTypeNumber {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.ScaleValue.Type.CR"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.ScaleValue.Type.CR"];
 
   /* -------------------------------------------- */
 
@@ -39669,8 +39669,8 @@ class ScaleValueTypeCR extends ScaleValueTypeNumber {
   /** @inheritDoc */
   static get metadata() {
     return foundry.utils.mergeObject(super.metadata, {
-      label: "DND5E.ADVANCEMENT.ScaleValue.Type.CR.Label",
-      hint: "DND5E.ADVANCEMENT.ScaleValue.Type.CR.Hint"
+      label: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.CR.Label",
+      hint: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.CR.Hint"
     });
   }
 
@@ -39702,7 +39702,7 @@ class ScaleValueTypeDice extends ScaleValueType {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.ScaleValue.Type.Dice"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.ScaleValue.Type.Dice"];
 
   /* -------------------------------------------- */
 
@@ -39720,9 +39720,9 @@ class ScaleValueTypeDice extends ScaleValueType {
   /** @inheritDoc */
   static get metadata() {
     return foundry.utils.mergeObject(super.metadata, {
-      label: "DND5E.ADVANCEMENT.ScaleValue.Type.Dice.Label",
-      hint: "DND5E.ADVANCEMENT.ScaleValue.Type.Dice.Hint",
-      identifier: "DND5E.ADVANCEMENT.ScaleValue.Type.Dice.Identifier"
+      label: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.Dice.Label",
+      hint: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.Dice.Hint",
+      identifier: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.Dice.Identifier"
     });
   }
 
@@ -39835,8 +39835,8 @@ class ScaleValueTypeDistance extends ScaleValueTypeNumber {
   /** @inheritDoc */
   static get metadata() {
     return foundry.utils.mergeObject(super.metadata, {
-      label: "DND5E.ADVANCEMENT.ScaleValue.Type.Distance.Label",
-      hint: "DND5E.ADVANCEMENT.ScaleValue.Type.Distance.Hint"
+      label: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.Distance.Label",
+      hint: "VARLYN5E.ADVANCEMENT.ScaleValue.Type.Distance.Hint"
     });
   }
 
@@ -39915,7 +39915,7 @@ class ScaleValueConfig extends AdvancementConfig$1 {
     const config = this.advancement.configuration;
     const type = TYPES[config.type];
 
-    context.distanceOptions = Object.entries(CONFIG.DND5E.movementUnits)
+    context.distanceOptions = Object.entries(CONFIG.VARLYN5E.movementUnits)
       .map(([value, { label }]) => ({ value, label }));
     context.identifier = {
       placeholder: config.identifier
@@ -39943,7 +39943,7 @@ class ScaleValueConfig extends AdvancementConfig$1 {
    */
   _prepareLevelData() {
     let lastValue = null;
-    let levels = Array.fromRange(CONFIG.DND5E.maxLevel + 1);
+    let levels = Array.fromRange(CONFIG.VARLYN5E.maxLevel + 1);
     if ( ["class", "subclass"].includes(this.advancement.item.type) ) levels = levels.slice(1);
     return levels.reduce((obj, level) => {
       const value = this.advancement.configuration.scale[level]?.clone();
@@ -40021,7 +40021,7 @@ class ScaleValueConfig extends AdvancementConfig$1 {
     const typeChange = foundry.utils.hasProperty(submitData, "configuration.type");
     if ( typeChange && (submitData.configuration.type !== this.advancement.configuration.type) ) {
       // Clear existing scale value data to prevent error during type update
-      await this.advancement.update(Array.fromRange(CONFIG.DND5E.maxLevel, 1).reduce((obj, lvl) => {
+      await this.advancement.update(Array.fromRange(CONFIG.VARLYN5E.maxLevel, 1).reduce((obj, lvl) => {
         obj[`configuration.scale.${lvl}`] = _del;
         return obj;
       }, {}));
@@ -40099,8 +40099,8 @@ class ScaleValueAdvancement extends Advancement {
       order: 60,
       icon: "icons/sundries/gaming/dice-pair-white-green.webp",
       typeIcon: "systems/dnd5e/icons/svg/scale-value.svg",
-      title: _loc("DND5E.ADVANCEMENT.ScaleValue.Title"),
-      hint: _loc("DND5E.ADVANCEMENT.ScaleValue.Hint"),
+      title: _loc("VARLYN5E.ADVANCEMENT.ScaleValue.Title"),
+      hint: _loc("VARLYN5E.ADVANCEMENT.ScaleValue.Hint"),
       multiLevel: true,
       apps: {
         config: ScaleValueConfig,
@@ -40205,13 +40205,13 @@ class ScaleValueAdvancement extends Advancement {
   getContextMenuOptions() {
     const options = super.getContextMenuOptions();
     options.push({
-      label: "DND5E.ADVANCEMENT.ScaleValue.Action.CopyFormula",
+      label: "VARLYN5E.ADVANCEMENT.ScaleValue.Action.CopyFormula",
       icon: '<i class="fa-solid fa-copy"></i>',
       group: "copy",
       onClick: () => {
         const value = `@scale.${this.item.identifier}.${this.identifier}`;
         game.clipboard.copyPlainText(value);
-        ui.notifications.info("DND5E.Copied", { console: false, format: { value } });
+        ui.notifications.info("VARLYN5E.Copied", { console: false, format: { value } });
       }
     });
     return options;
@@ -40251,7 +40251,7 @@ class SizeConfig extends AdvancementConfig$1 {
         hint: this.advancement.automaticHint
       },
       showLevelSelector: false,
-      sizes: Object.entries(CONFIG.DND5E.actorSizes).reduce((obj, [key, { label }]) => {
+      sizes: Object.entries(CONFIG.VARLYN5E.actorSizes).reduce((obj, [key, { label }]) => {
         obj[key] = {
           field: new BooleanField$f({ label }),
           input: context.inputs.createCheckboxInput,
@@ -40298,7 +40298,7 @@ class SizeFlow extends AdvancementFlow$1 {
     context.size = sizes.size > 1 ? {
       field: new StringField$z({ required: true, blank: false }),
       options: Array.from(sizes).map(value => ({
-        value, label: CONFIG.DND5E.actorSizes[value].label
+        value, label: CONFIG.VARLYN5E.actorSizes[value].label
       })),
       value: this.advancement.value.size
     } : null;
@@ -40330,7 +40330,7 @@ class SizeConfigurationData extends foundry.abstract.DataModel {
   /** @inheritDoc */
   static defineSchema() {
     return {
-      sizes: new SetField$h(new StringField$y(), { required: false, initial: ["med"], label: "DND5E.Size" })
+      sizes: new SetField$h(new StringField$y(), { required: false, initial: ["med"], label: "VARLYN5E.Size" })
     };
   }
 }
@@ -40344,7 +40344,7 @@ class SizeValueData extends foundry.abstract.DataModel {
   /** @inheritDoc */
   static defineSchema() {
     return {
-      size: new StringField$y({ required: false, label: "DND5E.Size" })
+      size: new StringField$y({ required: false, label: "VARLYN5E.Size" })
     };
   }
 }
@@ -40364,8 +40364,8 @@ class SizeAdvancement extends Advancement {
       order: 25,
       icon: "icons/environment/wilderness/tree-ash.webp",
       typeIcon: "systems/dnd5e/icons/svg/size.svg",
-      title: _loc("DND5E.ADVANCEMENT.Size.Title"),
-      hint: _loc("DND5E.ADVANCEMENT.Size.Hint"),
+      title: _loc("VARLYN5E.ADVANCEMENT.Size.Title"),
+      hint: _loc("VARLYN5E.ADVANCEMENT.Size.Hint"),
       apps: {
         config: SizeConfig,
         flow: SizeFlow
@@ -40384,14 +40384,14 @@ class SizeAdvancement extends Advancement {
   get automaticHint() {
     if ( !this.configuration.sizes.size ) return "";
     if ( this.configuration.sizes.size === 1 ) {
-      return `<p>${_loc("DND5E.ADVANCEMENT.Size.DefaultHint.Single", {
-        size: CONFIG.DND5E.actorSizes[this.configuration.sizes.first()].label
+      return `<p>${_loc("VARLYN5E.ADVANCEMENT.Size.DefaultHint.Single", {
+        size: CONFIG.VARLYN5E.actorSizes[this.configuration.sizes.first()].label
       })}</p>`;
     }
 
     const listFormatter = new Intl.ListFormat(game.i18n.lang, { type: "disjunction" });
-    return `<p>${_loc("DND5E.ADVANCEMENT.Size.DefaultHint.Multiple", {
-      sizes: listFormatter.format(this.configuration.sizes.map(s => CONFIG.DND5E.actorSizes[s].label))
+    return `<p>${_loc("VARLYN5E.ADVANCEMENT.Size.DefaultHint.Multiple", {
+      sizes: listFormatter.format(this.configuration.sizes.map(s => CONFIG.VARLYN5E.actorSizes[s].label))
     })}</p>`;
   }
 
@@ -40409,7 +40409,7 @@ class SizeAdvancement extends Advancement {
   /** @inheritDoc */
   summaryForLevel(level, { configMode=false }={}) {
     const sizes = configMode ? Array.from(this.configuration.sizes) : this.value.size ? [this.value.size] : [];
-    return sizes.map(s => `<span class="tag">${CONFIG.DND5E.actorSizes[s].label}</span>`).join("");
+    return sizes.map(s => `<span class="tag">${CONFIG.VARLYN5E.actorSizes[s].label}</span>`).join("");
   }
 
   /* -------------------------------------------- */
@@ -40584,7 +40584,7 @@ class SubclassFlow extends AdvancementFlow$1 {
 
     // Ensure the dropped item is a subclass
     if ( item.type !== "subclass" ) {
-      ui.notifications.warn("DND5E.ADVANCEMENT.Subclass.Warning.InvalidType");
+      ui.notifications.warn("VARLYN5E.ADVANCEMENT.Subclass.Warning.InvalidType");
       return;
     }
 
@@ -40633,8 +40633,8 @@ class SubclassAdvancement extends Advancement {
       order: 70,
       icon: "icons/skills/trades/mining-pickaxe-yellow-blue.webp",
       typeIcon: "systems/dnd5e/icons/svg/subclass.svg",
-      title: _loc("DND5E.ADVANCEMENT.Subclass.Title"),
-      hint: _loc("DND5E.ADVANCEMENT.Subclass.Hint"),
+      title: _loc("VARLYN5E.ADVANCEMENT.Subclass.Title"),
+      hint: _loc("VARLYN5E.ADVANCEMENT.Subclass.Hint"),
       apps: {
         flow: SubclassFlow
       }
@@ -40752,7 +40752,7 @@ var _module$w = /*#__PURE__*/Object.freeze({
  */
 
 // Namespace Configuration Values
-const DND5E = {};
+const VARLYN5E = {};
 
 /* -------------------------------------------- */
 /*  Abilities                                   */
@@ -40762,52 +40762,52 @@ const DND5E = {};
  * The set of Ability Scores used within the system.
  * @enum {AbilityConfiguration}
  */
-DND5E.abilities = {
+VARLYN5E.abilities = {
   str: {
-    label: "DND5E.AbilityStr",
-    abbreviation: "DND5E.AbilityStrAbbr",
+    label: "VARLYN5E.AbilityStr",
+    abbreviation: "VARLYN5E.AbilityStrAbbr",
     type: "physical",
     fullKey: "strength",
     icon: "systems/dnd5e/icons/svg/abilities/strength.svg"
   },
   dex: {
-    label: "DND5E.AbilityDex",
-    abbreviation: "DND5E.AbilityDexAbbr",
+    label: "VARLYN5E.AbilityDex",
+    abbreviation: "VARLYN5E.AbilityDexAbbr",
     type: "physical",
     fullKey: "dexterity",
     icon: "systems/dnd5e/icons/svg/abilities/dexterity.svg"
   },
   con: {
-    label: "DND5E.AbilityCon",
-    abbreviation: "DND5E.AbilityConAbbr",
+    label: "VARLYN5E.AbilityCon",
+    abbreviation: "VARLYN5E.AbilityConAbbr",
     type: "physical",
     fullKey: "constitution",
     icon: "systems/dnd5e/icons/svg/abilities/constitution.svg"
   },
   int: {
-    label: "DND5E.AbilityInt",
-    abbreviation: "DND5E.AbilityIntAbbr",
+    label: "VARLYN5E.AbilityInt",
+    abbreviation: "VARLYN5E.AbilityIntAbbr",
     type: "mental",
     fullKey: "intelligence",
     icon: "systems/dnd5e/icons/svg/abilities/intelligence.svg"
   },
   wis: {
-    label: "DND5E.AbilityWis",
-    abbreviation: "DND5E.AbilityWisAbbr",
+    label: "VARLYN5E.AbilityWis",
+    abbreviation: "VARLYN5E.AbilityWisAbbr",
     type: "mental",
     fullKey: "wisdom",
     icon: "systems/dnd5e/icons/svg/abilities/wisdom.svg"
   },
   cha: {
-    label: "DND5E.AbilityCha",
-    abbreviation: "DND5E.AbilityChaAbbr",
+    label: "VARLYN5E.AbilityCha",
+    abbreviation: "VARLYN5E.AbilityChaAbbr",
     type: "mental",
     fullKey: "charisma",
     icon: "systems/dnd5e/icons/svg/abilities/charisma.svg"
   },
   luk: {
-    label: "DND5E.AbilityLuk",
-    abbreviation: "DND5E.AbilityLukAbbr",
+    label: "VARLYN5E.AbilityLuk",
+    abbreviation: "VARLYN5E.AbilityLukAbbr",
     type: "fortune",
     fullKey: "luck",
     icon: "systems/dnd5e/icons/svg/abilities/luck.svg"
@@ -40823,7 +40823,7 @@ preLocalize("abilities", { keys: ["label", "abbreviation"] });
  * saving throws to maintain concentration.
  * @enum {string}
  */
-DND5E.defaultAbilities = {
+VARLYN5E.defaultAbilities = {
   meleeAttack: "str",
   rangedAttack: "dex",
   initiative: "dex",
@@ -40837,7 +40837,7 @@ DND5E.defaultAbilities = {
  * Maximum ability score value allowed by default.
  * @type {number}
  */
-DND5E.maxAbilityScore = 20;
+VARLYN5E.maxAbilityScore = 20;
 
 /* -------------------------------------------- */
 /*  Skills                                      */
@@ -40847,75 +40847,75 @@ DND5E.maxAbilityScore = 20;
  * The set of skill which can be trained with their default ability scores.
  * @enum {SkillConfiguration}
  */
-DND5E.skills = {
+VARLYN5E.skills = {
   acr: {
-    label: "DND5E.SkillAcr",
+    label: "VARLYN5E.SkillAcr",
     ability: "dex",
     fullKey: "acrobatics",
     icon: "icons/equipment/feet/shoes-simple-leaf-green.webp"
   },
   ani: {
-    label: "DND5E.SkillAni",
+    label: "VARLYN5E.SkillAni",
     ability: "wis",
     fullKey: "animalHandling",
     icon: "icons/environment/creatures/horse-brown.webp"
   },
   arc: {
-    label: "DND5E.SkillArc",
+    label: "VARLYN5E.SkillArc",
     ability: "int",
     fullKey: "arcana",
     icon: "icons/sundries/books/book-embossed-jewel-silver-green.webp"
   },
   ath: {
-    label: "DND5E.SkillAth",
+    label: "VARLYN5E.SkillAth",
     ability: "str",
     fullKey: "athletics",
     icon: "icons/magic/control/buff-strength-muscle-damage-orange.webp"
   },
   dec: {
-    label: "DND5E.SkillDec",
+    label: "VARLYN5E.SkillDec",
     ability: "cha",
     fullKey: "deception",
     icon: "icons/magic/control/mouth-smile-deception-purple.webp"
   },
   his: {
-    label: "DND5E.SkillHis",
+    label: "VARLYN5E.SkillHis",
     ability: "int",
     fullKey: "history",
     icon: "icons/sundries/books/book-embossed-bound-brown.webp"
   },
   ins: {
-    label: "DND5E.SkillIns",
+    label: "VARLYN5E.SkillIns",
     ability: "wis",
     fullKey: "insight",
     icon: "icons/magic/perception/orb-crystal-ball-scrying-blue.webp"
   },
   itm: {
-    label: "DND5E.SkillItm",
+    label: "VARLYN5E.SkillItm",
     ability: "cha",
     fullKey: "intimidation",
     icon: "icons/skills/social/intimidation-impressing.webp"
   },
   inv: {
-    label: "DND5E.SkillInv",
+    label: "VARLYN5E.SkillInv",
     ability: "int",
     fullKey: "investigation",
     icon: "icons/tools/scribal/magnifying-glass.webp"
   },
   med: {
-    label: "DND5E.SkillMed",
+    label: "VARLYN5E.SkillMed",
     ability: "wis",
     fullKey: "medicine",
     icon: "icons/tools/cooking/mortar-herbs-yellow.webp"
   },
   nat: {
-    label: "DND5E.SkillNat",
+    label: "VARLYN5E.SkillNat",
     ability: "int",
     fullKey: "nature",
     icon: "icons/magic/nature/plant-sprout-snow-green.webp"
   },
   prc: {
-    label: "DND5E.SkillPrc",
+    label: "VARLYN5E.SkillPrc",
     ability: "wis",
     fullKey: "perception",
     icon: "icons/magic/perception/eye-ringed-green.webp",
@@ -40925,31 +40925,31 @@ DND5E.skills = {
     }
   },
   prf: {
-    label: "DND5E.SkillPrf",
+    label: "VARLYN5E.SkillPrf",
     ability: "cha",
     fullKey: "performance",
     icon: "icons/tools/instruments/lute-gold-brown.webp"
   },
   per: {
-    label: "DND5E.SkillPer",
+    label: "VARLYN5E.SkillPer",
     ability: "cha",
     fullKey: "persuasion",
     icon: "icons/skills/social/diplomacy-handshake.webp"
   },
   rel: {
-    label: "DND5E.SkillRel",
+    label: "VARLYN5E.SkillRel",
     ability: "int",
     fullKey: "religion",
     icon: "icons/magic/holy/saint-glass-portrait-halo.webp"
   },
   slt: {
-    label: "DND5E.SkillSlt",
+    label: "VARLYN5E.SkillSlt",
     ability: "dex",
     fullKey: "sleightOfHand",
     icon: "icons/sundries/gaming/playing-cards.webp"
   },
   ste: {
-    label: "DND5E.SkillSte",
+    label: "VARLYN5E.SkillSte",
     ability: "dex",
     fullKey: "stealth",
     icon: "icons/magic/perception/shadow-stealth-eyes-purple.webp",
@@ -40958,7 +40958,7 @@ DND5E.skills = {
     }
   },
   sur: {
-    label: "DND5E.SkillSur",
+    label: "VARLYN5E.SkillSur",
     ability: "wis",
     fullKey: "survival",
     icon: "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
@@ -40977,7 +40977,7 @@ preLocalize("skills", { key: "label", sort: true });
  * advantage or disadvantage.
  * @type {{ base: number, modifier: number }}
  */
-DND5E.skillPassive = {
+VARLYN5E.skillPassive = {
   base: 10,
   modifier: 5
 };
@@ -40988,16 +40988,16 @@ DND5E.skillPassive = {
  * Character alignment options.
  * @enum {string}
  */
-DND5E.alignments = {
-  lg: "DND5E.AlignmentLG",
-  ng: "DND5E.AlignmentNG",
-  cg: "DND5E.AlignmentCG",
-  ln: "DND5E.AlignmentLN",
-  tn: "DND5E.AlignmentTN",
-  cn: "DND5E.AlignmentCN",
-  le: "DND5E.AlignmentLE",
-  ne: "DND5E.AlignmentNE",
-  ce: "DND5E.AlignmentCE"
+VARLYN5E.alignments = {
+  lg: "VARLYN5E.AlignmentLG",
+  ng: "VARLYN5E.AlignmentNG",
+  cg: "VARLYN5E.AlignmentCG",
+  ln: "VARLYN5E.AlignmentLN",
+  tn: "VARLYN5E.AlignmentTN",
+  cn: "VARLYN5E.AlignmentCN",
+  le: "VARLYN5E.AlignmentLE",
+  ne: "VARLYN5E.AlignmentNE",
+  ce: "VARLYN5E.AlignmentCE"
 };
 preLocalize("alignments");
 
@@ -41007,9 +41007,9 @@ preLocalize("alignments");
  * An enumeration of item attunement types.
  * @enum {string}
  */
-DND5E.attunementTypes = {
-  required: "DND5E.AttunementRequired",
-  optional: "DND5E.AttunementOptional"
+VARLYN5E.attunementTypes = {
+  required: "VARLYN5E.AttunementRequired",
+  optional: "VARLYN5E.AttunementOptional"
 };
 preLocalize("attunementTypes");
 
@@ -41021,14 +41021,14 @@ preLocalize("attunementTypes");
  * The set of types which a weapon item can take.
  * @enum {string}
  */
-DND5E.weaponTypes = {
-  simpleM: "DND5E.WeaponSimpleM",
-  simpleR: "DND5E.WeaponSimpleR",
-  martialM: "DND5E.WeaponMartialM",
-  martialR: "DND5E.WeaponMartialR",
-  natural: "DND5E.WeaponNatural",
-  improv: "DND5E.WeaponImprov",
-  siege: "DND5E.WeaponSiege"
+VARLYN5E.weaponTypes = {
+  simpleM: "VARLYN5E.WeaponSimpleM",
+  simpleR: "VARLYN5E.WeaponSimpleR",
+  martialM: "VARLYN5E.WeaponMartialM",
+  martialR: "VARLYN5E.WeaponMartialR",
+  natural: "VARLYN5E.WeaponNatural",
+  improv: "VARLYN5E.WeaponImprov",
+  siege: "VARLYN5E.WeaponSiege"
 };
 preLocalize("weaponTypes");
 
@@ -41038,9 +41038,9 @@ preLocalize("weaponTypes");
  * General weapon categories.
  * @enum {string}
  */
-DND5E.weaponProficiencies = {
-  sim: "DND5E.WeaponSimpleProficiency",
-  mar: "DND5E.WeaponMartialProficiency"
+VARLYN5E.weaponProficiencies = {
+  sim: "VARLYN5E.WeaponSimpleProficiency",
+  mar: "VARLYN5E.WeaponMartialProficiency"
 };
 preLocalize("weaponProficiencies");
 
@@ -41050,30 +41050,30 @@ preLocalize("weaponProficiencies");
  * Weapon masteries.
  * @enum {WeaponMasterConfiguration}
  */
-DND5E.weaponMasteries = {
+VARLYN5E.weaponMasteries = {
   cleave: {
-    label: "DND5E.WEAPON.Mastery.Cleave"
+    label: "VARLYN5E.WEAPON.Mastery.Cleave"
   },
   graze: {
-    label: "DND5E.WEAPON.Mastery.Graze"
+    label: "VARLYN5E.WEAPON.Mastery.Graze"
   },
   nick: {
-    label: "DND5E.WEAPON.Mastery.Nick"
+    label: "VARLYN5E.WEAPON.Mastery.Nick"
   },
   push: {
-    label: "DND5E.WEAPON.Mastery.Push"
+    label: "VARLYN5E.WEAPON.Mastery.Push"
   },
   sap: {
-    label: "DND5E.WEAPON.Mastery.Sap"
+    label: "VARLYN5E.WEAPON.Mastery.Sap"
   },
   slow: {
-    label: "DND5E.WEAPON.Mastery.Slow"
+    label: "VARLYN5E.WEAPON.Mastery.Slow"
   },
   topple: {
-    label: "DND5E.WEAPON.Mastery.Topple"
+    label: "VARLYN5E.WEAPON.Mastery.Topple"
   },
   vex: {
-    label: "DND5E.WEAPON.Mastery.Vex"
+    label: "VARLYN5E.WEAPON.Mastery.Vex"
   }
 };
 preLocalize("weaponMasteries", { key: "label", sort: true });
@@ -41081,11 +41081,11 @@ preLocalize("weaponMasteries", { key: "label", sort: true });
 /* -------------------------------------------- */
 
 /**
- * A mapping between `DND5E.weaponTypes` and `DND5E.weaponProficiencies` that
+ * A mapping between `VARLYN5E.weaponTypes` and `VARLYN5E.weaponProficiencies` that
  * is used to determine if character has proficiency when adding an item.
  * @enum {(boolean|string)}
  */
-DND5E.weaponProficienciesMap = {
+VARLYN5E.weaponProficienciesMap = {
   simpleM: "sim",
   simpleR: "sim",
   martialM: "mar",
@@ -41095,19 +41095,19 @@ DND5E.weaponProficienciesMap = {
 /* -------------------------------------------- */
 
 /**
- * A mapping between `DND5E.weaponTypes` and `DND5E.attackClassifications`. Unlisted types are assumed to be
+ * A mapping between `VARLYN5E.weaponTypes` and `VARLYN5E.attackClassifications`. Unlisted types are assumed to be
  * of the "weapon" classification.
  * @enum {string}
  */
-DND5E.weaponClassificationMap = {};
+VARLYN5E.weaponClassificationMap = {};
 
 /* -------------------------------------------- */
 
 /**
- * A mapping between `DND5E.weaponTypes` and `DND5E.attackTypes`.
+ * A mapping between `VARLYN5E.weaponTypes` and `VARLYN5E.attackTypes`.
  * @enum {string}
  */
-DND5E.weaponTypeMap = {
+VARLYN5E.weaponTypeMap = {
   simpleM: "melee",
   simpleR: "ranged",
   martialM: "melee",
@@ -41122,7 +41122,7 @@ DND5E.weaponTypeMap = {
  * starting equipment provided by classes and backgrounds.
  * @enum {string}
  */
-DND5E.weaponIds = {
+VARLYN5E.weaponIds = {
 };
 
 /* -------------------------------------------- */
@@ -41131,7 +41131,7 @@ DND5E.weaponIds = {
  * The basic ammunition types.
  * @enum {string}
  */
-DND5E.ammoIds = {
+VARLYN5E.ammoIds = {
 };
 
 /* -------------------------------------------- */
@@ -41143,10 +41143,10 @@ DND5E.ammoIds = {
  *
  * @enum {string}
  */
-DND5E.toolTypes = {
-  art: "DND5E.ToolArtisans",
-  game: "DND5E.ToolGamingSet",
-  music: "DND5E.ToolMusicalInstrument"
+VARLYN5E.toolTypes = {
+  art: "VARLYN5E.ToolArtisans",
+  game: "VARLYN5E.ToolGamingSet",
+  music: "VARLYN5E.ToolMusicalInstrument"
 };
 preLocalize("toolTypes", { sort: true });
 
@@ -41155,9 +41155,9 @@ preLocalize("toolTypes", { sort: true });
  *
  * @enum {string}
  */
-DND5E.toolProficiencies = {
-  ...DND5E.toolTypes,
-  vehicle: "DND5E.ToolVehicle"
+VARLYN5E.toolProficiencies = {
+  ...VARLYN5E.toolTypes,
+  vehicle: "VARLYN5E.ToolVehicle"
 };
 preLocalize("toolProficiencies", { sort: true });
 
@@ -41165,7 +41165,7 @@ preLocalize("toolProficiencies", { sort: true });
  * Configuration data for tools.
  * @enum {ToolConfiguration}
  */
-DND5E.tools = {
+VARLYN5E.tools = {
   alchemist: {
     ability: "int"
   },
@@ -41281,7 +41281,7 @@ DND5E.tools = {
  * starting equipment provided by classes and backgrounds.
  * @enum {string}
  */
-DND5E.toolIds = new Proxy(DND5E.tools, {
+VARLYN5E.toolIds = new Proxy(VARLYN5E.tools, {
   get(target, prop) {
     return target[prop]?.id ?? target[prop];
   }
@@ -41295,51 +41295,51 @@ DND5E.toolIds = new Proxy(DND5E.tools, {
  * Configuration for time units available to the system.
  * @enum {TimeUnitConfiguration}
  */
-DND5E.timeUnits = {
+VARLYN5E.timeUnits = {
   turn: {
-    label: "DND5E.UNITS.TIME.Turn.Label",
-    counted: "DND5E.UNITS.TIME.Turn.Counted",
+    label: "VARLYN5E.UNITS.TIME.Turn.Label",
+    counted: "VARLYN5E.UNITS.TIME.Turn.Counted",
     conversion: .1,
     combat: true
   },
   round: {
-    label: "DND5E.UNITS.TIME.Round.Label",
-    counted: "DND5E.UNITS.TIME.Round.Counted",
+    label: "VARLYN5E.UNITS.TIME.Round.Label",
+    counted: "VARLYN5E.UNITS.TIME.Round.Counted",
     conversion: .1,
     combat: true
   },
   second: {
-    label: "DND5E.UNITS.TIME.Second.Label",
+    label: "VARLYN5E.UNITS.TIME.Second.Label",
     conversion: 1 / 60,
     option: false,
     timeComponent: "second"
   },
   minute: {
-    label: "DND5E.UNITS.TIME.Minute.Label",
+    label: "VARLYN5E.UNITS.TIME.Minute.Label",
     conversion: 1,
     timeComponent: "minute"
   },
   hour: {
-    label: "DND5E.UNITS.TIME.Hour.Label",
+    label: "VARLYN5E.UNITS.TIME.Hour.Label",
     conversion: 60,
     timeComponent: "hour"
   },
   day: {
-    label: "DND5E.UNITS.TIME.Day.Label",
+    label: "VARLYN5E.UNITS.TIME.Day.Label",
     conversion: 1_440,
     timeComponent: "day"
   },
   week: {
-    label: "DND5E.UNITS.TIME.Week.Label",
+    label: "VARLYN5E.UNITS.TIME.Week.Label",
     conversion: 10_080,
     option: false
   },
   month: {
-    label: "DND5E.UNITS.TIME.Month.Label",
+    label: "VARLYN5E.UNITS.TIME.Month.Label",
     conversion: 43_200
   },
   year: {
-    label: "DND5E.UNITS.TIME.Year.Label",
+    label: "VARLYN5E.UNITS.TIME.Year.Label",
     conversion: 525_600,
     timeComponent: "year"
   }
@@ -41352,7 +41352,7 @@ preLocalize("timeUnits", { key: "label" });
  * Time periods that accept a numeric value.
  * @enum {string}
  */
-DND5E.scalarTimePeriods = new Proxy(DND5E.timeUnits, {
+VARLYN5E.scalarTimePeriods = new Proxy(VARLYN5E.timeUnits, {
   get(target, prop) {
     return target[prop]?.label;
   },
@@ -41370,10 +41370,10 @@ DND5E.scalarTimePeriods = new Proxy(DND5E.timeUnits, {
  * Time periods for spells that don't have a defined ending.
  * @enum {string}
  */
-DND5E.permanentTimePeriods = {
-  disp: "DND5E.TimeDisp",
-  dstr: "DND5E.TimeDispTrig",
-  perm: "DND5E.TimePerm"
+VARLYN5E.permanentTimePeriods = {
+  disp: "VARLYN5E.TimeDisp",
+  dstr: "VARLYN5E.TimeDispTrig",
+  perm: "VARLYN5E.TimePerm"
 };
 preLocalize("permanentTimePeriods");
 
@@ -41383,9 +41383,9 @@ preLocalize("permanentTimePeriods");
  * Time periods that don't accept a numeric value.
  * @enum {string}
  */
-DND5E.specialTimePeriods = {
-  inst: "DND5E.TimeInst",
-  spec: "DND5E.Special"
+VARLYN5E.specialTimePeriods = {
+  inst: "VARLYN5E.TimeInst",
+  spec: "VARLYN5E.Special"
 };
 preLocalize("specialTimePeriods");
 
@@ -41395,10 +41395,10 @@ preLocalize("specialTimePeriods");
  * The various lengths of time over which effects can occur.
  * @enum {string}
  */
-DND5E.timePeriods = {
-  ...DND5E.specialTimePeriods,
-  ...DND5E.permanentTimePeriods,
-  ...DND5E.scalarTimePeriods
+VARLYN5E.timePeriods = {
+  ...VARLYN5E.specialTimePeriods,
+  ...VARLYN5E.permanentTimePeriods,
+  ...VARLYN5E.scalarTimePeriods
 };
 preLocalize("timePeriods");
 
@@ -41408,27 +41408,27 @@ preLocalize("timePeriods");
  * Ways in which to activate an item that cannot be labeled with a cost.
  * @enum {string}
  */
-DND5E.staticAbilityActivationTypes = {
-  none: "DND5E.NoneActionLabel",
-  special: DND5E.timePeriods.spec
+VARLYN5E.staticAbilityActivationTypes = {
+  none: "VARLYN5E.NoneActionLabel",
+  special: VARLYN5E.timePeriods.spec
 };
 
 /**
  * Various ways in which an item or ability can be activated.
  * @enum {string}
  */
-DND5E.abilityActivationTypes = {
-  ...DND5E.staticAbilityActivationTypes,
-  action: "DND5E.Action",
-  bonus: "DND5E.BonusAction",
-  reaction: "DND5E.Reaction",
-  minute: DND5E.timePeriods.minute,
-  hour: DND5E.timePeriods.hour,
-  day: DND5E.timePeriods.day,
-  legendary: "DND5E.LegendaryAction.Label",
-  mythic: "DND5E.MythicActionLabel",
-  lair: "DND5E.LAIR.Action.Label",
-  crew: "DND5E.VEHICLE.Activation.Crew.label"
+VARLYN5E.abilityActivationTypes = {
+  ...VARLYN5E.staticAbilityActivationTypes,
+  action: "VARLYN5E.Action",
+  bonus: "VARLYN5E.BonusAction",
+  reaction: "VARLYN5E.Reaction",
+  minute: VARLYN5E.timePeriods.minute,
+  hour: VARLYN5E.timePeriods.hour,
+  day: VARLYN5E.timePeriods.day,
+  legendary: "VARLYN5E.LegendaryAction.Label",
+  mythic: "VARLYN5E.MythicActionLabel",
+  lair: "VARLYN5E.LAIR.Action.Label",
+  crew: "VARLYN5E.VEHICLE.Activation.Crew.label"
 };
 preLocalize("abilityActivationTypes");
 
@@ -41438,92 +41438,92 @@ preLocalize("abilityActivationTypes");
  * Configuration data for activation types on activities.
  * @enum {ActivityActivationTypeConfiguration}
  */
-DND5E.activityActivationTypes = {
+VARLYN5E.activityActivationTypes = {
   action: {
-    label: "DND5E.ACTIVATION.Type.Action.Label",
-    header: "DND5E.ACTIVATION.Type.Action.Header",
-    group: "DND5E.ACTIVATION.Category.Standard"
+    label: "VARLYN5E.ACTIVATION.Type.Action.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Action.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Standard"
   },
   bonus: {
-    label: "DND5E.ACTIVATION.Type.BonusAction.Label",
-    header: "DND5E.ACTIVATION.Type.BonusAction.Header",
-    group: "DND5E.ACTIVATION.Category.Standard"
+    label: "VARLYN5E.ACTIVATION.Type.BonusAction.Label",
+    header: "VARLYN5E.ACTIVATION.Type.BonusAction.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Standard"
   },
   reaction: {
-    label: "DND5E.ACTIVATION.Type.Reaction.Label",
-    header: "DND5E.ACTIVATION.Type.Reaction.Header",
-    group: "DND5E.ACTIVATION.Category.Standard"
+    label: "VARLYN5E.ACTIVATION.Type.Reaction.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Reaction.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Standard"
   },
   minute: {
-    label: "DND5E.ACTIVATION.Type.Minute.Label",
-    header: "DND5E.ACTIVATION.Type.Minute.Header",
-    group: "DND5E.ACTIVATION.Category.Time",
+    label: "VARLYN5E.ACTIVATION.Type.Minute.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Minute.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Time",
     scalar: true
   },
   hour: {
-    label: "DND5E.ACTIVATION.Type.Hour.Label",
-    header: "DND5E.ACTIVATION.Type.Hour.Header",
-    group: "DND5E.ACTIVATION.Category.Time",
+    label: "VARLYN5E.ACTIVATION.Type.Hour.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Hour.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Time",
     scalar: true
   },
   day: {
-    label: "DND5E.ACTIVATION.Type.Day.Label",
-    header: "DND5E.ACTIVATION.Type.Day.Header",
-    group: "DND5E.ACTIVATION.Category.Time",
+    label: "VARLYN5E.ACTIVATION.Type.Day.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Day.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Time",
     scalar: true
   },
   longRest: {
-    label: "DND5E.ACTIVATION.Type.LongRest.Label",
-    group: "DND5E.ACTIVATION.Category.Rest",
+    label: "VARLYN5E.ACTIVATION.Type.LongRest.Label",
+    group: "VARLYN5E.ACTIVATION.Category.Rest",
     passive: true
   },
   shortRest: {
-    label: "DND5E.ACTIVATION.Type.ShortRest.Label",
-    group: "DND5E.ACTIVATION.Category.Rest",
+    label: "VARLYN5E.ACTIVATION.Type.ShortRest.Label",
+    group: "VARLYN5E.ACTIVATION.Category.Rest",
     passive: true
   },
   encounter: {
-    label: "DND5E.ACTIVATION.Type.Encounter.Label",
-    group: "DND5E.ACTIVATION.Category.Combat",
+    label: "VARLYN5E.ACTIVATION.Type.Encounter.Label",
+    group: "VARLYN5E.ACTIVATION.Category.Combat",
     passive: true
   },
   turnStart: {
-    label: "DND5E.ACTIVATION.Type.TurnStart.Label",
-    group: "DND5E.ACTIVATION.Category.Combat",
+    label: "VARLYN5E.ACTIVATION.Type.TurnStart.Label",
+    group: "VARLYN5E.ACTIVATION.Category.Combat",
     passive: true
   },
   turnEnd: {
-    label: "DND5E.ACTIVATION.Type.TurnEnd.Label",
-    group: "DND5E.ACTIVATION.Category.Combat",
+    label: "VARLYN5E.ACTIVATION.Type.TurnEnd.Label",
+    group: "VARLYN5E.ACTIVATION.Category.Combat",
     passive: true
   },
   legendary: {
-    counted: "DND5E.ACTIVATION.Type.Legendary.Counted",
+    counted: "VARLYN5E.ACTIVATION.Type.Legendary.Counted",
     consume: {
       property: "resources.legact"
     },
-    label: "DND5E.ACTIVATION.Type.Legendary.Label",
-    header: "DND5E.ACTIVATION.Type.Legendary.Header",
-    group: "DND5E.ACTIVATION.Category.Monster",
+    label: "VARLYN5E.ACTIVATION.Type.Legendary.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Legendary.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Monster",
     scalar: true
   },
   mythic: {
-    counted: "DND5E.ACTIVATION.Type.Mythic.Counted",
+    counted: "VARLYN5E.ACTIVATION.Type.Mythic.Counted",
     consume: {
       property: "resources.legact"
     },
-    label: "DND5E.ACTIVATION.Type.Mythic.Label",
-    header: "DND5E.ACTIVATION.Type.Mythic.Header",
-    group: "DND5E.ACTIVATION.Category.Monster",
+    label: "VARLYN5E.ACTIVATION.Type.Mythic.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Mythic.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Monster",
     scalar: true
   },
   lair: {
-    label: "DND5E.ACTIVATION.Type.Lair.Label",
-    header: "DND5E.ACTIVATION.Type.Lair.Header",
-    group: "DND5E.ACTIVATION.Category.Monster"
+    label: "VARLYN5E.ACTIVATION.Type.Lair.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Lair.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Monster"
   },
   special: {
-    label: "DND5E.Special",
+    label: "VARLYN5E.Special",
     passive: true
   }
 };
@@ -41535,12 +41535,12 @@ preLocalize("activityActivationTypes", { key: "label" });
  * Different things that an ability can consume upon use.
  * @enum {string}
  */
-DND5E.abilityConsumptionTypes = {
-  ammo: "DND5E.ConsumeAmmunition",
-  attribute: "DND5E.ConsumeAttribute",
-  hitDice: "DND5E.ConsumeHitDice",
-  material: "DND5E.ConsumeMaterial",
-  charges: "DND5E.ConsumeCharges"
+VARLYN5E.abilityConsumptionTypes = {
+  ammo: "VARLYN5E.ConsumeAmmunition",
+  attribute: "VARLYN5E.ConsumeAttribute",
+  hitDice: "VARLYN5E.ConsumeHitDice",
+  material: "VARLYN5E.ConsumeMaterial",
+  charges: "VARLYN5E.ConsumeCharges"
 };
 preLocalize("abilityConsumptionTypes", { sort: true });
 
@@ -41550,46 +41550,46 @@ preLocalize("abilityConsumptionTypes", { sort: true });
  * Configuration information for different consumption targets.
  * @enum {ActivityConsumptionTargetConfiguration}
  */
-DND5E.activityConsumptionTypes = {
+VARLYN5E.activityConsumptionTypes = {
   activityUses: {
-    label: "DND5E.CONSUMPTION.Type.ActivityUses.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.ActivityUses.Label",
     consume: ConsumptionTargetData.consumeActivityUses,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsActivityUses
   },
   itemUses: {
-    label: "DND5E.CONSUMPTION.Type.ItemUses.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.ItemUses.Label",
     consume: ConsumptionTargetData.consumeItemUses,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsItemUses,
-    nonEmbeddedHint: "DND5E.CONSUMPTION.Type.ItemUses.NonEmbeddedHint",
+    nonEmbeddedHint: "VARLYN5E.CONSUMPTION.Type.ItemUses.NonEmbeddedHint",
     targetRequiresEmbedded: true,
     validTargets: ConsumptionTargetData.validItemUsesTargets
   },
   material: {
-    label: "DND5E.CONSUMPTION.Type.Material.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.Material.Label",
     consume: ConsumptionTargetData.consumeMaterial,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsMaterial,
-    nonEmbeddedHint: "DND5E.CONSUMPTION.Type.Material.NonEmbeddedHint",
+    nonEmbeddedHint: "VARLYN5E.CONSUMPTION.Type.Material.NonEmbeddedHint",
     targetRequiresEmbedded: true,
     validTargets: ConsumptionTargetData.validMaterialTargets
   },
   hitDice: {
-    label: "DND5E.CONSUMPTION.Type.HitDice.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.HitDice.Label",
     consume: ConsumptionTargetData.consumeHitDice,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsHitDice,
     validTargets: ConsumptionTargetData.validHitDiceTargets
   },
   spellSlots: {
-    label: "DND5E.CONSUMPTION.Type.SpellSlots.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.SpellSlots.Label",
     consume: ConsumptionTargetData.consumeSpellSlots,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsSpellSlots,
-    scalingModes: [{ value: "level", label: "DND5E.CONSUMPTION.Scaling.SlotLevel" }],
+    scalingModes: [{ value: "level", label: "VARLYN5E.CONSUMPTION.Scaling.SlotLevel" }],
     validTargets: ConsumptionTargetData.validSpellSlotsTargets
   },
   attribute: {
-    label: "DND5E.CONSUMPTION.Type.Attribute.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.Attribute.Label",
     consume: ConsumptionTargetData.consumeAttribute,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsAttribute,
-    nonEmbeddedHint: "DND5E.CONSUMPTION.Type.Attribute.NonEmbeddedHint",
+    nonEmbeddedHint: "VARLYN5E.CONSUMPTION.Type.Attribute.NonEmbeddedHint",
     targetRequiresEmbedded: true,
     validTargets: ConsumptionTargetData.validAttributeTargets
   }
@@ -41602,47 +41602,47 @@ preLocalize("activityConsumptionTypes", { key: "label" });
  * Creature sizes ordered from smallest to largest.
  * @enum {ActorSizeConfiguration}
  */
-DND5E.actorSizes = {
+VARLYN5E.actorSizes = {
   tiny: {
-    label: "DND5E.SizeTiny",
-    abbreviation: "DND5E.SizeTinyAbbr",
+    label: "VARLYN5E.SizeTiny",
+    abbreviation: "VARLYN5E.SizeTinyAbbr",
     hitDie: 4,
     token: 0.5,
     capacityMultiplier: 0.5,
     numerical: 0
   },
   sm: {
-    label: "DND5E.SizeSmall",
-    abbreviation: "DND5E.SizeSmallAbbr",
+    label: "VARLYN5E.SizeSmall",
+    abbreviation: "VARLYN5E.SizeSmallAbbr",
     hitDie: 6,
     dynamicTokenScale: 0.8,
     numerical: 1
   },
   med: {
-    label: "DND5E.SizeMedium",
-    abbreviation: "DND5E.SizeMediumAbbr",
+    label: "VARLYN5E.SizeMedium",
+    abbreviation: "VARLYN5E.SizeMediumAbbr",
     hitDie: 8,
     numerical: 2
   },
   lg: {
-    label: "DND5E.SizeLarge",
-    abbreviation: "DND5E.SizeLargeAbbr",
+    label: "VARLYN5E.SizeLarge",
+    abbreviation: "VARLYN5E.SizeLargeAbbr",
     hitDie: 10,
     token: 2,
     capacityMultiplier: 2,
     numerical: 3
   },
   huge: {
-    label: "DND5E.SizeHuge",
-    abbreviation: "DND5E.SizeHugeAbbr",
+    label: "VARLYN5E.SizeHuge",
+    abbreviation: "VARLYN5E.SizeHugeAbbr",
     hitDie: 12,
     token: 3,
     capacityMultiplier: 4,
     numerical: 4
   },
   grg: {
-    label: "DND5E.SizeGargantuan",
-    abbreviation: "DND5E.SizeGargantuanAbbr",
+    label: "VARLYN5E.SizeGargantuan",
+    abbreviation: "VARLYN5E.SizeGargantuanAbbr",
     hitDie: 20,
     token: 4,
     capacityMultiplier: 8,
@@ -41659,7 +41659,7 @@ preLocalize("actorSizes", { keys: ["label", "abbreviation"] });
  * Colors used to visualize temporary and temporary maximum HP in token health bars.
  * @enum {number}
  */
-DND5E.tokenHPColors = {
+VARLYN5E.tokenHPColors = {
   damage: 0xFF0000,
   healing: 0x00FF00,
   temp: 0x66CCFF,
@@ -41673,7 +41673,7 @@ DND5E.tokenHPColors = {
  * Colors used when a dynamic token ring effects.
  * @enum {number}
  */
-DND5E.tokenRingColors = {
+VARLYN5E.tokenRingColors = {
   damage: 0xFF0000,
   defeated: 0x000000,
   healing: 0x00FF00,
@@ -41686,7 +41686,7 @@ DND5E.tokenRingColors = {
  * Colors used to denote movement speed on ruler segments & grid highlighting
  * @enum {number}
  */
-DND5E.tokenRulerColors = {
+VARLYN5E.tokenRulerColors = {
   normal: 0x33BC4E,
   double: 0xF1D836,
   triple: 0xE72124
@@ -41698,7 +41698,7 @@ DND5E.tokenRulerColors = {
  * Settings used to render map location markers on the canvas.
  * @enum {MapLocationMarkerStyle}
  */
-DND5E.mapLocationMarker = {
+VARLYN5E.mapLocationMarker = {
   default: {
     icon: MapLocationControlIcon,
     backgroundColor: 0xFBF8F5,
@@ -41716,80 +41716,80 @@ DND5E.mapLocationMarker = {
  * Default types of creatures.
  * @enum {CreatureTypeConfiguration}
  */
-DND5E.creatureTypes = {
+VARLYN5E.creatureTypes = {
   aberration: {
-    label: "DND5E.CreatureAberration",
-    plural: "DND5E.CreatureAberrationPl",
+    label: "VARLYN5E.CreatureAberration",
+    plural: "VARLYN5E.CreatureAberrationPl",
     icon: "icons/creatures/tentacles/tentacle-eyes-yellow-pink.webp",
     detectAlignment: true
   },
   beast: {
-    label: "DND5E.CreatureBeast",
-    plural: "DND5E.CreatureBeastPl",
+    label: "VARLYN5E.CreatureBeast",
+    plural: "VARLYN5E.CreatureBeastPl",
     icon: "icons/creatures/claws/claw-bear-paw-swipe-red.webp"
   },
   celestial: {
-    label: "DND5E.CreatureCelestial",
-    plural: "DND5E.CreatureCelestialPl",
+    label: "VARLYN5E.CreatureCelestial",
+    plural: "VARLYN5E.CreatureCelestialPl",
     icon: "icons/creatures/abilities/wings-birdlike-blue.webp",
     detectAlignment: true
   },
   construct: {
-    label: "DND5E.CreatureConstruct",
-    plural: "DND5E.CreatureConstructPl",
+    label: "VARLYN5E.CreatureConstruct",
+    plural: "VARLYN5E.CreatureConstructPl",
     icon: "icons/creatures/magical/construct-stone-earth-gray.webp"
   },
   dragon: {
-    label: "DND5E.CreatureDragon",
-    plural: "DND5E.CreatureDragonPl",
+    label: "VARLYN5E.CreatureDragon",
+    plural: "VARLYN5E.CreatureDragonPl",
     icon: "icons/creatures/abilities/dragon-fire-breath-orange.webp"
   },
   elemental: {
-    label: "DND5E.CreatureElemental",
-    plural: "DND5E.CreatureElementalPl",
+    label: "VARLYN5E.CreatureElemental",
+    plural: "VARLYN5E.CreatureElementalPl",
     icon: "icons/creatures/magical/spirit-fire-orange.webp",
     detectAlignment: true
   },
   fey: {
-    label: "DND5E.CreatureFey",
-    plural: "DND5E.CreatureFeyPl",
+    label: "VARLYN5E.CreatureFey",
+    plural: "VARLYN5E.CreatureFeyPl",
     icon: "icons/creatures/magical/fae-fairy-winged-glowing-green.webp",
     detectAlignment: true
   },
   fiend: {
-    label: "DND5E.CreatureFiend",
-    plural: "DND5E.CreatureFiendPl",
+    label: "VARLYN5E.CreatureFiend",
+    plural: "VARLYN5E.CreatureFiendPl",
     icon: "icons/magic/death/skull-horned-goat-pentagram-red.webp",
     detectAlignment: true
   },
   giant: {
-    label: "DND5E.CreatureGiant",
-    plural: "DND5E.CreatureGiantPl",
+    label: "VARLYN5E.CreatureGiant",
+    plural: "VARLYN5E.CreatureGiantPl",
     icon: "icons/creatures/magical/humanoid-giant-forest-blue.webp"
   },
   humanoid: {
-    label: "DND5E.CreatureHumanoid",
-    plural: "DND5E.CreatureHumanoidPl",
+    label: "VARLYN5E.CreatureHumanoid",
+    plural: "VARLYN5E.CreatureHumanoidPl",
     icon: "icons/environment/people/group.webp"
   },
   monstrosity: {
-    label: "DND5E.CreatureMonstrosity",
-    plural: "DND5E.CreatureMonstrosityPl",
+    label: "VARLYN5E.CreatureMonstrosity",
+    plural: "VARLYN5E.CreatureMonstrosityPl",
     icon: "icons/creatures/abilities/mouth-teeth-rows-red.webp"
   },
   ooze: {
-    label: "DND5E.CreatureOoze",
-    plural: "DND5E.CreatureOozePl",
+    label: "VARLYN5E.CreatureOoze",
+    plural: "VARLYN5E.CreatureOozePl",
     icon: "icons/creatures/slimes/slime-movement-pseudopods-green.webp"
   },
   plant: {
-    label: "DND5E.CreaturePlant",
-    plural: "DND5E.CreaturePlantPl",
+    label: "VARLYN5E.CreaturePlant",
+    plural: "VARLYN5E.CreaturePlantPl",
     icon: "icons/magic/nature/tree-animated-strike.webp"
   },
   undead: {
-    label: "DND5E.CreatureUndead",
-    plural: "DND5E.CreatureUndeadPl",
+    label: "VARLYN5E.CreatureUndead",
+    plural: "VARLYN5E.CreatureUndeadPl",
     icon: "icons/magic/death/skull-horned-worn-fire-blue.webp",
     detectAlignment: true
   }
@@ -41802,18 +41802,18 @@ preLocalize("creatureTypes", { keys: ["label", "plural"], sort: true });
  * Classification types for item action types.
  * @enum {string}
  */
-DND5E.itemActionTypes = {
-  mwak: "DND5E.ActionMWAK",
-  rwak: "DND5E.ActionRWAK",
-  msak: "DND5E.ActionMSAK",
-  rsak: "DND5E.ActionRSAK",
-  abil: "DND5E.ActionAbil",
-  save: "DND5E.ActionSave",
-  ench: "DND5E.ActionEnch",
-  summ: "DND5E.ActionSumm",
-  heal: "DND5E.ActionHeal",
-  util: "DND5E.ActionUtil",
-  other: "DND5E.ActionOther"
+VARLYN5E.itemActionTypes = {
+  mwak: "VARLYN5E.ActionMWAK",
+  rwak: "VARLYN5E.ActionRWAK",
+  msak: "VARLYN5E.ActionMSAK",
+  rsak: "VARLYN5E.ActionRSAK",
+  abil: "VARLYN5E.ActionAbil",
+  save: "VARLYN5E.ActionSave",
+  ench: "VARLYN5E.ActionEnch",
+  summ: "VARLYN5E.ActionSumm",
+  heal: "VARLYN5E.ActionHeal",
+  util: "VARLYN5E.ActionUtil",
+  other: "VARLYN5E.ActionOther"
 };
 preLocalize("itemActionTypes");
 
@@ -41823,13 +41823,13 @@ preLocalize("itemActionTypes");
  * List of various item rarities.
  * @enum {string}
  */
-DND5E.itemRarity = {
-  common: "DND5E.ItemRarityCommon",
-  uncommon: "DND5E.ItemRarityUncommon",
-  rare: "DND5E.ItemRarityRare",
-  veryRare: "DND5E.ItemRarityVeryRare",
-  legendary: "DND5E.ItemRarityLegendary",
-  artifact: "DND5E.ItemRarityArtifact"
+VARLYN5E.itemRarity = {
+  common: "VARLYN5E.ItemRarityCommon",
+  uncommon: "VARLYN5E.ItemRarityUncommon",
+  rare: "VARLYN5E.ItemRarityRare",
+  veryRare: "VARLYN5E.ItemRarityVeryRare",
+  legendary: "VARLYN5E.ItemRarityLegendary",
+  artifact: "VARLYN5E.ItemRarityArtifact"
 };
 preLocalize("itemRarity");
 
@@ -41839,61 +41839,61 @@ preLocalize("itemRarity");
  * Enumerate the lengths of time over which an item can have limited use ability.
  * @enum {LimitedUsePeriodConfiguration}
  */
-DND5E.limitedUsePeriods = {
+VARLYN5E.limitedUsePeriods = {
   lr: {
-    label: "DND5E.USES.Recovery.Period.LongRest.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.LongRest.Abbreviation"
+    label: "VARLYN5E.USES.Recovery.Period.LongRest.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.LongRest.Abbreviation"
   },
   sr: {
-    label: "DND5E.USES.Recovery.Period.ShortRest.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.ShortRest.Abbreviation"
+    label: "VARLYN5E.USES.Recovery.Period.ShortRest.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.ShortRest.Abbreviation"
   },
   day: {
-    label: "DND5E.USES.Recovery.Period.Day.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.Day.Label"
+    label: "VARLYN5E.USES.Recovery.Period.Day.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.Day.Label"
   },
   dawn: {
-    label: "DND5E.USES.Recovery.Period.Dawn.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.Dawn.Label",
+    label: "VARLYN5E.USES.Recovery.Period.Dawn.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.Dawn.Label",
     formula: true
   },
   dusk: {
-    label: "DND5E.USES.Recovery.Period.Dusk.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.Dusk.Label",
+    label: "VARLYN5E.USES.Recovery.Period.Dusk.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.Dusk.Label",
     formula: true
   },
   initiative: {
-    label: "DND5E.USES.Recovery.Period.Initiative.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.Initiative.Label",
+    label: "VARLYN5E.USES.Recovery.Period.Initiative.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.Initiative.Label",
     type: "special"
   },
   turnStart: {
-    label: "DND5E.USES.Recovery.Period.TurnStart.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.TurnStart.Abbreviation",
+    label: "VARLYN5E.USES.Recovery.Period.TurnStart.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.TurnStart.Abbreviation",
     type: "combat"
   },
   turnEnd: {
-    label: "DND5E.USES.Recovery.Period.TurnEnd.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.TurnEnd.Abbreviation",
+    label: "VARLYN5E.USES.Recovery.Period.TurnEnd.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.TurnEnd.Abbreviation",
     type: "combat"
   },
   turn: {
-    label: "DND5E.USES.Recovery.Period.Turn.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.Turn.Label",
+    label: "VARLYN5E.USES.Recovery.Period.Turn.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.Turn.Label",
     type: "combat"
   }
 };
 preLocalize("limitedUsePeriods", { keys: ["label", "abbreviation"] });
 
-Object.defineProperty(DND5E.limitedUsePeriods, "recoveryOptions", {
+Object.defineProperty(VARLYN5E.limitedUsePeriods, "recoveryOptions", {
   get() {
     return [
-      ...Object.entries(CONFIG.DND5E.limitedUsePeriods)
+      ...Object.entries(CONFIG.VARLYN5E.limitedUsePeriods)
         .filter(([, config]) => !config.deprecated)
         .map(([value, { label, type }]) => ({
-          value, label, group: _loc(`DND5E.USES.Recovery.${type?.capitalize() ?? "Time"}`)
+          value, label, group: _loc(`VARLYN5E.USES.Recovery.${type?.capitalize() ?? "Time"}`)
         })),
-      { value: "recharge", label: _loc("DND5E.USES.Recovery.Recharge.Label") }
+      { value: "recharge", label: _loc("VARLYN5E.USES.Recovery.Recharge.Label") }
     ];
   }
 });
@@ -41904,15 +41904,15 @@ Object.defineProperty(DND5E.limitedUsePeriods, "recoveryOptions", {
  * Periods at which enchantments can be re-bound to new items.
  * @enum {{ label: string }}
  */
-DND5E.enchantmentPeriods = {
+VARLYN5E.enchantmentPeriods = {
   sr: {
-    label: "DND5E.ENCHANTMENT.Period.ShortRest"
+    label: "VARLYN5E.ENCHANTMENT.Period.ShortRest"
   },
   lr: {
-    label: "DND5E.ENCHANTMENT.Period.LongRest"
+    label: "VARLYN5E.ENCHANTMENT.Period.LongRest"
   },
   atwill: {
-    label: "DND5E.ENCHANTMENT.Period.AtWill"
+    label: "VARLYN5E.ENCHANTMENT.Period.AtWill"
   }
 };
 preLocalize("enchantmentPeriods", { key: "label" });
@@ -41925,12 +41925,12 @@ preLocalize("enchantmentPeriods", { key: "label" });
  * Specific equipment types that modify base AC.
  * @enum {string}
  */
-DND5E.armorTypes = {
-  light: "DND5E.EquipmentLight",
-  medium: "DND5E.EquipmentMedium",
-  heavy: "DND5E.EquipmentHeavy",
-  natural: "DND5E.EquipmentNatural",
-  shield: "DND5E.EquipmentShield"
+VARLYN5E.armorTypes = {
+  light: "VARLYN5E.EquipmentLight",
+  medium: "VARLYN5E.EquipmentMedium",
+  heavy: "VARLYN5E.EquipmentHeavy",
+  natural: "VARLYN5E.EquipmentNatural",
+  shield: "VARLYN5E.EquipmentShield"
 };
 preLocalize("armorTypes");
 
@@ -41940,22 +41940,22 @@ preLocalize("armorTypes");
  * The set of Armor Proficiencies which a character may have.
  * @enum {string}
  */
-DND5E.armorProficiencies = {
-  lgt: "DND5E.ArmorLightProficiency",
-  med: "DND5E.ArmorMediumProficiency",
-  hvy: "DND5E.ArmorHeavyProficiency",
-  shl: "DND5E.EquipmentShieldProficiency"
+VARLYN5E.armorProficiencies = {
+  lgt: "VARLYN5E.ArmorLightProficiency",
+  med: "VARLYN5E.ArmorMediumProficiency",
+  hvy: "VARLYN5E.ArmorHeavyProficiency",
+  shl: "VARLYN5E.EquipmentShieldProficiency"
 };
 preLocalize("armorProficiencies");
 
 /* -------------------------------------------- */
 
 /**
- * A mapping between `DND5E.equipmentTypes` and `DND5E.armorProficiencies` that
+ * A mapping between `VARLYN5E.equipmentTypes` and `VARLYN5E.armorProficiencies` that
  * is used to determine if character has proficiency when adding an item.
  * @enum {(boolean|string)}
  */
-DND5E.armorProficienciesMap = {
+VARLYN5E.armorProficienciesMap = {
   natural: true,
   clothing: true,
   light: "lgt",
@@ -41971,7 +41971,7 @@ DND5E.armorProficienciesMap = {
  * Value will be converted to the appropriate value to match the actor's speed unit.
  * @type {number}
  */
-DND5E.armorSpeedReduction = 10;
+VARLYN5E.armorSpeedReduction = 10;
 
 /* -------------------------------------------- */
 
@@ -41980,7 +41980,7 @@ DND5E.armorSpeedReduction = 10;
  * automated AC calculation in NPCs, and starting equipment.
  * @enum {string}
  */
-DND5E.armorIds = {
+VARLYN5E.armorIds = {
 };
 
 /* -------------------------------------------- */
@@ -41989,7 +41989,7 @@ DND5E.armorIds = {
  * The basic shield in 5e.
  * @enum {string}
  */
-DND5E.shieldIds = {
+VARLYN5E.shieldIds = {
 };
 
 /* -------------------------------------------- */
@@ -41998,41 +41998,41 @@ DND5E.shieldIds = {
  * Common armor class calculations.
  * @enum {{ label: string, [formula]: string }}
  */
-DND5E.armorClasses = {
+VARLYN5E.armorClasses = {
   flat: {
-    label: "DND5E.ArmorClassFlat",
+    label: "VARLYN5E.ArmorClassFlat",
     formula: "@attributes.ac.flat"
   },
   natural: {
-    label: "DND5E.ArmorClassNatural",
+    label: "VARLYN5E.ArmorClassNatural",
     formula: "@attributes.ac.flat"
   },
   default: {
-    label: "DND5E.ArmorClassEquipment",
+    label: "VARLYN5E.ArmorClassEquipment",
     formula: "@attributes.ac.armor + @attributes.ac.dex"
   },
   mage: {
-    label: "DND5E.ArmorClassMage",
+    label: "VARLYN5E.ArmorClassMage",
     formula: "13 + @abilities.dex.mod"
   },
   draconic: {
-    label: "DND5E.ArmorClassDraconic",
+    label: "VARLYN5E.ArmorClassDraconic",
     formula: "13 + @abilities.dex.mod"
   },
   unarmoredMonk: {
-    label: "DND5E.ArmorClassUnarmoredMonk",
+    label: "VARLYN5E.ArmorClassUnarmoredMonk",
     formula: "10 + @abilities.dex.mod + @abilities.wis.mod"
   },
   unarmoredBarb: {
-    label: "DND5E.ArmorClassUnarmoredBarbarian",
+    label: "VARLYN5E.ArmorClassUnarmoredBarbarian",
     formula: "10 + @abilities.dex.mod + @abilities.con.mod"
   },
   unarmoredBard: {
-    label: "DND5E.ArmorClassUnarmoredBard",
+    label: "VARLYN5E.ArmorClassUnarmoredBard",
     formula: "10 + @abilities.dex.mod + @abilities.cha.mod"
   },
   custom: {
-    label: "DND5E.ArmorClassCustom"
+    label: "VARLYN5E.ArmorClassCustom"
   }
 };
 preLocalize("armorClasses", { key: "label" });
@@ -42045,13 +42045,13 @@ preLocalize("armorClasses", { key: "label" });
  * Equipment types that aren't armor.
  * @enum {string}
  */
-DND5E.miscEquipmentTypes = {
-  clothing: "DND5E.EQUIPMENT.Type.Clothing.Label",
-  ring: "DND5E.EQUIPMENT.Type.Ring.Label",
-  rod: "DND5E.EQUIPMENT.Type.Rod.Label",
-  trinket: "DND5E.EQUIPMENT.Type.Trinket.Label",
-  wand: "DND5E.EQUIPMENT.Type.Wand.Label",
-  wondrous: "DND5E.EQUIPMENT.Type.Wondrous.Label"
+VARLYN5E.miscEquipmentTypes = {
+  clothing: "VARLYN5E.EQUIPMENT.Type.Clothing.Label",
+  ring: "VARLYN5E.EQUIPMENT.Type.Ring.Label",
+  rod: "VARLYN5E.EQUIPMENT.Type.Rod.Label",
+  trinket: "VARLYN5E.EQUIPMENT.Type.Trinket.Label",
+  wand: "VARLYN5E.EQUIPMENT.Type.Wand.Label",
+  wondrous: "VARLYN5E.EQUIPMENT.Type.Wondrous.Label"
 };
 preLocalize("miscEquipmentTypes", { sort: true });
 
@@ -42061,9 +42061,9 @@ preLocalize("miscEquipmentTypes", { sort: true });
  * The set of equipment types for armor, clothing, and other objects which can be worn by the character.
  * @enum {string}
  */
-DND5E.equipmentTypes = {
-  ...DND5E.miscEquipmentTypes,
-  ...DND5E.armorTypes
+VARLYN5E.equipmentTypes = {
+  ...VARLYN5E.miscEquipmentTypes,
+  ...VARLYN5E.armorTypes
 };
 preLocalize("equipmentTypes", { sort: true });
 
@@ -42073,47 +42073,47 @@ preLocalize("equipmentTypes", { sort: true });
  * Enumerate the valid consumable types which are recognized by the system.
  * @enum {SubtypeTypeConfiguration}
  */
-DND5E.consumableTypes = {
+VARLYN5E.consumableTypes = {
   ammo: {
-    label: "DND5E.CONSUMABLE.Type.Ammunition.Label",
+    label: "VARLYN5E.CONSUMABLE.Type.Ammunition.Label",
     subtypes: {
-      arrow: "DND5E.CONSUMABLE.Type.Ammunition.Arrow",
-      crossbowBolt: "DND5E.CONSUMABLE.Type.Ammunition.Bolt",
-      energyCell: "DND5E.CONSUMABLE.Type.Ammunition.EnergyCell",
-      firearmBullet: "DND5E.CONSUMABLE.Type.Ammunition.BulletFirearm",
-      slingBullet: "DND5E.CONSUMABLE.Type.Ammunition.BulletSling",
-      blowgunNeedle: "DND5E.CONSUMABLE.Type.Ammunition.Needle"
+      arrow: "VARLYN5E.CONSUMABLE.Type.Ammunition.Arrow",
+      crossbowBolt: "VARLYN5E.CONSUMABLE.Type.Ammunition.Bolt",
+      energyCell: "VARLYN5E.CONSUMABLE.Type.Ammunition.EnergyCell",
+      firearmBullet: "VARLYN5E.CONSUMABLE.Type.Ammunition.BulletFirearm",
+      slingBullet: "VARLYN5E.CONSUMABLE.Type.Ammunition.BulletSling",
+      blowgunNeedle: "VARLYN5E.CONSUMABLE.Type.Ammunition.Needle"
     }
   },
   potion: {
-    label: "DND5E.CONSUMABLE.Type.Potion.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Potion.Label"
   },
   poison: {
-    label: "DND5E.CONSUMABLE.Type.Poison.Label",
+    label: "VARLYN5E.CONSUMABLE.Type.Poison.Label",
     subtypes: {
-      contact: "DND5E.CONSUMABLE.Type.Poison.Contact",
-      ingested: "DND5E.CONSUMABLE.Type.Poison.Ingested",
-      inhaled: "DND5E.CONSUMABLE.Type.Poison.Inhaled",
-      injury: "DND5E.CONSUMABLE.Type.Poison.Injury"
+      contact: "VARLYN5E.CONSUMABLE.Type.Poison.Contact",
+      ingested: "VARLYN5E.CONSUMABLE.Type.Poison.Ingested",
+      inhaled: "VARLYN5E.CONSUMABLE.Type.Poison.Inhaled",
+      injury: "VARLYN5E.CONSUMABLE.Type.Poison.Injury"
     }
   },
   food: {
-    label: "DND5E.CONSUMABLE.Type.Food.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Food.Label"
   },
   scroll: {
-    label: "DND5E.CONSUMABLE.Type.Scroll.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Scroll.Label"
   },
   wand: {
-    label: "DND5E.CONSUMABLE.Type.Wand.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Wand.Label"
   },
   rod: {
-    label: "DND5E.CONSUMABLE.Type.Rod.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Rod.Label"
   },
   trinket: {
-    label: "DND5E.CONSUMABLE.Type.Trinket.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Trinket.Label"
   },
   wondrous: {
-    label: "DND5E.CONSUMABLE.Type.Wondrous.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Wondrous.Label"
   }
 };
 preLocalize("consumableTypes", { key: "label", sort: true });
@@ -42126,7 +42126,7 @@ preLocalize("consumableTypes.poison.subtypes", { sort: true });
  * Types of containers.
  * @enum {string}
  */
-DND5E.containerTypes = {
+VARLYN5E.containerTypes = {
   backpack: "H8YCd689ezlD26aT",
   barrel: "7Yqbqg5EtVW16wfT",
   basket: "Wv7HzD6dv1P0q78N",
@@ -42153,19 +42153,19 @@ DND5E.containerTypes = {
  * Type of spellcasting foci.
  * @enum {SpellcastingFocusConfiguration}
  */
-DND5E.focusTypes = {
+VARLYN5E.focusTypes = {
   arcane: {
-    label: "DND5E.Focus.Arcane",
+    label: "VARLYN5E.Focus.Arcane",
     itemIds: {
     }
   },
   druidic: {
-    label: "DND5E.Focus.Druidic",
+    label: "VARLYN5E.Focus.Druidic",
     itemIds: {
     }
   },
   holy: {
-    label: "DND5E.Focus.Holy",
+    label: "VARLYN5E.Focus.Holy",
     itemIds: {
     }
   }
@@ -42178,59 +42178,59 @@ preLocalize("focusTypes", { key: "label" });
  * Types of "features" items.
  * @enum {SubtypeTypeConfiguration}
  */
-DND5E.featureTypes = {
+VARLYN5E.featureTypes = {
   background: {
-    label: "DND5E.Feature.Background"
+    label: "VARLYN5E.Feature.Background"
   },
   class: {
-    label: "DND5E.Feature.Class.Label",
+    label: "VARLYN5E.Feature.Class.Label",
     subtypes: {
-      arcaneShot: "DND5E.Feature.Class.ArcaneShot",
-      artificerInfusion: "DND5E.Feature.Class.ArtificerPlan",
-      channelDivinity: "DND5E.Feature.Class.ChannelDivinity",
-      defensiveTactic: "DND5E.Feature.Class.DefensiveTactic",
-      eldritchInvocation: "DND5E.Feature.Class.EldritchInvocation",
-      elementalDiscipline: "DND5E.Feature.Class.ElementalDiscipline",
-      fightingStyle: "DND5E.Feature.Class.FightingStyle",
-      huntersPrey: "DND5E.Feature.Class.HuntersPrey",
-      ki: "DND5E.Feature.Class.Ki",
-      maneuver: "DND5E.Feature.Class.Maneuver",
-      metamagic: "DND5E.Feature.Class.Metamagic",
-      multiattack: "DND5E.Feature.Class.Multiattack",
-      pact: "DND5E.Feature.Class.PactBoon",
-      psionicPower: "DND5E.Feature.Class.PsionicPower",
-      rune: "DND5E.Feature.Class.Rune",
-      superiorHuntersDefense: "DND5E.Feature.Class.SuperiorHuntersDefense"
+      arcaneShot: "VARLYN5E.Feature.Class.ArcaneShot",
+      artificerInfusion: "VARLYN5E.Feature.Class.ArtificerPlan",
+      channelDivinity: "VARLYN5E.Feature.Class.ChannelDivinity",
+      defensiveTactic: "VARLYN5E.Feature.Class.DefensiveTactic",
+      eldritchInvocation: "VARLYN5E.Feature.Class.EldritchInvocation",
+      elementalDiscipline: "VARLYN5E.Feature.Class.ElementalDiscipline",
+      fightingStyle: "VARLYN5E.Feature.Class.FightingStyle",
+      huntersPrey: "VARLYN5E.Feature.Class.HuntersPrey",
+      ki: "VARLYN5E.Feature.Class.Ki",
+      maneuver: "VARLYN5E.Feature.Class.Maneuver",
+      metamagic: "VARLYN5E.Feature.Class.Metamagic",
+      multiattack: "VARLYN5E.Feature.Class.Multiattack",
+      pact: "VARLYN5E.Feature.Class.PactBoon",
+      psionicPower: "VARLYN5E.Feature.Class.PsionicPower",
+      rune: "VARLYN5E.Feature.Class.Rune",
+      superiorHuntersDefense: "VARLYN5E.Feature.Class.SuperiorHuntersDefense"
     }
   },
   monster: {
-    label: "DND5E.Feature.Monster"
+    label: "VARLYN5E.Feature.Monster"
   },
   race: {
-    label: "DND5E.Feature.Species"
+    label: "VARLYN5E.Feature.Species"
   },
   enchantment: {
-    label: "DND5E.ENCHANTMENT.Label",
+    label: "VARLYN5E.ENCHANTMENT.Label",
     subtypes: {
-      artificerInfusion: "DND5E.Feature.Class.ArtificerPlan",
-      rune: "DND5E.Feature.Class.Rune"
+      artificerInfusion: "VARLYN5E.Feature.Class.ArtificerPlan",
+      rune: "VARLYN5E.Feature.Class.Rune"
     }
   },
   feat: {
-    label: "DND5E.Feature.Feat.Label",
+    label: "VARLYN5E.Feature.Feat.Label",
     subtypes: {
-      general: "DND5E.Feature.Feat.General",
-      origin: "DND5E.Feature.Feat.Origin",
-      fightingStyle: "DND5E.Feature.Feat.FightingStyle",
-      epicBoon: "DND5E.Feature.Feat.EpicBoon"
+      general: "VARLYN5E.Feature.Feat.General",
+      origin: "VARLYN5E.Feature.Feat.Origin",
+      fightingStyle: "VARLYN5E.Feature.Feat.FightingStyle",
+      epicBoon: "VARLYN5E.Feature.Feat.EpicBoon"
     }
   },
   supernaturalGift: {
-    label: "DND5E.Feature.SupernaturalGift.Label",
+    label: "VARLYN5E.Feature.SupernaturalGift.Label",
     subtypes: {
-      blessing: "DND5E.Feature.SupernaturalGift.Blessing",
-      charm: "DND5E.Feature.SupernaturalGift.Charm",
-      epicBoon: "DND5E.Feature.SupernaturalGift.EpicBoon"
+      blessing: "VARLYN5E.Feature.SupernaturalGift.Blessing",
+      charm: "VARLYN5E.Feature.SupernaturalGift.Charm",
+      epicBoon: "VARLYN5E.Feature.SupernaturalGift.EpicBoon"
     }
   }
 };
@@ -42246,100 +42246,100 @@ preLocalize("featureTypes.supernaturalGift.subtypes", { sort: true });
  * The various properties of all item types.
  * @enum {ItemPropertyConfiguration}
  */
-DND5E.itemProperties = {
+VARLYN5E.itemProperties = {
   ada: {
-    label: "DND5E.ITEM.Property.Adamantine",
+    label: "VARLYN5E.ITEM.Property.Adamantine",
     isPhysical: true
   },
   amm: {
-    label: "DND5E.ITEM.Property.Ammunition"
+    label: "VARLYN5E.ITEM.Property.Ammunition"
   },
   concentration: {
-    label: "DND5E.ITEM.Property.Concentration",
-    abbreviation: "DND5E.ConcentrationAbbr",
+    label: "VARLYN5E.ITEM.Property.Concentration",
+    abbreviation: "VARLYN5E.ConcentrationAbbr",
     icon: "systems/dnd5e/icons/svg/statuses/concentrating.svg",
     isTag: true
   },
   fin: {
-    label: "DND5E.ITEM.Property.Finesse"
+    label: "VARLYN5E.ITEM.Property.Finesse"
   },
   fir: {
-    label: "DND5E.ITEM.Property.Firearm"
+    label: "VARLYN5E.ITEM.Property.Firearm"
   },
   foc: {
-    label: "DND5E.ITEM.Property.Focus"
+    label: "VARLYN5E.ITEM.Property.Focus"
   },
   gear: {
-    label: "DND5E.ITEM.Property.Gear"
+    label: "VARLYN5E.ITEM.Property.Gear"
   },
   hvy: {
-    label: "DND5E.ITEM.Property.Heavy"
+    label: "VARLYN5E.ITEM.Property.Heavy"
   },
   lgt: {
-    label: "DND5E.ITEM.Property.Light"
+    label: "VARLYN5E.ITEM.Property.Light"
   },
   lod: {
-    label: "DND5E.ITEM.Property.Loading"
+    label: "VARLYN5E.ITEM.Property.Loading"
   },
   material: {
-    label: "DND5E.ITEM.Property.Material",
-    abbreviation: "DND5E.ComponentMaterialAbbr"
+    label: "VARLYN5E.ITEM.Property.Material",
+    abbreviation: "VARLYN5E.ComponentMaterialAbbr"
   },
   mgc: {
-    label: "DND5E.ITEM.Property.Magical",
+    label: "VARLYN5E.ITEM.Property.Magical",
     icon: "systems/dnd5e/icons/svg/properties/magical.svg",
     isPhysical: true
   },
   rch: {
-    label: "DND5E.ITEM.Property.Reach"
+    label: "VARLYN5E.ITEM.Property.Reach"
   },
   rel: {
-    label: "DND5E.ITEM.Property.Reload"
+    label: "VARLYN5E.ITEM.Property.Reload"
   },
   ret: {
-    label: "DND5E.ITEM.Property.Returning"
+    label: "VARLYN5E.ITEM.Property.Returning"
   },
   ritual: {
-    label: "DND5E.ITEM.Property.Ritual",
-    abbreviation: "DND5E.RitualAbbr",
+    label: "VARLYN5E.ITEM.Property.Ritual",
+    abbreviation: "VARLYN5E.RitualAbbr",
     icon: "systems/dnd5e/icons/svg/items/spell.svg",
     isTag: true
   },
   sidekick: {
-    label: "DND5E.ITEM.Property.Sidekick"
+    label: "VARLYN5E.ITEM.Property.Sidekick"
   },
   sil: {
-    label: "DND5E.ITEM.Property.Silvered",
+    label: "VARLYN5E.ITEM.Property.Silvered",
     isPhysical: true
   },
   somatic: {
-    label: "DND5E.ITEM.Property.Somatic",
-    abbreviation: "DND5E.ComponentSomaticAbbr"
+    label: "VARLYN5E.ITEM.Property.Somatic",
+    abbreviation: "VARLYN5E.ComponentSomaticAbbr"
   },
   spc: {
-    label: "DND5E.ITEM.Property.Special"
+    label: "VARLYN5E.ITEM.Property.Special"
   },
   stealthDisadvantage: {
-    label: "DND5E.ITEM.Property.StealthDisadvantage"
+    label: "VARLYN5E.ITEM.Property.StealthDisadvantage"
   },
   thr: {
-    label: "DND5E.ITEM.Property.Thrown"
+    label: "VARLYN5E.ITEM.Property.Thrown"
   },
   trait: {
-    label: "DND5E.ITEM.Property.Trait"
+    label: "VARLYN5E.ITEM.Property.Trait"
   },
   two: {
-    label: "DND5E.ITEM.Property.TwoHanded"
+    label: "VARLYN5E.ITEM.Property.TwoHanded"
   },
   ver: {
-    label: "DND5E.ITEM.Property.Versatile"
+    label: "VARLYN5E.ITEM.Property.Versatile"
   },
   vocal: {
-    label: "DND5E.ITEM.Property.Verbal",
-    abbreviation: "DND5E.ComponentVerbalAbbr"
+    label: "VARLYN5E.ITEM.Property.Verbal",
+    abbreviation: "VARLYN5E.ComponentVerbalAbbr"
   },
   weightlessContents: {
-    label: "DND5E.ITEM.Property.WeightlessContents"
+    label: "VARLYN5E.ITEM.Property.WeightlessContents"
   }
 };
 preLocalize("itemProperties", { keys: ["label", "abbreviation"], sort: true });
@@ -42350,7 +42350,7 @@ preLocalize("itemProperties", { keys: ["label", "abbreviation"], sort: true });
  * The various properties of an item per item type.
  * @enum {object}
  */
-DND5E.validProperties = {
+VARLYN5E.validProperties = {
   class: new Set([
     "sidekick"
   ]),
@@ -42410,34 +42410,34 @@ DND5E.validProperties = {
  * The conversion number defines how many of that currency are equal to one GP.
  * @enum {CurrencyConfiguration}
  */
-DND5E.currencies = {
+VARLYN5E.currencies = {
   pp: {
-    label: "DND5E.CurrencyPP",
-    abbreviation: "DND5E.CurrencyAbbrPP",
+    label: "VARLYN5E.CurrencyPP",
+    abbreviation: "VARLYN5E.CurrencyAbbrPP",
     conversion: 0.1,
     icon: "systems/dnd5e/icons/currency/platinum.webp"
   },
   gp: {
-    label: "DND5E.CurrencyGP",
-    abbreviation: "DND5E.CurrencyAbbrGP",
+    label: "VARLYN5E.CurrencyGP",
+    abbreviation: "VARLYN5E.CurrencyAbbrGP",
     conversion: 1,
     icon: "systems/dnd5e/icons/currency/gold.webp"
   },
   ep: {
-    label: "DND5E.CurrencyEP",
-    abbreviation: "DND5E.CurrencyAbbrEP",
+    label: "VARLYN5E.CurrencyEP",
+    abbreviation: "VARLYN5E.CurrencyAbbrEP",
     conversion: 2,
     icon: "systems/dnd5e/icons/currency/electrum.webp"
   },
   sp: {
-    label: "DND5E.CurrencySP",
-    abbreviation: "DND5E.CurrencyAbbrSP",
+    label: "VARLYN5E.CurrencySP",
+    abbreviation: "VARLYN5E.CurrencyAbbrSP",
     conversion: 10,
     icon: "systems/dnd5e/icons/currency/silver.webp"
   },
   cp: {
-    label: "DND5E.CurrencyCP",
-    abbreviation: "DND5E.CurrencyAbbrCP",
+    label: "VARLYN5E.CurrencyCP",
+    abbreviation: "VARLYN5E.CurrencyAbbrCP",
     conversion: 100,
     icon: "systems/dnd5e/icons/currency/copper.webp"
   }
@@ -42450,7 +42450,7 @@ preLocalize("currencies", { keys: ["label", "abbreviation"] });
  * Default currency used for data model defaults, starting wealth, and facility prices.
  * @enum {string}
  */
-DND5E.defaultCurrency = "gp";
+VARLYN5E.defaultCurrency = "gp";
 
 /* -------------------------------------------- */
 
@@ -42458,7 +42458,7 @@ DND5E.defaultCurrency = "gp";
  * Configuration data for crafting costs.
  * @type {CraftingConfiguration}
  */
-DND5E.crafting = {
+VARLYN5E.crafting = {
   consumable: {
     days: .5,
     gold: .5
@@ -42547,7 +42547,7 @@ DND5E.crafting = {
  * Standard dice spread available for things like damage.
  * @type {number[]}
  */
-DND5E.dieSteps = [4, 6, 8, 10, 12, 20, 100];
+VARLYN5E.dieSteps = [4, 6, 8, 10, 12, 20, 100];
 
 /* -------------------------------------------- */
 
@@ -42555,14 +42555,14 @@ DND5E.dieSteps = [4, 6, 8, 10, 12, 20, 100];
  * Methods by which damage scales relative to the overall scaling increase.
  * @enum {{ label: string, labelCantrip: string }}
  */
-DND5E.damageScalingModes = {
+VARLYN5E.damageScalingModes = {
   whole: {
-    label: "DND5E.DAMAGE.Scaling.Whole",
-    labelCantrip: "DND5E.DAMAGE.Scaling.WholeCantrip"
+    label: "VARLYN5E.DAMAGE.Scaling.Whole",
+    labelCantrip: "VARLYN5E.DAMAGE.Scaling.WholeCantrip"
   },
   half: {
-    label: "DND5E.DAMAGE.Scaling.Half",
-    labelCantrip: "DND5E.DAMAGE.Scaling.HalfCantrip"
+    label: "VARLYN5E.DAMAGE.Scaling.Half",
+    labelCantrip: "VARLYN5E.DAMAGE.Scaling.HalfCantrip"
   }
 };
 preLocalize("damageScalingModes", { keys: ["label", "labelCantrip"] });
@@ -42573,72 +42573,72 @@ preLocalize("damageScalingModes", { keys: ["label", "labelCantrip"] });
  * Types of damage the can be caused by abilities.
  * @enum {DamageTypeConfiguration}
  */
-DND5E.damageTypes = {
+VARLYN5E.damageTypes = {
   acid: {
-    label: "DND5E.DAMAGE.Type.Acid",
+    label: "VARLYN5E.DAMAGE.Type.Acid",
     icon: "systems/dnd5e/icons/svg/damage/acid.svg",
     color: new Color(0x839D50)
   },
   bludgeoning: {
-    label: "DND5E.DAMAGE.Type.Bludgeoning",
+    label: "VARLYN5E.DAMAGE.Type.Bludgeoning",
     icon: "systems/dnd5e/icons/svg/damage/bludgeoning.svg",
     isPhysical: true,
     color: new Color(0x0000A0)
   },
   cold: {
-    label: "DND5E.DAMAGE.Type.Cold",
+    label: "VARLYN5E.DAMAGE.Type.Cold",
     icon: "systems/dnd5e/icons/svg/damage/cold.svg",
     color: new Color(0xADD8E6)
   },
   fire: {
-    label: "DND5E.DAMAGE.Type.Fire",
+    label: "VARLYN5E.DAMAGE.Type.Fire",
     icon: "systems/dnd5e/icons/svg/damage/fire.svg",
     color: new Color(0xFF4500)
   },
   force: {
-    label: "DND5E.DAMAGE.Type.Force",
+    label: "VARLYN5E.DAMAGE.Type.Force",
     icon: "systems/dnd5e/icons/svg/damage/force.svg",
     color: new Color(0x800080)
   },
   lightning: {
-    label: "DND5E.DAMAGE.Type.Lightning",
+    label: "VARLYN5E.DAMAGE.Type.Lightning",
     icon: "systems/dnd5e/icons/svg/damage/lightning.svg",
     color: new Color(0x1E90FF)
   },
   necrotic: {
-    label: "DND5E.DAMAGE.Type.Necrotic",
+    label: "VARLYN5E.DAMAGE.Type.Necrotic",
     icon: "systems/dnd5e/icons/svg/damage/necrotic.svg",
     color: new Color(0x006400)
   },
   piercing: {
-    label: "DND5E.DAMAGE.Type.Piercing",
+    label: "VARLYN5E.DAMAGE.Type.Piercing",
     icon: "systems/dnd5e/icons/svg/damage/piercing.svg",
     isPhysical: true,
     color: new Color(0xC0C0C0)
   },
   poison: {
-    label: "DND5E.DAMAGE.Type.Poison",
+    label: "VARLYN5E.DAMAGE.Type.Poison",
     icon: "systems/dnd5e/icons/svg/damage/poison.svg",
     color: new Color(0x8A2BE2)
   },
   psychic: {
-    label: "DND5E.DAMAGE.Type.Psychic",
+    label: "VARLYN5E.DAMAGE.Type.Psychic",
     icon: "systems/dnd5e/icons/svg/damage/psychic.svg",
     color: new Color(0xFF1493)
   },
   radiant: {
-    label: "DND5E.DAMAGE.Type.Radiant",
+    label: "VARLYN5E.DAMAGE.Type.Radiant",
     icon: "systems/dnd5e/icons/svg/damage/radiant.svg",
     color: new Color(0xFFD700)
   },
   slashing: {
-    label: "DND5E.DAMAGE.Type.Slashing",
+    label: "VARLYN5E.DAMAGE.Type.Slashing",
     icon: "systems/dnd5e/icons/svg/damage/slashing.svg",
     isPhysical: true,
     color: new Color(0x8B0000)
   },
   thunder: {
-    label: "DND5E.DAMAGE.Type.Thunder",
+    label: "VARLYN5E.DAMAGE.Type.Thunder",
     icon: "systems/dnd5e/icons/svg/damage/thunder.svg",
     color: new Color(0x708090)
   }
@@ -42651,7 +42651,7 @@ preLocalize("damageTypes", { keys: ["label"], sort: true });
  * Display aggregated damage in chat cards.
  * @type {boolean}
  */
-DND5E.aggregateDamageDisplay = true;
+VARLYN5E.aggregateDamageDisplay = true;
 
 /* -------------------------------------------- */
 
@@ -42659,22 +42659,22 @@ DND5E.aggregateDamageDisplay = true;
  * Different types of healing that can be applied using abilities.
  * @enum {DamageTypeConfiguration}
  */
-DND5E.healingTypes = {
+VARLYN5E.healingTypes = {
   healing: {
-    label: "DND5E.HEAL.Type.Healing",
-    labelShort: "DND5E.HEAL.Type.HealingShort",
+    label: "VARLYN5E.HEAL.Type.Healing",
+    labelShort: "VARLYN5E.HEAL.Type.HealingShort",
     icon: "systems/dnd5e/icons/svg/damage/healing.svg",
     color: new Color(0x46C252)
   },
   temphp: {
-    label: "DND5E.HEAL.Type.Temporary",
-    labelShort: "DND5E.HEAL.Type.TemporaryShort",
+    label: "VARLYN5E.HEAL.Type.Temporary",
+    labelShort: "VARLYN5E.HEAL.Type.TemporaryShort",
     icon: "systems/dnd5e/icons/svg/damage/temphp.svg",
     color: new Color(0x4B66DE)
   },
   maximum: {
-    label: "DND5E.HEAL.Type.Maximum",
-    labelShort: "DND5E.HEAL.Type.MaximumShort",
+    label: "VARLYN5E.HEAL.Type.Maximum",
+    labelShort: "VARLYN5E.HEAL.Type.MaximumShort",
     icon: "systems/dnd5e/icons/svg/damage/maxhp.svg",
     color: new Color(0x4BDEDE)
   }
@@ -42689,33 +42689,33 @@ preLocalize("healingTypes", { keys: ["label", "labelShort"] });
  * Types of terrain that can cause difficult terrain.
  * @enum {{ label: string }}
  */
-DND5E.difficultTerrainTypes = {
+VARLYN5E.difficultTerrainTypes = {
   ice: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Ice"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Ice"
   },
   liquid: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Liquid"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Liquid"
   },
   plants: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Plants"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Plants"
   },
   rocks: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Rocks"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Rocks"
   },
   mud: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Mud"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Mud"
   },
   sand: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Sand"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Sand"
   },
   slope: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Slope"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Slope"
   },
   snow: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Snow"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Snow"
   },
   web: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Webs"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Webs"
   }
 };
 preLocalize("difficultTerrainTypes", { key: "label", sort: true });
@@ -42726,27 +42726,27 @@ preLocalize("difficultTerrainTypes", { key: "label", sort: true });
  * Types of movement supported by creature actors in the system.
  * @enum {MovementTypeConfiguration}
  */
-DND5E.movementTypes = {
+VARLYN5E.movementTypes = {
   walk: {
-    label: "DND5E.MOVEMENT.Type.Speed"
+    label: "VARLYN5E.MOVEMENT.Type.Speed"
   },
   burrow: {
-    label: "DND5E.MOVEMENT.Type.Burrow"
+    label: "VARLYN5E.MOVEMENT.Type.Burrow"
   },
   climb: {
-    label: "DND5E.MOVEMENT.Type.Climb",
+    label: "VARLYN5E.MOVEMENT.Type.Climb",
     walkFallback: true
   },
   fly: {
-    label: "DND5E.MOVEMENT.Type.Fly",
+    label: "VARLYN5E.MOVEMENT.Type.Fly",
     travel: "air"
   },
   jump: {
-    label: "DND5E.MOVEMENT.Type.Jump",
+    label: "VARLYN5E.MOVEMENT.Type.Jump",
     hidden: true
   },
   swim: {
-    label: "DND5E.MOVEMENT.Type.Swim",
+    label: "VARLYN5E.MOVEMENT.Type.Swim",
     travel: "water",
     walkFallback: true
   }
@@ -42759,7 +42759,7 @@ preLocalize("movementTypes", { key: "label" });
  * Default number of hours per day traveled by specific actor types.
  * @enum {number}
  */
-DND5E.travelTimes = {
+VARLYN5E.travelTimes = {
   group: 8,
   vehicle: 24
 };
@@ -42770,15 +42770,15 @@ DND5E.travelTimes = {
  * Types of movement supported by creature actors in the system.
  * @enum {Omit<MovementTypeConfiguration, "travel">}
  */
-DND5E.travelTypes = {
+VARLYN5E.travelTypes = {
   land: {
-    label: "DND5E.TRAVEL.Type.Land"
+    label: "VARLYN5E.TRAVEL.Type.Land"
   },
   water: {
-    label: "DND5E.TRAVEL.Type.Water"
+    label: "VARLYN5E.TRAVEL.Type.Water"
   },
   air: {
-    label: "DND5E.TRAVEL.Type.Air"
+    label: "VARLYN5E.TRAVEL.Type.Air"
   }
 };
 preLocalize("travelTypes", { key: "label" });
@@ -42789,21 +42789,21 @@ preLocalize("travelTypes", { key: "label" });
  * Available travel paces.
  * @type {Readonly<Record<string, TravelPaceConfiguration>>}
  */
-DND5E.travelPace = Object.freeze({
+VARLYN5E.travelPace = Object.freeze({
   slow: {
-    label: "DND5E.TRAVEL.Pace.Slow",
+    label: "VARLYN5E.TRAVEL.Pace.Slow",
     standard: 18,
     multiplier: 2 / 3,
     round: "down"
   },
   normal: {
-    label: "DND5E.TRAVEL.Pace.Normal",
+    label: "VARLYN5E.TRAVEL.Pace.Normal",
     standard: 24,
     multiplier: 1,
     round: "down"
   },
   fast: {
-    label: "DND5E.TRAVEL.Pace.Fast",
+    label: "VARLYN5E.TRAVEL.Pace.Fast",
     standard: 30,
     multiplier: 4 / 3,
     round: "down"
@@ -42819,7 +42819,7 @@ preLocalize("travelPace", { key: "label" });
  * Default units used for imperial & metric settings.
  * @enum {{ imperial: string, metric: string }}
  */
-DND5E.defaultUnits = {
+VARLYN5E.defaultUnits = {
   length: {
     imperial: "ft",
     metric: "m"
@@ -42844,38 +42844,38 @@ DND5E.defaultUnits = {
  * The valid units of measure for movement distances in the game system.
  * @enum {MovementUnitConfiguration}
  */
-DND5E.movementUnits = {
+VARLYN5E.movementUnits = {
   ft: {
-    label: "DND5E.UNITS.DISTANCE.Foot.Label",
-    abbreviation: "DND5E.UNITS.DISTANCE.Foot.Abbreviation",
-    template: "DND5E.UNITS.DISTANCE.Foot.Template",
+    label: "VARLYN5E.UNITS.DISTANCE.Foot.Label",
+    abbreviation: "VARLYN5E.UNITS.DISTANCE.Foot.Abbreviation",
+    template: "VARLYN5E.UNITS.DISTANCE.Foot.Template",
     conversion: 1,
     formattingUnit: "foot",
     type: "imperial",
     travelResolution: "round"
   },
   mi: {
-    label: "DND5E.UNITS.DISTANCE.Mile.Label",
-    abbreviation: "DND5E.UNITS.DISTANCE.Mile.Abbreviation",
-    template: "DND5E.UNITS.DISTANCE.Mile.Template",
+    label: "VARLYN5E.UNITS.DISTANCE.Mile.Label",
+    abbreviation: "VARLYN5E.UNITS.DISTANCE.Mile.Abbreviation",
+    template: "VARLYN5E.UNITS.DISTANCE.Mile.Template",
     conversion: 5_280,
     formattingUnit: "mile",
     type: "imperial",
     travelResolution: "day"
   },
   m: {
-    label: "DND5E.UNITS.DISTANCE.Meter.Label",
-    abbreviation: "DND5E.UNITS.DISTANCE.Meter.Abbreviation",
-    template: "DND5E.UNITS.DISTANCE.Meter.Template",
+    label: "VARLYN5E.UNITS.DISTANCE.Meter.Label",
+    abbreviation: "VARLYN5E.UNITS.DISTANCE.Meter.Abbreviation",
+    template: "VARLYN5E.UNITS.DISTANCE.Meter.Template",
     conversion: 10 / 3, // D&D uses a simplified 5ft -> 1.5m conversion.
     formattingUnit: "meter",
     type: "metric",
     travelResolution: "round"
   },
   km: {
-    label: "DND5E.UNITS.DISTANCE.Kilometer.Label",
-    abbreviation: "DND5E.UNITS.DISTANCE.Kilometer.Abbreviation",
-    template: "DND5E.UNITS.DISTANCE.Kilometer.Template",
+    label: "VARLYN5E.UNITS.DISTANCE.Kilometer.Label",
+    abbreviation: "VARLYN5E.UNITS.DISTANCE.Kilometer.Abbreviation",
+    template: "VARLYN5E.UNITS.DISTANCE.Kilometer.Template",
     conversion: 10_000 / 3, // Matching simplified conversion
     formattingUnit: "kilometer",
     type: "metric",
@@ -42891,19 +42891,19 @@ preLocalize("movementUnits", { keys: ["label", "abbreviation", "template"] });
  * `-per-hour` or `-per-day` to result in the final unit passed to `Intl.NumberFormat`.
  * @enum {TravelUnitConfiguration}
  */
-DND5E.travelUnits = {
+VARLYN5E.travelUnits = {
   mph: {
-    label: "DND5E.UNITS.TRAVEL.Mile.Label",
-    abbreviationDay: "DND5E.UNITS.TRAVEL.Mile.AbbreviationDay",
-    abbreviationHour: "DND5E.UNITS.TRAVEL.Mile.AbbreviationHour",
+    label: "VARLYN5E.UNITS.TRAVEL.Mile.Label",
+    abbreviationDay: "VARLYN5E.UNITS.TRAVEL.Mile.AbbreviationDay",
+    abbreviationHour: "VARLYN5E.UNITS.TRAVEL.Mile.AbbreviationHour",
     formattingUnit: "mile",
     conversion: 1,
     type: "imperial"
   },
   kph: {
-    label: "DND5E.UNITS.TRAVEL.Kilometer.Label",
-    abbreviationDay: "DND5E.UNITS.TRAVEL.Kilometer.AbbreviationDay",
-    abbreviationHour: "DND5E.UNITS.TRAVEL.Kilometer.AbbreviationHour",
+    label: "VARLYN5E.UNITS.TRAVEL.Kilometer.Label",
+    abbreviationDay: "VARLYN5E.UNITS.TRAVEL.Kilometer.AbbreviationDay",
+    abbreviationHour: "VARLYN5E.UNITS.TRAVEL.Kilometer.AbbreviationHour",
     formattingUnit: "kilometer",
     conversion: 0.6,
     type: "metric"
@@ -42917,24 +42917,24 @@ preLocalize("travelUnits", { keys: ["label", "abbreviationDay", "abbreviationHou
  * The types of range that are used for measuring actions and effects.
  * @enum {string}
  */
-DND5E.rangeTypes = {
-  self: "DND5E.DistSelf",
-  touch: "DND5E.DistTouch",
-  spec: "DND5E.Special",
-  any: "DND5E.DistAny"
+VARLYN5E.rangeTypes = {
+  self: "VARLYN5E.DistSelf",
+  touch: "VARLYN5E.DistTouch",
+  spec: "VARLYN5E.Special",
+  any: "VARLYN5E.DistAny"
 };
 preLocalize("rangeTypes");
 
 /* -------------------------------------------- */
 
 /**
- * The valid units of measure for the range of an action or effect. A combination of `DND5E.movementUnits` and
- * `DND5E.rangeUnits`.
+ * The valid units of measure for the range of an action or effect. A combination of `VARLYN5E.movementUnits` and
+ * `VARLYN5E.rangeUnits`.
  * @enum {string}
  */
-DND5E.distanceUnits = {
-  ...Object.fromEntries(Object.entries(DND5E.movementUnits).map(([k, { label }]) => [k, label])),
-  ...DND5E.rangeTypes
+VARLYN5E.distanceUnits = {
+  ...Object.fromEntries(Object.entries(VARLYN5E.movementUnits).map(([k, { label }]) => [k, label])),
+  ...VARLYN5E.rangeTypes
 };
 preLocalize("distanceUnits");
 
@@ -42944,17 +42944,17 @@ preLocalize("distanceUnits");
  * The valid units for measurement of volume.
  * @enum {UnitConfiguration}
  */
-DND5E.volumeUnits = {
+VARLYN5E.volumeUnits = {
   cubicFoot: {
-    label: "DND5E.UNITS.VOLUME.CubicFoot.Label",
-    abbreviation: "DND5E.UNITS.VOLUME.CubicFoot.Abbreviation",
-    counted: "DND5E.UNITS.VOLUME.CubicFoot.Counted",
+    label: "VARLYN5E.UNITS.VOLUME.CubicFoot.Label",
+    abbreviation: "VARLYN5E.UNITS.VOLUME.CubicFoot.Abbreviation",
+    counted: "VARLYN5E.UNITS.VOLUME.CubicFoot.Counted",
     conversion: 1,
     type: "imperial"
   },
   liter: {
-    label: "DND5E.UNITS.VOLUME.Liter.Label",
-    abbreviation: "DND5E.UNITS.VOLUME.Liter.Abbreviation",
+    label: "VARLYN5E.UNITS.VOLUME.Liter.Label",
+    abbreviation: "VARLYN5E.UNITS.VOLUME.Liter.Abbreviation",
     conversion: 1 / 28.317,
     type: "metric"
   }
@@ -42967,32 +42967,32 @@ preLocalize("volumeUnits", { keys: ["label", "abbreviation"] });
  * The valid units for measurement of weight.
  * @enum {UnitConfiguration}
  */
-DND5E.weightUnits = {
+VARLYN5E.weightUnits = {
   lb: {
-    label: "DND5E.UNITS.WEIGHT.Pound.Label",
-    abbreviation: "DND5E.UNITS.WEIGHT.Pound.Abbreviation",
+    label: "VARLYN5E.UNITS.WEIGHT.Pound.Label",
+    abbreviation: "VARLYN5E.UNITS.WEIGHT.Pound.Abbreviation",
     conversion: 1,
     formattingUnit: "pound",
     type: "imperial"
   },
   tn: {
-    label: "DND5E.UNITS.WEIGHT.Ton.Label",
-    abbreviation: "DND5E.UNITS.WEIGHT.Ton.Abbreviation",
-    counted: "DND5E.UNITS.WEIGHT.Ton.Counted",
+    label: "VARLYN5E.UNITS.WEIGHT.Ton.Label",
+    abbreviation: "VARLYN5E.UNITS.WEIGHT.Ton.Abbreviation",
+    counted: "VARLYN5E.UNITS.WEIGHT.Ton.Counted",
     conversion: 2000,
     type: "imperial"
   },
   kg: {
-    label: "DND5E.UNITS.WEIGHT.Kilogram.Label",
-    abbreviation: "DND5E.UNITS.WEIGHT.Kilogram.Abbreviation",
+    label: "VARLYN5E.UNITS.WEIGHT.Kilogram.Label",
+    abbreviation: "VARLYN5E.UNITS.WEIGHT.Kilogram.Abbreviation",
     conversion: 2.5,
     formattingUnit: "kilogram",
     type: "metric"
   },
   Mg: {
-    label: "DND5E.UNITS.WEIGHT.Megagram.Label",
-    abbreviation: "DND5E.UNITS.WEIGHT.Megagram.Abbreviation",
-    counted: "DND5E.UNITS.WEIGHT.Megagram.Counted",
+    label: "VARLYN5E.UNITS.WEIGHT.Megagram.Label",
+    abbreviation: "VARLYN5E.UNITS.WEIGHT.Megagram.Abbreviation",
+    counted: "VARLYN5E.UNITS.WEIGHT.Megagram.Counted",
     conversion: 2500,
     type: "metric"
   }
@@ -43005,7 +43005,7 @@ preLocalize("weightUnits", { keys: ["label", "abbreviation"] });
  * Configure aspects of encumbrance calculation so that it could be configured by modules.
  * @type {EncumbranceConfiguration}
  */
-DND5E.encumbrance = {
+VARLYN5E.encumbrance = {
   currencyPerWeight: {
     imperial: 50,
     metric: 110
@@ -43013,15 +43013,15 @@ DND5E.encumbrance = {
   draftMultiplier: 5,
   effects: {
     encumbered: {
-      name: "EFFECT.DND5E.StatusEncumbered",
+      name: "EFFECT.VARLYN5E.StatusEncumbered",
       img: "systems/dnd5e/icons/svg/statuses/encumbered.svg"
     },
     heavilyEncumbered: {
-      name: "EFFECT.DND5E.StatusHeavilyEncumbered",
+      name: "EFFECT.VARLYN5E.StatusHeavilyEncumbered",
       img: "systems/dnd5e/icons/svg/statuses/heavily-encumbered.svg"
     },
     exceedingCarryingCapacity: {
-      name: "EFFECT.DND5E.StatusExceedingCarryingCapacity",
+      name: "EFFECT.VARLYN5E.StatusExceedingCarryingCapacity",
       img: "systems/dnd5e/icons/svg/statuses/exceeding-carrying-capacity.svg"
     }
   },
@@ -43070,42 +43070,42 @@ preLocalize("encumbrance.effects", { key: "name" });
  * Targeting types that apply to one or more distinct targets.
  * @enum {IndividualTargetDefinition}
  */
-DND5E.individualTargetTypes = {
+VARLYN5E.individualTargetTypes = {
   self: {
-    label: "DND5E.TARGET.Type.Self.Label",
+    label: "VARLYN5E.TARGET.Type.Self.Label",
     scalar: false
   },
   ally: {
-    label: "DND5E.TARGET.Type.Ally.Label",
-    counted: "DND5E.TARGET.Type.Ally.Counted"
+    label: "VARLYN5E.TARGET.Type.Ally.Label",
+    counted: "VARLYN5E.TARGET.Type.Ally.Counted"
   },
   enemy: {
-    label: "DND5E.TARGET.Type.Enemy.Label",
-    counted: "DND5E.TARGET.Type.Enemy.Counted"
+    label: "VARLYN5E.TARGET.Type.Enemy.Label",
+    counted: "VARLYN5E.TARGET.Type.Enemy.Counted"
   },
   creature: {
-    label: "DND5E.TARGET.Type.Creature.Label",
-    counted: "DND5E.TARGET.Type.Creature.Counted"
+    label: "VARLYN5E.TARGET.Type.Creature.Label",
+    counted: "VARLYN5E.TARGET.Type.Creature.Counted"
   },
   object: {
-    label: "DND5E.TARGET.Type.Object.Label",
-    counted: "DND5E.TARGET.Type.Object.Counted"
+    label: "VARLYN5E.TARGET.Type.Object.Label",
+    counted: "VARLYN5E.TARGET.Type.Object.Counted"
   },
   space: {
-    label: "DND5E.TARGET.Type.Space.Label",
-    counted: "DND5E.TARGET.Type.Space.Counted"
+    label: "VARLYN5E.TARGET.Type.Space.Label",
+    counted: "VARLYN5E.TARGET.Type.Space.Counted"
   },
   creatureOrObject: {
-    label: "DND5E.TARGET.Type.CreatureOrObject.Label",
-    counted: "DND5E.TARGET.Type.CreatureOrObject.Counted"
+    label: "VARLYN5E.TARGET.Type.CreatureOrObject.Label",
+    counted: "VARLYN5E.TARGET.Type.CreatureOrObject.Counted"
   },
   any: {
-    label: "DND5E.TARGET.Type.Any.Label",
-    counted: "DND5E.TARGET.Type.Target.Counted"
+    label: "VARLYN5E.TARGET.Type.Any.Label",
+    counted: "VARLYN5E.TARGET.Type.Target.Counted"
   },
   willing: {
-    label: "DND5E.TARGET.Type.WillingCreature.Label",
-    counted: "DND5E.TARGET.Type.WillingCreature.Counted"
+    label: "VARLYN5E.TARGET.Type.WillingCreature.Label",
+    counted: "VARLYN5E.TARGET.Type.WillingCreature.Counted"
   }
 };
 preLocalize("individualTargetTypes", { key: "label" });
@@ -43116,70 +43116,70 @@ preLocalize("individualTargetTypes", { key: "label" });
  * Targeting types that cover an area.
  * @enum {AreaTargetDefinition}
  */
-DND5E.areaTargetTypes = {
+VARLYN5E.areaTargetTypes = {
   circle: {
-    label: "DND5E.TARGET.Type.Circle.Label",
-    counted: "DND5E.TARGET.Type.Circle.Counted",
+    label: "VARLYN5E.TARGET.Type.Circle.Label",
+    counted: "VARLYN5E.TARGET.Type.Circle.Counted",
     template: "circle",
     sizes: ["radius"]
   },
   cone: {
-    label: "DND5E.TARGET.Type.Cone.Label",
-    counted: "DND5E.TARGET.Type.Cone.Counted",
+    label: "VARLYN5E.TARGET.Type.Cone.Label",
+    counted: "VARLYN5E.TARGET.Type.Cone.Counted",
     template: "cone",
     sizes: ["length"],
     standard: true
   },
   cube: {
-    label: "DND5E.TARGET.Type.Cube.Label",
-    counted: "DND5E.TARGET.Type.Cube.Counted",
+    label: "VARLYN5E.TARGET.Type.Cube.Label",
+    counted: "VARLYN5E.TARGET.Type.Cube.Counted",
     template: "rect",
     sizes: ["width"],
     standard: true
   },
   cylinder: {
-    label: "DND5E.TARGET.Type.Cylinder.Label",
-    counted: "DND5E.TARGET.Type.Cylinder.Counted",
+    label: "VARLYN5E.TARGET.Type.Cylinder.Label",
+    counted: "VARLYN5E.TARGET.Type.Cylinder.Counted",
     template: "circle",
     sizes: ["radius", "height"],
     standard: true
   },
   line: {
-    label: "DND5E.TARGET.Type.Line.Label",
-    counted: "DND5E.TARGET.Type.Line.Counted",
+    label: "VARLYN5E.TARGET.Type.Line.Label",
+    counted: "VARLYN5E.TARGET.Type.Line.Counted",
     template: "ray",
     sizes: ["length", "width"],
     standard: true
   },
   radius: {
-    label: "DND5E.TARGET.Type.Emanation.Label",
-    counted: "DND5E.TARGET.Type.Emanation.Counted",
+    label: "VARLYN5E.TARGET.Type.Emanation.Label",
+    counted: "VARLYN5E.TARGET.Type.Emanation.Counted",
     template: "circle",
     standard: true
   },
   sphere: {
-    label: "DND5E.TARGET.Type.Sphere.Label",
-    counted: "DND5E.TARGET.Type.Sphere.Counted",
+    label: "VARLYN5E.TARGET.Type.Sphere.Label",
+    counted: "VARLYN5E.TARGET.Type.Sphere.Counted",
     template: "circle",
     sizes: ["radius"],
     standard: true
   },
   square: {
-    label: "DND5E.TARGET.Type.Square.Label",
-    counted: "DND5E.TARGET.Type.Square.Counted",
+    label: "VARLYN5E.TARGET.Type.Square.Label",
+    counted: "VARLYN5E.TARGET.Type.Square.Counted",
     template: "rect",
     sizes: ["width"]
   },
   wall: {
-    label: "DND5E.TARGET.Type.Wall.Label",
-    counted: "DND5E.TARGET.Type.Wall.Counted",
+    label: "VARLYN5E.TARGET.Type.Wall.Label",
+    counted: "VARLYN5E.TARGET.Type.Wall.Counted",
     template: "ray",
     sizes: ["length", "thickness", "height"]
   }
 };
 preLocalize("areaTargetTypes", { key: "label", sort: true });
 
-Object.defineProperty(DND5E, "areaTargetOptions", {
+Object.defineProperty(VARLYN5E, "areaTargetOptions", {
   get() {
     const { primary, secondary } = Object.entries(this.areaTargetTypes).reduce((obj, [value, data]) => {
       const entry = { value, label: data.label };
@@ -43197,9 +43197,9 @@ Object.defineProperty(DND5E, "areaTargetOptions", {
  * The types of single or area targets which can be applied to abilities.
  * @enum {string}
  */
-DND5E.targetTypes = {
-  ...Object.fromEntries(Object.entries(DND5E.individualTargetTypes).map(([k, v]) => [k, v.label])),
-  ...Object.fromEntries(Object.entries(DND5E.areaTargetTypes).map(([k, v]) => [k, v.label]))
+VARLYN5E.targetTypes = {
+  ...Object.fromEntries(Object.entries(VARLYN5E.individualTargetTypes).map(([k, v]) => [k, v.label])),
+  ...Object.fromEntries(Object.entries(VARLYN5E.areaTargetTypes).map(([k, v]) => [k, v.label]))
 };
 preLocalize("targetTypes", { sort: true });
 
@@ -43209,7 +43209,7 @@ preLocalize("targetTypes", { sort: true });
  * Denominations of hit dice which can apply to classes.
  * @type {string[]}
  */
-DND5E.hitDieTypes = ["d4", "d6", "d8", "d10", "d12"];
+VARLYN5E.hitDieTypes = ["d4", "d6", "d8", "d10", "d12"];
 
 /* -------------------------------------------- */
 
@@ -43217,14 +43217,14 @@ DND5E.hitDieTypes = ["d4", "d6", "d8", "d10", "d12"];
  * Types of rests.
  * @enum {RestTypeConfiguration}
  */
-DND5E.restTypes = {
+VARLYN5E.restTypes = {
   short: {
     duration: {
       normal: 60,
       gritty: 480,
       epic: 1
     },
-    label: "DND5E.REST.Short.Label",
+    label: "VARLYN5E.REST.Short.Label",
     icon: "fa-solid fa-utensils",
     dialogClass: ShortRestDialog,
     activationPeriods: ["shortRest"],
@@ -43238,7 +43238,7 @@ DND5E.restTypes = {
       epic: 60
     },
     exhaustionDelta: -1,
-    label: "DND5E.REST.Long.Label",
+    label: "VARLYN5E.REST.Long.Label",
     icon: "fa-solid fa-campground",
     dialogClass: LongRestDialog,
     newDay: true,
@@ -43259,22 +43259,22 @@ preLocalize("restTypes", { key: "label" });
  * The set of possible sensory perception types which an Actor may have.
  * @enum {SenseConfiguration}
  */
-DND5E.senses = {
+VARLYN5E.senses = {
   blindsight: {
-    label: "DND5E.SenseBlindsight",
+    label: "VARLYN5E.SenseBlindsight",
     detectionMode: "blindsight"
   },
   darkvision: {
-    label: "DND5E.SenseDarkvision",
+    label: "VARLYN5E.SenseDarkvision",
     grantsSight: true,
     visionMode: "darkvision"
   },
   tremorsense: {
-    label: "DND5E.SenseTremorsense",
+    label: "VARLYN5E.SenseTremorsense",
     detectionMode: "feelTremor"
   },
   truesight: {
-    label: "DND5E.SenseTruesight",
+    label: "VARLYN5E.SenseTruesight",
     detectionMode: "seeAll",
     grantsSight: true,
     visionMode: "darkvision"
@@ -43291,15 +43291,15 @@ patchConfig("senses", "label", { since: "DnD5e 6.0", until: "DnD5e 6.2" });
  * Classifications of attacks based on what is performing them.
  * @enum {{ label: string }}
  */
-DND5E.attackClassifications = {
+VARLYN5E.attackClassifications = {
   weapon: {
-    label: "DND5E.ATTACK.Classification.Weapon"
+    label: "VARLYN5E.ATTACK.Classification.Weapon"
   },
   spell: {
-    label: "DND5E.ATTACK.Classification.Spell"
+    label: "VARLYN5E.ATTACK.Classification.Spell"
   },
   unarmed: {
-    label: "DND5E.ATTACK.Classification.Unarmed"
+    label: "VARLYN5E.ATTACK.Classification.Unarmed"
   }
 };
 preLocalize("attackClassifications", { key: "label" });
@@ -43310,24 +43310,24 @@ preLocalize("attackClassifications", { key: "label" });
  * Attack modes available for weapons.
  * @enum {string}
  */
-DND5E.attackModes = Object.seal({
+VARLYN5E.attackModes = Object.seal({
   oneHanded: {
-    label: "DND5E.ATTACK.Mode.OneHanded"
+    label: "VARLYN5E.ATTACK.Mode.OneHanded"
   },
   twoHanded: {
-    label: "DND5E.ATTACK.Mode.TwoHanded"
+    label: "VARLYN5E.ATTACK.Mode.TwoHanded"
   },
   offhand: {
-    label: "DND5E.ATTACK.Mode.Offhand"
+    label: "VARLYN5E.ATTACK.Mode.Offhand"
   },
   ranged: {
-    label: "DND5E.ATTACK.Mode.Ranged"
+    label: "VARLYN5E.ATTACK.Mode.Ranged"
   },
   thrown: {
-    label: "DND5E.ATTACK.Mode.Thrown"
+    label: "VARLYN5E.ATTACK.Mode.Thrown"
   },
   "thrown-offhand": {
-    label: "DND5E.ATTACK.Mode.ThrownOffhand"
+    label: "VARLYN5E.ATTACK.Mode.ThrownOffhand"
   }
 });
 preLocalize("attackModes", { key: "label" });
@@ -43338,12 +43338,12 @@ preLocalize("attackModes", { key: "label" });
  * Types of attacks based on range.
  * @enum {{ label: string }}
  */
-DND5E.attackTypes = Object.seal({
+VARLYN5E.attackTypes = Object.seal({
   melee: {
-    label: "DND5E.ATTACK.Type.Melee"
+    label: "VARLYN5E.ATTACK.Type.Melee"
   },
   ranged: {
-    label: "DND5E.ATTACK.Type.Ranged"
+    label: "VARLYN5E.ATTACK.Type.Ranged"
   }
 });
 preLocalize("attackTypes", { key: "label" });
@@ -43357,7 +43357,7 @@ preLocalize("attackTypes", { key: "label" });
  * The entries of this array represent the spell slot progression for a full spell-caster.
  * @type {SpellcastingTable5e}
  */
-const SPELL_SLOT_TABLE = DND5E.SPELL_SLOT_TABLE = [
+const SPELL_SLOT_TABLE = VARLYN5E.SPELL_SLOT_TABLE = [
   [2],
   [3],
   [4, 2],
@@ -43386,7 +43386,7 @@ const SPELL_SLOT_TABLE = DND5E.SPELL_SLOT_TABLE = [
  * Define the pact slot & level progression by pact caster level.
  * @type {SpellcastingTableSingle5e}
  */
-const pactCastingProgression = DND5E.pactCastingProgression = {
+const pactCastingProgression = VARLYN5E.pactCastingProgression = {
   1: { slots: 1, level: 1 },
   2: { slots: 2, level: 1 },
   3: { slots: 2, level: 2 },
@@ -43410,21 +43410,21 @@ const pactCastingProgression = DND5E.pactCastingProgression = {
  * Available spellcasting methods.
  * @type {Record<string, SpellcastingMethod5e>}
  */
-DND5E.spellcasting = {
+VARLYN5E.spellcasting = {
   atwill: {
-    label: "DND5E.SPELLCASTING.METHODS.AtWill.label",
+    label: "VARLYN5E.SPELLCASTING.METHODS.AtWill.label",
     order: -30
   },
   innate: {
-    label: "DND5E.SPELLCASTING.METHODS.Innate.label",
+    label: "VARLYN5E.SPELLCASTING.METHODS.Innate.label",
     order: -20
   },
   ritual: {
-    label: "DND5E.SPELLCASTING.METHODS.Ritual.label",
+    label: "VARLYN5E.SPELLCASTING.METHODS.Ritual.label",
     order: -10
   },
   pact: {
-    label: "DND5E.SPELLCASTING.METHODS.Pact.label",
+    label: "VARLYN5E.SPELLCASTING.METHODS.Pact.label",
     type: "single",
     cantrips: true,
     prepares: true,
@@ -43433,13 +43433,13 @@ DND5E.spellcasting = {
     table: pactCastingProgression,
     progression: {
       pact: {
-        label: "DND5E.SPELLCASTING.METHODS.Pact.Full.label",
+        label: "VARLYN5E.SPELLCASTING.METHODS.Pact.Full.label",
         divisor: 1
       }
     }
   },
   spell: {
-    label: "DND5E.SPELLCASTING.METHODS.Spell.label",
+    label: "VARLYN5E.SPELLCASTING.METHODS.Spell.label",
     type: "multi",
     cantrips: true,
     prepares: true,
@@ -43448,16 +43448,16 @@ DND5E.spellcasting = {
     table: SPELL_SLOT_TABLE,
     progression: {
       full: {
-        label: "DND5E.SPELLCASTING.METHODS.Spell.Full.label",
+        label: "VARLYN5E.SPELLCASTING.METHODS.Spell.Full.label",
         divisor: 1
       },
       half: {
-        label: "DND5E.SPELLCASTING.METHODS.Spell.Half.label",
+        label: "VARLYN5E.SPELLCASTING.METHODS.Spell.Half.label",
         divisor: 2,
         roundUp: true
       },
       third: {
-        label: "DND5E.SPELLCASTING.METHODS.Spell.Third.label",
+        label: "VARLYN5E.SPELLCASTING.METHODS.Spell.Third.label",
         divisor: 3
       }
     }
@@ -43473,17 +43473,17 @@ preLocalize("spellcasting.pact.progression", { key: "label" });
  * Spell preparation states.
  * @type {Record<string, SpellcastingPreparationState5e>}
  */
-DND5E.spellPreparationStates = {
+VARLYN5E.spellPreparationStates = {
   unprepared: {
-    label: "DND5E.SPELLCASTING.STATES.Unprepared",
+    label: "VARLYN5E.SPELLCASTING.STATES.Unprepared",
     value: 0
   },
   prepared: {
-    label: "DND5E.SPELLCASTING.STATES.Prepared",
+    label: "VARLYN5E.SPELLCASTING.STATES.Prepared",
     value: 1
   },
   always: {
-    label: "DND5E.SPELLCASTING.STATES.AlwaysPrepared",
+    label: "VARLYN5E.SPELLCASTING.STATES.AlwaysPrepared",
     value: 2
   }
 };
@@ -43496,7 +43496,7 @@ preLocalize("spellPreparationStates", { key: "label" });
  * Varlyn spell lists will be added here once the varlyn-spells compendium pack is created (Phase 3.8).
  * @type {string[]}
  */
-DND5E.SPELL_LISTS = Object.freeze([]);
+VARLYN5E.SPELL_LISTS = Object.freeze([]);
 
 /* -------------------------------------------- */
 
@@ -43504,17 +43504,17 @@ DND5E.SPELL_LISTS = Object.freeze([]);
  * Valid spell levels.
  * @enum {string}
  */
-DND5E.spellLevels = {
-  0: "DND5E.SpellLevel0",
-  1: "DND5E.SpellLevel1",
-  2: "DND5E.SpellLevel2",
-  3: "DND5E.SpellLevel3",
-  4: "DND5E.SpellLevel4",
-  5: "DND5E.SpellLevel5",
-  6: "DND5E.SpellLevel6",
-  7: "DND5E.SpellLevel7",
-  8: "DND5E.SpellLevel8",
-  9: "DND5E.SpellLevel9"
+VARLYN5E.spellLevels = {
+  0: "VARLYN5E.SpellLevel0",
+  1: "VARLYN5E.SpellLevel1",
+  2: "VARLYN5E.SpellLevel2",
+  3: "VARLYN5E.SpellLevel3",
+  4: "VARLYN5E.SpellLevel4",
+  5: "VARLYN5E.SpellLevel5",
+  6: "VARLYN5E.SpellLevel6",
+  7: "VARLYN5E.SpellLevel7",
+  8: "VARLYN5E.SpellLevel8",
+  9: "VARLYN5E.SpellLevel9"
 };
 preLocalize("spellLevels");
 
@@ -43524,10 +43524,10 @@ preLocalize("spellLevels");
  * The available choices for how spell damage scaling may be computed.
  * @enum {string}
  */
-DND5E.spellScalingModes = {
-  none: "DND5E.SpellNone",
-  cantrip: "DND5E.SpellCantrip",
-  level: "DND5E.SpellLevel"
+VARLYN5E.spellScalingModes = {
+  none: "VARLYN5E.SpellNone",
+  cantrip: "VARLYN5E.SpellCantrip",
+  level: "VARLYN5E.SpellLevel"
 };
 preLocalize("spellScalingModes", { sort: true });
 
@@ -43537,44 +43537,44 @@ preLocalize("spellScalingModes", { sort: true });
  * Schools to which a spell can belong.
  * @enum {SpellSchoolConfiguration}
  */
-DND5E.spellSchools = {
+VARLYN5E.spellSchools = {
   abj: {
-    label: "DND5E.SchoolAbj",
+    label: "VARLYN5E.SchoolAbj",
     icon: "systems/dnd5e/icons/svg/schools/abjuration.svg",
     fullKey: "abjuration"
   },
   con: {
-    label: "DND5E.SchoolCon",
+    label: "VARLYN5E.SchoolCon",
     icon: "systems/dnd5e/icons/svg/schools/conjuration.svg",
     fullKey: "conjuration"
   },
   div: {
-    label: "DND5E.SchoolDiv",
+    label: "VARLYN5E.SchoolDiv",
     icon: "systems/dnd5e/icons/svg/schools/divination.svg",
     fullKey: "divination"
   },
   enc: {
-    label: "DND5E.SchoolEnc",
+    label: "VARLYN5E.SchoolEnc",
     icon: "systems/dnd5e/icons/svg/schools/enchantment.svg",
     fullKey: "enchantment"
   },
   evo: {
-    label: "DND5E.SchoolEvo",
+    label: "VARLYN5E.SchoolEvo",
     icon: "systems/dnd5e/icons/svg/schools/evocation.svg",
     fullKey: "evocation"
   },
   ill: {
-    label: "DND5E.SchoolIll",
+    label: "VARLYN5E.SchoolIll",
     icon: "systems/dnd5e/icons/svg/schools/illusion.svg",
     fullKey: "illusion"
   },
   nec: {
-    label: "DND5E.SchoolNec",
+    label: "VARLYN5E.SchoolNec",
     icon: "systems/dnd5e/icons/svg/schools/necromancy.svg",
     fullKey: "necromancy"
   },
   trs: {
-    label: "DND5E.SchoolTrs",
+    label: "VARLYN5E.SchoolTrs",
     icon: "systems/dnd5e/icons/svg/schools/transmutation.svg",
     fullKey: "transmutation"
   }
@@ -43587,21 +43587,21 @@ preLocalize("spellSchools", { key: "label", sort: true });
  * Types of spell lists.
  * @enum {string}
  */
-DND5E.spellListTypes = {
+VARLYN5E.spellListTypes = {
   class: "TYPES.Item.class",
   subclass: "TYPES.Item.subclass",
   race: "TYPES.Item.race",
-  other: "JOURNALENTRYPAGE.DND5E.SpellList.Type.Other"
+  other: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Type.Other"
 };
 preLocalize("spellListTypes");
 
 /* -------------------------------------------- */
 
 /**
- * Spell scroll item ID within the `DND5E.sourcePacks` compendium or a full UUID for each spell level.
+ * Spell scroll item ID within the `VARLYN5E.sourcePacks` compendium or a full UUID for each spell level.
  * @enum {string}
  */
-DND5E.spellScrollIds = {
+VARLYN5E.spellScrollIds = {
 };
 
 /* -------------------------------------------- */
@@ -43611,7 +43611,7 @@ DND5E.spellScrollIds = {
  * then the nearest level lower than it will be selected.
  * @enum {SpellScrollValues}
  */
-DND5E.spellScrollValues = {
+VARLYN5E.spellScrollValues = {
   0: { dc: 13, bonus: 5 },
   3: { dc: 15, bonus: 7 },
   5: { dc: 17, bonus: 9 },
@@ -43625,7 +43625,7 @@ DND5E.spellScrollValues = {
  * Compendium packs used for localized items.
  * @enum {string}
  */
-DND5E.sourcePacks = {};
+VARLYN5E.sourcePacks = {};
 
 /* -------------------------------------------- */
 
@@ -43633,111 +43633,111 @@ DND5E.sourcePacks = {};
  * Settings that configuration how actors are changed when transformation is applied.
  * @typedef {TransformationConfiguration}
  */
-DND5E.transformation = {
+VARLYN5E.transformation = {
   effects: {
     all: {
-      label: "DND5E.TRANSFORM.Setting.Effects.All.Label",
-      hint: "DND5E.TRANSFORM.Setting.Effects.All.Hint",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.All.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Effects.All.Hint",
       disables: ["effects.*"]
     },
     origin: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Origin.Label",
-      hint: "DND5E.TRANSFORM.Setting.Effects.Origin.Hint",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Origin.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Effects.Origin.Hint",
       default: true
     },
     otherOrigin: {
-      label: "DND5E.TRANSFORM.Setting.Effects.OtherOrigin.Label",
-      hint: "DND5E.TRANSFORM.Setting.Effects.OtherOrigin.Hint",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.OtherOrigin.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Effects.OtherOrigin.Hint",
       default: true
     },
     background: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Background.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Background.Label",
       default: true
     },
     class: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Class.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Class.Label",
       default: true
     },
     feat: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Feature.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Feature.Label",
       default: true
     },
     equipment: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Equipment.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Equipment.Label",
       default: true
     },
     spell: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Spell.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Spell.Label",
       default: true
     }
   },
   keep: {
     physical: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Physical.Label",
-      hint: "DND5E.TRANSFORM.Setting.Keep.Physical.Hint"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Physical.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Keep.Physical.Hint"
     },
     mental: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Mental.Label",
-      hint: "DND5E.TRANSFORM.Setting.Keep.Mental.Hint"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Mental.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Keep.Mental.Hint"
     },
     saves: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Saves.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Saves.Label",
       disables: ["merge.saves"]
     },
     skills: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Skills.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Skills.Label",
       disables: ["merge.skills"]
     },
     gearProf: {
-      label: "DND5E.TRANSFORM.Setting.Keep.GearProficiency.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.GearProficiency.Label"
     },
     languages: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Languages.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Languages.Label"
     },
     class: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Proficiency.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Proficiency.Label"
     },
     feats: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Features.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Features.Label"
     },
     items: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Equipment.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Equipment.Label"
     },
     spells: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Spells.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Spells.Label"
     },
     bio: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Biography.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Biography.Label"
     },
     type: {
-      label: "DND5E.TRANSFORM.Setting.Keep.CreatureType.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.CreatureType.Label"
     },
     hp: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Health.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Health.Label"
     },
     tempHP: {
-      label: "DND5E.TRANSFORM.Setting.Keep.TempHP.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.TempHP.Label"
     },
     resistances: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Resistances.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Resistances.Label"
     },
     vision: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Vision.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Vision.Label",
       default: true
     },
     self: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Self.Label",
-      hint: "DND5E.TRANSFORM.Setting.Keep.Self.Hint",
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Self.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Keep.Self.Hint",
       disables: ["keep.*", "merge.*", "minimumAC", "tempFormula"]
     }
   },
   merge: {
     saves: {
-      label: "DND5E.TRANSFORM.Setting.Merge.Saves.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Merge.Saves.Label",
       disables: ["keep.saves"]
     },
     skills: {
-      label: "DND5E.TRANSFORM.Setting.Merge.Skills.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Merge.Skills.Label",
       disables: ["keep.skills"]
     }
   },
@@ -43745,7 +43745,7 @@ DND5E.transformation = {
   presets: {
     wildshape: {
       icon: '<i class="fas fa-paw" inert></i>',
-      label: "DND5E.TRANSFORM.Preset.WildShape.Label",
+      label: "VARLYN5E.TRANSFORM.Preset.WildShape.Label",
       settings: {
         effects: new Set(["otherOrigin", "origin", "feat", "spell", "class"]),
         keep: new Set(["bio", "class", "feats", "hp", "languages", "mental", "tempHP", "type"]),
@@ -43757,7 +43757,7 @@ DND5E.transformation = {
     },
     polymorph: {
       icon: '<i class="fas fa-pastafarianism" inert></i>',
-      label: "DND5E.TRANSFORM.Preset.Polymorph.Label",
+      label: "VARLYN5E.TRANSFORM.Preset.Polymorph.Label",
       settings: {
         effects: new Set(["otherOrigin", "origin", "spell"]),
         keep: new Set(["hp", "type"]),
@@ -43766,7 +43766,7 @@ DND5E.transformation = {
     },
     polymorphSelf: {
       icon: '<i class="fas fa-eye" inert></i>',
-      label: "DND5E.TRANSFORM.Preset.Appearance.Label",
+      label: "VARLYN5E.TRANSFORM.Preset.Appearance.Label",
       settings: {
         effects: new Set(["all"]),
         keep: new Set(["self"])
@@ -43787,11 +43787,11 @@ preLocalize("transformation.presets", { key: "label", sort: true });
  * The key for each level represents its proficiency multiplier.
  * @enum {string}
  */
-DND5E.proficiencyLevels = {
-  0: "DND5E.NotProficient",
-  1: "DND5E.Proficient",
-  0.5: "DND5E.HalfProficient",
-  2: "DND5E.Expertise"
+VARLYN5E.proficiencyLevels = {
+  0: "VARLYN5E.NotProficient",
+  1: "VARLYN5E.Proficient",
+  0.5: "VARLYN5E.HalfProficient",
+  2: "VARLYN5E.Expertise"
 };
 preLocalize("proficiencyLevels");
 
@@ -43801,9 +43801,9 @@ preLocalize("proficiencyLevels");
  * Weapon and armor item proficiency levels.
  * @enum {string}
  */
-DND5E.weaponAndArmorProficiencyLevels = {
-  0: "DND5E.NotProficient",
-  1: "DND5E.Proficient"
+VARLYN5E.weaponAndArmorProficiencyLevels = {
+  0: "VARLYN5E.NotProficient",
+  1: "VARLYN5E.Proficient"
 };
 preLocalize("weaponAndArmorProficiencyLevels");
 
@@ -43814,11 +43814,11 @@ preLocalize("weaponAndArmorProficiencyLevels");
  * of cover are in play, we take the highest value.
  * @enum {string}
  */
-DND5E.cover = {
-  0: "DND5E.None",
-  .5: "DND5E.CoverHalf",
-  .75: "DND5E.CoverThreeQuarters",
-  1: "DND5E.CoverTotal"
+VARLYN5E.cover = {
+  0: "VARLYN5E.None",
+  .5: "VARLYN5E.CoverHalf",
+  .75: "VARLYN5E.CoverThreeQuarters",
+  1: "VARLYN5E.CoverTotal"
 };
 preLocalize("cover");
 
@@ -43829,7 +43829,7 @@ preLocalize("cover");
  * @type {string[]}
  * @deprecated since v10
  */
-DND5E.trackableAttributes = [
+VARLYN5E.trackableAttributes = [
   "attributes.ac.value", "attributes.init.bonus", "attributes.movement", "attributes.senses",
   "attributes.spell.attack", "attributes.spell.dc", "attributes.spell.level", "details.cr",
   "details.xp.value", "skills.*.passive", "abilities.*.value"
@@ -43841,7 +43841,7 @@ DND5E.trackableAttributes = [
  * A selection of actor and item attributes that are valid targets for item resource consumption.
  * @type {string[]}
  */
-DND5E.consumableResources = [
+VARLYN5E.consumableResources = [
   // Configured during init.
 ];
 
@@ -43851,127 +43851,127 @@ DND5E.consumableResources = [
  * Conditions that can affect an actor.
  * @enum {ConditionConfiguration}
  */
-DND5E.conditionTypes = {
+VARLYN5E.conditionTypes = {
   bleeding: {
-    name: "EFFECT.DND5E.StatusBleeding",
+    name: "EFFECT.VARLYN5E.StatusBleeding",
     img: "systems/dnd5e/icons/svg/statuses/bleeding.svg",
     pseudo: true
   },
   blinded: {
-    name: "DND5E.ConBlinded",
+    name: "VARLYN5E.ConBlinded",
     img: "systems/dnd5e/icons/svg/statuses/blinded.svg",
     special: "BLIND"
   },
   burning: {
-    name: "EFFECT.DND5E.StatusBurning",
+    name: "EFFECT.VARLYN5E.StatusBurning",
     img: "systems/dnd5e/icons/svg/statuses/burning.svg",
     pseudo: true
   },
   charmed: {
-    name: "DND5E.ConCharmed",
+    name: "VARLYN5E.ConCharmed",
     img: "systems/dnd5e/icons/svg/statuses/charmed.svg"
   },
   cursed: {
-    name: "EFFECT.DND5E.StatusCursed",
+    name: "EFFECT.VARLYN5E.StatusCursed",
     img: "systems/dnd5e/icons/svg/statuses/cursed.svg",
     pseudo: true
   },
   dehydration: {
-    name: "EFFECT.DND5E.StatusDehydration",
+    name: "EFFECT.VARLYN5E.StatusDehydration",
     img: "systems/dnd5e/icons/svg/statuses/dehydration.svg",
     pseudo: true
   },
   deafened: {
-    name: "DND5E.ConDeafened",
+    name: "VARLYN5E.ConDeafened",
     img: "systems/dnd5e/icons/svg/statuses/deafened.svg"
   },
   diseased: {
-    name: "DND5E.ConDiseased",
+    name: "VARLYN5E.ConDiseased",
     img: "systems/dnd5e/icons/svg/statuses/diseased.svg",
     pseudo: true
   },
   exhaustion: {
-    name: "DND5E.ConExhaustion",
+    name: "VARLYN5E.ConExhaustion",
     img: "systems/dnd5e/icons/svg/statuses/exhaustion.svg",
     levels: 6,
     reduction: { rolls: 2, speed: 5 }
   },
   falling: {
-    name: "EFFECT.DND5E.StatusFalling",
+    name: "EFFECT.VARLYN5E.StatusFalling",
     img: "systems/dnd5e/icons/svg/statuses/falling.svg",
     pseudo: true
   },
   frightened: {
-    name: "DND5E.ConFrightened",
+    name: "VARLYN5E.ConFrightened",
     img: "systems/dnd5e/icons/svg/statuses/frightened.svg"
   },
   grappled: {
-    name: "DND5E.ConGrappled",
+    name: "VARLYN5E.ConGrappled",
     img: "systems/dnd5e/icons/svg/statuses/grappled.svg"
   },
   incapacitated: {
-    name: "DND5E.ConIncapacitated",
+    name: "VARLYN5E.ConIncapacitated",
     img: "systems/dnd5e/icons/svg/statuses/incapacitated.svg",
     neverBlockMovement: true
   },
   invisible: {
-    name: "DND5E.ConInvisible",
+    name: "VARLYN5E.ConInvisible",
     img: "systems/dnd5e/icons/svg/statuses/invisible.svg"
   },
   malnutrition: {
-    name: "EFFECT.DND5E.StatusMalnutrition",
+    name: "EFFECT.VARLYN5E.StatusMalnutrition",
     img: "systems/dnd5e/icons/svg/statuses/malnutrition.svg",
     pseudo: true
   },
   paralyzed: {
-    name: "DND5E.ConParalyzed",
+    name: "VARLYN5E.ConParalyzed",
     img: "systems/dnd5e/icons/svg/statuses/paralyzed.svg",
     statuses: ["incapacitated"]
   },
   petrified: {
-    name: "DND5E.ConPetrified",
+    name: "VARLYN5E.ConPetrified",
     img: "systems/dnd5e/icons/svg/statuses/petrified.svg",
     statuses: ["incapacitated"]
   },
   poisoned: {
-    name: "DND5E.ConPoisoned",
+    name: "VARLYN5E.ConPoisoned",
     img: "systems/dnd5e/icons/svg/statuses/poisoned.svg"
   },
   prone: {
-    name: "DND5E.ConProne",
+    name: "VARLYN5E.ConProne",
     img: "systems/dnd5e/icons/svg/statuses/prone.svg"
   },
   restrained: {
-    name: "DND5E.ConRestrained",
+    name: "VARLYN5E.ConRestrained",
     img: "systems/dnd5e/icons/svg/statuses/restrained.svg"
   },
   silenced: {
-    name: "EFFECT.DND5E.StatusSilenced",
+    name: "EFFECT.VARLYN5E.StatusSilenced",
     img: "systems/dnd5e/icons/svg/statuses/silenced.svg",
     pseudo: true
   },
   stunned: {
-    name: "DND5E.ConStunned",
+    name: "VARLYN5E.ConStunned",
     img: "systems/dnd5e/icons/svg/statuses/stunned.svg",
     statuses: ["incapacitated"]
   },
   suffocation: {
-    name: "EFFECT.DND5E.StatusSuffocation",
+    name: "EFFECT.VARLYN5E.StatusSuffocation",
     img: "systems/dnd5e/icons/svg/statuses/suffocation.svg",
     pseudo: true
   },
   surprised: {
-    name: "EFFECT.DND5E.StatusSurprised",
+    name: "EFFECT.VARLYN5E.StatusSurprised",
     img: "systems/dnd5e/icons/svg/statuses/surprised.svg",
     pseudo: true
   },
   transformed: {
-    name: "EFFECT.DND5E.StatusTransformed",
+    name: "EFFECT.VARLYN5E.StatusTransformed",
     img: "systems/dnd5e/icons/svg/statuses/transformed.svg",
     pseudo: true
   },
   unconscious: {
-    name: "DND5E.ConUnconscious",
+    name: "VARLYN5E.ConUnconscious",
     img: "systems/dnd5e/icons/svg/statuses/unconscious.svg",
     statuses: ["incapacitated"],
     riders: ["prone"]
@@ -43986,7 +43986,7 @@ preLocalize("conditionTypes", { key: "name", sort: true });
  * and with a number appended for a level of exhaustion.
  * @enum {Set<string>}
  */
-DND5E.conditionEffects = {
+VARLYN5E.conditionEffects = {
   noMovement: new Set(["exhaustion-5", "grappled", "paralyzed", "petrified", "restrained", "unconscious"]),
   halfMovement: new Set(["exhaustion-2"]),
   crawl: new Set(["prone", "exceedingCarryingCapacity"]),
@@ -44013,78 +44013,78 @@ DND5E.conditionEffects = {
  * data will be merged into the core data.
  * @enum {StatusEffectConfig5e}
  */
-DND5E.statusEffects = {
+VARLYN5E.statusEffects = {
   burrowing: {
-    name: "EFFECT.DND5E.StatusBurrowing",
+    name: "EFFECT.VARLYN5E.StatusBurrowing",
     img: "systems/dnd5e/icons/svg/statuses/burrowing.svg",
     special: "BURROW"
   },
   concentrating: {
-    name: "EFFECT.DND5E.StatusConcentrating",
+    name: "EFFECT.VARLYN5E.StatusConcentrating",
     img: "systems/dnd5e/icons/svg/statuses/concentrating.svg",
     special: "CONCENTRATING"
   },
   coverHalf: {
-    name: "EFFECT.DND5E.StatusHalfCover",
+    name: "EFFECT.VARLYN5E.StatusHalfCover",
     img: "systems/dnd5e/icons/svg/statuses/cover-half.svg",
     order: 2,
     exclusiveGroup: "cover",
     coverBonus: 2
   },
   coverThreeQuarters: {
-    name: "EFFECT.DND5E.StatusThreeQuartersCover",
+    name: "EFFECT.VARLYN5E.StatusThreeQuartersCover",
     img: "systems/dnd5e/icons/svg/statuses/cover-three-quarters.svg",
     order: 3,
     exclusiveGroup: "cover",
     coverBonus: 5
   },
   coverTotal: {
-    name: "EFFECT.DND5E.StatusTotalCover",
+    name: "EFFECT.VARLYN5E.StatusTotalCover",
     img: "systems/dnd5e/icons/svg/statuses/cover-total.svg",
     order: 4,
     exclusiveGroup: "cover"
   },
   dead: {
-    name: "EFFECT.DND5E.StatusDead",
+    name: "EFFECT.VARLYN5E.StatusDead",
     img: "systems/dnd5e/icons/svg/statuses/dead.svg",
     special: "DEFEATED",
     order: 1,
     neverBlockMovement: true
   },
   dodging: {
-    name: "EFFECT.DND5E.StatusDodging",
+    name: "EFFECT.VARLYN5E.StatusDodging",
     img: "systems/dnd5e/icons/svg/statuses/dodging.svg"
   },
   ethereal: {
-    name: "EFFECT.DND5E.StatusEthereal",
+    name: "EFFECT.VARLYN5E.StatusEthereal",
     img: "systems/dnd5e/icons/svg/statuses/ethereal.svg",
     neverBlockMovement: true
   },
   flying: {
-    name: "EFFECT.DND5E.StatusFlying",
+    name: "EFFECT.VARLYN5E.StatusFlying",
     img: "systems/dnd5e/icons/svg/statuses/flying.svg",
     special: "FLY"
   },
   hiding: {
-    name: "EFFECT.DND5E.StatusHiding",
+    name: "EFFECT.VARLYN5E.StatusHiding",
     img: "systems/dnd5e/icons/svg/statuses/hiding.svg"
   },
   hovering: {
-    name: "EFFECT.DND5E.StatusHovering",
+    name: "EFFECT.VARLYN5E.StatusHovering",
     img: "systems/dnd5e/icons/svg/statuses/hovering.svg",
     special: "HOVER"
   },
   marked: {
-    name: "EFFECT.DND5E.StatusMarked",
+    name: "EFFECT.VARLYN5E.StatusMarked",
     img: "systems/dnd5e/icons/svg/statuses/marked.svg"
   },
   sleeping: {
-    name: "EFFECT.DND5E.StatusSleeping",
+    name: "EFFECT.VARLYN5E.StatusSleeping",
     img: "systems/dnd5e/icons/svg/statuses/sleeping.svg",
     statuses: ["incapacitated", "unconscious"]
   },
   stable: {
-    name: "EFFECT.DND5E.StatusStable",
+    name: "EFFECT.VARLYN5E.StatusStable",
     img: "systems/dnd5e/icons/svg/statuses/stable.svg"
   }
 };
@@ -44095,7 +44095,7 @@ DND5E.statusEffects = {
  * Status effects that never block token movement. Populated during the setup process.
  * @type {Set<string>}
  */
-DND5E.neverBlockStatuses = new Set();
+VARLYN5E.neverBlockStatuses = new Set();
 
 /* -------------------------------------------- */
 
@@ -44103,8 +44103,8 @@ DND5E.neverBlockStatuses = new Set();
  * Configuration for the special bloodied status effect.
  * @type {{ name: string, icon: string, threshold: number }}
  */
-DND5E.bloodied = {
-  name: "EFFECT.DND5E.StatusBloodied",
+VARLYN5E.bloodied = {
+  name: "EFFECT.VARLYN5E.StatusBloodied",
   img: "systems/dnd5e/icons/svg/statuses/bloodied.svg",
   threshold: .5
 };
@@ -44117,47 +44117,47 @@ DND5E.bloodied = {
  * Languages a character can learn.
  * @enum {object}
  */
-DND5E.languages = {
+VARLYN5E.languages = {
   standard: {
-    label: "DND5E.Language.Category.Standard",
+    label: "VARLYN5E.Language.Category.Standard",
     selectable: false,
     children: {
-      common: "DND5E.Language.Language.Common",
-      draconic: "DND5E.Language.Language.Draconic",
-      dwarvish: "DND5E.Language.Language.Dwarvish",
-      elvish: "DND5E.Language.Language.Elvish",
-      giant: "DND5E.Language.Language.Giant",
-      gnomish: "DND5E.Language.Language.Gnomish",
-      goblin: "DND5E.Language.Language.Goblin",
-      halfling: "DND5E.Language.Language.Halfling",
-      orc: "DND5E.Language.Language.Orc",
-      sign: "DND5E.Language.Language.CommonSign"
+      common: "VARLYN5E.Language.Language.Common",
+      draconic: "VARLYN5E.Language.Language.Draconic",
+      dwarvish: "VARLYN5E.Language.Language.Dwarvish",
+      elvish: "VARLYN5E.Language.Language.Elvish",
+      giant: "VARLYN5E.Language.Language.Giant",
+      gnomish: "VARLYN5E.Language.Language.Gnomish",
+      goblin: "VARLYN5E.Language.Language.Goblin",
+      halfling: "VARLYN5E.Language.Language.Halfling",
+      orc: "VARLYN5E.Language.Language.Orc",
+      sign: "VARLYN5E.Language.Language.CommonSign"
     }
   },
   exotic: {
-    label: "DND5E.Language.Category.Rare",
+    label: "VARLYN5E.Language.Category.Rare",
     selectable: false,
     children: {
-      aarakocra: "DND5E.Language.Language.Aarakocra",
-      abyssal: "DND5E.Language.Language.Abyssal",
-      cant: "DND5E.Language.Language.ThievesCant",
-      celestial: "DND5E.Language.Language.Celestial",
-      deep: "DND5E.Language.Language.DeepSpeech",
-      druidic: "DND5E.Language.Language.Druidic",
-      gith: "DND5E.Language.Language.Gith",
-      gnoll: "DND5E.Language.Language.Gnoll",
-      infernal: "DND5E.Language.Language.Infernal",
+      aarakocra: "VARLYN5E.Language.Language.Aarakocra",
+      abyssal: "VARLYN5E.Language.Language.Abyssal",
+      cant: "VARLYN5E.Language.Language.ThievesCant",
+      celestial: "VARLYN5E.Language.Language.Celestial",
+      deep: "VARLYN5E.Language.Language.DeepSpeech",
+      druidic: "VARLYN5E.Language.Language.Druidic",
+      gith: "VARLYN5E.Language.Language.Gith",
+      gnoll: "VARLYN5E.Language.Language.Gnoll",
+      infernal: "VARLYN5E.Language.Language.Infernal",
       primordial: {
-        label: "DND5E.Language.Language.Primordial",
+        label: "VARLYN5E.Language.Language.Primordial",
         children: {
-          aquan: "DND5E.Language.Language.Aquan",
-          auran: "DND5E.Language.Language.Auran",
-          ignan: "DND5E.Language.Language.Ignan",
-          terran: "DND5E.Language.Language.Terran"
+          aquan: "VARLYN5E.Language.Language.Aquan",
+          auran: "VARLYN5E.Language.Language.Auran",
+          ignan: "VARLYN5E.Language.Language.Ignan",
+          terran: "VARLYN5E.Language.Language.Terran"
         }
       },
-      sylvan: "DND5E.Language.Language.Sylvan",
-      undercommon: "DND5E.Language.Language.Undercommon"
+      sylvan: "VARLYN5E.Language.Language.Sylvan",
+      undercommon: "VARLYN5E.Language.Language.Undercommon"
     }
   }
 };
@@ -44172,9 +44172,9 @@ preLocalize("languages.exotic.children.primordial.children", { sort: true });
  * Communication types that take ranges such as telepathy.
  * @enum {{ label: string }}
  */
-DND5E.communicationTypes = {
+VARLYN5E.communicationTypes = {
   telepathy: {
-    label: "DND5E.Language.Communication.Telepathy"
+    label: "VARLYN5E.Language.Communication.Telepathy"
   }
 };
 preLocalize("communicationTypes", { key: "label" });
@@ -44187,46 +44187,46 @@ preLocalize("communicationTypes", { key: "label" });
  * NPC habitats.
  * @enum {HabitatConfiguration5e}
  */
-DND5E.habitats = {
+VARLYN5E.habitats = {
   any: {
-    label: "DND5E.Habitat.Categories.Any"
+    label: "VARLYN5E.Habitat.Categories.Any"
   },
   arctic: {
-    label: "DND5E.Habitat.Categories.Arctic"
+    label: "VARLYN5E.Habitat.Categories.Arctic"
   },
   coastal: {
-    label: "DND5E.Habitat.Categories.Coastal"
+    label: "VARLYN5E.Habitat.Categories.Coastal"
   },
   desert: {
-    label: "DND5E.Habitat.Categories.Desert"
+    label: "VARLYN5E.Habitat.Categories.Desert"
   },
   forest: {
-    label: "DND5E.Habitat.Categories.Forest"
+    label: "VARLYN5E.Habitat.Categories.Forest"
   },
   grassland: {
-    label: "DND5E.Habitat.Categories.Grassland"
+    label: "VARLYN5E.Habitat.Categories.Grassland"
   },
   hill: {
-    label: "DND5E.Habitat.Categories.Hill"
+    label: "VARLYN5E.Habitat.Categories.Hill"
   },
   mountain: {
-    label: "DND5E.Habitat.Categories.Mountain"
+    label: "VARLYN5E.Habitat.Categories.Mountain"
   },
   planar: {
-    label: "DND5E.Habitat.Categories.Planar",
+    label: "VARLYN5E.Habitat.Categories.Planar",
     subtypes: true
   },
   swamp: {
-    label: "DND5E.Habitat.Categories.Swamp"
+    label: "VARLYN5E.Habitat.Categories.Swamp"
   },
   underdark: {
-    label: "DND5E.Habitat.Categories.Underdark"
+    label: "VARLYN5E.Habitat.Categories.Underdark"
   },
   underwater: {
-    label: "DND5E.Habitat.Categories.Underwater"
+    label: "VARLYN5E.Habitat.Categories.Underwater"
   },
   urban: {
-    label: "DND5E.Habitat.Categories.Urban"
+    label: "VARLYN5E.Habitat.Categories.Urban"
   }
 };
 preLocalize("habitats", { key: "label" });
@@ -44237,24 +44237,24 @@ preLocalize("habitats", { key: "label" });
  * NPC Treasure
  * @enum {TreasureConfiguration5e}
  */
-DND5E.treasure = {
+VARLYN5E.treasure = {
   any: {
-    label: "DND5E.Treasure.Categories.Any"
+    label: "VARLYN5E.Treasure.Categories.Any"
   },
   arcana: {
-    label: "DND5E.Treasure.Categories.Arcana"
+    label: "VARLYN5E.Treasure.Categories.Arcana"
   },
   armaments: {
-    label: "DND5E.Treasure.Categories.Armaments"
+    label: "VARLYN5E.Treasure.Categories.Armaments"
   },
   implements: {
-    label: "DND5E.Treasure.Categories.Implements"
+    label: "VARLYN5E.Treasure.Categories.Implements"
   },
   individual: {
-    label: "DND5E.Treasure.Categories.Individual"
+    label: "VARLYN5E.Treasure.Categories.Individual"
   },
   relics: {
-    label: "DND5E.Treasure.Categories.Relics"
+    label: "VARLYN5E.Treasure.Categories.Relics"
   }
 };
 preLocalize("treasure", { key: "label" });
@@ -44267,7 +44267,7 @@ preLocalize("treasure", { key: "label" });
  * Maximum allowed character level.
  * @type {number}
  */
-DND5E.maxLevel = 20;
+VARLYN5E.maxLevel = 20;
 
 /* -------------------------------------------- */
 
@@ -44275,7 +44275,7 @@ DND5E.maxLevel = 20;
  * XP required to achieve each character level.
  * @type {number[]}
  */
-DND5E.CHARACTER_EXP_LEVELS = [
+VARLYN5E.CHARACTER_EXP_LEVELS = [
   0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000,
   120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000
 ];
@@ -44286,7 +44286,7 @@ DND5E.CHARACTER_EXP_LEVELS = [
  * Intervals above the maximum XP that result in an epic boon.
  * @type {number}
  */
-DND5E.epicBoonInterval = 30000;
+VARLYN5E.epicBoonInterval = 30000;
 
 /* -------------------------------------------- */
 /*  Traits                                      */
@@ -44296,11 +44296,11 @@ DND5E.epicBoonInterval = 30000;
  * Configurable traits on actors.
  * @enum {TraitConfiguration}
  */
-DND5E.traits = {
+VARLYN5E.traits = {
   saves: {
     labels: {
-      title: "DND5E.ClassSaves",
-      localization: "DND5E.TraitSavesPlural"
+      title: "VARLYN5E.ClassSaves",
+      localization: "VARLYN5E.TraitSavesPlural"
     },
     icon: "icons/magic/life/ankh-gold-blue.webp",
     actorKeyPath: "system.abilities",
@@ -44309,8 +44309,8 @@ DND5E.traits = {
   },
   skills: {
     labels: {
-      title: "DND5E.Skills",
-      localization: "DND5E.TraitSkillsPlural"
+      title: "VARLYN5E.Skills",
+      localization: "VARLYN5E.TraitSkillsPlural"
     },
     icon: "icons/tools/instruments/harp-yellow-teal.webp",
     actorKeyPath: "system.skills",
@@ -44320,16 +44320,16 @@ DND5E.traits = {
   },
   languages: {
     labels: {
-      title: "DND5E.Languages",
-      localization: "DND5E.TraitLanguagesPlural",
-      all: "DND5E.Language.All"
+      title: "VARLYN5E.Languages",
+      localization: "VARLYN5E.TraitLanguagesPlural",
+      all: "VARLYN5E.Language.All"
     },
     icon: "icons/skills/social/diplomacy-peace-alliance.webp"
   },
   armor: {
     labels: {
-      title: "DND5E.TraitArmorProf",
-      localization: "DND5E.TraitArmorPlural"
+      title: "VARLYN5E.TraitArmorProf",
+      localization: "VARLYN5E.TraitArmorPlural"
     },
     icon: "icons/equipment/chest/breastplate-helmet-metal.webp",
     actorKeyPath: "system.traits.armorProf",
@@ -44338,8 +44338,8 @@ DND5E.traits = {
   },
   weapon: {
     labels: {
-      title: "DND5E.TraitWeaponProf",
-      localization: "DND5E.TraitWeaponPlural"
+      title: "VARLYN5E.TraitWeaponProf",
+      localization: "VARLYN5E.TraitWeaponPlural"
     },
     icon: "icons/skills/melee/weapons-crossed-swords-purple.webp",
     actorKeyPath: "system.traits.weaponProf",
@@ -44349,8 +44349,8 @@ DND5E.traits = {
   },
   tool: {
     labels: {
-      title: "DND5E.TraitToolProf",
-      localization: "DND5E.TraitToolPlural"
+      title: "VARLYN5E.TraitToolProf",
+      localization: "VARLYN5E.TraitToolPlural"
     },
     icon: "icons/skills/trades/smithing-anvil-silver-red.webp",
     actorKeyPath: "system.tools",
@@ -44362,44 +44362,44 @@ DND5E.traits = {
   },
   di: {
     labels: {
-      title: "DND5E.DamImm",
-      localization: "DND5E.TraitDIPlural",
-      all: "DND5E.DAMAGE.All"
+      title: "VARLYN5E.DamImm",
+      localization: "VARLYN5E.TraitDIPlural",
+      all: "VARLYN5E.DAMAGE.All"
     },
     icon: "systems/dnd5e/icons/svg/trait-damage-immunities.svg",
     configKey: "damageTypes"
   },
   dr: {
     labels: {
-      title: "DND5E.DamRes",
-      localization: "DND5E.TraitDRPlural",
-      all: "DND5E.DAMAGE.All"
+      title: "VARLYN5E.DamRes",
+      localization: "VARLYN5E.TraitDRPlural",
+      all: "VARLYN5E.DAMAGE.All"
     },
     icon: "systems/dnd5e/icons/svg/trait-damage-resistances.svg",
     configKey: "damageTypes"
   },
   dv: {
     labels: {
-      title: "DND5E.DamVuln",
-      localization: "DND5E.TraitDVPlural",
-      all: "DND5E.DAMAGE.All"
+      title: "VARLYN5E.DamVuln",
+      localization: "VARLYN5E.TraitDVPlural",
+      all: "VARLYN5E.DAMAGE.All"
     },
     icon: "systems/dnd5e/icons/svg/trait-damage-vulnerabilities.svg",
     configKey: "damageTypes"
   },
   dm: {
     labels: {
-      title: "DND5E.DamMod",
-      localization: "DND5E.TraitDMPlural",
-      all: "DND5E.DAMAGE.All"
+      title: "VARLYN5E.DamMod",
+      localization: "VARLYN5E.TraitDMPlural",
+      all: "VARLYN5E.DAMAGE.All"
     },
     configKey: "damageTypes",
     dataType: Number
   },
   ci: {
     labels: {
-      title: "DND5E.ConImm",
-      localization: "DND5E.TraitCIPlural"
+      title: "VARLYN5E.ConImm",
+      localization: "VARLYN5E.TraitCIPlural"
     },
     icon: "systems/dnd5e/icons/svg/trait-condition-immunities.svg",
     configKey: "conditionTypes",
@@ -44414,26 +44414,26 @@ preLocalize("traits", { keys: ["labels.title", "labels.all"] });
  * Modes used within a trait advancement.
  * @enum {{ label: string, hint: string }}
  */
-DND5E.traitModes = {
+VARLYN5E.traitModes = {
   default: {
-    label: "DND5E.ADVANCEMENT.Trait.Mode.Default.Label",
-    hint: "DND5E.ADVANCEMENT.Trait.Mode.Default.Hint"
+    label: "VARLYN5E.ADVANCEMENT.Trait.Mode.Default.Label",
+    hint: "VARLYN5E.ADVANCEMENT.Trait.Mode.Default.Hint"
   },
   expertise: {
-    label: "DND5E.ADVANCEMENT.Trait.Mode.Expertise.Label",
-    hint: "DND5E.ADVANCEMENT.Trait.Mode.Expertise.Hint"
+    label: "VARLYN5E.ADVANCEMENT.Trait.Mode.Expertise.Label",
+    hint: "VARLYN5E.ADVANCEMENT.Trait.Mode.Expertise.Hint"
   },
   forcedExpertise: {
-    label: "DND5E.ADVANCEMENT.Trait.Mode.Force.Label",
-    hint: "DND5E.ADVANCEMENT.Trait.Mode.Force.Hint"
+    label: "VARLYN5E.ADVANCEMENT.Trait.Mode.Force.Label",
+    hint: "VARLYN5E.ADVANCEMENT.Trait.Mode.Force.Hint"
   },
   upgrade: {
-    label: "DND5E.ADVANCEMENT.Trait.Mode.Upgrade.Label",
-    hint: "DND5E.ADVANCEMENT.Trait.Mode.Upgrade.Hint"
+    label: "VARLYN5E.ADVANCEMENT.Trait.Mode.Upgrade.Label",
+    hint: "VARLYN5E.ADVANCEMENT.Trait.Mode.Upgrade.Hint"
   },
   mastery: {
-    label: "DND5E.ADVANCEMENT.Trait.Mode.Mastery.Label",
-    hint: "DND5E.ADVANCEMENT.Trait.Mode.Mastery.Hint"
+    label: "VARLYN5E.ADVANCEMENT.Trait.Mode.Mastery.Label",
+    hint: "VARLYN5E.ADVANCEMENT.Trait.Mode.Mastery.Hint"
   }
 };
 preLocalize("traitModes", { keys: ["label", "hint"] });
@@ -44444,113 +44444,113 @@ preLocalize("traitModes", { keys: ["label", "hint"] });
  * Special character flags.
  * @enum {CharacterFlagConfiguration}
  */
-DND5E.characterFlags = {
+VARLYN5E.characterFlags = {
   diamondSoul: {
-    name: "DND5E.FlagsDiamondSoul",
-    hint: "DND5E.FlagsDiamondSoulHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsDiamondSoul",
+    hint: "VARLYN5E.FlagsDiamondSoulHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   enhancedDualWielding: {
-    name: "DND5E.FLAGS.EnhancedDualWielding.Name",
-    hint: "DND5E.FLAGS.EnhancedDualWielding.Hint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FLAGS.EnhancedDualWielding.Name",
+    hint: "VARLYN5E.FLAGS.EnhancedDualWielding.Hint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   elvenAccuracy: {
-    name: "DND5E.FlagsElvenAccuracy",
-    hint: "DND5E.FlagsElvenAccuracyHint",
-    section: "DND5E.RacialTraits",
+    name: "VARLYN5E.FlagsElvenAccuracy",
+    hint: "VARLYN5E.FlagsElvenAccuracyHint",
+    section: "VARLYN5E.RacialTraits",
     abilities: ["dex", "int", "wis", "cha"],
     type: Boolean
   },
   halflingLucky: {
-    name: "DND5E.FlagsHalflingLucky",
-    hint: "DND5E.FlagsHalflingLuckyHint",
-    section: "DND5E.RacialTraits",
+    name: "VARLYN5E.FlagsHalflingLucky",
+    hint: "VARLYN5E.FlagsHalflingLuckyHint",
+    section: "VARLYN5E.RacialTraits",
     type: Boolean
   },
   halflingNimbleness: {
-    name: "DND5E.FlagsHalflingNimbleness",
-    hint: "DND5E.FlagsHalflingNimblenessHint",
-    section: "DND5E.RacialTraits",
+    name: "VARLYN5E.FlagsHalflingNimbleness",
+    hint: "VARLYN5E.FlagsHalflingNimblenessHint",
+    section: "VARLYN5E.RacialTraits",
     type: Boolean
   },
   ignoreArmorSpeedReduction: {
-    name: "DND5E.FLAGS.IgnoreArmorSpeedReduction.Name",
-    hint: "DND5E.FLAGS.IgnoreArmorSpeedReduction.Hint",
-    section: "DND5E.RacialTraits",
+    name: "VARLYN5E.FLAGS.IgnoreArmorSpeedReduction.Name",
+    hint: "VARLYN5E.FLAGS.IgnoreArmorSpeedReduction.Hint",
+    section: "VARLYN5E.RacialTraits",
     type: Boolean
   },
   initiativeAlert: {
-    name: "DND5E.FlagsAlert",
-    hint: "DND5E.FlagsAlertHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsAlert",
+    hint: "VARLYN5E.FlagsAlertHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   jackOfAllTrades: {
-    name: "DND5E.FlagsJOAT",
-    hint: "DND5E.FlagsJOATHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsJOAT",
+    hint: "VARLYN5E.FlagsJOATHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   observantFeat: {
-    name: "DND5E.FlagsObservant",
-    hint: "DND5E.FlagsObservantHint",
+    name: "VARLYN5E.FlagsObservant",
+    hint: "VARLYN5E.FlagsObservantHint",
     skills: ["prc", "inv"],
-    section: "DND5E.Feats",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   tavernBrawlerFeat: {
-    name: "DND5E.FlagsTavernBrawler",
-    hint: "DND5E.FlagsTavernBrawlerHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsTavernBrawler",
+    hint: "VARLYN5E.FlagsTavernBrawlerHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   powerfulBuild: {
-    name: "DND5E.FlagsPowerfulBuild",
-    hint: "DND5E.FlagsPowerfulBuildHint",
-    section: "DND5E.RacialTraits",
+    name: "VARLYN5E.FlagsPowerfulBuild",
+    hint: "VARLYN5E.FlagsPowerfulBuildHint",
+    section: "VARLYN5E.RacialTraits",
     type: Boolean
   },
   reliableTalent: {
-    name: "DND5E.FlagsReliableTalent",
-    hint: "DND5E.FlagsReliableTalentHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsReliableTalent",
+    hint: "VARLYN5E.FlagsReliableTalentHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   remarkableAthlete: {
-    name: "DND5E.FlagsRemarkableAthlete",
-    hint: "DND5E.FlagsRemarkableAthleteHint",
+    name: "VARLYN5E.FlagsRemarkableAthlete",
+    hint: "VARLYN5E.FlagsRemarkableAthleteHint",
     abilities: ["str", "dex", "con"],
     skills: ["ath"],
-    section: "DND5E.Feats",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   toolExpertise: {
-    name: "DND5E.FlagsToolExpertise",
-    hint: "DND5E.FlagsToolExpertiseHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsToolExpertise",
+    hint: "VARLYN5E.FlagsToolExpertiseHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   weaponCriticalThreshold: {
-    name: "DND5E.FlagsWeaponCritThreshold",
-    hint: "DND5E.FlagsWeaponCritThresholdHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsWeaponCritThreshold",
+    hint: "VARLYN5E.FlagsWeaponCritThresholdHint",
+    section: "VARLYN5E.Feats",
     type: Number,
     placeholder: 20
   },
   spellCriticalThreshold: {
-    name: "DND5E.FlagsSpellCritThreshold",
-    hint: "DND5E.FlagsSpellCritThresholdHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsSpellCritThreshold",
+    hint: "VARLYN5E.FlagsSpellCritThresholdHint",
+    section: "VARLYN5E.Feats",
     type: Number,
     placeholder: 20
   },
   meleeCriticalDamageDice: {
-    name: "DND5E.FlagsMeleeCriticalDice",
-    hint: "DND5E.FlagsMeleeCriticalDiceHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsMeleeCriticalDice",
+    hint: "VARLYN5E.FlagsMeleeCriticalDiceHint",
+    section: "VARLYN5E.Feats",
     type: Number,
     placeholder: 0
   }
@@ -44563,7 +44563,7 @@ preLocalize("characterFlags", { keys: ["name", "hint", "section"] });
  * Configuration information for activity types.
  * @enum {ActivityTypeConfiguration}
  */
-DND5E.activityTypes = {
+VARLYN5E.activityTypes = {
   attack: {
     documentClass: AttackActivity
   },
@@ -44607,7 +44607,7 @@ const _ALL_ITEM_TYPES = ["class", "feat", "race", "subclass"];
  * Advancement types that can be added to items.
  * @enum {AdvancementTypeConfiguration}
  */
-DND5E.advancementTypes = {
+VARLYN5E.advancementTypes = {
   AbilityScoreImprovement: {
     documentClass: AbilityScoreImprovementAdvancement,
     validItemTypes: new Set(["class", "race", "feat"])
@@ -44652,7 +44652,7 @@ DND5E.advancementTypes = {
  * Default artwork configuration for each Document type and sub-type.
  * @enum {Record<string, string>}
  */
-DND5E.defaultArtwork = {
+VARLYN5E.defaultArtwork = {
   ActiveEffect: {
     base: "systems/dnd5e/icons/svg/active-effects/base.svg",
     enchantment: "systems/dnd5e/icons/svg/active-effects/enchantment.svg"
@@ -44686,51 +44686,51 @@ DND5E.defaultArtwork = {
  * Configuration information for the calendar UI.
  * @type {CalendarHUDConfiguration}
  */
-DND5E.calendar = {
+VARLYN5E.calendar = {
   application: CalendarHUD,
   calendars: [
     {
       value: "gregorian",
-      label: "DND5E.CALENDAR.Gregorian",
+      label: "VARLYN5E.CALENDAR.Gregorian",
       config: foundry.data.SIMPLIFIED_GREGORIAN_CALENDAR_CONFIG
     }
   ],
   formatters: [
     {
       value: "monthDay",
-      label: "DND5E.CALENDAR.Formatters.MonthDay.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.MonthDay.Label",
       formatter: "formatMonthDay",
-      group: "DND5E.CALENDAR.Formatters.Date"
+      group: "VARLYN5E.CALENDAR.Formatters.Date"
     },
     {
       value: "monthDayYear",
-      label: "DND5E.CALENDAR.Formatters.MonthDayYear.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.MonthDayYear.Label",
       formatter: "formatMonthDayYear",
-      group: "DND5E.CALENDAR.Formatters.Date"
+      group: "VARLYN5E.CALENDAR.Formatters.Date"
     },
     {
       value: "approximateDate",
-      label: "DND5E.CALENDAR.Formatters.ApproximateDate.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.ApproximateDate.Label",
       formatter: "formatApproximateDate",
-      group: "DND5E.CALENDAR.Formatters.Date"
+      group: "VARLYN5E.CALENDAR.Formatters.Date"
     },
     {
       value: "hoursMinutes",
-      label: "DND5E.CALENDAR.Formatters.HoursMinutes.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.HoursMinutes.Label",
       formatter: "formatHoursMinutes",
-      group: "DND5E.CALENDAR.Formatters.Time"
+      group: "VARLYN5E.CALENDAR.Formatters.Time"
     },
     {
       value: "hoursMinutesSeconds",
-      label: "DND5E.CALENDAR.Formatters.HoursMinutesSeconds.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.HoursMinutesSeconds.Label",
       formatter: "formatHoursMinutesSeconds",
-      group: "DND5E.CALENDAR.Formatters.Time"
+      group: "VARLYN5E.CALENDAR.Formatters.Time"
     },
     {
       value: "approximateTime",
-      label: "DND5E.CALENDAR.Formatters.ApproximateTime.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.ApproximateTime.Label",
       formatter: "formatApproximateTime",
-      group: "DND5E.CALENDAR.Formatters.Time"
+      group: "VARLYN5E.CALENDAR.Formatters.Time"
     }
   ]
 };
@@ -44745,7 +44745,7 @@ preLocalize("calendar.formatters", { keys: ["label", "group"] });
  * Handler functions for named request/response operations
  * @type {Record<string, RequestCallback5e>}
  */
-DND5E.requests = {
+VARLYN5E.requests = {
   rest: Actor5e.handleRestRequest,
   skill: Actor5e.handleSkillCheckRequest
 };
@@ -44758,45 +44758,45 @@ DND5E.requests = {
  * Types of rules that can be used in rule pages and the &Reference enricher.
  * @enum {RuleTypeConfiguration}
  */
-DND5E.ruleTypes = {
+VARLYN5E.ruleTypes = {
   ability: {
-    label: "DND5E.Ability",
+    label: "VARLYN5E.Ability",
     references: "enrichmentLookup.abilities"
   },
   areaOfEffect: {
-    label: "DND5E.AreaOfEffect.Label",
+    label: "VARLYN5E.AreaOfEffect.Label",
     references: "areaTargetTypes"
   },
   condition: {
-    label: "DND5E.Rule.Type.Condition",
+    label: "VARLYN5E.Rule.Type.Condition",
     references: "conditionTypes"
   },
   creatureType: {
-    label: "DND5E.CreatureType",
+    label: "VARLYN5E.CreatureType",
     references: "creatureTypes"
   },
   damage: {
-    label: "DND5E.DamageType",
+    label: "VARLYN5E.DamageType",
     references: "damageTypes"
   },
   skill: {
-    label: "DND5E.Skill",
+    label: "VARLYN5E.Skill",
     references: "enrichmentLookup.skills"
   },
   spellComponent: {
-    label: "DND5E.SpellComponent",
+    label: "VARLYN5E.SpellComponent",
     references: "itemProperties"
   },
   spellSchool: {
-    label: "DND5E.SpellSchool",
+    label: "VARLYN5E.SpellSchool",
     references: "enrichmentLookup.spellSchools"
   },
   spellTag: {
-    label: "DND5E.SpellTag",
+    label: "VARLYN5E.SpellTag",
     references: "itemProperties"
   },
   weaponMastery: {
-    label: "DND5E.WEAPON.Mastery.Label",
+    label: "VARLYN5E.WEAPON.Mastery.Label",
     references: "weaponMasteries"
   }
 };
@@ -44808,7 +44808,7 @@ preLocalize("ruleTypes", { key: "label" });
  * List of rules that can be referenced from enrichers.
  * @enum {string}
  */
-DND5E.rules = {
+VARLYN5E.rules = {
 };
 
 /* -------------------------------------------- */
@@ -44819,9 +44819,9 @@ DND5E.rules = {
  * Themes that can be set for the system or on sheets.
  * @enum {string}
  */
-DND5E.themes = {
-  light: "SHEETS.DND5E.THEME.Light",
-  dark: "SHEETS.DND5E.THEME.Dark"
+VARLYN5E.themes = {
+  light: "SHEETS.VARLYN5E.THEME.Light",
+  dark: "SHEETS.VARLYN5E.THEME.Dark"
 };
 preLocalize("themes");
 
@@ -44830,21 +44830,21 @@ preLocalize("themes");
 /* -------------------------------------------- */
 
 let _enrichmentLookup;
-Object.defineProperty(DND5E, "enrichmentLookup", {
+Object.defineProperty(VARLYN5E, "enrichmentLookup", {
   get() {
     const slugify = value => value?.slugify().replaceAll("-", "");
     if ( !_enrichmentLookup ) {
       _enrichmentLookup = {
-        abilities: foundry.utils.deepClone(DND5E.abilities),
+        abilities: foundry.utils.deepClone(VARLYN5E.abilities),
         damageTypes: Object.fromEntries(
-          Object.keys({ ...DND5E.damageTypes, ...DND5E.healingTypes }).map(k => [slugify(k), k])
+          Object.keys({ ...VARLYN5E.damageTypes, ...VARLYN5E.healingTypes }).map(k => [slugify(k), k])
         ),
-        languages: _flattenConfig(DND5E.languages, { labelKey: "label", skipEntry: (k, d) => d.selectable === false }),
-        skills: foundry.utils.deepClone(DND5E.skills),
-        spellSchools: foundry.utils.deepClone(DND5E.spellSchools),
-        tools: foundry.utils.deepClone(DND5E.tools)
+        languages: _flattenConfig(VARLYN5E.languages, { labelKey: "label", skipEntry: (k, d) => d.selectable === false }),
+        skills: foundry.utils.deepClone(VARLYN5E.skills),
+        spellSchools: foundry.utils.deepClone(VARLYN5E.spellSchools),
+        tools: foundry.utils.deepClone(VARLYN5E.tools)
       };
-      const addFullKeys = key => Object.entries(DND5E[key]).forEach(([k, v]) => {
+      const addFullKeys = key => Object.entries(VARLYN5E[key]).forEach(([k, v]) => {
         _enrichmentLookup[key][k].key = k;
         if ( v.fullKey ) _enrichmentLookup[key][slugify(v.fullKey)] = { ...v, key: k };
       });
@@ -44861,7 +44861,7 @@ Object.defineProperty(DND5E, "enrichmentLookup", {
 /* -------------------------------------------- */
 
 /**
- * Create a flattened version of a nested config (such as CONFIG.DND5E.languages) so all leaf entries are at
+ * Create a flattened version of a nested config (such as CONFIG.VARLYN5E.languages) so all leaf entries are at
  * a single level.
  * @param {object} config
  * @param {object} [options={}]
@@ -44887,20 +44887,20 @@ function _flattenConfig(config, { labelKey, skipEntry }={}) {
 /**
  * Patch an existing config enum to allow conversion from string values to object values without
  * breaking existing modules that are expecting strings.
- * @param {string} key          Key within DND5E that has been replaced with an enum of objects.
+ * @param {string} key          Key within VARLYN5E that has been replaced with an enum of objects.
  * @param {string} fallbackKey  Key within the new config object from which to get the fallback value.
  * @param {object} [options]    Additional options passed through to logCompatibilityWarning.
  */
 function patchConfig(key, fallbackKey, options) {
   /** @override */
   function toString() {
-    const message = `The value of CONFIG.DND5E.${key} has been changed to an object.`
+    const message = `The value of CONFIG.VARLYN5E.${key} has been changed to an object.`
       +` The former value can be accessed from .${fallbackKey}.`;
     foundry.utils.logCompatibilityWarning(message, options);
     return this[fallbackKey];
   }
 
-  Object.values(DND5E[key]).forEach(o => {
+  Object.values(VARLYN5E[key]).forEach(o => {
     if ( foundry.utils.getType(o) !== "Object" ) return;
     Object.defineProperty(o, "toString", {value: toString});
   });
@@ -44920,7 +44920,7 @@ const { BooleanField: BooleanField$e, SchemaField: SchemaField$l, StringField: S
 class CalendarConfigSetting extends foundry.abstract.DataModel {
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.CALENDAR"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.CALENDAR"];
 
   /* -------------------------------------------- */
 
@@ -44942,7 +44942,7 @@ class CalendarConfigSetting extends foundry.abstract.DataModel {
 class CalendarPreferencesSetting extends foundry.abstract.DataModel {
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.CALENDAR"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.CALENDAR"];
 
   /* -------------------------------------------- */
 
@@ -45069,7 +45069,7 @@ class CalendarSettingsConfig extends BaseSettingsConfig {
   /** @override */
   static DEFAULT_OPTIONS = {
     window: {
-      title: "DND5E.CALENDAR.Configuration.Label"
+      title: "VARLYN5E.CALENDAR.Configuration.Label"
     }
   };
 
@@ -45132,13 +45132,13 @@ class CalendarSettingsConfig extends BaseSettingsConfig {
       }));
     context.fields.splice(1, 0, this.createSettingField("calendar"));
 
-    if ( !CONFIG.DND5E.calendar.application ) {
+    if ( !CONFIG.VARLYN5E.calendar.application ) {
       const enabledField = context.fields.find(f => f.name === "calendarConfig.enabled");
       enabledField.disabled = true;
       enabledField.value = false;
       context.message = {
         level: "warn",
-        text: _loc("DND5E.CALENDAR.Configuration.UnavailableMessage")
+        text: _loc("VARLYN5E.CALENDAR.Configuration.UnavailableMessage")
       };
     }
 
@@ -45167,28 +45167,28 @@ class CalendarSettingsConfig extends BaseSettingsConfig {
       {
         field: fields.formatters.fields.date,
         name: "calendarPreferences.formatters.date",
-        options: CONFIG.DND5E.calendar.formatters,
+        options: CONFIG.VARLYN5E.calendar.formatters,
         value: data.formatters.date
       },
       {
         field: fields.formatters.fields.time,
         name: "calendarPreferences.formatters.time",
-        options: CONFIG.DND5E.calendar.formatters,
+        options: CONFIG.VARLYN5E.calendar.formatters,
         value: data.formatters.time
       }
     ];
-    context.legend = _loc("DND5E.CALENDAR.Configuration.Preferences");
-    if ( !CONFIG.DND5E.calendar.application ) {
+    context.legend = _loc("VARLYN5E.CALENDAR.Configuration.Preferences");
+    if ( !CONFIG.VARLYN5E.calendar.application ) {
       context.disabled = true;
       if ( !game.user.isGM ) context.message = {
         level: "warn",
-        text: _loc("DND5E.CALENDAR.Configuration.UnavailableMessage")
+        text: _loc("VARLYN5E.CALENDAR.Configuration.UnavailableMessage")
       };
     } else if ( !game.settings.get("dnd5e", "calendarConfig")?.enabled ) {
       context.disabled = !game.user.isGM;
       context.message = {
         level: "warn",
-        text: _loc("DND5E.CALENDAR.Configuration.DisabledMessage")
+        text: _loc("VARLYN5E.CALENDAR.Configuration.DisabledMessage")
       };
     }
     return context;
@@ -45202,7 +45202,7 @@ class CombatSettingsConfig extends BaseSettingsConfig {
   /** @override */
   static DEFAULT_OPTIONS = {
     window: {
-      title: "SETTINGS.DND5E.COMBAT.Label"
+      title: "SETTINGS.VARLYN5E.COMBAT.Label"
     }
   };
 
@@ -45242,27 +45242,27 @@ class CombatSettingsConfig extends BaseSettingsConfig {
           this.createSettingField("initiativeGroupRoll"),
           this.createSettingField("initiativeGroupCombatants")
         ];
-        context.legend = _loc("DND5E.Initiative");
+        context.legend = _loc("VARLYN5E.Initiative");
         break;
       case "criticals":
         context.fields = [
           this.createSettingField("criticalDamageModifiers"),
           this.createSettingField("criticalDamageMaxDice")
         ];
-        context.legend = _loc("SETTINGS.DND5E.CRITICAL.Name");
+        context.legend = _loc("SETTINGS.VARLYN5E.CRITICAL.Name");
         break;
       case "npcs":
         context.fields = [
           this.createSettingField("autoRecharge"),
           this.createSettingField("autoRollNPCHP")
         ];
-        context.legend = _loc("SETTINGS.DND5E.NPCS.Name");
+        context.legend = _loc("SETTINGS.VARLYN5E.NPCS.Name");
         break;
       case "encounterPlacement":
         context.fields = [
           this.createSettingField("encounterPlacementBehavior")
         ];
-        context.legend = _loc("SETTINGS.DND5E.ENCOUNTERS.Name");
+        context.legend = _loc("SETTINGS.VARLYN5E.ENCOUNTERS.Name");
         break;
     }
     return context;
@@ -45276,7 +45276,7 @@ class VariantRulesSettingsConfig extends BaseSettingsConfig {
   /** @override */
   static DEFAULT_OPTIONS = {
     window: {
-      title: "SETTINGS.DND5E.VARIANT.Label"
+      title: "SETTINGS.VARLYN5E.VARIANT.Label"
     }
   };
 
@@ -45313,21 +45313,21 @@ class VariantRulesSettingsConfig extends BaseSettingsConfig {
           this.createSettingField("proficiencyModifier"),
           this.createSettingField("levelingMode")
         ].filter(_ => _);
-        context.legend = _loc("SETTINGS.DND5E.General");
+        context.legend = _loc("SETTINGS.VARLYN5E.General");
         break;
       case "encumbrance":
         context.fields = [
           this.createSettingField("encumbrance"),
           this.createSettingField("currencyWeight")
         ];
-        context.legend = _loc("DND5E.Encumbrance");
+        context.legend = _loc("VARLYN5E.Encumbrance");
         break;
       case "abilities":
         context.fields = [
           this.createSettingField("honorScore"),
           this.createSettingField("sanityScore")
         ];
-        context.legend = _loc("DND5E.Abilities");
+        context.legend = _loc("VARLYN5E.Abilities");
         break;
     }
     return context;
@@ -45341,7 +45341,7 @@ class VisibilitySettingsConfig extends BaseSettingsConfig {
   /** @override */
   static DEFAULT_OPTIONS = {
     window: {
-      title: "SETTINGS.DND5E.VISIBILITY.Label"
+      title: "SETTINGS.VARLYN5E.VISIBILITY.Label"
     }
   };
 
@@ -45388,27 +45388,27 @@ const { StringField: StringField$v } = foundry.data.fields;
  */
 function registerSystemKeybindings() {
   game.keybindings.register("dnd5e", "skipDialogNormal", {
-    name: "KEYBINDINGS.DND5E.SkipDialogNormal",
+    name: "KEYBINDINGS.VARLYN5E.SkipDialogNormal",
     editable: [{ key: "ShiftLeft" }, { key: "ShiftRight" }]
   });
 
   game.keybindings.register("dnd5e", "skipDialogAdvantage", {
-    name: "KEYBINDINGS.DND5E.SkipDialogAdvantage",
+    name: "KEYBINDINGS.VARLYN5E.SkipDialogAdvantage",
     editable: [{ key: "AltLeft" }, { key: "AltRight" }]
   });
 
   game.keybindings.register("dnd5e", "skipDialogDisadvantage", {
-    name: "KEYBINDINGS.DND5E.SkipDialogDisadvantage",
+    name: "KEYBINDINGS.VARLYN5E.SkipDialogDisadvantage",
     editable: [{ key: "ControlLeft" }, { key: "ControlRight" }, { key: "OsLeft" }, { key: "OsRight" }]
   });
 
   game.keybindings.register("dnd5e", "dragCopy", {
-    name: "KEYBINDINGS.DND5E.DragCopy",
+    name: "KEYBINDINGS.VARLYN5E.DragCopy",
     editable: [{ key: "ControlLeft" }, { key: "ControlRight" }, { key: "AltLeft" }, { key: "AltRight" }]
   });
 
   game.keybindings.register("dnd5e", "dragMove", {
-    name: "KEYBINDINGS.DND5E.DragMove",
+    name: "KEYBINDINGS.VARLYN5E.DragMove",
     editable: [{ key: "ShiftLeft" }, { key: "ShiftRight" }, { key: "OsLeft" }, { key: "OsRight" }]
   });
 }
@@ -45428,23 +45428,23 @@ function registerSystemSettings() {
 
   // Movement automation
   game.settings.register("dnd5e", "movementAutomation", {
-    name: "SETTINGS.DND5E.AUTOMATION.Movement.Name",
-    hint: "SETTINGS.DND5E.AUTOMATION.Movement.Hint",
+    name: "SETTINGS.VARLYN5E.AUTOMATION.Movement.Name",
+    hint: "SETTINGS.VARLYN5E.AUTOMATION.Movement.Hint",
     scope: "world",
     config: true,
     default: "full",
     type: String,
     choices: {
-      full: "SETTINGS.DND5E.AUTOMATION.Movement.Full",
-      noBlocking: "SETTINGS.DND5E.AUTOMATION.Movement.NoBlocking",
-      none: "SETTINGS.DND5E.AUTOMATION.Movement.None"
+      full: "SETTINGS.VARLYN5E.AUTOMATION.Movement.Full",
+      noBlocking: "SETTINGS.VARLYN5E.AUTOMATION.Movement.NoBlocking",
+      none: "SETTINGS.VARLYN5E.AUTOMATION.Movement.None"
     }
   });
 
   // Sense-to-token vision sync
   game.settings.register("dnd5e", "senseVisionSync", {
-    name: "SETTINGS.DND5E.AUTOMATION.SenseVision.Name",
-    hint: "SETTINGS.DND5E.AUTOMATION.SenseVision.Hint",
+    name: "SETTINGS.VARLYN5E.AUTOMATION.SenseVision.Name",
+    hint: "SETTINGS.VARLYN5E.AUTOMATION.SenseVision.Hint",
     scope: "world",
     config: true,
     default: true,
@@ -45466,8 +45466,8 @@ function registerSystemSettings() {
 
   // Loyalty
   game.settings.register("dnd5e", "loyaltyScore", {
-    name: "SETTINGS.DND5E.LOYALTY.Name",
-    hint: "SETTINGS.DND5E.LOYALTY.Hint",
+    name: "SETTINGS.VARLYN5E.LOYALTY.Name",
+    hint: "SETTINGS.VARLYN5E.LOYALTY.Hint",
     scope: "world",
     config: true,
     default: false,
@@ -45509,24 +45509,24 @@ function registerSystemSettings() {
 
   // Collapse Chat Card Trays
   game.settings.register("dnd5e", "autoCollapseChatTrays", {
-    name: "SETTINGS.DND5E.COLLAPSETRAYS.Name",
-    hint: "SETTINGS.DND5E.COLLAPSETRAYS.Hint",
+    name: "SETTINGS.VARLYN5E.COLLAPSETRAYS.Name",
+    hint: "SETTINGS.VARLYN5E.COLLAPSETRAYS.Hint",
     scope: "client",
     config: true,
     default: "older",
     type: String,
     choices: {
-      manual: "SETTINGS.DND5E.COLLAPSETRAYS.Manual",
-      never: "SETTINGS.DND5E.COLLAPSETRAYS.Never",
-      older: "SETTINGS.DND5E.COLLAPSETRAYS.Older",
-      always: "SETTINGS.DND5E.COLLAPSETRAYS.Always"
+      manual: "SETTINGS.VARLYN5E.COLLAPSETRAYS.Manual",
+      never: "SETTINGS.VARLYN5E.COLLAPSETRAYS.Never",
+      older: "SETTINGS.VARLYN5E.COLLAPSETRAYS.Older",
+      always: "SETTINGS.VARLYN5E.COLLAPSETRAYS.Always"
     }
   });
 
   // Allow Rests from Sheet
   game.settings.register("dnd5e", "allowRests", {
-    name: "SETTINGS.DND5E.PERMISSIONS.AllowRests.Name",
-    hint: "SETTINGS.DND5E.PERMISSIONS.AllowRests.Hint",
+    name: "SETTINGS.VARLYN5E.PERMISSIONS.AllowRests.Name",
+    hint: "SETTINGS.VARLYN5E.PERMISSIONS.AllowRests.Hint",
     scope: "world",
     config: true,
     default: true,
@@ -45535,8 +45535,8 @@ function registerSystemSettings() {
 
   // Allow Polymorphing
   game.settings.register("dnd5e", "allowPolymorphing", {
-    name: "SETTINGS.DND5E.PERMISSIONS.AllowTransformation.Name",
-    hint: "SETTINGS.DND5E.PERMISSIONS.AllowTransformation.Hint",
+    name: "SETTINGS.VARLYN5E.PERMISSIONS.AllowTransformation.Name",
+    hint: "SETTINGS.VARLYN5E.PERMISSIONS.AllowTransformation.Hint",
     scope: "world",
     config: true,
     default: false,
@@ -45545,8 +45545,8 @@ function registerSystemSettings() {
 
   // Allow Summoning
   game.settings.register("dnd5e", "allowSummoning", {
-    name: "SETTINGS.DND5E.PERMISSIONS.AllowSummoning.Name",
-    hint: "SETTINGS.DND5E.PERMISSIONS.AllowSummoning.Hint",
+    name: "SETTINGS.VARLYN5E.PERMISSIONS.AllowSummoning.Name",
+    hint: "SETTINGS.VARLYN5E.PERMISSIONS.AllowSummoning.Hint",
     scope: "world",
     config: true,
     default: false,
@@ -45555,8 +45555,8 @@ function registerSystemSettings() {
 
   // Metric Length Weights
   game.settings.register("dnd5e", "metricLengthUnits", {
-    name: "SETTINGS.DND5E.METRIC.LengthUnits.Name",
-    hint: "SETTINGS.DND5E.METRIC.LengthUnits.Hint",
+    name: "SETTINGS.VARLYN5E.METRIC.LengthUnits.Name",
+    hint: "SETTINGS.VARLYN5E.METRIC.LengthUnits.Hint",
     scope: "world",
     config: true,
     type: Boolean,
@@ -45565,8 +45565,8 @@ function registerSystemSettings() {
 
   // Metric Volume Weights
   game.settings.register("dnd5e", "metricVolumeUnits", {
-    name: "SETTINGS.DND5E.METRIC.VolumeUnits.Name",
-    hint: "SETTINGS.DND5E.METRIC.VolumeUnits.Hint",
+    name: "SETTINGS.VARLYN5E.METRIC.VolumeUnits.Name",
+    hint: "SETTINGS.VARLYN5E.METRIC.VolumeUnits.Hint",
     scope: "world",
     config: true,
     type: Boolean,
@@ -45575,8 +45575,8 @@ function registerSystemSettings() {
 
   // Metric Unit Weights
   game.settings.register("dnd5e", "metricWeightUnits", {
-    name: "SETTINGS.DND5E.METRIC.WeightUnits.Name",
-    hint: "SETTINGS.DND5E.METRIC.WeightUnits.Hint",
+    name: "SETTINGS.VARLYN5E.METRIC.WeightUnits.Name",
+    hint: "SETTINGS.VARLYN5E.METRIC.WeightUnits.Hint",
     scope: "world",
     config: true,
     type: Boolean,
@@ -45593,9 +45593,9 @@ function registerSystemSettings() {
 
   // Compendium Browser source exclusion
   game.settings.registerMenu("dnd5e", "packSourceConfiguration", {
-    name: "DND5E.CompendiumBrowser.Sources.Name",
-    label: "DND5E.CompendiumBrowser.Sources.Label",
-    hint: "DND5E.CompendiumBrowser.Sources.Hint",
+    name: "VARLYN5E.CompendiumBrowser.Sources.Name",
+    label: "VARLYN5E.CompendiumBrowser.Sources.Label",
+    hint: "VARLYN5E.CompendiumBrowser.Sources.Hint",
     icon: "fas fa-book-open-reader",
     type: CompendiumBrowserSettingsConfig,
     restricted: true
@@ -45619,21 +45619,21 @@ function registerSystemSettings() {
 
   // Calendar Settings
   game.settings.registerMenu("dnd5e", "calendarConfiguration", {
-    name: "DND5E.CALENDAR.Configuration.Name",
-    label: "DND5E.CALENDAR.Configuration.Label",
-    hint: "DND5E.CALENDAR.Configuration.Hint",
+    name: "VARLYN5E.CALENDAR.Configuration.Name",
+    label: "VARLYN5E.CALENDAR.Configuration.Label",
+    hint: "VARLYN5E.CALENDAR.Configuration.Hint",
     icon: "fas fa-calendar-days",
     type: CalendarSettingsConfig
   });
 
   game.settings.register("dnd5e", "calendar", {
-    name: "DND5E.CALENDAR.FIELDS.calendar.label",
-    hint: "DND5E.CALENDAR.FIELDS.calendar.hint",
+    name: "VARLYN5E.CALENDAR.FIELDS.calendar.label",
+    hint: "VARLYN5E.CALENDAR.FIELDS.calendar.hint",
     scope: "world",
     config: false,
     type: new StringField$v({
       required: true, blank: false, initial: "gregorian", choices: () => Object.fromEntries(
-        CONFIG.DND5E.calendar.calendars.map(({ value, label }) => [value, label])
+        CONFIG.VARLYN5E.calendar.calendars.map(({ value, label }) => [value, label])
       )
     }),
     requiresReload: true
@@ -45657,45 +45657,45 @@ function registerSystemSettings() {
 
   // Combat Settings
   game.settings.registerMenu("dnd5e", "combatConfiguration", {
-    name: "SETTINGS.DND5E.COMBAT.Name",
-    label: "SETTINGS.DND5E.COMBAT.Label",
-    hint: "SETTINGS.DND5E.COMBAT.Hint",
+    name: "SETTINGS.VARLYN5E.COMBAT.Name",
+    label: "SETTINGS.VARLYN5E.COMBAT.Label",
+    hint: "SETTINGS.VARLYN5E.COMBAT.Hint",
     icon: "fas fa-explosion",
     type: CombatSettingsConfig,
     restricted: true
   });
 
   game.settings.register("dnd5e", "autoRecharge", {
-    name: "SETTINGS.DND5E.NPCS.AutoRecharge.Name",
-    hint: "SETTINGS.DND5E.NPCS.AutoRecharge.Hint",
+    name: "SETTINGS.VARLYN5E.NPCS.AutoRecharge.Name",
+    hint: "SETTINGS.VARLYN5E.NPCS.AutoRecharge.Hint",
     scope: "world",
     config: false,
     default: "no",
     type: String,
     choices: {
-      no: "SETTINGS.DND5E.NPCS.AutoRecharge.No",
-      silent: "SETTINGS.DND5E.NPCS.AutoRecharge.Silent",
-      yes: "SETTINGS.DND5E.NPCS.AutoRecharge.Yes"
+      no: "SETTINGS.VARLYN5E.NPCS.AutoRecharge.No",
+      silent: "SETTINGS.VARLYN5E.NPCS.AutoRecharge.Silent",
+      yes: "SETTINGS.VARLYN5E.NPCS.AutoRecharge.Yes"
     }
   });
 
   game.settings.register("dnd5e", "autoRollNPCHP", {
-    name: "SETTINGS.DND5E.NPCS.AutoRollNPCHP.Name",
-    hint: "SETTINGS.DND5E.NPCS.AutoRollNPCHP.Hint",
+    name: "SETTINGS.VARLYN5E.NPCS.AutoRollNPCHP.Name",
+    hint: "SETTINGS.VARLYN5E.NPCS.AutoRollNPCHP.Hint",
     scope: "world",
     config: false,
     default: "no",
     type: String,
     choices: {
-      no: "SETTINGS.DND5E.NPCS.AutoRollNPCHP.No",
-      silent: "SETTINGS.DND5E.NPCS.AutoRollNPCHP.Silent",
-      yes: "SETTINGS.DND5E.NPCS.AutoRollNPCHP.Yes"
+      no: "SETTINGS.VARLYN5E.NPCS.AutoRollNPCHP.No",
+      silent: "SETTINGS.VARLYN5E.NPCS.AutoRollNPCHP.Silent",
+      yes: "SETTINGS.VARLYN5E.NPCS.AutoRollNPCHP.Yes"
     }
   });
 
   game.settings.register("dnd5e", "criticalDamageModifiers", {
-    name: "SETTINGS.DND5E.CRITICAL.MultiplyModifiers.Name",
-    hint: "SETTINGS.DND5E.CRITICAL.MultiplyModifiers.Hint",
+    name: "SETTINGS.VARLYN5E.CRITICAL.MultiplyModifiers.Name",
+    hint: "SETTINGS.VARLYN5E.CRITICAL.MultiplyModifiers.Hint",
     scope: "world",
     config: false,
     type: Boolean,
@@ -45703,8 +45703,8 @@ function registerSystemSettings() {
   });
 
   game.settings.register("dnd5e", "criticalDamageMaxDice", {
-    name: "SETTINGS.DND5E.CRITICAL.MaxDice.Name",
-    hint: "SETTINGS.DND5E.CRITICAL.MaxDice.Hint",
+    name: "SETTINGS.VARLYN5E.CRITICAL.MaxDice.Name",
+    hint: "SETTINGS.VARLYN5E.CRITICAL.MaxDice.Hint",
     scope: "world",
     config: false,
     type: Boolean,
@@ -45712,22 +45712,22 @@ function registerSystemSettings() {
   });
 
   game.settings.register("dnd5e", "encounterPlacementBehavior", {
-    name: "SETTINGS.DND5E.ENCOUNTERS.EncounterPlacementBehavior.Name",
-    hint: "SETTINGS.DND5E.ENCOUNTERS.EncounterPlacementBehavior.Hint",
+    name: "SETTINGS.VARLYN5E.ENCOUNTERS.EncounterPlacementBehavior.Name",
+    hint: "SETTINGS.VARLYN5E.ENCOUNTERS.EncounterPlacementBehavior.Hint",
     scope: "world",
     config: false,
     default: "none",
     type: String,
     choices: {
-      none: "SETTINGS.DND5E.ENCOUNTERS.EncounterPlacementBehavior.None",
-      createCombatants: "SETTINGS.DND5E.ENCOUNTERS.EncounterPlacementBehavior.CreateCombatants",
-      rollInitiative: "SETTINGS.DND5E.ENCOUNTERS.EncounterPlacementBehavior.RollInitiative"
+      none: "SETTINGS.VARLYN5E.ENCOUNTERS.EncounterPlacementBehavior.None",
+      createCombatants: "SETTINGS.VARLYN5E.ENCOUNTERS.EncounterPlacementBehavior.CreateCombatants",
+      rollInitiative: "SETTINGS.VARLYN5E.ENCOUNTERS.EncounterPlacementBehavior.RollInitiative"
     }
   });
 
   game.settings.register("dnd5e", "initiativeDexTiebreaker", {
-    name: "SETTINGS.DND5E.COMBAT.DexTiebreaker.Name",
-    hint: "SETTINGS.DND5E.COMBAT.DexTiebreaker.Hint",
+    name: "SETTINGS.VARLYN5E.COMBAT.DexTiebreaker.Name",
+    hint: "SETTINGS.VARLYN5E.COMBAT.DexTiebreaker.Hint",
     scope: "world",
     config: false,
     default: false,
@@ -45735,8 +45735,8 @@ function registerSystemSettings() {
   });
 
   game.settings.register("dnd5e", "initiativeGroupCombatants", {
-    name: "SETTINGS.DND5E.COMBAT.InitiativeGroupCombatants.Name",
-    hint: "SETTINGS.DND5E.COMBAT.InitiativeGroupCombatants.Hint",
+    name: "SETTINGS.VARLYN5E.COMBAT.InitiativeGroupCombatants.Name",
+    hint: "SETTINGS.VARLYN5E.COMBAT.InitiativeGroupCombatants.Hint",
     scope: "world",
     config: false,
     default: true,
@@ -45744,8 +45744,8 @@ function registerSystemSettings() {
   });
 
   game.settings.register("dnd5e", "initiativeGroupRoll", {
-    name: "SETTINGS.DND5E.COMBAT.InitiativeGroupRoll.Name",
-    hint: "SETTINGS.DND5E.COMBAT.InitiativeGroupRoll.Hint",
+    name: "SETTINGS.VARLYN5E.COMBAT.InitiativeGroupRoll.Name",
+    hint: "SETTINGS.VARLYN5E.COMBAT.InitiativeGroupRoll.Hint",
     scope: "world",
     config: false,
     default: true,
@@ -45753,32 +45753,32 @@ function registerSystemSettings() {
   });
 
   game.settings.register("dnd5e", "initiativeScore", {
-    name: "SETTINGS.DND5E.COMBAT.InitiativeScore.Name",
-    hint: "SETTINGS.DND5E.COMBAT.InitiativeScore.Hint",
+    name: "SETTINGS.VARLYN5E.COMBAT.InitiativeScore.Name",
+    hint: "SETTINGS.VARLYN5E.COMBAT.InitiativeScore.Hint",
     scope: "world",
     config: false,
     default: "none",
     type: String,
     choices: {
-      none: "SETTINGS.DND5E.COMBAT.InitiativeScore.None",
-      npcs: "SETTINGS.DND5E.COMBAT.InitiativeScore.NPCs",
-      all: "SETTINGS.DND5E.COMBAT.InitiativeScore.All"
+      none: "SETTINGS.VARLYN5E.COMBAT.InitiativeScore.None",
+      npcs: "SETTINGS.VARLYN5E.COMBAT.InitiativeScore.NPCs",
+      all: "SETTINGS.VARLYN5E.COMBAT.InitiativeScore.All"
     }
   });
 
   // Variant Rules
   game.settings.registerMenu("dnd5e", "variantRulesConfiguration", {
-    name: "SETTINGS.DND5E.VARIANT.Name",
-    label: "SETTINGS.DND5E.VARIANT.Label",
-    hint: "SETTINGS.DND5E.VARIANT.Hint",
+    name: "SETTINGS.VARLYN5E.VARIANT.Name",
+    label: "SETTINGS.VARLYN5E.VARIANT.Label",
+    hint: "SETTINGS.VARLYN5E.VARIANT.Hint",
     icon: "fas fa-list-check",
     type: VariantRulesSettingsConfig,
     restricted: true
   });
 
   game.settings.register("dnd5e", "allowFeats", {
-    name: "SETTINGS.DND5E.VARIANT.AllowFeats.Name",
-    hint: "SETTINGS.DND5E.VARIANT.AllowFeats.Hint",
+    name: "SETTINGS.VARLYN5E.VARIANT.AllowFeats.Name",
+    hint: "SETTINGS.VARLYN5E.VARIANT.AllowFeats.Hint",
     scope: "world",
     config: false,
     default: true,
@@ -45786,8 +45786,8 @@ function registerSystemSettings() {
   });
 
   game.settings.register("dnd5e", "currencyWeight", {
-    name: "SETTINGS.DND5E.VARIANT.CurrencyWeight.Name",
-    hint: "SETTINGS.DND5E.VARIANT.CurrencyWeight.Hint",
+    name: "SETTINGS.VARLYN5E.VARIANT.CurrencyWeight.Name",
+    hint: "SETTINGS.VARLYN5E.VARIANT.CurrencyWeight.Hint",
     scope: "world",
     config: false,
     default: true,
@@ -45795,115 +45795,115 @@ function registerSystemSettings() {
   });
 
   game.settings.register("dnd5e", "encumbrance", {
-    name: "SETTINGS.DND5E.VARIANT.Encumbrance.Name",
-    hint: "SETTINGS.DND5E.VARIANT.Encumbrance.Hint",
+    name: "SETTINGS.VARLYN5E.VARIANT.Encumbrance.Name",
+    hint: "SETTINGS.VARLYN5E.VARIANT.Encumbrance.Hint",
     scope: "world",
     config: false,
     default: "none",
     type: String,
     choices: {
-      none: "SETTINGS.DND5E.VARIANT.Encumbrance.None",
-      normal: "SETTINGS.DND5E.VARIANT.Encumbrance.Normal",
-      variant: "SETTINGS.DND5E.VARIANT.Encumbrance.Variant"
+      none: "SETTINGS.VARLYN5E.VARIANT.Encumbrance.None",
+      normal: "SETTINGS.VARLYN5E.VARIANT.Encumbrance.Normal",
+      variant: "SETTINGS.VARLYN5E.VARIANT.Encumbrance.Variant"
     }
   });
 
   game.settings.register("dnd5e", "levelingMode", {
-    name: "SETTINGS.DND5E.VARIANT.LevelingMode.Name",
-    hint: "SETTINGS.DND5E.VARIANT.LevelingMode.Hint",
+    name: "SETTINGS.VARLYN5E.VARIANT.LevelingMode.Name",
+    hint: "SETTINGS.VARLYN5E.VARIANT.LevelingMode.Hint",
     scope: "world",
     config: false,
     default: "xpBoons",
     type: String,
     choices: {
-      noxp: "SETTINGS.DND5E.VARIANT.LevelingMode.NoXP",
-      xp: "SETTINGS.DND5E.VARIANT.LevelingMode.XP",
-      xpBoons: "SETTINGS.DND5E.VARIANT.LevelingMode.XPBoons"
+      noxp: "SETTINGS.VARLYN5E.VARIANT.LevelingMode.NoXP",
+      xp: "SETTINGS.VARLYN5E.VARIANT.LevelingMode.XP",
+      xpBoons: "SETTINGS.VARLYN5E.VARIANT.LevelingMode.XPBoons"
     }
   });
 
   game.settings.register("dnd5e", "proficiencyModifier", {
-    name: "SETTINGS.DND5E.VARIANT.ProficiencyModifier.Name",
-    hint: "SETTINGS.DND5E.VARIANT.ProficiencyModifier.Hint",
+    name: "SETTINGS.VARLYN5E.VARIANT.ProficiencyModifier.Name",
+    hint: "SETTINGS.VARLYN5E.VARIANT.ProficiencyModifier.Hint",
     scope: "world",
     config: false,
     default: "bonus",
     type: String,
     choices: {
-      bonus: "SETTINGS.DND5E.VARIANT.ProficiencyModifier.Bonus",
-      dice: "SETTINGS.DND5E.VARIANT.ProficiencyModifier.Dice"
+      bonus: "SETTINGS.VARLYN5E.VARIANT.ProficiencyModifier.Bonus",
+      dice: "SETTINGS.VARLYN5E.VARIANT.ProficiencyModifier.Dice"
     }
   });
 
   game.settings.register("dnd5e", "restVariant", {
-    name: "SETTINGS.DND5E.VARIANT.Rest.Name",
-    hint: "SETTINGS.DND5E.VARIANT.Rest.Hint",
+    name: "SETTINGS.VARLYN5E.VARIANT.Rest.Name",
+    hint: "SETTINGS.VARLYN5E.VARIANT.Rest.Hint",
     scope: "world",
     config: false,
     default: "normal",
     type: String,
     choices: {
-      normal: "SETTINGS.DND5E.VARIANT.Rest.Normal",
-      gritty: "SETTINGS.DND5E.VARIANT.Rest.Gritty",
-      epic: "SETTINGS.DND5E.VARIANT.Rest.Epic"
+      normal: "SETTINGS.VARLYN5E.VARIANT.Rest.Normal",
+      gritty: "SETTINGS.VARLYN5E.VARIANT.Rest.Gritty",
+      epic: "SETTINGS.VARLYN5E.VARIANT.Rest.Epic"
     }
   });
 
   // Visibility Settings
   game.settings.registerMenu("dnd5e", "visibilityConfiguration", {
-    name: "SETTINGS.DND5E.VISIBILITY.Name",
-    label: "SETTINGS.DND5E.VISIBILITY.Label",
-    hint: "SETTINGS.DND5E.VISIBILITY.Hint",
+    name: "SETTINGS.VARLYN5E.VISIBILITY.Name",
+    label: "SETTINGS.VARLYN5E.VISIBILITY.Label",
+    hint: "SETTINGS.VARLYN5E.VISIBILITY.Hint",
     icon: "fas fa-eye",
     type: VisibilitySettingsConfig,
     restricted: true
   });
 
   game.settings.register("dnd5e", "attackRollVisibility", {
-    name: "SETTINGS.DND5E.VISIBILITY.Attack.Name",
-    hint: "SETTINGS.DND5E.VISIBILITY.Attack.Hint",
+    name: "SETTINGS.VARLYN5E.VISIBILITY.Attack.Name",
+    hint: "SETTINGS.VARLYN5E.VISIBILITY.Attack.Hint",
     scope: "world",
     config: false,
     default: "none",
     type: String,
     choices: {
-      all: "SETTINGS.DND5E.VISIBILITY.Attack.All",
-      hideAC: "SETTINGS.DND5E.VISIBILITY.Attack.HideAC",
-      none: "SETTINGS.DND5E.VISIBILITY.Attack.None"
+      all: "SETTINGS.VARLYN5E.VISIBILITY.Attack.All",
+      hideAC: "SETTINGS.VARLYN5E.VISIBILITY.Attack.HideAC",
+      none: "SETTINGS.VARLYN5E.VISIBILITY.Attack.None"
     }
   });
 
   game.settings.register("dnd5e", "bloodied", {
-    name: "SETTINGS.DND5E.BLOODIED.Name",
-    hint: "SETTINGS.DND5E.BLOODIED.Hint",
+    name: "SETTINGS.VARLYN5E.BLOODIED.Name",
+    hint: "SETTINGS.VARLYN5E.BLOODIED.Hint",
     scope: "world",
     config: false,
     default: "player",
     type: String,
     choices: {
-      all: "SETTINGS.DND5E.BLOODIED.All",
-      player: "SETTINGS.DND5E.BLOODIED.Player",
-      none: "SETTINGS.DND5E.BLOODIED.None"
+      all: "SETTINGS.VARLYN5E.BLOODIED.All",
+      player: "SETTINGS.VARLYN5E.BLOODIED.Player",
+      none: "SETTINGS.VARLYN5E.BLOODIED.None"
     }
   });
 
   game.settings.register("dnd5e", "challengeVisibility", {
-    name: "SETTINGS.DND5E.VISIBILITY.Challenge.Name",
-    hint: "SETTINGS.DND5E.VISIBILITY.Challenge.Hint",
+    name: "SETTINGS.VARLYN5E.VISIBILITY.Challenge.Name",
+    hint: "SETTINGS.VARLYN5E.VISIBILITY.Challenge.Hint",
     scope: "world",
     config: false,
     default: "player",
     type: String,
     choices: {
-      all: "SETTINGS.DND5E.VISIBILITY.Challenge.All",
-      player: "SETTINGS.DND5E.VISIBILITY.Challenge.Player",
-      none: "SETTINGS.DND5E.VISIBILITY.Challenge.None"
+      all: "SETTINGS.VARLYN5E.VISIBILITY.Challenge.All",
+      player: "SETTINGS.VARLYN5E.VISIBILITY.Challenge.Player",
+      none: "SETTINGS.VARLYN5E.VISIBILITY.Challenge.None"
     }
   });
 
   game.settings.register("dnd5e", "concealItemDescriptions", {
-    name: "SETTINGS.DND5E.VISIBILITY.ItemDescriptions.Name",
-    hint: "SETTINGS.DND5E.VISIBILITY.ItemDescriptions.Hint",
+    name: "SETTINGS.VARLYN5E.VISIBILITY.ItemDescriptions.Name",
+    hint: "SETTINGS.VARLYN5E.VISIBILITY.ItemDescriptions.Hint",
     scope: "world",
     config: false,
     default: false,
@@ -45922,8 +45922,8 @@ function registerSystemSettings() {
 
   // Control hints
   game.settings.register("dnd5e", "controlHints", {
-    name: "DND5E.Controls.Name",
-    hint: "DND5E.Controls.Hint",
+    name: "VARLYN5E.Controls.Name",
+    hint: "VARLYN5E.Controls.Hint",
     scope: "client",
     config: true,
     type: Boolean,
@@ -45932,11 +45932,11 @@ function registerSystemSettings() {
 
   // NPC sheet default skills
   game.settings.register("dnd5e", "defaultSkills", {
-    name: "SETTINGS.DND5E.DEFAULTSKILLS.Name",
-    hint: "SETTINGS.DND5E.DEFAULTSKILLS.Hint",
+    name: "SETTINGS.VARLYN5E.DEFAULTSKILLS.Name",
+    hint: "SETTINGS.VARLYN5E.DEFAULTSKILLS.Hint",
     type: new foundry.data.fields.SetField(
       new foundry.data.fields.StringField({
-        choices: () => CONFIG.DND5E.skills
+        choices: () => CONFIG.VARLYN5E.skills
       })
     ),
     default: [],
@@ -45979,15 +45979,15 @@ function registerDeferredSettings() {
   });
 
   game.settings.register("dnd5e", "theme", {
-    name: "SETTINGS.DND5E.THEME.Name",
-    hint: "SETTINGS.DND5E.THEME.Hint",
+    name: "SETTINGS.VARLYN5E.THEME.Name",
+    hint: "SETTINGS.VARLYN5E.THEME.Hint",
     scope: "client",
     config: false,
     default: "",
     type: String,
     choices: {
-      "": "SHEETS.DND5E.THEME.Automatic",
-      ...CONFIG.DND5E.themes
+      "": "SHEETS.VARLYN5E.THEME.Automatic",
+      ...CONFIG.VARLYN5E.themes
     },
     onChange: s => setTheme(document.body, s)
   });
@@ -46559,7 +46559,7 @@ class AdvancementMigrationDialog extends Dialog5e {
           action: "complete",
           default: true,
           icon: "fa-solid fa-check",
-          label: _loc("DND5E.ADVANCEMENT.Migration.Action.Confirm")
+          label: _loc("VARLYN5E.ADVANCEMENT.Migration.Action.Confirm")
         }
       ],
       content: await foundry.applications.handlebars.renderTemplate(
@@ -46568,7 +46568,7 @@ class AdvancementMigrationDialog extends Dialog5e {
       ),
       rejectClose: false,
       window: {
-        title: _loc("DND5E.ADVANCEMENT.Migration.Title"),
+        title: _loc("VARLYN5E.ADVANCEMENT.Migration.Title"),
         subtitle: item.name
       }
     });
@@ -46672,43 +46672,43 @@ class EffectsElement extends (foundry.applications.elements.AdoptableHTMLElement
     const categories = {
       enchantment: {
         type: "enchantment",
-        label: _loc("DND5E.ENCHANTMENT.Category.General"),
+        label: _loc("VARLYN5E.ENCHANTMENT.Category.General"),
         effects: [],
         isEnchantment: true
       },
       temporary: {
         type: "temporary",
-        label: _loc("DND5E.EffectTemporary"),
+        label: _loc("VARLYN5E.EffectTemporary"),
         effects: []
       },
       enchantmentActive: {
         type: "activeEnchantment",
-        label: _loc("DND5E.ENCHANTMENT.Category.Active"),
+        label: _loc("VARLYN5E.ENCHANTMENT.Category.Active"),
         effects: [],
         isEnchantment: true
       },
       passive: {
         type: "passive",
-        label: _loc("DND5E.EffectPassive"),
+        label: _loc("VARLYN5E.EffectPassive"),
         effects: []
       },
       enchantmentInactive: {
         type: "inactiveEnchantment",
-        label: _loc("DND5E.ENCHANTMENT.Category.Inactive"),
+        label: _loc("VARLYN5E.ENCHANTMENT.Category.Inactive"),
         effects: [],
         isEnchantment: true
       },
       inactive: {
         type: "inactive",
-        label: _loc("DND5E.EffectInactive"),
+        label: _loc("VARLYN5E.EffectInactive"),
         effects: []
       },
       suppressed: {
         type: "suppressed",
-        label: _loc("DND5E.EffectUnavailable"),
+        label: _loc("VARLYN5E.EffectUnavailable"),
         effects: [],
         disabled: true,
-        info: [_loc("DND5E.EffectUnavailableInfo")]
+        info: [_loc("VARLYN5E.EffectUnavailableInfo")]
       }
     };
 
@@ -46733,7 +46733,7 @@ class EffectsElement extends (foundry.applications.elements.AdoptableHTMLElement
     categories.suppressed.hidden = !categories.suppressed.effects.length;
 
     for ( const category of Object.values(categories) ) {
-      category.localizationPrefix = category.isEnchantment ? "DND5E.ENCHANTMENT.Action." : "DND5E.Effect";
+      category.localizationPrefix = category.isEnchantment ? "VARLYN5E.ENCHANTMENT.Action." : "VARLYN5E.Effect";
     }
 
     return categories;
@@ -46753,32 +46753,32 @@ class EffectsElement extends (foundry.applications.elements.AdoptableHTMLElement
     const isConcentrationEffect = (this.document instanceof Actor5e) && this.app._concentration?.effects.has(effect);
     const options = [
       {
-        label: "DND5E.ContextMenuActionEdit",
+        label: "VARLYN5E.ContextMenuActionEdit",
         icon: "<i class='fas fa-edit fa-fw'></i>",
         visible: () => effect.isOwner,
         onClick: (_, target) => this._onAction(target, "edit")
       },
       {
-        label: "DND5E.ContextMenuActionDuplicate",
+        label: "VARLYN5E.ContextMenuActionDuplicate",
         icon: "<i class='fas fa-copy fa-fw'></i>",
         visible: () => effect.isOwner,
         onClick: (_, target) => this._onAction(target, "duplicate")
       },
       {
-        label: "DND5E.ContextMenuActionDelete",
+        label: "VARLYN5E.ContextMenuActionDelete",
         icon: "<i class='fas fa-trash fa-fw'></i>",
         visible: () => effect.isOwner && !isConcentrationEffect,
         onClick: (_, target) => this._onAction(target, "delete")
       },
       {
-        label: effect.disabled ? "DND5E.ContextMenuActionEnable" : "DND5E.ContextMenuActionDisable",
+        label: effect.disabled ? "VARLYN5E.ContextMenuActionEnable" : "VARLYN5E.ContextMenuActionDisable",
         icon: effect.disabled ? "<i class='fas fa-check fa-fw'></i>" : "<i class='fas fa-times fa-fw'></i>",
         group: "state",
         visible: () => effect.isOwner && !isConcentrationEffect,
         onClick: (_, target) => this._onAction(target, "toggle")
       },
       {
-        label: "DND5E.ConcentrationBreak",
+        label: "VARLYN5E.ConcentrationBreak",
         icon: '<dnd5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></dnd5e-icon>',
         group: "state",
         visible: () => isConcentrationEffect,
@@ -46791,7 +46791,7 @@ class EffectsElement extends (foundry.applications.elements.AdoptableHTMLElement
       const uuid = foundry.utils.buildRelativeUuid(effect, this.document);
       const isFavorited = this.document.system.hasFavorite(uuid);
       options.push({
-        label: isFavorited ? "DND5E.FavoriteRemove" : "DND5E.Favorite",
+        label: isFavorited ? "VARLYN5E.FavoriteRemove" : "VARLYN5E.Favorite",
         icon: "<i class='fas fa-bookmark fa-fw'></i>",
         group: "state",
         visible: () => effect.isOwner,
@@ -46876,7 +46876,7 @@ class EffectsElement extends (foundry.applications.elements.AdoptableHTMLElement
     const isEnchantment = li.dataset.effectType.startsWith("enchantment");
     return this.document.createEmbeddedDocuments("ActiveEffect", [{
       type: isEnchantment ? "enchantment" : "base",
-      name: isActor ? _loc("DND5E.EffectNew") : this.document.name,
+      name: isActor ? _loc("VARLYN5E.EffectNew") : this.document.name,
       icon: isActor ? "icons/svg/aura.svg" : this.document.img,
       origin: isEnchantment ? undefined : this.document.uuid,
       "duration.rounds": li.dataset.effectType === "temporary" ? 1 : undefined,
@@ -46896,7 +46896,7 @@ class EffectsElement extends (foundry.applications.elements.AdoptableHTMLElement
     const doc = await fromUuid(uuid);
     if ( !doc ) return;
     if ( !doc.testUserPermission(game.user, "LIMITED") ) {
-      ui.notifications.warn("DND5E.DocumentViewWarn");
+      ui.notifications.warn("VARLYN5E.DocumentViewWarn");
       return;
     }
     doc.sheet.render(true);
@@ -46938,9 +46938,9 @@ class BaseConfigSheet extends DocumentSheet5e {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.advantageModeOptions = [
-      { value: -1, label: _loc("DND5E.Disadvantage") },
-      { value: 0, label: _loc("DND5E.Normal") },
-      { value: 1, label: _loc("DND5E.Advantage") }
+      { value: -1, label: _loc("VARLYN5E.Disadvantage") },
+      { value: 0, label: _loc("VARLYN5E.Normal") },
+      { value: 1, label: _loc("VARLYN5E.Advantage") }
     ];
     return context;
   }
@@ -46974,7 +46974,7 @@ class CreatureTypeConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.CreatureType");
+    return _loc("VARLYN5E.CreatureType");
   }
 
   /* -------------------------------------------- */
@@ -47003,9 +47003,9 @@ class CreatureTypeConfig extends BaseConfigSheet {
 
     context.swarmOptions = [
       { value: "", label: "" },
-      ...Object.entries(CONFIG.DND5E.actorSizes).map(([value, { label }]) => ({ value, label })).reverse()
+      ...Object.entries(CONFIG.VARLYN5E.actorSizes).map(([value, { label }]) => ({ value, label })).reverse()
     ];
-    context.typeOptions = Object.entries(CONFIG.DND5E.creatureTypes)
+    context.typeOptions = Object.entries(CONFIG.VARLYN5E.creatureTypes)
       .map(([value, { label }]) => ({ value, label, selected: context.data.value === value }));
     if ( context.fields.custom ) context.custom = {
       enabled: true,
@@ -47068,7 +47068,7 @@ class MovementSensesConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc(this.options.type === "movement" ? "DND5E.Movement" : "DND5E.Senses");
+    return _loc(this.options.type === "movement" ? "VARLYN5E.Movement" : "VARLYN5E.Senses");
   }
 
   /* -------------------------------------------- */
@@ -47078,8 +47078,8 @@ class MovementSensesConfig extends BaseConfigSheet {
    * @type {string}
    */
   get types() {
-    if ( this.options.type === "senses" ) return Object.keys(CONFIG.DND5E.senses);
-    return Object.keys(CONFIG.DND5E.movementTypes);
+    if ( this.options.type === "senses" ) return Object.keys(CONFIG.VARLYN5E.senses);
+    return Object.keys(CONFIG.VARLYN5E.movementTypes);
   }
 
   /* -------------------------------------------- */
@@ -47108,19 +47108,19 @@ class MovementSensesConfig extends BaseConfigSheet {
       context.extras = this._prepareExtraFields(context);
       context.types = this.types.map(key => ({
         field: this.subPath ? context.fields[this.subPath].model : context.fields[key],
-        label: this.options.type === "movement" ? CONFIG.DND5E.movementTypes[key].label : CONFIG.DND5E.senses[key]?.label,
+        label: this.options.type === "movement" ? CONFIG.VARLYN5E.movementTypes[key].label : CONFIG.VARLYN5E.senses[key]?.label,
         name: this.subPath ? `system.${this.keyPath}.${this.subPath}.${key}` : `system.${this.keyPath}.${key}`,
         value: this.subPath ? context.data[this.subPath][key] : context.data[key],
         placeholder: placeholderData?.[key] ?? ""
       })).filter(type => type.field);
 
-      context.unitsOptions = Object.entries(CONFIG.DND5E.movementUnits).map(([value, { label }]) => ({ value, label }));
+      context.unitsOptions = Object.entries(CONFIG.VARLYN5E.movementUnits).map(([value, { label }]) => ({ value, label }));
       context.unitsOptions.blank = false;
       if ( this.document.system.isCharacter || (this.document.system.isNPC && placeholderData) ) {
-        const automaticUnit = CONFIG.DND5E.movementUnits[placeholderData?.units ?? defaultUnits("length")]?.label ?? "";
+        const automaticUnit = CONFIG.VARLYN5E.movementUnits[placeholderData?.units ?? defaultUnits("length")]?.label ?? "";
         context.unitsOptions.blank = true;
         context.unitsOptions.unshift(
-          { value: "", label: _loc("DND5E.AutomaticValue", { value: automaticUnit.toLowerCase() }) },
+          { value: "", label: _loc("VARLYN5E.AutomaticValue", { value: automaticUnit.toLowerCase() }) },
           { rule: true }
         );
       }
@@ -47156,11 +47156,11 @@ class MovementSensesConfig extends BaseConfigSheet {
       field: context.fields.ignoredDifficultTerrain,
       value: context.data.ignoredDifficultTerrain,
       options: [
-        { value: "all", label: _loc("DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.All") },
-        { value: "magical", label: _loc("DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Magical") },
-        { value: "nonmagical", label: _loc("DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Nonmagical") },
+        { value: "all", label: _loc("VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.All") },
+        { value: "magical", label: _loc("VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Magical") },
+        { value: "nonmagical", label: _loc("VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Nonmagical") },
         { rule: true },
-        ...Object.entries(CONFIG.DND5E.difficultTerrainTypes).map(([value, { label }]) => ({ value, label }))
+        ...Object.entries(CONFIG.VARLYN5E.difficultTerrainTypes).map(([value, { label }]) => ({ value, label }))
       ],
       localize: true
     });
@@ -47183,9 +47183,9 @@ class MovementSensesConfig extends BaseConfigSheet {
       data,
       extras: [],
       fields: this.document.system.schema.getField(keyPath).fields,
-      unitsOptions: Object.entries(CONFIG.DND5E.travelUnits).map(([value, { label }]) => ({ value, label }))
+      unitsOptions: Object.entries(CONFIG.VARLYN5E.travelUnits).map(([value, { label }]) => ({ value, label }))
     };
-    context.travel.types = Object.entries(CONFIG.DND5E.travelTypes).map(([key, config]) => ({
+    context.travel.types = Object.entries(CONFIG.VARLYN5E.travelTypes).map(([key, config]) => ({
       label: config.label,
       pace: {
         field: context.travel.fields.paces.model,
@@ -47203,7 +47203,7 @@ class MovementSensesConfig extends BaseConfigSheet {
     if ( context.travel.fields.pace ) context.travel.extras.push({
       field: context.travel.fields.pace,
       localize: true,
-      options: Object.entries(CONFIG.DND5E.travelPace).map(([value, { label }]) => ({ value, label })),
+      options: Object.entries(CONFIG.VARLYN5E.travelPace).map(([value, { label }]) => ({ value, label })),
       value: data.pace
     });
     if ( context.travel.fields.time ) context.travel.extras.push({
@@ -47211,7 +47211,7 @@ class MovementSensesConfig extends BaseConfigSheet {
       localize: true,
       value: data.time
     });
-    if ( context.fields ) context.legend = _loc("DND5E.MOVEMENT.Speed");
+    if ( context.fields ) context.legend = _loc("VARLYN5E.MOVEMENT.Speed");
   }
 }
 
@@ -47249,7 +47249,7 @@ class SourceConfig extends DocumentSheet5e {
 
   /** @override */
   get title() {
-    return _loc("DND5E.SOURCE.Action.Configure");
+    return _loc("VARLYN5E.SOURCE.Action.Configure");
   }
 
   /* -------------------------------------------- */
@@ -47269,8 +47269,8 @@ class SourceConfig extends DocumentSheet5e {
     context.sourceAnchor = (await fromUuid(context.sourceUuid))?.toAnchor().outerHTML;
     context.rulesVersions = [
       { value: "", label: "" },
-      { value: "2024", label: _loc("SETTINGS.DND5E.RULESVERSION.Modern") },
-      { value: "2014", label: _loc("SETTINGS.DND5E.RULESVERSION.Legacy") }
+      { value: "2024", label: _loc("SETTINGS.VARLYN5E.RULESVERSION.Modern") },
+      { value: "2014", label: _loc("SETTINGS.VARLYN5E.RULESVERSION.Legacy") }
     ];
     if ( this.document.system.hasOwnProperty("identifier") ) context.identifier = {
       field: this.document.system.schema.getField("identifier"),
@@ -47311,7 +47311,7 @@ class StartingEquipmentConfig extends DocumentSheet5e {
 
   /** @override */
   get title() {
-    return _loc("DND5E.StartingEquipment.Action.Configure");
+    return _loc("VARLYN5E.StartingEquipment.Action.Configure");
   }
 
   /* -------------------------------------------- */
@@ -47466,7 +47466,7 @@ class StartingEquipmentConfig extends DocumentSheet5e {
 
     // Validate that this is a physical item
     if ( !item.system.constructor._schemaTemplates?.includes(PhysicalItemTemplate) ) {
-      ui.notifications.error("DND5E.StartingEquipment.Warning.ItemTypeInvalid", {
+      ui.notifications.error("VARLYN5E.StartingEquipment.Warning.ItemTypeInvalid", {
         format: { type: _loc(CONFIG.Item.typeLabels[item.type]) }
       });
       return null;
@@ -47518,7 +47518,7 @@ class StartingEquipmentConfig extends DocumentSheet5e {
         if ( dragEntry.children.some(c => c.type in EquipmentEntryData.GROUPING_TYPES) ) depth += 1;
       }
       if ( depth > 3 ) {
-        ui.notifications.warn("DND5E.StartingEquipment.Warning.Depth");
+        ui.notifications.warn("VARLYN5E.StartingEquipment.Warning.Depth");
         return;
       }
       updateData = { [`startingEquipment.${dragEntry._id}.group`]: dropEntry._id };
@@ -47637,11 +47637,11 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
 
   /** @override */
   static TABS = [
-    { tab: "description", label: "DND5E.ITEM.SECTIONS.Description" },
-    { tab: "details", label: "DND5E.ITEM.SECTIONS.Details", condition: this.isItemIdentified.bind(this) },
-    { tab: "activities", label: "DND5E.ITEM.SECTIONS.Activities", condition: this.itemHasActivities.bind(this) },
-    { tab: "effects", label: "DND5E.ITEM.SECTIONS.Effects", condition: this.itemHasEffects.bind(this) },
-    { tab: "advancement", label: "DND5E.ITEM.SECTIONS.Advancement", condition: this.itemHasAdvancement.bind(this) }
+    { tab: "description", label: "VARLYN5E.ITEM.SECTIONS.Description" },
+    { tab: "details", label: "VARLYN5E.ITEM.SECTIONS.Details", condition: this.isItemIdentified.bind(this) },
+    { tab: "activities", label: "VARLYN5E.ITEM.SECTIONS.Activities", condition: this.itemHasActivities.bind(this) },
+    { tab: "effects", label: "VARLYN5E.ITEM.SECTIONS.Effects", condition: this.itemHasEffects.bind(this) },
+    { tab: "advancement", label: "VARLYN5E.ITEM.SECTIONS.Advancement", condition: this.itemHasAdvancement.bind(this) }
   ];
 
   /* -------------------------------------------- */
@@ -47743,7 +47743,7 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
       active: [],
       object: Object.fromEntries((context.system.properties ?? []).map(p => [p, true])),
       options: (this.item.system.validProperties ?? []).reduce((arr, k) => {
-        const { label } = CONFIG.DND5E.itemProperties[k];
+        const { label } = CONFIG.VARLYN5E.itemProperties[k];
         arr.push({
           label,
           value: k,
@@ -47886,30 +47886,30 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
     context.parts ??= [];
 
     context.baseItemOptions = await this._getBaseItemOptions(context);
-    context.coverOptions = Object.entries(CONFIG.DND5E.cover).map(([value, label]) => ({ value, label }));
-    context.unitsOptions = Object.entries(CONFIG.DND5E.movementUnits).map(([value, { label }]) => ({ value, label }));
+    context.coverOptions = Object.entries(CONFIG.VARLYN5E.cover).map(([value, label]) => ({ value, label }));
+    context.unitsOptions = Object.entries(CONFIG.VARLYN5E.movementUnits).map(([value, { label }]) => ({ value, label }));
 
     // If using modern rules, do not show redundant artificer progression unless it is already selected.
-    context.spellProgression = { ...CONFIG.DND5E.spellProgression };
+    context.spellProgression = { ...CONFIG.VARLYN5E.spellProgression };
     if ( (varlyn5e.settings.rulesVersion === "modern")
       && (this.item.system.spellcasting?.progression !== "artificer") ) delete context.spellProgression.artificer;
     context.spellProgression = Object.entries(context.spellProgression).map(([value, config]) => {
-      const group = CONFIG.DND5E.spellcasting[config.type]?.label ?? "";
+      const group = CONFIG.VARLYN5E.spellcasting[config.type]?.label ?? "";
       return { group, value, label: config.label };
     });
     const { progression } = this.item.system.spellcasting ?? {};
-    if ( progression && !(progression in CONFIG.DND5E.spellProgression) ) {
+    if ( progression && !(progression in CONFIG.VARLYN5E.spellProgression) ) {
       context.spellProgression.push({ value: progression, label: progression });
     }
 
     // Limited Uses
     context.data = { uses: context.source.uses };
     context.hasLimitedUses = this.item.system.hasLimitedUses;
-    context.recoveryPeriods = CONFIG.DND5E.limitedUsePeriods.recoveryOptions;
+    context.recoveryPeriods = CONFIG.VARLYN5E.limitedUsePeriods.recoveryOptions;
     context.recoveryTypes = [
-      { value: "recoverAll", label: "DND5E.USES.Recovery.Type.RecoverAll" },
-      { value: "loseAll", label: "DND5E.USES.Recovery.Type.LoseAll" },
-      { value: "formula", label: "DND5E.USES.Recovery.Type.Formula" }
+      { value: "recoverAll", label: "VARLYN5E.USES.Recovery.Type.RecoverAll" },
+      { value: "loseAll", label: "VARLYN5E.USES.Recovery.Type.LoseAll" },
+      { value: "formula", label: "VARLYN5E.USES.Recovery.Type.Formula" }
     ];
     context.usesRecovery = (context.source.uses?.recovery ?? []).map((data, index) => ({
       data,
@@ -48072,12 +48072,12 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
     const tags = [];
     if ( advancement.classRestriction === "primary" ) {
       tags.push({
-        label: "DND5E.AdvancementClassRestrictionPrimary",
+        label: "VARLYN5E.AdvancementClassRestrictionPrimary",
         icon: "systems/dnd5e/icons/svg/original-class.svg"
       });
     } else if ( advancement.classRestriction === "secondary" ) {
       tags.push({
-        label: "DND5E.AdvancementClassRestrictionSecondary",
+        label: "VARLYN5E.AdvancementClassRestrictionSecondary",
         icon: "systems/dnd5e/icons/svg/multiclass.svg"
       });
     }
@@ -48094,9 +48094,9 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
    */
   async _getBaseItemOptions(context) {
     const baseIds = this.item.type === "equipment" ? {
-      ...CONFIG.DND5E.armorIds,
-      ...CONFIG.DND5E.shieldIds
-    } : CONFIG.DND5E[`${this.item.type}Ids`];
+      ...CONFIG.VARLYN5E.armorIds,
+      ...CONFIG.VARLYN5E.shieldIds
+    } : CONFIG.VARLYN5E[`${this.item.type}Ids`];
     if ( baseIds === undefined ) return null;
 
     const options = [];
@@ -48191,7 +48191,7 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
 
     if ( this._headerToggles.identified ) {
       const isIdentified = this.item.system.identified;
-      const label = isIdentified ? "DND5E.Identified" : "DND5E.Unidentified.Title";
+      const label = isIdentified ? "VARLYN5E.Identified" : "VARLYN5E.Unidentified.Title";
       this._headerToggles.identified.setAttribute("aria-label", _loc(label));
       this._headerToggles.identified.dataset.tooltip = label;
       this._headerToggles.identified.classList.toggle("active", isIdentified);
@@ -48199,7 +48199,7 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
 
     if ( this._headerToggles.equipped ) {
       const isEquipped = this.item.system.equipped;
-      const label = isEquipped ? "DND5E.Equipped" : "DND5E.Unequipped";
+      const label = isEquipped ? "VARLYN5E.Equipped" : "VARLYN5E.Unequipped";
       this._headerToggles.equipped.setAttribute("aria-label", _loc(label));
       this._headerToggles.equipped.dataset.tooltip = label;
       this._headerToggles.equipped.classList.toggle("active", isEquipped);
@@ -48522,7 +48522,7 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
   _onDropActivity(event, { data }) {
     const { _id: id, type } = data;
     const source = this.item.system.activities.get(id);
-    const config = CONFIG.DND5E.activityTypes[type] ?? {};
+    const config = CONFIG.VARLYN5E.activityTypes[type] ?? {};
 
     // Reordering
     if ( source ) {
@@ -48568,7 +48568,7 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
       return false;
     }
     advancements = advancements.filter(a => {
-      const validItemTypes = CONFIG.DND5E.advancementTypes[a.constructor.typeName]?.validItemTypes
+      const validItemTypes = CONFIG.VARLYN5E.advancementTypes[a.constructor.typeName]?.validItemTypes
         ?? a.metadata.validItemTypes;
       return !this.item.advancement.byId[a.id]
         && validItemTypes.has(this.item.type)
@@ -48815,7 +48815,7 @@ function PrimarySheetMixin(Base) {
       elements.innerHTML = `
         <div class="source-book">
           <button type="button" class="unbutton control-button header-control" data-action="showConfiguration"
-                  data-config="source" data-tooltip aria-label="${_loc("DND5E.SOURCE.Action.Configure")}">
+                  data-config="source" data-tooltip aria-label="${_loc("VARLYN5E.SOURCE.Action.Configure")}">
             <i class="fas fa-cog" inert></i>
           </button>
           <span></span>
@@ -48837,7 +48837,7 @@ function PrimarySheetMixin(Base) {
       const editable = this.isEditable && this.isEditMode;
       elements.querySelector("button")?.toggleAttribute("hidden", !editable);
       elements.querySelector("span").innerText = editable
-        ? (source.label || _loc("DND5E.SOURCE.FIELDS.source.label"))
+        ? (source.label || _loc("VARLYN5E.SOURCE.FIELDS.source.label"))
         : source.label;
     }
 
@@ -49017,7 +49017,7 @@ function PrimarySheetMixin(Base) {
      */
     async _onChangeSheetMode(event, target=event.currentTarget) {
       const { MODES } = this.constructor;
-      const label = _loc(`DND5E.SheetMode${target.checked ? "Play" : "Edit"}`);
+      const label = _loc(`VARLYN5E.SheetMode${target.checked ? "Play" : "Edit"}`);
       target.dataset.tooltip = label;
       target.setAttribute("aria-label", label);
       this._mode = target.checked ? MODES.EDIT : MODES.PLAY;
@@ -49284,7 +49284,7 @@ class BaseProficiencyConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.ABILITY.Configure.Title", { ability: this.propertyLabel });
+    return _loc("VARLYN5E.ABILITY.Configure.Title", { ability: this.propertyLabel });
   }
 
   /* -------------------------------------------- */
@@ -49344,7 +49344,7 @@ class AbilityConfig extends BaseProficiencyConfig {
 
   /** @override */
   get propertyConfig() {
-    return CONFIG.DND5E.abilities[this.options.key];
+    return CONFIG.VARLYN5E.abilities[this.options.key];
   }
 
   /* -------------------------------------------- */
@@ -49355,11 +49355,11 @@ class AbilityConfig extends BaseProficiencyConfig {
   async _preparePartContext(partId, context, options) {
     context = await super._preparePartContext(partId, context, options);
     context.proficiencyOptions = [
-      { value: 0, label: CONFIG.DND5E.proficiencyLevels[0] },
-      { value: 1, label: CONFIG.DND5E.proficiencyLevels[1] }
+      { value: 0, label: CONFIG.VARLYN5E.proficiencyLevels[0] },
+      { value: 1, label: CONFIG.VARLYN5E.proficiencyLevels[1] }
     ];
-    context.checkLabel = _loc("DND5E.ABILITY.Configure.CheckLabel", { ability: context.label });
-    context.saveLabel = _loc("DND5E.ABILITY.Configure.SaveLabel", { ability: context.label });
+    context.checkLabel = _loc("VARLYN5E.ABILITY.Configure.CheckLabel", { ability: context.label });
+    context.saveLabel = _loc("VARLYN5E.ABILITY.Configure.SaveLabel", { ability: context.label });
     return context;
   }
 }
@@ -49391,7 +49391,7 @@ class ArmorClassConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.ArmorClass");
+    return _loc("VARLYN5E.ArmorClass");
   }
 
   /* -------------------------------------------- */
@@ -49405,14 +49405,14 @@ class ArmorClassConfig extends BaseConfigSheet {
     context.fields = this.document.system.schema.fields.attributes.fields.ac.fields;
     context.source = this.document.system._source.attributes.ac;
 
-    context.calculationOptions = Object.entries(CONFIG.DND5E.armorClasses).reduce((arr, [value, config]) => {
+    context.calculationOptions = Object.entries(CONFIG.VARLYN5E.armorClasses).reduce((arr, [value, config]) => {
       if ( value === "custom" ) arr.push({ rule: true });
       arr.push({ value, label: config.label });
       if ( value === "natural" ) arr.push({ rule: true });
       return arr;
     }, []);
 
-    const config = CONFIG.DND5E.armorClasses[context.source.calc];
+    const config = CONFIG.VARLYN5E.armorClasses[context.source.calc];
     context.formula = {
       disabled: context.source.calc !== "custom",
       showFlat: ["flat", "natural"].includes(context.source.calc),
@@ -49481,7 +49481,7 @@ class ConcentrationConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.ABILITY.Configure.Title", { ability: _loc("DND5E.Concentration") });
+    return _loc("VARLYN5E.ABILITY.Configure.Title", { ability: _loc("VARLYN5E.Concentration") });
   }
 
   /* -------------------------------------------- */
@@ -49495,11 +49495,11 @@ class ConcentrationConfig extends BaseConfigSheet {
 
     context.data = source.attributes?.concentration ?? {};
     context.fields = this.document.system.schema.fields.attributes.fields.concentration.fields;
-    const ability = CONFIG.DND5E.abilities[CONFIG.DND5E.defaultAbilities.concentration]?.label?.toLowerCase();
+    const ability = CONFIG.VARLYN5E.abilities[CONFIG.VARLYN5E.defaultAbilities.concentration]?.label?.toLowerCase();
     context.abilityOptions = [
-      { value: "", label: ability ? _loc("DND5E.DefaultSpecific", { default: ability }) : "" },
+      { value: "", label: ability ? _loc("VARLYN5E.DefaultSpecific", { default: ability }) : "" },
       { rule: true },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label }))
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label }))
     ];
 
     if ( this.document.system.bonuses?.abilities ) context.global = {
@@ -49549,7 +49549,7 @@ class TraitsConfig extends BaseConfigSheet {
    * @type {string}
    */
   get otherLabel() {
-    return _loc("DND5E.ProficiencyOther");
+    return _loc("VARLYN5E.ProficiencyOther");
   }
 
   /* -------------------------------------------- */
@@ -49559,8 +49559,8 @@ class TraitsConfig extends BaseConfigSheet {
   /** @inheritDoc */
   _initializeApplicationOptions(options) {
     options = super._initializeApplicationOptions(options);
-    if ( !CONFIG.DND5E.traits[options.trait] ) throw new Error(
-      `Cannot instantiate TraitsConfig with a trait not defined in CONFIG.DND5E.traits: ${options.trait}.`
+    if ( !CONFIG.VARLYN5E.traits[options.trait] ) throw new Error(
+      `Cannot instantiate TraitsConfig with a trait not defined in CONFIG.VARLYN5E.traits: ${options.trait}.`
     );
     options.uniqueId = `${options.trait}-${options.document.uuid}`.replace(/\./g, "-");
     return options;
@@ -49638,7 +49638,7 @@ class TraitsConfig extends BaseConfigSheet {
   /** @inheritDoc */
   _processFormData(event, form, formData) {
     const submitData = super._processFormData(event, form, formData);
-    if ( !CONFIG.DND5E.traits[this.options.trait].dataType ) {
+    if ( !CONFIG.VARLYN5E.traits[this.options.trait].dataType ) {
       this._filterData(submitData, `${actorKeyPath(this.options.trait)}.value`);
     }
     return submitData;
@@ -49683,7 +49683,7 @@ class DamagesConfig extends TraitsConfig {
 
   /** @override */
   get otherLabel() {
-    return _loc("DND5E.DamageTypes");
+    return _loc("VARLYN5E.DamageTypes");
   }
 
   /* -------------------------------------------- */
@@ -49693,7 +49693,7 @@ class DamagesConfig extends TraitsConfig {
   /** @inheritDoc */
   async _preparePartContext(partId, context, options) {
     context = await super._preparePartContext(partId, context, options);
-    context.bypasses = new SelectChoices(Object.entries(CONFIG.DND5E.itemProperties).reduce((obj, [k, v]) => {
+    context.bypasses = new SelectChoices(Object.entries(CONFIG.VARLYN5E.itemProperties).reduce((obj, [k, v]) => {
       if ( v.isPhysical ) obj[k] = {
         label: v.label,
         chosen: context.data.bypasses.includes(k),
@@ -49704,12 +49704,12 @@ class DamagesConfig extends TraitsConfig {
     context.value = {};
     if ( this.options.trait === "dm" ) {
       context.choices.forEach((key, data) => data.chosen = context.data.amount[key] ?? "");
-      context.bypassHint = "DND5E.DamageModification.BypassHint";
-      context.hint = "DND5E.DamageModification.Hint";
+      context.bypassHint = "VARLYN5E.DamageModification.BypassHint";
+      context.hint = "VARLYN5E.DamageModification.Hint";
       context.value.field = new FormulaField({ determinstic: true });
       context.value.key = "amount";
     } else {
-      context.bypassHint = "DND5E.DAMAGE.PhysicalBypass.Hint";
+      context.bypassHint = "VARLYN5E.DAMAGE.PhysicalBypass.Hint";
       context.value.field = context.checkbox;
       context.value.input = context.inputs.createCheckboxInput;
       context.value.key = "value";
@@ -49722,7 +49722,7 @@ class DamagesConfig extends TraitsConfig {
   /** @inheritDoc */
   _processChoice(data, key, choice, categoryChosen=false) {
     super._processChoice(data, key, choice, categoryChosen);
-    const config = CONFIG.DND5E.damageTypes[key];
+    const config = CONFIG.VARLYN5E.damageTypes[key];
     if ( config ) choice.icon = { src: config.icon };
   }
 
@@ -49773,7 +49773,7 @@ class DeathConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.DeathSaveConfigure");
+    return _loc("VARLYN5E.DeathSaveConfigure");
   }
 
   /* -------------------------------------------- */
@@ -49829,7 +49829,7 @@ class HitDiceConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.HitDice");
+    return _loc("VARLYN5E.HitDice");
   }
 
   /* -------------------------------------------- */
@@ -49925,7 +49925,7 @@ class HitPointsConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.HitPoints");
+    return _loc("VARLYN5E.HitPoints");
   }
 
   /* -------------------------------------------- */
@@ -49940,8 +49940,8 @@ class HitPointsConfig extends BaseConfigSheet {
     context.source = this.document.system._source.attributes.hp;
 
     // Display positive ability modifier as its own row, but if negative merge into classes totals
-    const ability = CONFIG.DND5E.abilities[CONFIG.DND5E.defaultAbilities.hitPoints];
-    const mod = this.document.system.abilities?.[CONFIG.DND5E.defaultAbilities.hitPoints]?.mod ?? 0;
+    const ability = CONFIG.VARLYN5E.abilities[CONFIG.VARLYN5E.defaultAbilities.hitPoints];
+    const mod = this.document.system.abilities?.[CONFIG.VARLYN5E.defaultAbilities.hitPoints]?.mod ?? 0;
     if ( ability && (mod > 0) ) context.ability = { mod, name: ability.label };
 
     // Summarize HP from classes
@@ -49995,7 +49995,7 @@ class HitPointsConfig extends BaseConfigSheet {
       const roll = await this.document.rollNPCHitPoints();
       this.submit({ updateData: { "system.attributes.hp.max": roll.total } });
     } catch(error) {
-      ui.notifications.error("DND5E.HPFormulaError");
+      ui.notifications.error("VARLYN5E.HPFormulaError");
       throw error;
     }
   }
@@ -50044,7 +50044,7 @@ class InitiativeConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.Initiative");
+    return _loc("VARLYN5E.Initiative");
   }
 
   /* -------------------------------------------- */
@@ -50056,19 +50056,19 @@ class InitiativeConfig extends BaseConfigSheet {
     context = await super._preparePartContext(partId, context, options);
     const source = this.document._source;
 
-    const defaultAbility = CONFIG.DND5E.abilities[CONFIG.DND5E.defaultAbilities.initiative];
+    const defaultAbility = CONFIG.VARLYN5E.abilities[CONFIG.VARLYN5E.defaultAbilities.initiative];
     context.abilityOptions = [
-      { value: "", label: _loc("DND5E.DefaultSpecific", { default: defaultAbility.label.toLowerCase() }) },
+      { value: "", label: _loc("VARLYN5E.DefaultSpecific", { default: defaultAbility.label.toLowerCase() }) },
       { rule: true },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label }))
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label }))
     ];
     context.data = source.system.attributes.init;
     context.fields = this.document.system.schema.fields.attributes.fields.init.fields;
 
-    const ability = this.document.system.attributes.init.ability || CONFIG.DND5E.defaultAbilities.initiative;
-    const abilityConfig = CONFIG.DND5E.abilities[ability];
+    const ability = this.document.system.attributes.init.ability || CONFIG.VARLYN5E.defaultAbilities.initiative;
+    const abilityConfig = CONFIG.VARLYN5E.abilities[ability];
     context.ability = {
-      label: _loc("DND5E.AbilityCheckConfigure", { ability: abilityConfig.label }),
+      label: _loc("VARLYN5E.AbilityCheckConfigure", { ability: abilityConfig.label }),
       global: {
         field: this.document.system.schema.fields.bonuses?.fields.abilities.fields.check,
         name: "system.bonuses.abilities.check",
@@ -50083,7 +50083,7 @@ class InitiativeConfig extends BaseConfigSheet {
 
     context.flags = {
       alert: {
-        field: new BooleanField$b({ label: _loc("DND5E.FlagsAlert") }),
+        field: new BooleanField$b({ label: _loc("VARLYN5E.FlagsAlert") }),
         name: "flags.dnd5e.initiativeAlert",
         value: source.flags.dnd5e?.initiativeAlert
       }
@@ -50118,7 +50118,7 @@ class LanguagesConfig extends TraitsConfig {
 
   /** @override */
   get title() {
-    return _loc("DND5E.Languages");
+    return _loc("VARLYN5E.Languages");
   }
 
   /* -------------------------------------------- */
@@ -50129,8 +50129,8 @@ class LanguagesConfig extends TraitsConfig {
   async _preparePartContext(partId, context, options) {
     context = await super._preparePartContext(partId, context, options);
 
-    const unitOptions = Object.entries(CONFIG.DND5E.movementUnits).map(([value, { label }]) => ({ value, label }));
-    context.communication = Object.entries(CONFIG.DND5E.communicationTypes).map(([key, { label }]) => ({
+    const unitOptions = Object.entries(CONFIG.VARLYN5E.movementUnits).map(([value, { label }]) => ({ value, label }));
+    context.communication = Object.entries(CONFIG.VARLYN5E.communicationTypes).map(([key, { label }]) => ({
       label, unitOptions,
       data: context.data.communication[key],
       fields: context.fields.communication.model.fields,
@@ -50166,7 +50166,7 @@ class SkillToolConfig extends BaseProficiencyConfig {
    * @type {SkillConfiguration|ToolConfiguration}
    */
   get propertyConfig() {
-    return CONFIG.DND5E[this.options.trait === "skills" ? "skills" : "tools"][this.options.key];
+    return CONFIG.VARLYN5E[this.options.trait === "skills" ? "skills" : "tools"][this.options.key];
   }
 
   /* -------------------------------------------- */
@@ -50176,10 +50176,10 @@ class SkillToolConfig extends BaseProficiencyConfig {
   /** @inheritDoc */
   async _preparePartContext(partId, context, options) {
     context = await super._preparePartContext(partId, context, options);
-    context.abilityOptions = Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label }));
-    context.proficiencyOptions = Object.entries(CONFIG.DND5E.proficiencyLevels)
+    context.abilityOptions = Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label }));
+    context.proficiencyOptions = Object.entries(CONFIG.VARLYN5E.proficiencyLevels)
       .map(([value, label]) => ({ value, label }));
-    context.section = `DND5E.${this.options.trait === "skills" ? "SKILL" : "TOOL"}.SECTIONS.`;
+    context.section = `VARLYN5E.${this.options.trait === "skills" ? "SKILL" : "TOOL"}.SECTIONS.`;
     context.global.skill = this.options.trait === "skills";
     return context;
   }
@@ -50228,7 +50228,7 @@ class SkillsConfig extends TraitsConfig {
     if ( skill ) {
       choice.value = skill.value;
       choice.total = this.document.system.skills[key]?.total;
-      choice.tooltip = CONFIG.DND5E.proficiencyLevels[skill.value];
+      choice.tooltip = CONFIG.VARLYN5E.proficiencyLevels[skill.value];
     }
   }
 
@@ -50286,7 +50286,7 @@ class SpellSlotsConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.SpellSlotsConfig");
+    return _loc("VARLYN5E.SpellSlotsConfig");
   }
 
   /* -------------------------------------------- */
@@ -50299,7 +50299,7 @@ class SpellSlotsConfig extends BaseConfigSheet {
 
     const { spells } = this.document.system;
     const source = this.document._source.system.spells;
-    const maxLevel = Object.keys(CONFIG.DND5E.spellLevels).length - 1;
+    const maxLevel = Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1;
     const spellcastingMethods = new Set([
       "spell",
       ...Object.values(this.document.spellcastingClasses).map(cls => {
@@ -50308,7 +50308,7 @@ class SpellSlotsConfig extends BaseConfigSheet {
       ...this.document.itemTypes.spell.map(s => s.system.method)
     ]);
 
-    const models = Object.entries(CONFIG.DND5E.spellcasting).sort(([a]) => a === "spell" ? -1 : 0);
+    const models = Object.entries(CONFIG.VARLYN5E.spellcasting).sort(([a]) => a === "spell" ? -1 : 0);
     context.overrides = models.reduce((arr, [method, model]) => {
       if ( !model.slots ) return arr;
       for ( let i = model.isSingleLevel ? maxLevel : 1; i <= maxLevel; i++ ) {
@@ -50318,7 +50318,7 @@ class SpellSlotsConfig extends BaseConfigSheet {
         arr.push({
           value,
           label: model.isSingleLevel
-            ? _loc(`DND5E.SPELLCASTING.METHODS.${method.capitalize()}.abbr`)
+            ? _loc(`VARLYN5E.SPELLCASTING.METHODS.${method.capitalize()}.abbr`)
             : model.getLabel({ level: i }),
           name: `system.spells.${key}.override`,
           placeholder: spells[key]?.max ?? 0
@@ -50366,7 +50366,7 @@ class ToolsConfig extends TraitsConfig {
       choice.value = tool.value;
       choice.total = this.document.system.tools[key]?.total;
     }
-    choice.tooltip = CONFIG.DND5E.proficiencyLevels[tool?.value ?? 0];
+    choice.tooltip = CONFIG.VARLYN5E.proficiencyLevels[tool?.value ?? 0];
   }
 
   /* -------------------------------------------- */
@@ -50405,7 +50405,7 @@ class ToolsConfig extends TraitsConfig {
     const submitData = Object.entries(formData.object).reduce((obj, [k, value]) => {
       const key = k.split(".")[2];
       const tool = this.document.system._source.tools[key];
-      const config = CONFIG.DND5E.tools[key];
+      const config = CONFIG.VARLYN5E.tools[key];
       if ( tool && !value ) obj[`system.tools.${key}`] = _del;
       else if ( !tool && value ) obj[`system.tools.${key}`] = { value, ability: config?.ability || "int" };
       else if ( value ) obj[`system.tools.${key}.value`] = value;
@@ -50487,7 +50487,7 @@ class TransformDialog extends Dialog5e {
     buttons: [{
       action: "submit",
       icon: "fa-solid fa-check",
-      label: "DND5E.TRANSFORM.Action.Transform",
+      label: "VARLYN5E.TRANSFORM.Action.Transform",
       type: "submit"
     }],
     classes: ["transformation"],
@@ -50504,7 +50504,7 @@ class TransformDialog extends Dialog5e {
       source: null
     },
     window: {
-      title: "DND5E.TRANSFORM.Dialog.Title",
+      title: "VARLYN5E.TRANSFORM.Dialog.Title",
       icon: "fa-solid fa-arrow-right-arrow-left",
       minimizable: true
     }
@@ -50600,7 +50600,7 @@ class TransformDialog extends Dialog5e {
    * @protected
    */
   async _preparePresetsContext(context, options) {
-    context.presets = Object.entries(CONFIG.DND5E.transformation.presets).reduce((obj, [key, config]) => {
+    context.presets = Object.entries(CONFIG.VARLYN5E.transformation.presets).reduce((obj, [key, config]) => {
       obj[key] = {
         ...config,
         selected: this.#settings.preset === key
@@ -50646,13 +50646,13 @@ class TransformDialog extends Dialog5e {
   #disableFields(changed) {
     const handleDisable = field => {
       if ( field.disabled ) return;
-      const config = foundry.utils.getProperty(CONFIG.DND5E.transformation, field.name);
+      const config = foundry.utils.getProperty(CONFIG.VARLYN5E.transformation, field.name);
       if ( !config?.disables?.length ) return;
       const names = config.disables.map(d => d.includes("*") ? `[name^="${d.replace("*", "")}"]` : `[name="${d}"]`);
       const selector = `:is(${names.join(",")}):not([name="${field.name}"])`;
       this.element.querySelectorAll(selector).forEach(element => {
         element.disabled = field.value;
-        if ( element.disabled && element.tagName === "DND5E-CHECKBOX" ) element.checked = false;
+        if ( element.disabled && element.tagName === "VARLYN5E-CHECKBOX" ) element.checked = false;
         else if ( element.disabled ) element.value = "";
       });
     };
@@ -50664,7 +50664,7 @@ class TransformDialog extends Dialog5e {
 
   /** @inheritDoc */
   _onChangeForm(formConfig, event) {
-    if ( event.target?.tagName === "DND5E-CHECKBOX" ) this.#disableFields(event.target);
+    if ( event.target?.tagName === "VARLYN5E-CHECKBOX" ) this.#disableFields(event.target);
     super._onChangeForm(formConfig, event);
   }
 
@@ -50677,7 +50677,7 @@ class TransformDialog extends Dialog5e {
    * @param {HTMLElement} target  Button that was clicked.
    */
   static async #setPreset(event, target) {
-    const preset = CONFIG.DND5E.transformation.presets[target.dataset.preset];
+    const preset = CONFIG.VARLYN5E.transformation.presets[target.dataset.preset];
     if ( preset ) this.#settings = new TransformationSetting({
       ...preset.settings,
       preset: target.dataset.preset,
@@ -50818,14 +50818,14 @@ class ItemListControlsElement extends MaybeAdoptable$3 {
    */
   static CONFIG = {
     inventory: {
-      label: "DND5E.InventorySearch",
+      label: "VARLYN5E.InventorySearch",
       list: "inventory",
       filters: [
-        { key: "action", label: "DND5E.Action" },
-        { key: "bonus", label: "DND5E.BonusAction" },
-        { key: "reaction", label: "DND5E.Reaction" },
-        { key: "equipped", label: "DND5E.Equipped" },
-        { key: "mgc", label: "DND5E.ITEM.Property.Magical" }
+        { key: "action", label: "VARLYN5E.Action" },
+        { key: "bonus", label: "VARLYN5E.BonusAction" },
+        { key: "reaction", label: "VARLYN5E.Reaction" },
+        { key: "equipped", label: "VARLYN5E.Equipped" },
+        { key: "mgc", label: "VARLYN5E.ITEM.Property.Magical" }
       ],
       sorting: [
         { key: "m", label: "SIDEBAR.SortModeManual", dataset: { icon: "fa-solid fa-arrow-down-short-wide" } },
@@ -50834,10 +50834,10 @@ class ItemListControlsElement extends MaybeAdoptable$3 {
       grouping: [
         {
           key: "type",
-          label: "DND5E.FilterGroupCategory",
+          label: "VARLYN5E.FilterGroupCategory",
           dataset: { icon: "fa-solid fa-layer-group", classes: "active" }
         },
-        { key: "contents", label: "DND5E.FilterGroupCategory", dataset: { icon: "fa-solid fa-layer-group" } }
+        { key: "contents", label: "VARLYN5E.FilterGroupCategory", dataset: { icon: "fa-solid fa-layer-group" } }
       ]
     }
   };
@@ -51027,7 +51027,7 @@ class ItemListControlsElement extends MaybeAdoptable$3 {
       <ul class="unlist controls">
         <li>
           <button type="button" class="unbutton filter-control always-interactive" data-action="clear"
-                  data-tooltip aria-label="${_loc("DND5E.FilterClear")}">
+                  data-tooltip aria-label="${_loc("VARLYN5E.FilterClear")}">
             <i class="fas fa-xmark"></i>
           </button>
         </li>
@@ -51045,7 +51045,7 @@ class ItemListControlsElement extends MaybeAdoptable$3 {
       const item = document.createElement("li");
       item.innerHTML = `
         <button type="button" class="unbutton filter-control filter always-interactive" data-action="filter"
-                aria-label="${_loc("DND5E.Filter")}">
+                aria-label="${_loc("VARLYN5E.Filter")}">
           <i class="fa-solid fa-filter" inert></i>
         </button>
       `;
@@ -51325,7 +51325,7 @@ class BaseActorSheet extends PrimarySheetMixin(
         {
           action: "restoreTransformation",
           icon: "fa-solid fa-backward",
-          label: "DND5E.TRANSFORM.Action.Restore",
+          label: "VARLYN5E.TRANSFORM.Action.Restore",
           ownership: "OWNER",
           visible: BaseActorSheet.#canRestoreTransformation
         }
@@ -51438,7 +51438,7 @@ class BaseActorSheet extends PrimarySheetMixin(
       elements: this.options.elements,
       fields: this.actor.system.schema.fields,
       labels: {
-        damageAndHealing: { ...CONFIG.DND5E.damageTypes, ...CONFIG.DND5E.healingTypes },
+        damageAndHealing: { ...CONFIG.VARLYN5E.damageTypes, ...CONFIG.VARLYN5E.healingTypes },
         ...this.actor.labels
       },
       limited: this.actor.limited,
@@ -51474,7 +51474,7 @@ class BaseActorSheet extends PrimarySheetMixin(
     context.effects = EffectsElement.prepareCategories(this.actor.allApplicableEffects());
 
     const conditionIds = new Set();
-    context.conditions = Object.entries(CONFIG.DND5E.conditionTypes).reduce((arr, [k, c]) => {
+    context.conditions = Object.entries(CONFIG.VARLYN5E.conditionTypes).reduce((arr, [k, c]) => {
       if ( c.pseudo ) return arr; // Filter out pseudo-conditions.
       let { name, img, reference } = c;
       const id = staticID(`dnd5e${k}`);
@@ -51533,7 +51533,7 @@ class BaseActorSheet extends PrimarySheetMixin(
 
     // Currency
     context.currency = Object.fromEntries(
-      Object.keys(CONFIG.DND5E.currencies).map(k => [k, this.inventorySource.system.currency[k] ?? 0])
+      Object.keys(CONFIG.VARLYN5E.currencies).map(k => [k, this.inventorySource.system.currency[k] ?? 0])
     );
 
     // Containers
@@ -51585,7 +51585,7 @@ class BaseActorSheet extends PrimarySheetMixin(
     };
 
     // Character Flags
-    for ( const [key, config] of Object.entries(CONFIG.DND5E.characterFlags) ) {
+    for ( const [key, config] of Object.entries(CONFIG.VARLYN5E.characterFlags) ) {
       const flag = { ...config, name: `flags.dnd5e.${key}`, value: foundry.utils.getProperty(flags.data, key) };
       const fieldOptions = { label: config.name, hint: config.hint };
       if ( config.type === Boolean ) {
@@ -51608,7 +51608,7 @@ class BaseActorSheet extends PrimarySheetMixin(
       else globals.push({ field, name: field.fieldPath, value: foundry.utils.getProperty(source, field.fieldPath) });
     };
     addBonus(this.document.system.schema.fields.bonuses);
-    if ( globals.length ) sections[_loc("DND5E.BONUSES.FIELDS.bonuses.label")] = globals;
+    if ( globals.length ) sections[_loc("VARLYN5E.BONUSES.FIELDS.bonuses.label")] = globals;
 
     flags.sections = Object.entries(sections).map(([label, fields]) => ({ label, fields }));
 
@@ -51628,16 +51628,16 @@ class BaseActorSheet extends PrimarySheetMixin(
     const Inventory = customElements.get(this.options.elements.inventory);
     context.sections = Inventory.prepareSections(Object.values(context.spellbook));
     context.listControls = {
-      label: "DND5E.SpellsSearch",
+      label: "VARLYN5E.SpellsSearch",
       list: "spells",
       filters: [
-        { key: "action", label: "DND5E.Action" },
-        { key: "bonus", label: "DND5E.BonusAction" },
-        { key: "reaction", label: "DND5E.Reaction" },
-        { key: "concentration", label: "DND5E.Concentration" },
-        { key: "ritual", label: "DND5E.Ritual" },
-        { key: "prepared", label: "DND5E.Prepared" },
-        ...Object.entries(CONFIG.DND5E.spellSchools).map(([key, { label }]) => ({ key, label }))
+        { key: "action", label: "VARLYN5E.Action" },
+        { key: "bonus", label: "VARLYN5E.BonusAction" },
+        { key: "reaction", label: "VARLYN5E.Reaction" },
+        { key: "concentration", label: "VARLYN5E.Concentration" },
+        { key: "ritual", label: "VARLYN5E.Ritual" },
+        { key: "prepared", label: "VARLYN5E.Prepared" },
+        ...Object.entries(CONFIG.VARLYN5E.spellSchools).map(([key, { label }]) => ({ key, label }))
       ],
       sorting: [
         { key: "a", label: "SIDEBAR.SortModeAlpha", dataset: { icon: "fa-solid fa-arrow-down-a-z" } },
@@ -51661,10 +51661,10 @@ class BaseActorSheet extends PrimarySheetMixin(
   _prepareAbilities(context) {
     return Object.entries(context.system.abilities).map(([key, ability]) => ({
       ...ability, key,
-      abbr: CONFIG.DND5E.abilities[key]?.abbreviation ?? "",
-      hover: CONFIG.DND5E.proficiencyLevels[ability.proficient],
-      icon: CONFIG.DND5E.abilities[key]?.icon,
-      label: CONFIG.DND5E.abilities[key]?.label,
+      abbr: CONFIG.VARLYN5E.abilities[key]?.abbreviation ?? "",
+      hover: CONFIG.VARLYN5E.proficiencyLevels[ability.proficient],
+      icon: CONFIG.VARLYN5E.abilities[key]?.icon,
+      label: CONFIG.VARLYN5E.abilities[key]?.label,
       source: context.source.abilities[key]
     }));
   }
@@ -51736,7 +51736,7 @@ class BaseActorSheet extends PrimarySheetMixin(
    */
   _prepareSenses(context) {
     return [
-      ...Object.entries(CONFIG.DND5E.senses).map(([k, { label }]) => {
+      ...Object.entries(CONFIG.VARLYN5E.senses).map(([k, { label }]) => {
         const value = context.system.attributes.senses.ranges[k];
         return value ? { label, value } : null;
       }, {}).filter(_ => _),
@@ -51758,17 +51758,17 @@ class BaseActorSheet extends PrimarySheetMixin(
     const baseAbility = key => {
       let src = context.source[property]?.[key]?.ability;
       if ( src ) return src;
-      if ( property === "skills" ) src = CONFIG.DND5E.skills[key]?.ability;
+      if ( property === "skills" ) src = CONFIG.VARLYN5E.skills[key]?.ability;
       return src ?? "int";
     };
     return Object.entries(context.system[property] ?? {})
-      .filter(([key]) => key in CONFIG.DND5E[property])
+      .filter(([key]) => key in CONFIG.VARLYN5E[property])
       .map(([key, entry]) => ({
         ...entry, key,
-        abbreviation: CONFIG.DND5E.abilities[entry.ability]?.abbreviation,
+        abbreviation: CONFIG.VARLYN5E.abilities[entry.ability]?.abbreviation,
         baseAbility: baseAbility(key),
-        hover: CONFIG.DND5E.proficiencyLevels[entry.value],
-        label: (property === "skills") ? CONFIG.DND5E.skills[key]?.label : keyLabel(key, { trait: "tool" }),
+        hover: CONFIG.VARLYN5E.proficiencyLevels[entry.value],
+        label: (property === "skills") ? CONFIG.VARLYN5E.skills[key]?.label : keyLabel(key, { trait: "tool" }),
         link: { action: "roll", key, type: property === "skills" ? "skill" : "tool" },
         source: context.source[property]?.[key],
         value: entry.total
@@ -51801,7 +51801,7 @@ class BaseActorSheet extends PrimarySheetMixin(
     const registerSection = (key, level, config) => {
       level = config?.slots ? level : 1;
       if ( key in spellbook ) return;
-      const label = config?.getLabel({ level }) ?? _loc("DND5E.CAST.SECTIONS.Spellbook");
+      const label = config?.getLabel({ level }) ?? _loc("VARLYN5E.CAST.SECTIONS.Spellbook");
       const method = config?.key ?? key;
       const order = level === 0 ? 0 : (config?.order ?? 1000);
       const usesSlots = config?.slots && (level !== 0);
@@ -51821,10 +51821,10 @@ class BaseActorSheet extends PrimarySheetMixin(
         const filled = spells.value >= n;
         const temp = n > maxSlots;
         const label = temp
-          ? _loc("DND5E.SpellSlotTemporary")
+          ? _loc("VARLYN5E.SpellSlotTemporary")
           : filled
-            ? _loc(`DND5E.SpellSlotN.${getPluralRules({ type: "ordinal" }).select(n)}`, { n })
-            : _loc("DND5E.SpellSlotExpended");
+            ? _loc(`VARLYN5E.SpellSlotN.${getPluralRules({ type: "ordinal" }).select(n)}`, { n })
+            : _loc("VARLYN5E.SpellSlotExpended");
         const classes = ["pip"];
         if ( filled ) classes.push("filled");
         if ( temp ) classes.push("tmp");
@@ -51833,18 +51833,18 @@ class BaseActorSheet extends PrimarySheetMixin(
     };
 
     // Register sections for the available spellcasting methods this character has.
-    for ( const spellcasting of Object.values(CONFIG.DND5E.spellcasting) ) {
+    for ( const spellcasting of Object.values(CONFIG.VARLYN5E.spellcasting) ) {
       const levels = spellcasting.getAvailableLevels?.(this.actor) ?? [];
       if ( !levels.length ) continue;
-      if ( spellcasting.cantrips ) registerSection("spell0", 0, CONFIG.DND5E.spellcasting.spell);
+      if ( spellcasting.cantrips ) registerSection("spell0", 0, CONFIG.VARLYN5E.spellcasting.spell);
       levels.forEach(l => registerSection(spellcasting.getSpellSlotKey(l), l, spellcasting));
     }
 
     // Iterate over every spell item, adding spells to the spellbook by section
     (context.itemCategories.spells ?? []).forEach(spell => {
       let method = spell.system.method;
-      if ( !(method in CONFIG.DND5E.spellcasting) ) method = "innate";
-      const spellcasting = CONFIG.DND5E.spellcasting[method];
+      if ( !(method in CONFIG.VARLYN5E.spellcasting) ) method = "innate";
+      const spellcasting = CONFIG.VARLYN5E.spellcasting[method];
       const level = spellcasting instanceof SingleLevelSpellcasting && spell.system.level !== 0
         ? null : (spell.system.level || 0);
       method = spellcasting?.getSpellSlotKey?.(level) ?? method;
@@ -51877,7 +51877,7 @@ class BaseActorSheet extends PrimarySheetMixin(
    */
   _prepareTraits(context) {
     const traits = {};
-    for ( const [trait$1, config] of Object.entries(CONFIG.DND5E.traits) ) {
+    for ( const [trait$1, config] of Object.entries(CONFIG.VARLYN5E.traits) ) {
       const key = config.actorKeyPath ?? `system.traits.${trait$1}`;
       const data = foundry.utils.deepClone(foundry.utils.getProperty(this.actor, key));
       if ( ["dm", "languages"].includes(trait$1) || !data ) continue;
@@ -51889,9 +51889,9 @@ class BaseActorSheet extends PrimarySheetMixin(
       values = values.map(key => {
         const value = { key, label: keyLabel(key, { trait: trait$1 }) ?? key };
         const icons = value.icons = [];
-        if ( data.bypasses?.size && CONFIG.DND5E.damageTypes[key]?.isPhysical ) icons.push(...data.bypasses.map(p => {
-          const type = CONFIG.DND5E.itemProperties[p]?.label;
-          return { icon: p, label: _loc("DND5E.DAMAGE.PhysicalBypass.DescriptionShort", { type }) };
+        if ( data.bypasses?.size && CONFIG.VARLYN5E.damageTypes[key]?.isPhysical ) icons.push(...data.bypasses.map(p => {
+          const type = CONFIG.VARLYN5E.itemProperties[p]?.label;
+          return { icon: p, label: _loc("VARLYN5E.DAMAGE.PhysicalBypass.DescriptionShort", { type }) };
         }));
         return value;
       });
@@ -51901,7 +51901,7 @@ class BaseActorSheet extends PrimarySheetMixin(
 
     // If petrified, display "All Damage" instead of all damage types separately
     if ( this.document.hasConditionEffect("petrification") ) {
-      traits.dr = [{ label: _loc("DND5E.DAMAGE.All") }];
+      traits.dr = [{ label: _loc("VARLYN5E.DAMAGE.All") }];
     }
 
     // Combine damage & condition immunities in play mode.
@@ -51919,13 +51919,13 @@ class BaseActorSheet extends PrimarySheetMixin(
         const total = simplifyBonus(v, rollData);
         if ( !total ) return null;
         const value = {
-          label: `${CONFIG.DND5E.damageTypes[k]?.label ?? k} ${formatNumber(total, { signDisplay: "always" })}`,
+          label: `${CONFIG.VARLYN5E.damageTypes[k]?.label ?? k} ${formatNumber(total, { signDisplay: "always" })}`,
           color: total > 0 ? "maroon" : "green"
         };
         const icons = value.icons = [];
-        if ( dm.bypasses.size && CONFIG.DND5E.damageTypes[k]?.isPhysical ) icons.push(...dm.bypasses.map(p => {
-          const type = CONFIG.DND5E.itemProperties[p]?.label;
-          return { icon: p, label: _loc("DND5E.DAMAGE.PhysicalBypass.DescriptionShort", { type }) };
+        if ( dm.bypasses.size && CONFIG.VARLYN5E.damageTypes[k]?.isPhysical ) icons.push(...dm.bypasses.map(p => {
+          const type = CONFIG.VARLYN5E.itemProperties[p]?.label;
+          return { icon: p, label: _loc("VARLYN5E.DAMAGE.PhysicalBypass.DescriptionShort", { type }) };
         }));
         return value;
       }).filter(f => f);
@@ -51935,7 +51935,7 @@ class BaseActorSheet extends PrimarySheetMixin(
     // Prepare languages
     const languages = this.actor.system.traits?.languages?.labels;
     if ( languages?.languages?.length ) traits.languages = languages.languages.map(label => ({ label }));
-    for ( const [key, { label }] of Object.entries(CONFIG.DND5E.communicationTypes) ) {
+    for ( const [key, { label }] of Object.entries(CONFIG.VARLYN5E.communicationTypes) ) {
       const data = this.actor.system.traits?.languages?.communication?.[key];
       if ( !data?.value ) continue;
       traits.languages ??= [];
@@ -51950,7 +51950,7 @@ class BaseActorSheet extends PrimarySheetMixin(
         traits.weapon ??= [];
         traits.weapon.push(value);
       }
-      value.icons.push({ icon: "mastery", label: _loc("DND5E.WEAPON.Mastery.Label") });
+      value.icons.push({ icon: "mastery", label: _loc("VARLYN5E.WEAPON.Mastery.Label") });
     }
 
     return traits;
@@ -52020,12 +52020,12 @@ class BaseActorSheet extends PrimarySheetMixin(
 
     // Activation
     const activationAbbr = {
-      action: "DND5E.ActionAbbr",
-      bonus: "DND5E.BonusActionAbbr",
-      reaction: "DND5E.ReactionAbbr",
-      minute: "DND5E.TimeMinuteAbbr",
-      hour: "DND5E.TimeHourAbbr",
-      day: "DND5E.TimeDayAbbr"
+      action: "VARLYN5E.ActionAbbr",
+      bonus: "VARLYN5E.BonusActionAbbr",
+      reaction: "VARLYN5E.ReactionAbbr",
+      minute: "VARLYN5E.TimeMinuteAbbr",
+      hour: "VARLYN5E.TimeHourAbbr",
+      day: "VARLYN5E.TimeDayAbbr"
     }[activation?.type || ""];
 
     // To Hit
@@ -52048,8 +52048,8 @@ class BaseActorSheet extends PrimarySheetMixin(
         ...save,
         ability: save.ability?.size
           ? save.ability.size === 1
-            ? CONFIG.DND5E.abilities[save.ability.first()]?.abbreviation
-            : _loc("DND5E.AbbreviationDC")
+            ? CONFIG.VARLYN5E.abilities[save.ability.first()]?.abbreviation
+            : _loc("VARLYN5E.AbbreviationDC")
           : null
       } : null,
       toHit: Number.isNaN(toHit) ? null : toHit
@@ -52082,8 +52082,8 @@ class BaseActorSheet extends PrimarySheetMixin(
     // Save
     ctx.save = { ...item.system.activities?.getByType("save")[0]?.save };
     ctx.save.ability = ctx.save.ability?.size ? ctx.save.ability.size === 1
-      ? CONFIG.DND5E.abilities[ctx.save.ability.first()]?.abbreviation
-      : _loc("DND5E.AbbreviationDC") : null;
+      ? CONFIG.VARLYN5E.abilities[ctx.save.ability.first()]?.abbreviation
+      : _loc("VARLYN5E.AbbreviationDC") : null;
 
     // Linked Uses
     const cachedFor = fromUuidSync(item.flags.dnd5e?.cachedFor, { relative: item.parent, strict: false });
@@ -52113,10 +52113,10 @@ class BaseActorSheet extends PrimarySheetMixin(
     // Classes & Subclasses
     if ( ["class", "subclass"].includes(item.type) ) {
       ctx.prefixedImage = item.img ? foundry.utils.getRoute(item.img) : null;
-      if ( item.type === "class" ) ctx.availableLevels = Array.fromRange(CONFIG.DND5E.maxLevel, 1).map(level => {
+      if ( item.type === "class" ) ctx.availableLevels = Array.fromRange(CONFIG.VARLYN5E.maxLevel, 1).map(level => {
         const value = level - item.system.levels;
         const label = value ? `${level} (${formatNumber(value, { signDisplay: "always" })})` : `${level}`;
-        return { label, value, disabled: value > (CONFIG.DND5E.maxLevel - (item.parent.system.details?.level ?? 0)) };
+        return { label, value, disabled: value > (CONFIG.VARLYN5E.maxLevel - (item.parent.system.details?.level ?? 0)) };
       });
     }
 
@@ -52144,7 +52144,7 @@ class BaseActorSheet extends PrimarySheetMixin(
     if ( "equipped" in item.system ) ctx.equip = {
       applicable: true,
       cls: item.system.equipped ? "active" : "",
-      title: `DND5E.${item.system.equipped ? "Equipped" : "Unequipped"}`,
+      title: `VARLYN5E.${item.system.equipped ? "Equipped" : "Unequipped"}`,
       disabled: !item.isOwner
     };
     else ctx.equip = { applicable: false };
@@ -52173,22 +52173,22 @@ class BaseActorSheet extends PrimarySheetMixin(
     // Activation
     const cost = item.system.activation?.value ?? "";
     const abbr = {
-      action: "DND5E.ActionAbbr",
-      bonus: "DND5E.BonusActionAbbr",
-      reaction: "DND5E.ReactionAbbr",
-      minute: "DND5E.TimeMinuteAbbr",
-      hour: "DND5E.TimeHourAbbr",
-      day: "DND5E.TimeDayAbbr"
+      action: "VARLYN5E.ActionAbbr",
+      bonus: "VARLYN5E.BonusActionAbbr",
+      reaction: "VARLYN5E.ReactionAbbr",
+      minute: "VARLYN5E.TimeMinuteAbbr",
+      hour: "VARLYN5E.TimeHourAbbr",
+      day: "VARLYN5E.TimeDayAbbr"
     }[item.system.activation.type];
     ctx.activation = abbr ? `${cost}${_loc(abbr)}` : item.labels.activation;
 
     // Range
     const units = item.system.range?.units;
     if ( units && (units !== "none") ) {
-      if ( units in CONFIG.DND5E.movementUnits ) ctx.range = {
+      if ( units in CONFIG.VARLYN5E.movementUnits ) ctx.range = {
         distance: true,
         value: item.system.range.value,
-        unit: CONFIG.DND5E.movementUnits[units].abbreviation,
+        unit: CONFIG.VARLYN5E.movementUnits[units].abbreviation,
         parts: formatLength(item.system.range.value, units, { parts: true })
       };
       else ctx.range = { distance: false };
@@ -52196,15 +52196,15 @@ class BaseActorSheet extends PrimarySheetMixin(
 
     // Prepared
     const { method, prepared } = item.system;
-    const config = CONFIG.DND5E.spellcasting[method];
+    const config = CONFIG.VARLYN5E.spellcasting[method];
     if ( config?.prepares && !linked ) {
-      const isAlways = prepared === CONFIG.DND5E.spellPreparationStates.always.value;
+      const isAlways = prepared === CONFIG.VARLYN5E.spellPreparationStates.always.value;
       ctx.preparation = {
         applicable: true,
         disabled: !item.isOwner || isAlways,
         cls: prepared ? "active" : "",
         icon: `<i class="fa-${prepared ? "solid" : "regular"} fa-${isAlways ? "certificate" : "sun"}" inert></i>`,
-        title: CONFIG.DND5E.spellPreparationStates[isAlways ? "always" : prepared ? "prepared" : "unprepared"].label
+        title: CONFIG.VARLYN5E.spellPreparationStates[isAlways ? "always" : prepared ? "prepared" : "unprepared"].label
       };
     }
     else ctx.preparation = { applicable: false };
@@ -52240,8 +52240,8 @@ class BaseActorSheet extends PrimarySheetMixin(
     const element = document.createElement("div");
     element.classList.add("attunement");
     element.innerHTML = `
-      <i class="fa-solid fa-sun" data-tooltip="DND5E.Attunement"
-         aria-label="${_loc("DND5E.Attunement")}"></i>
+      <i class="fa-solid fa-sun" data-tooltip="VARLYN5E.Attunement"
+         aria-label="${_loc("VARLYN5E.Attunement")}"></i>
       <span class="value"></span>
       <span class="separator">&sol;</span>
     `;
@@ -52297,10 +52297,10 @@ class BaseActorSheet extends PrimarySheetMixin(
       if ( context.editable ) {
         const config = document.createElement("button");
         Object.assign(config, {
-          type: "button", className: "unbutton config-button", ariaLabel: _loc("DND5E.SpellSlotsConfig")
+          type: "button", className: "unbutton config-button", ariaLabel: _loc("VARLYN5E.SpellSlotsConfig")
         });
         Object.assign(config.dataset, {
-          action: "showConfiguration", config: "spellSlots", tooltip: "DND5E.SpellSlotsConfig"
+          action: "showConfiguration", config: "spellSlots", tooltip: "VARLYN5E.SpellSlotsConfig"
         });
         config.insertAdjacentHTML("afterbegin", '<i class="fa-solid fa-cog" inert></i>');
         header.append(config);
@@ -52430,7 +52430,7 @@ class BaseActorSheet extends PrimarySheetMixin(
   /** @override */
   _addDocument(event, target) {
     if ( this.tabGroups.primary === "effects" ) return ActiveEffect.implementation.create({
-      name: _loc("DND5E.EffectNew"),
+      name: _loc("VARLYN5E.EffectNew"),
       icon: "icons/svg/aura.svg"
     }, { parent: this.actor, renderSheet: true });
 
@@ -53020,7 +53020,7 @@ class BaseActorSheet extends PrimarySheetMixin(
     if ( item.type === "container" ) {
       const parentContainers = await container.system.allContainers();
       if ( (container.id === item.id) || parentContainers.includes(item) ) {
-        ui.notifications.error("DND5E.ContainerRecursiveError");
+        ui.notifications.error("VARLYN5E.ContainerRecursiveError");
         return;
       }
     }
@@ -53077,7 +53077,7 @@ class BaseActorSheet extends PrimarySheetMixin(
     const itemsWithoutAdvancement = items.filter(i => !i.system.advancement?.size);
     const multipleAdvancements = (items.length - itemsWithoutAdvancement.length) > 1;
     if ( multipleAdvancements && !game.settings.get("dnd5e", "disableAdvancements") ) {
-      ui.notifications.warn("DND5E.WarnCantAddMultipleAdvancements");
+      ui.notifications.warn("VARLYN5E.WarnCantAddMultipleAdvancements");
       items = itemsWithoutAdvancement;
     }
 
@@ -53119,7 +53119,7 @@ class BaseActorSheet extends PrimarySheetMixin(
 
     // Check to make sure items of this type are allowed on this actor
     if ( this.constructor.unsupportedItemTypes.has(itemData.type) ) {
-      ui.notifications.warn("DND5E.ACTOR.Warning.InvalidItem", {
+      ui.notifications.warn("VARLYN5E.ACTOR.Warning.InvalidItem", {
         format: {
           itemType: _loc(CONFIG.Item.typeLabels[itemData.type]),
           actorType: _loc(CONFIG.Actor.typeLabels[actor.type])
@@ -53148,7 +53148,7 @@ class BaseActorSheet extends PrimarySheetMixin(
       const dataModel = CONFIG.Item.dataModels[itemData.type];
       const singleton = dataModel?.metadata.singleton ?? false;
       if ( singleton && actor.itemTypes[itemData.type].length ) {
-        ui.notifications.error("DND5E.ACTOR.Warning.Singleton", {
+        ui.notifications.error("VARLYN5E.ACTOR.Warning.Singleton", {
           format: {
             itemType: _loc(CONFIG.Item.typeLabels[itemData.type]),
             actorType: _loc(CONFIG.Actor.typeLabels[actor.type])
@@ -53279,7 +53279,7 @@ class BaseActorSheet extends PrimarySheetMixin(
   _filterItems(items, filters) {
     const actions = ["action", "bonus", "reaction", "lair", "legendary"];
     const recoveries = ["lr", "sr"];
-    const spellSchools = new Set(Object.keys(CONFIG.DND5E.spellSchools));
+    const spellSchools = new Set(Object.keys(CONFIG.VARLYN5E.spellSchools));
     const schoolFilter = spellSchools.intersection(filters);
     const spellcastingClasses = new Set(Object.keys(this.actor.spellcastingClasses));
     const classFilter = spellcastingClasses.intersection(filters);
@@ -53495,13 +53495,13 @@ class CharacterActorSheet extends BaseActorSheet {
 
   /** @override */
   static TABS = [
-    { tab: "details", label: "DND5E.Details", icon: "fas fa-cog" },
-    { tab: "inventory", label: "DND5E.Inventory", svg: "systems/dnd5e/icons/svg/backpack.svg" },
-    { tab: "features", label: "DND5E.Features", icon: "fas fa-list" },
+    { tab: "details", label: "VARLYN5E.Details", icon: "fas fa-cog" },
+    { tab: "inventory", label: "VARLYN5E.Inventory", svg: "systems/dnd5e/icons/svg/backpack.svg" },
+    { tab: "features", label: "VARLYN5E.Features", icon: "fas fa-list" },
     { tab: "spells", label: "TYPES.Item.spellPl", icon: "fas fa-book" },
-    { tab: "effects", label: "DND5E.Effects", icon: "fas fa-bolt" },
-    { tab: "biography", label: "DND5E.Biography", icon: "fas fa-feather" },
-    { tab: "specialTraits", label: "DND5E.SpecialTraits", icon: "fas fa-star" }
+    { tab: "effects", label: "VARLYN5E.Effects", icon: "fas fa-bolt" },
+    { tab: "biography", label: "VARLYN5E.Biography", icon: "fas fa-feather" },
+    { tab: "specialTraits", label: "VARLYN5E.SpecialTraits", icon: "fas fa-star" }
   ];
 
   /* -------------------------------------------- */
@@ -53551,7 +53551,7 @@ class CharacterActorSheet extends BaseActorSheet {
     const context = {
       ...await super._prepareContext(options),
       abilityRows: {
-        bottom: [], top: [], optional: Object.keys(CONFIG.DND5E.abilities).length - 6
+        bottom: [], top: [], optional: Object.keys(CONFIG.VARLYN5E.abilities).length - 6
       },
       isCharacter: true
     };
@@ -53610,7 +53610,7 @@ class CharacterActorSheet extends BaseActorSheet {
       secrets: this.actor.isOwner, relativeTo: this.actor, rollData: context.rollData
     };
     context.enriched = {
-      label: "DND5E.Biography",
+      label: "VARLYN5E.Biography",
       value: await TextEditor$7.enrichHTML(this.actor.system.details.biography.value, enrichmentOptions)
     };
 
@@ -53645,15 +53645,15 @@ class CharacterActorSheet extends BaseActorSheet {
     // Origin
     context.creatureType = {
       class: details.type.value === "custom" ? "none" : "",
-      icon: CONFIG.DND5E.creatureTypes[details.type.value]?.icon ?? "icons/svg/mystery-man.svg",
+      icon: CONFIG.VARLYN5E.creatureTypes[details.type.value]?.icon ?? "icons/svg/mystery-man.svg",
       title: details.type.value === "custom"
         ? details.type.custom
-        : CONFIG.DND5E.creatureTypes[details.type.value]?.label,
-      reference: CONFIG.DND5E.creatureTypes[details.type.value]?.reference,
+        : CONFIG.VARLYN5E.creatureTypes[details.type.value]?.label,
+      reference: CONFIG.VARLYN5E.creatureTypes[details.type.value]?.reference,
       subtitle: details.type.subtype
     };
     if ( details.race instanceof varlyn5e.documents.Item5e ) context.species = details.race;
-    context.labels.size = CONFIG.DND5E.actorSizes[traits.size]?.label ?? traits.size;
+    context.labels.size = CONFIG.VARLYN5E.actorSizes[traits.size]?.label ?? traits.size;
 
     // Saving Throws
     context.saves = {};
@@ -53665,8 +53665,8 @@ class CharacterActorSheet extends BaseActorSheet {
       context.saves.concentration = {
         isConcentration: true,
         class: "colspan concentration",
-        label: _loc("DND5E.Concentration"),
-        abbr: _loc("DND5E.Concentration"),
+        label: _loc("VARLYN5E.Concentration"),
+        abbr: _loc("VARLYN5E.Concentration"),
         save: { value: context.system.attributes.concentration.save }
       };
     }
@@ -53680,8 +53680,8 @@ class CharacterActorSheet extends BaseActorSheet {
     for ( const entry of context.skills.concat(context.tools) ) {
       const key = entry.key;
       entry.class = this.constructor.PROFICIENCY_CLASSES[context.editable ? entry.baseValue : entry.value];
-      if ( key in CONFIG.DND5E.skills ) entry.reference = CONFIG.DND5E.skills[key].reference;
-      else if ( key in CONFIG.DND5E.tools ) entry.reference = getBaseItemUUID(CONFIG.DND5E.tools[key].id ?? "");
+      if ( key in CONFIG.VARLYN5E.skills ) entry.reference = CONFIG.VARLYN5E.skills[key].reference;
+      else if ( key in CONFIG.VARLYN5E.tools ) entry.reference = getBaseItemUUID(CONFIG.VARLYN5E.tools[key].id ?? "");
     }
 
     // Traits
@@ -53726,34 +53726,34 @@ class CharacterActorSheet extends BaseActorSheet {
     const Inventory = customElements.get(this.options.elements.inventory);
     const columns = Inventory.mapColumns([{ id: "uses", order: 200 }, "recovery", "controls"]);
     const sections = [
-      { columns, id: "active", label: "DND5E.FeatureActive", order: 100, groups: { activation: "active" }, items: [] },
-      { columns, id: "passive", label: "DND5E.FeaturePassive", order: 200, groups: { activation: "passive" } },
+      { columns, id: "active", label: "VARLYN5E.FeatureActive", order: 100, groups: { activation: "active" }, items: [] },
+      { columns, id: "passive", label: "VARLYN5E.FeaturePassive", order: 200, groups: { activation: "passive" } },
       ...Object.values(this.actor.classes ?? {})
         .sort((a, b) => b.system.levels - a.system.levels)
         .map((cls, i) => {
           return {
             columns, id: cls.identifier, order: i * 100, groups: { origin: cls.identifier },
-            label: _loc("DND5E.FeaturesClass", { class: cls.name })
+            label: _loc("VARLYN5E.FeaturesClass", { class: cls.name })
           };
         }),
       this.actor.system.details.race instanceof Item5e ? {
-        columns, id: "species", label: "DND5E.Species.Features", order: 1000, groups: { origin: "species" }
+        columns, id: "species", label: "VARLYN5E.Species.Features", order: 1000, groups: { origin: "species" }
       } : null,
-      { columns, id: "other", label: "DND5E.FeaturesOther", order: 3000, groups: { origin: "other" } }
+      { columns, id: "other", label: "VARLYN5E.FeaturesOther", order: 3000, groups: { origin: "other" } }
     ].filter(_ => _);
     sections[0].items = [...(context.itemCategories.features ?? []), ...context.subclasses];
     context.sections = Inventory.prepareSections(sections);
     context.listControls = {
-      label: "DND5E.FeatureSearch",
+      label: "VARLYN5E.FeatureSearch",
       list: "features",
       filters: [
-        { key: "action", label: "DND5E.Action" },
-        { key: "bonus", label: "DND5E.BonusAction" },
-        { key: "reaction", label: "DND5E.Reaction" },
-        { key: "sr", label: "DND5E.REST.Short.Label" },
-        { key: "lr", label: "DND5E.REST.Long.Label" },
-        { key: "concentration", label: "DND5E.Concentration" },
-        { key: "mgc", label: "DND5E.ITEM.Property.Magical" }
+        { key: "action", label: "VARLYN5E.Action" },
+        { key: "bonus", label: "VARLYN5E.BonusAction" },
+        { key: "reaction", label: "VARLYN5E.Reaction" },
+        { key: "sr", label: "VARLYN5E.REST.Short.Label" },
+        { key: "lr", label: "VARLYN5E.REST.Long.Label" },
+        { key: "concentration", label: "VARLYN5E.Concentration" },
+        { key: "mgc", label: "VARLYN5E.ITEM.Property.Magical" }
       ],
       sorting: [
         { key: "m", label: "SIDEBAR.SortModeManual", dataset: { icon: "fa-solid fa-arrow-down-short-wide" } },
@@ -53762,15 +53762,15 @@ class CharacterActorSheet extends BaseActorSheet {
       grouping: [
         {
           key: "origin",
-          label: "DND5E.FilterGroupOrigin",
+          label: "VARLYN5E.FilterGroupOrigin",
           dataset: { icon: "fa-solid fa-layer-group", classes: "active" }
         },
-        { key: "activation", label: "DND5E.FilterGroupOrigin", dataset: { icon: "fa-solid fa-layer-group" } }
+        { key: "activation", label: "VARLYN5E.FilterGroupOrigin", dataset: { icon: "fa-solid fa-layer-group" } }
       ]
     };
 
     // TODO: Add this warning during data preparation instead
-    // const message = _loc("DND5E.SubclassMismatchWarn", {
+    // const message = _loc("VARLYN5E.SubclassMismatchWarn", {
     //   name: subclass.name, class: subclass.system.classIdentifier
     // });
     // context.warnings.push({ message, type: "warning" });
@@ -53802,7 +53802,7 @@ class CharacterActorSheet extends BaseActorSheet {
     if ( context.system.details.xp.boonsEarned !== undefined ) {
       const pluralRules = new Intl.PluralRules(game.i18n.lang);
       context.epicBoonsEarned = _loc(
-        `DND5E.ExperiencePoints.Boons.${pluralRules.select(context.system.details.xp.boonsEarned ?? 0)}`,
+        `VARLYN5E.ExperiencePoints.Boons.${pluralRules.select(context.system.details.xp.boonsEarned ?? 0)}`,
         { number: formatNumber(context.system.details.xp.boonsEarned ?? 0, { signDisplay: "always" }) }
       );
     }
@@ -53821,8 +53821,8 @@ class CharacterActorSheet extends BaseActorSheet {
     context.itemCategories.inventory = context.itemCategories.inventory?.filter(i => i.type !== "container");
     context = await super._prepareInventoryContext(context, options);
     context.size = {
-      label: CONFIG.DND5E.actorSizes[this.actor.system.traits.size]?.label ?? this.actor.system.traits.size,
-      abbr: CONFIG.DND5E.actorSizes[this.actor.system.traits.size]?.abbreviation ?? "—",
+      label: CONFIG.VARLYN5E.actorSizes[this.actor.system.traits.size]?.label ?? this.actor.system.traits.size,
+      abbr: CONFIG.VARLYN5E.actorSizes[this.actor.system.traits.size]?.abbreviation ?? "—",
       mod: this.actor.system.attributes.encumbrance.mod
     };
     return context;
@@ -53850,7 +53850,7 @@ class CharacterActorSheet extends BaseActorSheet {
       context.death[deathSave] = [];
       for ( let i = 1; i < 4; i++ ) {
         const n = deathSave === "failure" ? i : 4 - i;
-        const i18nKey = `DND5E.DeathSave${deathSave.titleCase()}Label`;
+        const i18nKey = `VARLYN5E.DeathSave${deathSave.titleCase()}Label`;
         const filled = attributes.death[deathSave] >= n;
         const classes = ["pip"];
         if ( filled ) classes.push("filled");
@@ -53865,10 +53865,10 @@ class CharacterActorSheet extends BaseActorSheet {
     }
 
     // Exhaustion
-    if ( CONFIG.DND5E.conditionTypes.exhaustion ) {
-      const max = CONFIG.DND5E.conditionTypes.exhaustion.levels;
+    if ( CONFIG.VARLYN5E.conditionTypes.exhaustion ) {
+      const max = CONFIG.VARLYN5E.conditionTypes.exhaustion.levels;
       context.exhaustion = Array.fromRange(max, 1).reduce((acc, n) => {
-        const label = _loc("DND5E.ExhaustionLevel", { n });
+        const label = _loc("VARLYN5E.ExhaustionLevel", { n });
         const classes = ["pip"];
         const filled = attributes.exhaustion >= n;
         if ( filled ) classes.push("filled");
@@ -53885,15 +53885,15 @@ class CharacterActorSheet extends BaseActorSheet {
     context.favorites = await this._prepareFavorites();
 
     // Speed
-    context.speed = Object.entries(CONFIG.DND5E.movementTypes).reduce((obj, [k, { hidden, label }]) => {
+    context.speed = Object.entries(CONFIG.VARLYN5E.movementTypes).reduce((obj, [k, { hidden, label }]) => {
       if ( hidden ) return obj;
       const value = attributes.movement[k];
       if ( (k === "fly") && attributes.movement.hover ) {
-        label = _loc("DND5E.MOVEMENT.HoverSpeed", { speed: label });
+        label = _loc("VARLYN5E.MOVEMENT.HoverSpeed", { speed: label });
       }
       if ( value > obj.value ) Object.assign(obj, { label, value });
       return obj;
-    }, { label: CONFIG.DND5E.movementTypes.walk?.label, value: 0 });
+    }, { label: CONFIG.VARLYN5E.movementTypes.walk?.label, value: 0 });
 
     return context;
   }
@@ -53914,7 +53914,7 @@ class CharacterActorSheet extends BaseActorSheet {
       const mod = ability?.mod ?? 0;
       const name = item.system.spellcasting.progression === sc.progression ? item.name : item.subclass?.name;
       context.spellcasting.push({
-        label: _loc("DND5E.SpellcastingClass", { class: name }),
+        label: _loc("VARLYN5E.SpellcastingClass", { class: name }),
         ability: { mod, ability: sc.ability },
         attack: sc.attack,
         preparation: sc.preparation,
@@ -53951,8 +53951,8 @@ class CharacterActorSheet extends BaseActorSheet {
         css: "uses",
         title: label,
         subtitle: [
-          sr ? _loc("DND5E.AbbreviationSR") : null,
-          lr ? _loc("DND5E.AbbreviationLR") : null
+          sr ? _loc("VARLYN5E.AbbreviationSR") : null,
+          lr ? _loc("VARLYN5E.AbbreviationLR") : null
         ].filterJoin(" &bull; ")
       });
       return arr;
@@ -53980,8 +53980,8 @@ class CharacterActorSheet extends BaseActorSheet {
 
       if ( foundry.utils.getType(save?.ability) === "Set" ) save = {
         ...save, ability: save.ability.size > 2
-          ? _loc("DND5E.AbbreviationDC")
-          : Array.from(save.ability).map(k => CONFIG.DND5E.abilities[k]?.abbreviation).filterJoin(" / ")
+          ? _loc("VARLYN5E.AbbreviationDC")
+          : Array.from(save.ability).map(k => CONFIG.VARLYN5E.abilities[k]?.abbreviation).filterJoin(" / ")
       };
 
       const css = [];
@@ -54005,7 +54005,7 @@ class CharacterActorSheet extends BaseActorSheet {
       if ( type === "skill" ) rollableClass.push("skill-name");
       else if ( type === "tool" ) rollableClass.push("tool-name");
 
-      if ( suppressed ) subtitle = _loc("DND5E.Suppressed");
+      if ( suppressed ) subtitle = _loc("VARLYN5E.Suppressed");
       const itemId = type === "item" ? favorite.id : type === "activity" ? favorite.item.id : null;
       arr.push({
         id, img, type, title, value, uses, sort, save, modifier, passive, range, reference, suppressed, level, itemId,
@@ -54038,23 +54038,23 @@ class CharacterActorSheet extends BaseActorSheet {
     // Spell slots
     if ( type === "slots" ) {
       const { value, max, level, type: method } = this.actor.system.spells?.[id] ?? {};
-      const model = CONFIG.DND5E.spellcasting[method];
+      const model = CONFIG.VARLYN5E.spellcasting[method];
       const uses = { value, max, name: `system.spells.${id}.value` };
       if ( !model || model.isSingleLevel ) return {
         uses, level, method,
-        title: _loc(`DND5E.SpellSlots${id.capitalize()}`),
+        title: _loc(`VARLYN5E.SpellSlots${id.capitalize()}`),
         subtitle: [
-          _loc(`DND5E.SpellLevel${level}`),
-          _loc(`DND5E.Abbreviation${model?.isSR ? "SR" : "LR"}`)
+          _loc(`VARLYN5E.SpellLevel${level}`),
+          _loc(`VARLYN5E.Abbreviation${model?.isSR ? "SR" : "LR"}`)
         ],
-        img: model?.img || CONFIG.DND5E.spellcasting.pact.img
+        img: model?.img || CONFIG.VARLYN5E.spellcasting.pact.img
       };
 
       const plurals = new Intl.PluralRules(game.i18n.lang, { type: "ordinal" });
       return {
         uses, level, method,
-        title: _loc(`DND5E.SpellSlotsN.${plurals.select(level)}`, { n: level }),
-        subtitle: _loc(`DND5E.Abbreviation${model.isSR ? "SR" : "LR"}`),
+        title: _loc(`VARLYN5E.SpellSlotsN.${plurals.select(level)}`, { n: level }),
+        subtitle: _loc(`VARLYN5E.Abbreviation${model.isSR ? "SR" : "LR"}`),
         img: model.img.replace("{id}", id)
       };
     }
@@ -54064,17 +54064,17 @@ class CharacterActorSheet extends BaseActorSheet {
       const data = this.actor.system[`${type}s`]?.[id];
       if ( !data ) return;
       const { total, ability, passive } = data ?? {};
-      const subtitle = _loc("DND5E.AbilityPromptTitle", {
-        ability: CONFIG.DND5E.abilities[ability].label
+      const subtitle = _loc("VARLYN5E.AbilityPromptTitle", {
+        ability: CONFIG.VARLYN5E.abilities[ability].label
       });
       let img;
       let title;
       let reference;
       if ( type === "tool" ) {
-        reference = getBaseItemUUID(CONFIG.DND5E.tools[id]?.id ?? "");
+        reference = getBaseItemUUID(CONFIG.VARLYN5E.tools[id]?.id ?? "");
         ({ img, name: title } = getBaseItem(reference, { indexOnly: true }));
       }
-      else if ( type === "skill" ) ({ icon: img, label: title, reference } = CONFIG.DND5E.skills[id]);
+      else if ( type === "skill" ) ({ icon: img, label: title, reference } = CONFIG.VARLYN5E.skills[id]);
       return { img, title, subtitle, modifier: total, passive, reference };
     }
   }
@@ -54124,11 +54124,11 @@ class CharacterActorSheet extends BaseActorSheet {
     if ( item.system.attunement ) ctx.attunement = item.system.attuned ? {
       icon: "fa-sun",
       cls: "attuned",
-      title: "DND5E.AttunementAttuned"
+      title: "VARLYN5E.AttunementAttuned"
     } : {
       icon: "fa-sun",
       cls: "not-attuned",
-      title: CONFIG.DND5E.attunementTypes[item.system.attunement]
+      title: CONFIG.VARLYN5E.attunementTypes[item.system.attunement]
     };
 
     return super._prepareItemPhysical(item, ctx);
@@ -54226,7 +54226,7 @@ class CharacterActorSheet extends BaseActorSheet {
     const tab = tray.querySelector(".death-tab");
     tray.classList.toggle("open", open);
     this._deathTrayOpen = tray.classList.contains("open");
-    tab.dataset.tooltip = `DND5E.DeathSave${this._deathTrayOpen ? "Hide" : "Show"}`;
+    tab.dataset.tooltip = `VARLYN5E.DeathSave${this._deathTrayOpen ? "Hide" : "Show"}`;
     tab.setAttribute("aria-label", _loc(tab.dataset.tooltip));
   }
 
@@ -54286,13 +54286,13 @@ class CharacterActorSheet extends BaseActorSheet {
 
   /** @inheritDoc */
   _onDragStart(event) {
-    const methods = CONFIG.DND5E.spellcasting;
+    const methods = CONFIG.VARLYN5E.spellcasting;
     const { key } = event.target.closest("[data-key]")?.dataset ?? {};
     const { level, method } = event.target.closest("[data-level]")?.dataset ?? {};
     const isSlots = event.target.closest("[data-favorite-id]") || event.target.classList.contains("items-header");
     let type;
-    if ( key in CONFIG.DND5E.skills ) type = "skill";
-    else if ( key in CONFIG.DND5E.tools ) type = "tool";
+    if ( key in CONFIG.VARLYN5E.skills ) type = "skill";
+    else if ( key in CONFIG.VARLYN5E.tools ) type = "tool";
     else if ( methods[method]?.slots && (level !== "0") && isSlots ) type = "slots";
     if ( !type ) return super._onDragStart(event);
 
@@ -54393,9 +54393,9 @@ class CharacterActorSheet extends BaseActorSheet {
     // Increment the number of class levels a character instead of creating a new item
     if ( itemData.type === "class" ) {
       const charLevel = this.actor.system.details.level;
-      itemData.system.levels = Math.min(itemData.system.levels, CONFIG.DND5E.maxLevel - charLevel);
+      itemData.system.levels = Math.min(itemData.system.levels, CONFIG.VARLYN5E.maxLevel - charLevel);
       if ( itemData.system.levels <= 0 ) {
-        const err = _loc("DND5E.MaxCharacterLevelExceededWarn", { max: CONFIG.DND5E.maxLevel });
+        const err = _loc("VARLYN5E.MaxCharacterLevelExceededWarn", { max: CONFIG.VARLYN5E.maxLevel });
         ui.notifications.error(err);
         return;
       }
@@ -54419,13 +54419,13 @@ class CharacterActorSheet extends BaseActorSheet {
     else if ( itemData.type === "subclass" ) {
       const other = this.actor.itemTypes.subclass.find(i => i.identifier === itemData.system.identifier);
       if ( other ) {
-        const err = _loc("DND5E.SubclassDuplicateError", { identifier: other.identifier });
+        const err = _loc("VARLYN5E.SubclassDuplicateError", { identifier: other.identifier });
         ui.notifications.error(err);
         return;
       }
       const cls = this.actor.itemTypes.class.find(i => i.identifier === itemData.system.classIdentifier);
       if ( cls && cls.subclass ) {
-        const err = _loc("DND5E.SubclassAssignmentError", { class: cls.name, subclass: cls.subclass.name });
+        const err = _loc("VARLYN5E.SubclassAssignmentError", { class: cls.name, subclass: cls.subclass.name });
         ui.notifications.error(err);
         return;
       }
@@ -54507,7 +54507,7 @@ class HabitatConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.Habitat.Configuration.Title");
+    return _loc("VARLYN5E.Habitat.Configuration.Title");
   }
 
   /* -------------------------------------------- */
@@ -54517,7 +54517,7 @@ class HabitatConfig extends BaseConfigSheet {
   /** @inheritDoc */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const config = CONFIG.DND5E.habitats;
+    const config = CONFIG.VARLYN5E.habitats;
     const { details } = this.document.system._source;
     const value = Object.fromEntries(details.habitat.value.map(({ type, subtype }) => [type, { type, subtype }]));
     const any = "any" in value;
@@ -54590,7 +54590,7 @@ class TreasureConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.Treasure.Configuration.Title");
+    return _loc("VARLYN5E.Treasure.Configuration.Title");
   }
 
   /* -------------------------------------------- */
@@ -54600,7 +54600,7 @@ class TreasureConfig extends BaseConfigSheet {
   /** @inheritDoc */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const config = CONFIG.DND5E.treasure;
+    const config = CONFIG.VARLYN5E.treasure;
     const { details } = this.document.system._source;
     const any = details.treasure.value.includes("any");
     context.treasure = [
@@ -54709,12 +54709,12 @@ class NPCActorSheet extends BaseActorSheet {
 
   /** @override */
   static TABS = [
-    { tab: "features", label: "DND5E.Features", icon: "fas fa-list" },
-    { tab: "inventory", label: "DND5E.Inventory", svg: "systems/dnd5e/icons/svg/backpack.svg" },
+    { tab: "features", label: "VARLYN5E.Features", icon: "fas fa-list" },
+    { tab: "inventory", label: "VARLYN5E.Inventory", svg: "systems/dnd5e/icons/svg/backpack.svg" },
     { tab: "spells", label: "TYPES.Item.spellPl", icon: "fas fa-book" },
-    { tab: "effects", label: "DND5E.Effects", icon: "fas fa-bolt" },
-    { tab: "biography", label: "DND5E.Biography", icon: "fas fa-feather" },
-    { tab: "specialTraits", label: "DND5E.SpecialTraits", icon: "fas fa-star" }
+    { tab: "effects", label: "VARLYN5E.Effects", icon: "fas fa-bolt" },
+    { tab: "biography", label: "VARLYN5E.Biography", icon: "fas fa-feather" },
+    { tab: "specialTraits", label: "VARLYN5E.SpecialTraits", icon: "fas fa-star" }
   ];
 
   /* -------------------------------------------- */
@@ -54831,7 +54831,7 @@ class NPCActorSheet extends BaseActorSheet {
    * @protected
    */
   async _prepareFeaturesContext(context, options) {
-    const sections = Object.entries(CONFIG.DND5E.activityActivationTypes).reduce((obj, [id, config], i) => {
+    const sections = Object.entries(CONFIG.VARLYN5E.activityActivationTypes).reduce((obj, [id, config], i) => {
       const { header: label, passive } = config;
       if ( passive ) return obj;
       obj[id] ??= {
@@ -54841,7 +54841,7 @@ class NPCActorSheet extends BaseActorSheet {
       return obj;
     }, {});
     sections.passive = {
-      id: "passive", label: "DND5E.Features", order: 0, items: [], minWidth: 210,
+      id: "passive", label: "VARLYN5E.Features", order: 0, items: [], minWidth: 210,
       columns: ["recovery", "uses", "roll", "formula", "controls"]
     };
     context.itemCategories.features?.forEach(i => {
@@ -54850,14 +54850,14 @@ class NPCActorSheet extends BaseActorSheet {
     });
     context.sections = customElements.get(this.options.elements.inventory).prepareSections(Object.values(sections));
     context.listControls = {
-      label: "DND5E.FeatureSearch",
+      label: "VARLYN5E.FeatureSearch",
       list: "features",
       filters: [
-        { key: "action", label: "DND5E.ACTIVATION.Type.Action.Label" },
-        { key: "bonus", label: "DND5E.ACTIVATION.Type.BonusAction.Label" },
-        { key: "reaction", label: "DND5E.ACTIVATION.Type.Reaction.Label" },
-        { key: "legendary", label: "DND5E.ACTIVATION.Type.Legendary.Label" },
-        { key: "lair", label: "DND5E.ACTIVATION.Type.Lair.Label" }
+        { key: "action", label: "VARLYN5E.ACTIVATION.Type.Action.Label" },
+        { key: "bonus", label: "VARLYN5E.ACTIVATION.Type.BonusAction.Label" },
+        { key: "reaction", label: "VARLYN5E.ACTIVATION.Type.Reaction.Label" },
+        { key: "legendary", label: "VARLYN5E.ACTIVATION.Type.Legendary.Label" },
+        { key: "lair", label: "VARLYN5E.ACTIVATION.Type.Lair.Label" }
       ],
       sorting: [
         { key: "m", label: "SIDEBAR.SortModeManual", dataset: { icon: "fa-solid fa-arrow-down-short-wide" } },
@@ -54902,8 +54902,8 @@ class NPCActorSheet extends BaseActorSheet {
         if ( filled ) classes.push("filled");
         return {
           n: max - n, filled,
-          tooltip: `DND5E.${i18n}.Label`,
-          label: _loc(`DND5E.${i18n}.Ordinal.${plurals.select(n)}`, { n }),
+          tooltip: `VARLYN5E.${i18n}.Label`,
+          label: _loc(`VARLYN5E.${i18n}.Ordinal.${plurals.select(n)}`, { n }),
           classes: classes.join(" ")
         };
       });
@@ -54966,9 +54966,9 @@ class NPCActorSheet extends BaseActorSheet {
       const any = details.habitat.value.find(({ type }) => type === "any");
       context.habitat = [
         ...habitat.value.map(({ type, subtype }) => {
-          let { label } = CONFIG.DND5E.habitats[type] ?? {};
+          let { label } = CONFIG.VARLYN5E.habitats[type] ?? {};
           if ( label && (!any || (type === "any")) ) {
-            if ( subtype ) label = _loc("DND5E.Habitat.Subtype", { type: label, subtype });
+            if ( subtype ) label = _loc("VARLYN5E.Habitat.Subtype", { type: label, subtype });
             return { label };
           }
           return null;
@@ -54981,7 +54981,7 @@ class NPCActorSheet extends BaseActorSheet {
     context.senses = this._prepareSenses(context);
     if ( this.actor.system.skills.prc ) context.senses.push({
       key: "passivePerception",
-      label: _loc("DND5E.PassivePerception"),
+      label: _loc("VARLYN5E.PassivePerception"),
       value: this.actor.system.skills.prc.passive
     });
 
@@ -54993,12 +54993,12 @@ class NPCActorSheet extends BaseActorSheet {
 
     // Speed
     context.speed = [
-      ...Object.entries(CONFIG.DND5E.movementTypes).filter(([, m]) => !m.hidden).map(([k, { label }]) => {
+      ...Object.entries(CONFIG.VARLYN5E.movementTypes).filter(([, m]) => !m.hidden).map(([k, { label }]) => {
         const value = attributes.movement[k];
         if ( !value ) return null;
         const data = { label, value };
         if ( (k === "fly") && attributes.movement.hover ) data.icons = [{
-          icon: "fas fa-cloud", label: _loc("DND5E.MOVEMENT.Hover")
+          icon: "fas fa-cloud", label: _loc("VARLYN5E.MOVEMENT.Hover")
         }];
         return data;
       }),
@@ -55013,7 +55013,7 @@ class NPCActorSheet extends BaseActorSheet {
       const any = details.treasure.value.has("any");
       context.treasure = Array.from(details.treasure.value)
         .map(id => {
-          const { label } = CONFIG.DND5E.treasure[id] ?? {};
+          const { label } = CONFIG.VARLYN5E.treasure[id] ?? {};
           if ( label && (!any || (id === "any")) ) return { label };
           return null;
         }, [])
@@ -55032,21 +55032,21 @@ class NPCActorSheet extends BaseActorSheet {
 
     const { fields } = this.document.system.schema;
     context.flags.sections.unshift({
-      label: _loc("DND5E.NPC.Label"),
+      label: _loc("VARLYN5E.NPC.Label"),
       fields: [{
         field: fields.traits.fields.important,
         input: createCheckboxInput,
         name: "system.traits.important",
         value: context.source.traits.important
       }, {
-        label: "DND5E.NPC.FIELDS.attributes.price.label",
-        hint: "DND5E.NPC.FIELDS.attributes.price.hint",
+        label: "VARLYN5E.NPC.FIELDS.attributes.price.label",
+        hint: "VARLYN5E.NPC.FIELDS.attributes.price.hint",
         fields: [{
           field: fields.attributes.fields.price.fields.value,
           name: "system.attributes.price.value",
           value: context.source.attributes.price.value
         }, {
-          choices: CONFIG.DND5E.currencies,
+          choices: CONFIG.VARLYN5E.currencies,
           field: fields.attributes.fields.price.fields.denomination,
           name: "system.attributes.price.denomination",
           value: context.source.attributes.price.denomination
@@ -55074,20 +55074,20 @@ class NPCActorSheet extends BaseActorSheet {
     const mod = spellAbility?.mod ?? 0;
     const attackBonus = msak === rsak ? msak : 0;
     context.spellcasting.push({
-      label: _loc("DND5E.SpellcastingClass", {
-        class: spellcaster?.name ?? _loc("DND5E.NPC.Label")
+      label: _loc("VARLYN5E.SpellcastingClass", {
+        class: spellcaster?.name ?? _loc("VARLYN5E.NPC.Label")
       }),
       level: spellcaster?.system.levels ?? attributes.spell.level,
       ability: {
         ability, mod,
-        label: CONFIG.DND5E.abilities[ability]?.label
+        label: CONFIG.VARLYN5E.abilities[ability]?.label
       },
       attack: mod + attributes.prof + attackBonus,
       save: spellAbility?.dc ?? 0,
       noSpellcaster: !spellcaster,
       concentration: {
         mod: attributes.concentration.save,
-        tooltip: _loc("DND5E.AbilityConfigure", { ability: _loc("DND5E.Concentration") })
+        tooltip: _loc("VARLYN5E.AbilityConfigure", { ability: _loc("VARLYN5E.Concentration") })
       }
     });
 
@@ -55122,7 +55122,7 @@ class NPCActorSheet extends BaseActorSheet {
   async _prepareItem(item, ctx) {
     await super._prepareItem(item, ctx);
     const isPassive = item.system.properties?.has("trait")
-      || CONFIG.DND5E.activityActivationTypes[item.system.activities?.contents[0]?.activation.type]?.passive;
+      || CONFIG.VARLYN5E.activityActivationTypes[item.system.activities?.contents[0]?.activation.type]?.passive;
     ctx.group = isPassive ? "passive" : item.system.activities?.contents[0]?.activation.type || "passive";
   }
 
@@ -55143,7 +55143,7 @@ class NPCActorSheet extends BaseActorSheet {
     const elements = this.element.querySelector(".header-elements .cr-xp");
     if ( !elements || this.actor.limited ) return;
     const xp = this.actor.system.details.xp.value;
-    elements.innerText = xp === null ? "" : _loc("DND5E.ExperiencePoints.Format", {
+    elements.innerText = xp === null ? "" : _loc("VARLYN5E.ExperiencePoints.Format", {
       value: formatNumber(xp)
     });
 
@@ -55290,7 +55290,7 @@ class MultiActorSheet extends BaseActorSheet {
       secrets: this.actor.isOwner, relativeTo: this.actor, rollData: context.rollData
     };
     context.enriched = {
-      label: "DND5E.Description",
+      label: "VARLYN5E.Description",
       summary: await CONFIG.ux.TextEditor.enrichHTML(summary, enrichmentOptions),
       full: await CONFIG.ux.TextEditor.enrichHTML(full, enrichmentOptions)
     };
@@ -55382,7 +55382,7 @@ class MultiActorSheet extends BaseActorSheet {
       }
       return true;
     });
-    if ( foundNonPhysical ) ui.notifications.warn("DND5E.Group.Warning.PhysicalItemOnly");
+    if ( foundNonPhysical ) ui.notifications.warn("VARLYN5E.Group.Warning.PhysicalItemOnly");
     return super._onDropCreateItems(event, items, behavior);
   }
 
@@ -55434,11 +55434,11 @@ class MultiActorSheet extends BaseActorSheet {
    */
   _getEntryContextOptions() {
     return [{
-      label: "DND5E.Group.Action.View",
+      label: "VARLYN5E.Group.Action.View",
       icon: '<i class="fa-solid fa-eye"></i>',
       onClick: async (_, target) => (await fromUuid(target.dataset.uuid))?.sheet.render({ force: true })
     }, {
-      label: "DND5E.Group.Action.Remove",
+      label: "VARLYN5E.Group.Action.Remove",
       icon: '<i class="fa-solid fa-xmark"></i>',
       onClick: async (_, target) => this.actor.system.removeMember(await fromUuid(target.dataset.uuid))
     }];
@@ -55457,14 +55457,14 @@ class MultiActorSheet extends BaseActorSheet {
     const { document: doc } = app.options;
     const showTokenPortrait = doc.getFlag("dnd5e", "showTokenPortrait");
     const artOptions = {
-      false: _loc("DND5E.Group.Config.Art.portraits"),
-      true: _loc("DND5E.Group.Config.Art.tokens")
+      false: _loc("VARLYN5E.Group.Config.Art.portraits"),
+      true: _loc("VARLYN5E.Group.Config.Art.tokens")
     };
     const fieldset = document.createElement("fieldset");
     fieldset.innerHTML = `
-      <legend>${_loc("DND5E.Group.Config.Legend")}</legend>
+      <legend>${_loc("VARLYN5E.Group.Config.Legend")}</legend>
       <div class="form-group">
-        <label>${_loc("DND5E.Group.Config.Art.Label")}</label>
+        <label>${_loc("VARLYN5E.Group.Config.Art.Label")}</label>
         <div class="form-fields">
           <select name="flags.dnd5e.showTokenPortrait" data-dtype="Boolean">
             ${foundry.applications.handlebars.selectOptions(artOptions, { hash: { selected: showTokenPortrait } })}
@@ -55585,7 +55585,7 @@ class AdvancementConfig extends FormApplication {
   /** @inheritDoc */
   get title() {
     const type = this.advancement.constructor.metadata.title;
-    return `${_loc("DND5E.AdvancementConfigureTitle", { item: this.item.name })}: ${type}`;
+    return `${_loc("VARLYN5E.AdvancementConfigureTitle", { item: this.item.name })}: ${type}`;
   }
 
   /* -------------------------------------------- */
@@ -55600,12 +55600,12 @@ class AdvancementConfig extends FormApplication {
 
   /** @inheritDoc */
   getData() {
-    const levels = Object.fromEntries(Array.fromRange(CONFIG.DND5E.maxLevel + 1).map(l => [l, l]));
+    const levels = Object.fromEntries(Array.fromRange(CONFIG.VARLYN5E.maxLevel + 1).map(l => [l, l]));
     if ( ["class", "subclass"].includes(this.item.type) ) delete levels[0];
-    else levels[0] = _loc("DND5E.AdvancementLevelAnyHeader");
+    else levels[0] = _loc("VARLYN5E.AdvancementLevelAnyHeader");
     const context = {
       appId: this.id,
-      CONFIG: CONFIG.DND5E,
+      CONFIG: CONFIG.VARLYN5E,
       ...this.advancement.toObject(false),
       src: this.advancement._source,
       source: this.advancement._source,
@@ -55616,9 +55616,9 @@ class AdvancementConfig extends FormApplication {
       },
       levels,
       classRestrictionOptions: [
-        { value: "", label: _loc("DND5E.AdvancementClassRestrictionNone") },
-        { value: "primary", label: _loc("DND5E.AdvancementClassRestrictionPrimary") },
-        { value: "secondary", label: _loc("DND5E.AdvancementClassRestrictionSecondary") }
+        { value: "", label: _loc("VARLYN5E.AdvancementClassRestrictionNone") },
+        { value: "primary", label: _loc("VARLYN5E.AdvancementClassRestrictionPrimary") },
+        { value: "secondary", label: _loc("VARLYN5E.AdvancementClassRestrictionSecondary") }
       ],
       showClassRestrictions: this.item.type === "class",
       showLevelSelector: !this.advancement.constructor.metadata.multiLevel
@@ -55743,13 +55743,13 @@ class AdvancementConfig extends FormApplication {
 
     // Abort if this uuid is the parent item
     if ( item.uuid === this.item.uuid ) {
-      ui.notifications.error("DND5E.ADVANCEMENT.ItemGrant.Warning.Recursive");
+      ui.notifications.error("VARLYN5E.ADVANCEMENT.ItemGrant.Warning.Recursive");
       return null;
     }
 
     // Abort if this uuid exists already
     if ( existingItems.find(i => i.uuid === item.uuid) ) {
-      ui.notifications.warn("DND5E.ADVANCEMENT.ItemGrant.Warning.Duplicate");
+      ui.notifications.warn("VARLYN5E.ADVANCEMENT.ItemGrant.Warning.Duplicate");
       return null;
     }
 
@@ -55971,7 +55971,7 @@ class ItemGrantFlow extends AdvancementFlow {
     const config = this.advancement.configuration;
     return {
       options: config.spell?.ability.size > 1 ? config.spell.ability.reduce((obj, k) => {
-        obj[k] = CONFIG.DND5E.abilities[k]?.label;
+        obj[k] = CONFIG.VARLYN5E.abilities[k]?.label;
         return obj;
       }, {}) : null,
       selected: this.ability ?? this.retainedData?.ability ?? this.advancement.value.ability
@@ -56127,12 +56127,12 @@ class CombatTracker5e extends foundry.applications.sidebar.tabs.CombatTracker {
       for ( const [index, element] of children.entries() ) {
         if ( element.classList.contains("active") ) activeEntry = index;
       }
-      let count = _loc(`DND5E.COMBATANT.Counted.${getPluralRules().select(children.length)}`, {
+      let count = _loc(`VARLYN5E.COMBATANT.Counted.${getPluralRules().select(children.length)}`, {
         number: formatNumber(children.length)
       });
       if ( activeEntry !== undefined ) {
         groupContainer.classList.add("active");
-        count = _loc("DND5E.COMBAT.Group.ActiveCount", {
+        count = _loc("VARLYN5E.COMBAT.Group.ActiveCount", {
           combatants: count, current: formatNumber(activeEntry + 1)
         });
       }
@@ -56157,7 +56157,7 @@ class CombatTracker5e extends foundry.applications.sidebar.tabs.CombatTracker {
         </div>
       `;
       groupContainer.dataset.groupKey = key;
-      groupContainer.querySelector(".name").innerText = _loc("DND5E.COMBAT.Group.Title", { name });
+      groupContainer.querySelector(".name").innerText = _loc("VARLYN5E.COMBAT.Group.Title", { name });
       children[0].before(groupContainer);
       groupContainer.querySelector(".group-children").replaceChildren(...children);
       groupContainer.addEventListener("click", event => {
@@ -56338,7 +56338,7 @@ class CopyableTextElement extends (foundry.applications.elements.AdoptableHTMLEl
   connectedCallback() {
     this.#controller = new AbortController();
     const button = document.createElement("button");
-    button.ariaLabel = this.getAttribute("label") ?? _loc("DND5E.Copy");
+    button.ariaLabel = this.getAttribute("label") ?? _loc("VARLYN5E.Copy");
     button.classList.add("copy-button");
     button.dataset.tooltip = button.ariaLabel;
     button.innerHTML = '<i class="fa-regular fa-clipboard" inert></i>';
@@ -56381,7 +56381,7 @@ class CopyableTextElement extends (foundry.applications.elements.AdoptableHTMLEl
     event.stopPropagation();
     const value = this.getAttribute("value") ?? this.innerText;
     game.clipboard.copyPlainText(value);
-    game.tooltip.activate(event.target, { text: _loc("DND5E.Copied", { value }), direction: "UP" });
+    game.tooltip.activate(event.target, { text: _loc("VARLYN5E.Copied", { value }), direction: "UP" });
   }
 }
 
@@ -56571,10 +56571,10 @@ function TargetedApplicationMixin(Base) {
       this.targetSourceControl.classList.add("target-source-control");
       this.targetSourceControl.innerHTML = `
         <button type="button" class="unbutton" data-mode="targeted" aria-pressed="false">
-          <i class="fa-solid fa-bullseye" inert></i> ${_loc("DND5E.Tokens.Targeted")}
+          <i class="fa-solid fa-bullseye" inert></i> ${_loc("VARLYN5E.Tokens.Targeted")}
         </button>
         <button type="button" class="unbutton" data-mode="selected" aria-pressed="false">
-          <i class="fa-solid fa-expand" inert></i> ${_loc("DND5E.Tokens.Selected")}
+          <i class="fa-solid fa-expand" inert></i> ${_loc("VARLYN5E.Tokens.Selected")}
         </button>
       `;
       this.targetSourceControl.querySelectorAll("button").forEach(b =>
@@ -56613,7 +56613,7 @@ function TargetedApplicationMixin(Base) {
       else {
         const li = document.createElement("li");
         li.classList.add("none");
-        li.innerText = _loc(`DND5E.Tokens.None${this.targetingMode.capitalize()}`);
+        li.innerText = _loc(`VARLYN5E.Tokens.None${this.targetingMode.capitalize()}`);
         this.targetList.replaceChildren(li);
       }
     }
@@ -56739,14 +56739,14 @@ class DamageApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
       div.innerHTML = `
         <label class="roboto-upper">
           <i class="fa-solid fa-heart-crack"></i>
-          <span>${_loc("DND5E.Apply")}</span>
+          <span>${_loc("VARLYN5E.Apply")}</span>
           <i class="fa-solid fa-caret-down"></i>
         </label>
         <div class="collapsible-content">
           <div class="wrapper">
             <button class="apply-damage" type="button" data-action="applyDamage">
               <i class="fa-solid fa-reply-all fa-flip-horizontal" inert></i>
-              ${_loc("DND5E.Apply")}
+              ${_loc("VARLYN5E.Apply")}
             </button>
           </div>
         </div>
@@ -56779,7 +56779,7 @@ class DamageApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
         if ( type === "ALL" ) {
           types.push({ type, change, icon: "systems/dnd5e/icons/svg/damage/all.svg" });
         } else {
-          const config = CONFIG.DND5E.damageTypes[type] ?? CONFIG.DND5E.healingTypes[type];
+          const config = CONFIG.VARLYN5E.damageTypes[type] ?? CONFIG.VARLYN5E.healingTypes[type];
           if ( !config ) continue;
           const data = { type, change, icon: config.icon };
           types.push(data);
@@ -56800,10 +56800,10 @@ class DamageApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
       <div class="calculated damage">
         ${total}
       </div>
-      <div class="calculated temp" data-tooltip="DND5E.HEAL.Type.Temporary">
+      <div class="calculated temp" data-tooltip="VARLYN5E.HEAL.Type.Temporary">
         ${temp}
       </div>
-      <div class="calculated temp-max" data-tooltip="DND5E.HEAL.Type.Maximum">
+      <div class="calculated temp-max" data-tooltip="VARLYN5E.HEAL.Type.Maximum">
         ${tempMax}
       </div>
       <menu class="damage-multipliers unlist"></menu>
@@ -56904,12 +56904,12 @@ class DamageApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
     if ( (options.ignore?.[change] === true) || options.ignore?.[change]?.has?.(type) ) mode = "ignore";
     else if ( (change === "immunity") && options.downgrade?.has(type) ) mode = "downgrade";
 
-    let label = _loc(`DND5E.DamageApplication.Change.${change.capitalize()}`, {
-      type: type === "ALL" ? _loc("DND5E.DAMAGE.All")
-        : CONFIG.DND5E.damageTypes[type]?.label ?? CONFIG.DND5E.healingTypes[type]?.label
+    let label = _loc(`VARLYN5E.DamageApplication.Change.${change.capitalize()}`, {
+      type: type === "ALL" ? _loc("VARLYN5E.DAMAGE.All")
+        : CONFIG.VARLYN5E.damageTypes[type]?.label ?? CONFIG.VARLYN5E.healingTypes[type]?.label
     });
-    if ( mode === "ignore" ) label = _loc("DND5E.DamageApplication.Ignoring", { source: label });
-    if ( mode === "downgrade" ) label = _loc("DND5E.DamageApplication.Downgrading", { source: label });
+    if ( mode === "ignore" ) label = _loc("VARLYN5E.DamageApplication.Ignoring", { source: label });
+    if ( mode === "downgrade" ) label = _loc("VARLYN5E.DamageApplication.Downgrading", { source: label });
 
     return { label, pressed: mode === "active" ? "false" : mode === "ignore" ? "true" : "mixed" };
   }
@@ -56927,7 +56927,7 @@ class DamageApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
     const calculatedDamage = entry.querySelector(".calculated.damage");
     calculatedDamage.innerText = formatNumber(-total, { signDisplay: "exceptZero" });
     calculatedDamage.classList.toggle("healing", total < 0);
-    calculatedDamage.dataset.tooltip = `DND5E.${total < 0 ? "Healing" : "Damage"}`;
+    calculatedDamage.dataset.tooltip = `VARLYN5E.${total < 0 ? "Healing" : "Damage"}`;
     calculatedDamage.hidden = !total && (!!temp || !!tempMax);
     const calculatedTemp = entry.querySelector(".calculated.temp");
     calculatedTemp.innerText = temp;
@@ -57137,7 +57137,7 @@ class EffectApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
       div.innerHTML = `
         <label class="roboto-upper">
           <i class="fa-solid fa-bolt"></i>
-          <span>${_loc("DND5E.Effects")}</span>
+          <span>${_loc("VARLYN5E.Effects")}</span>
           <i class="fa-solid fa-caret-down"></i>
         </label>
         <div class="collapsible-content">
@@ -57183,7 +57183,7 @@ class EffectApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
           <span class="subtitle">${effect.duration.label}</span>
         </div>
         <button class="apply-effect" type="button" data-action="applyEffect"
-                data-tooltip aria-label="${_loc("DND5E.EffectsApplyTokens")}">
+                data-tooltip aria-label="${_loc("VARLYN5E.EffectsApplyTokens")}">
           <i class="fas fa-reply-all fa-flip-horizontal" inert></i>
         </button>
       `;
@@ -57238,7 +57238,7 @@ class EffectApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
     const concentration = this.chatMessage.getAssociatedActor()?.effects.get(this.chatMessage.system.concentration);
     const origin = concentration ?? effect;
     if ( !game.user.isGM && !actor.isOwner ) {
-      throw new Error(_loc("DND5E.EffectApplyWarningOwnership"));
+      throw new Error(_loc("VARLYN5E.EffectApplyWarningOwnership"));
     }
 
     const effectFlags = {
@@ -57269,7 +57269,7 @@ class EffectApplicationElement extends TargetedApplicationMixin(ChatTrayElement)
     }
 
     if ( !game.user.isGM && concentration && !concentration.isOwner ) {
-      throw new Error(_loc("DND5E.EffectApplyWarningConcentration"));
+      throw new Error(_loc("VARLYN5E.EffectApplyWarningConcentration"));
     }
 
     // Otherwise, create a new effect on the target
@@ -57425,7 +57425,7 @@ class EnchantmentApplicationElement extends MaybeAdoptable$2 {
         this.querySelector(".enchantment-control").append(div);
         this.countArea = this.querySelector(".count-area");
       }
-      this.countArea.innerHTML = _loc("DND5E.ENCHANT.Enchanted", {
+      this.countArea.innerHTML = _loc("VARLYN5E.ENCHANT.Enchanted", {
         current: '<span class="current">0</span>',
         max: `<span class="max">${maxTargets}<span>`
       });
@@ -57456,16 +57456,16 @@ class EnchantmentApplicationElement extends MaybeAdoptable$2 {
       div.querySelector(".name").append(item.name);
       if ( item.isOwner ) {
         const control = document.createElement("a");
-        control.ariaLabel = _loc("DND5E.ENCHANTMENT.Action.Remove");
+        control.ariaLabel = _loc("VARLYN5E.ENCHANTMENT.Action.Remove");
         control.dataset.action = "removeEnchantment";
-        control.dataset.tooltip = "DND5E.ENCHANTMENT.Action.Remove";
+        control.dataset.tooltip = "VARLYN5E.ENCHANTMENT.Action.Remove";
         control.innerHTML = '<i class="fa-solid fa-rotate-left" inert></i>';
         div.append(control);
       }
       return div;
     });
     if ( enchantedItems.length ) this.dropArea.replaceChildren(...enchantedItems);
-    else this.dropArea.innerHTML = `<p>${_loc("DND5E.ENCHANT.DropArea")}</p>`;
+    else this.dropArea.innerHTML = `<p>${_loc("VARLYN5E.ENCHANT.DropArea")}</p>`;
     if ( this.countArea ) this.countArea.querySelector(".current").innerText = enchantedItems.length;
   }
 
@@ -57487,7 +57487,7 @@ class EnchantmentApplicationElement extends MaybeAdoptable$2 {
     const concentrationId = this.chatMessage.system.concentration;
     const concentration = this.enchantmentActivity.actor.effects.get(concentrationId);
     if ( concentrationId && !concentration ) {
-      ui.notifications.error("DND5E.ENCHANT.Warning.ConcentrationEnded", { console: false });
+      ui.notifications.error("VARLYN5E.ENCHANT.Warning.ConcentrationEnded", { console: false });
       return;
     }
 
@@ -57962,7 +57962,7 @@ class CurrencyManager extends Application5e {
     },
     tag: "form",
     window: {
-      title: "DND5E.CurrencyManager.Title"
+      title: "VARLYN5E.CurrencyManager.Title"
     }
   };
 
@@ -58056,13 +58056,13 @@ class CurrencyManager extends Application5e {
     return {
       convert: {
         id: "convert", group: "primary", icon: "fa-solid fa-arrow-up-short-wide",
-        label: "DND5E.CurrencyManager.Convert.Label",
+        label: "VARLYN5E.CurrencyManager.Convert.Label",
         active: this.tabGroups.primary === "convert",
         cssClass: this.tabGroups.primary === "convert" ? "active" : ""
       },
       transfer: {
         id: "transfer", group: "primary", icon: "fa-solid fa-reply-all fa-flip-horizontal",
-        label: "DND5E.CurrencyManager.Transfer.Label",
+        label: "VARLYN5E.CurrencyManager.Transfer.Label",
         active: this.tabGroups.primary === "transfer",
         cssClass: this.tabGroups.primary === "transfer" ? "active" : ""
       }
@@ -58142,14 +58142,14 @@ class CurrencyManager extends Application5e {
 
   /**
    * Convert all carried currency to the highest possible denomination using configured conversion rates.
-   * See CONFIG.DND5E.currencies for configuration.
+   * See CONFIG.VARLYN5E.currencies for configuration.
    * @param {Actor5e|Item5e} doc  Actor or container item to convert.
    * @returns {Promise<Actor5e|Item5e>}
    */
   static convertCurrency(doc) {
     const currency = foundry.utils.deepClone(doc.system.currency);
 
-    const currencies = Object.entries(CONFIG.DND5E.currencies)
+    const currencies = Object.entries(CONFIG.VARLYN5E.currencies)
       .filter(([, c]) => c.conversion)
       .sort((a, b) => a[1].conversion - b[1].conversion);
 
@@ -58185,7 +58185,7 @@ class CurrencyManager extends Application5e {
     if ( amount <= 0 ) return;
     // eslint-disable-next-line no-unused-vars
     const { item, remainder, ...updates } = this.getActorCurrencyUpdates(actor, amount, denomination, options);
-    if ( remainder ) throw new Error(_loc("DND5E.CurrencyManager.Error.InsufficientFunds", {
+    if ( remainder ) throw new Error(_loc("VARLYN5E.CurrencyManager.Error.InsufficientFunds", {
       denomination,
       amount: new Intl.NumberFormat(game.i18n.lang).format(amount),
       name: actor.name
@@ -58209,11 +58209,11 @@ class CurrencyManager extends Application5e {
     const { currency } = actor.system;
     if ( amount <= 0 ) return { system: { currency: { ...currency } }, remainder: amount, item: [] };
 
-    const currencies = Object.entries(CONFIG.DND5E.currencies)
+    const currencies = Object.entries(CONFIG.VARLYN5E.currencies)
       .filter(([denom]) => !exact || (denom !== denomination))
       .map(([denom, { conversion }]) => [denom, conversion])
       .sort(([, a], [, b]) => priority === "high" ? a - b : b - a);
-    const baseConversion = CONFIG.DND5E.currencies[denomination].conversion;
+    const baseConversion = CONFIG.VARLYN5E.currencies[denomination].conversion;
     if ( exact ) currencies.unshift([denomination, baseConversion]);
 
     let passes = currencies.length;
@@ -58291,7 +58291,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 70,
       order: 800,
       priority: 600,
-      label: "DND5E.Charges",
+      label: "VARLYN5E.Charges",
       template: "systems/dnd5e/templates/inventory/columns/uses.hbs"
     },
     controls: {
@@ -58306,7 +58306,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 80,
       order: 700,
       priority: 700,
-      label: "DND5E.SpellHeader.Formula",
+      label: "VARLYN5E.SpellHeader.Formula",
       template: "systems/dnd5e/templates/inventory/columns/formula.hbs"
     },
     price: {
@@ -58314,7 +58314,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 80,
       order: 300,
       priority: 300,
-      label: "DND5E.Price",
+      label: "VARLYN5E.Price",
       template: "systems/dnd5e/templates/inventory/columns/price.hbs"
     },
     range: {
@@ -58322,7 +58322,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 50,
       order: 300,
       priority: 800,
-      label: "DND5E.SpellHeader.Range",
+      label: "VARLYN5E.SpellHeader.Range",
       template: "systems/dnd5e/templates/inventory/columns/range.hbs"
     },
     recovery: {
@@ -58330,7 +58330,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 60,
       order: 400,
       priority: 500,
-      label: "DND5E.Recovery",
+      label: "VARLYN5E.Recovery",
       template: "systems/dnd5e/templates/inventory/columns/recovery.hbs"
     },
     roll: {
@@ -58338,7 +58338,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 40,
       order: 600,
       priority: 800,
-      label: "DND5E.SpellHeader.Roll",
+      label: "VARLYN5E.SpellHeader.Roll",
       template: "systems/dnd5e/templates/inventory/columns/roll.hbs"
     },
     school: {
@@ -58346,7 +58346,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 40,
       order: 100,
       priority: 100,
-      label: "DND5E.SpellHeader.School",
+      label: "VARLYN5E.SpellHeader.School",
       template: "systems/dnd5e/templates/inventory/columns/school.hbs"
     },
     target: {
@@ -58354,7 +58354,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 80,
       order: 400,
       priority: 800,
-      label: "DND5E.SpellHeader.Target",
+      label: "VARLYN5E.SpellHeader.Target",
       template: "systems/dnd5e/templates/inventory/columns/target.hbs"
     },
     time: {
@@ -58362,7 +58362,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 40,
       order: 200,
       priority: 800,
-      label: "DND5E.SpellHeader.Time",
+      label: "VARLYN5E.SpellHeader.Time",
       template: "systems/dnd5e/templates/inventory/columns/time.hbs"
     },
     quantity: {
@@ -58370,7 +58370,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 70,
       order: 500,
       priority: 500,
-      label: "DND5E.Quantity",
+      label: "VARLYN5E.Quantity",
       template: "systems/dnd5e/templates/inventory/columns/quantity.hbs"
     },
     uses: {
@@ -58378,7 +58378,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 70,
       order: 500,
       priority: 600,
-      label: "DND5E.Uses",
+      label: "VARLYN5E.Uses",
       template: "systems/dnd5e/templates/inventory/columns/uses.hbs"
     },
     weight: {
@@ -58386,7 +58386,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       width: 60,
       order: 400,
       priority: 400,
-      label: "DND5E.Weight",
+      label: "VARLYN5E.Weight",
       template: "systems/dnd5e/templates/inventory/columns/weight.hbs"
     }
   };
@@ -58402,7 +58402,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       id: "contents",
       order: 100,
       groups: { contents: "contents" },
-      label: "DND5E.Contents",
+      label: "VARLYN5E.Contents",
       columns: ["price", "weight", "quantity", "charges", "controls"]
     }
   };
@@ -58583,27 +58583,27 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
 
     // Standard options.
     const options = [{
-      label: "DND5E.ItemView",
+      label: "VARLYN5E.ItemView",
       icon: '<i class="fa-solid fa-eye fa-fw"></i>',
       onClick: (event, target) => this._onAction(target, "view", { event })
     }, {
-      label: "DND5E.ContextMenuActionEdit",
+      label: "VARLYN5E.ContextMenuActionEdit",
       icon: '<i class="fa-solid fa-edit fa-fw"></i>',
       visible: () => item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "edit", { event })
     }, {
-      label: "DND5E.ContextMenuActionDuplicate",
+      label: "VARLYN5E.ContextMenuActionDuplicate",
       icon: '<i class="fa-solid fa-copy fa-fw"></i>',
       visible: () => !inFavorites && item.canDuplicate && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "duplicate", { event })
     }, {
       id: "delete",
-      label: "DND5E.ContextMenuActionDelete",
+      label: "VARLYN5E.ContextMenuActionDelete",
       icon: '<i class="fa-solid fa-trash fa-fw"></i>',
       visible: () => !inFavorites && item.canDelete && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "delete", { event })
     }, {
-      label: "DND5E.DisplayCard",
+      label: "VARLYN5E.DisplayCard",
       icon: '<i class="fa-solid fa-message"></i>',
       visible: () => item.actor,
       onClick: () => item.displayCard()
@@ -58616,7 +58616,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
 
     // Owned item options.
     options.push({
-      label: "DND5E.Scroll.CreateScroll",
+      label: "VARLYN5E.Scroll.CreateScroll",
       icon: '<i class="fa-solid fa-scroll"></i>',
       group: "action",
       visible: () => {
@@ -58629,42 +58629,42 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
         if ( scroll ) void Item.implementation.create(scroll, { parent: this.actor });
       }
     }, {
-      label: "DND5E.ConcentrationBreak",
+      label: "VARLYN5E.ConcentrationBreak",
       icon: '<dnd5e-icon src="systems/dnd5e/icons/svg/break-concentration.svg"></dnd5e-icon>',
       group: "state",
       visible: () => this.actor?.concentration?.items.has(item),
       onClick: () => this.actor?.endConcentration(item)
     }, {
-      label: `DND5E.ContextMenuAction${item.system.attuned ? "Unattune" : "Attune"}`,
+      label: `VARLYN5E.ContextMenuAction${item.system.attuned ? "Unattune" : "Attune"}`,
       icon: '<i class="fa-solid fa-sun fa-fw"></i>',
       group: "state",
       visible: () => item.system.attunement && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "attune", { event })
     }, {
-      label: `DND5E.ContextMenuAction${item.system.equipped ? "Unequip" : "Equip"}`,
+      label: `VARLYN5E.ContextMenuAction${item.system.equipped ? "Unequip" : "Equip"}`,
       icon: '<i class="fa-solid fa-shield-alt fa-fw"></i>',
       group: "state",
       visible: () => ("equipped" in item.system) && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "equip", { event })
     }, {
-      label: `DND5E.ContextMenuAction${item.isOnCooldown ? "Charge" : "ExpendCharge"}`,
+      label: `VARLYN5E.ContextMenuAction${item.isOnCooldown ? "Charge" : "ExpendCharge"}`,
       icon: '<i class="fa-solid fa-bolt"></i>',
       group: "state",
       visible: () => item.hasRecharge && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "toggleCharge", { event })
     }, {
-      label: `DND5E.ContextMenuAction${item.system.prepared ? "Unprepare" : "Prepare"}`,
+      label: `VARLYN5E.ContextMenuAction${item.system.prepared ? "Unprepare" : "Prepare"}`,
       icon: '<i class="fa-solid fa-sun fa-fw"></i>',
       group: "state",
       visible: () => {
-        const isPrepared = CONFIG.DND5E.spellcasting[item.system.method]?.prepares;
-        const isAlways = item.system.prepared === CONFIG.DND5E.spellPreparationStates.always.value;
+        const isPrepared = CONFIG.VARLYN5E.spellcasting[item.system.method]?.prepares;
+        const isAlways = item.system.prepared === CONFIG.VARLYN5E.spellPreparationStates.always.value;
         const canEdit = item.isOwner && !compendiumLocked;
         return !item.hasRecharge && isPrepared && !isAlways && canEdit && !item.getFlag("dnd5e", "cachedFor");
       },
       onClick: (event, target) => this._onAction(target, "prepare", { event })
     }, {
-      label: "DND5E.Identify",
+      label: "VARLYN5E.Identify",
       icon: '<i class="fa-solid fa-magnifying-glass"></i>',
       group: "state",
       visible: () => {
@@ -58674,13 +58674,13 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
       },
       onClick: (event, target) => this._onAction(target, "identify", { event })
     }, {
-      label: favorited ? "DND5E.FavoriteRemove" : "DND5E.Favorite",
+      label: favorited ? "VARLYN5E.FavoriteRemove" : "VARLYN5E.Favorite",
       icon: '<i class="fa-solid fa-bookmark fa-fw"></i>',
       group: "state",
       visible: () => ("favorites" in this.actor.system) && item.isOwner && !compendiumLocked,
       onClick: (event, target) => this._onAction(target, "toggleFavorite", { event })
     }, {
-      label: item.system.properties?.has("gear") ? "DND5E.Gear.Action.Remove" : "DND5E.Gear.Action.Add",
+      label: item.system.properties?.has("gear") ? "VARLYN5E.Gear.Action.Remove" : "VARLYN5E.Gear.Action.Add",
       icon: '<i class="fa-solid fa-axe fa-fw"></i>',
       group: "state",
       visible: () => !!this.actor.system.isNPC && item.isOwner && !compendiumLocked
@@ -59329,7 +59329,7 @@ class ProficiencyCycleElement extends AdoptedStyleSheetMixin(
     const input = this.#shadowRoot.querySelector("input");
     input.setAttribute("value", this._value);
     this._internals.ariaValueNow = this._value;
-    this._internals.ariaValueText = CONFIG.DND5E.proficiencyLevels[this._value];
+    this._internals.ariaValueText = CONFIG.VARLYN5E.proficiencyLevels[this._value];
     this._internals.setFormValue(this._value);
     this._primaryInput = this.#shadowRoot.querySelector("input");
   }
@@ -59527,12 +59527,12 @@ class DamageRollConfigurationDialog extends RollConfigurationDialog {
       critical: {
         default: defaultCritical,
         icon: '<i class="fa-solid fa-bomb" inert></i>',
-        label: _loc("DND5E.CriticalHit")
+        label: _loc("VARLYN5E.CriticalHit")
       },
       normal: {
         default: !defaultCritical,
         icon: '<i class="fa-solid fa-dice" inert></i>',
-        label: _loc(allowCritical ? "DND5E.Normal" : "DND5E.Roll")
+        label: _loc(allowCritical ? "VARLYN5E.Normal" : "VARLYN5E.Roll")
       }
     };
     if ( !allowCritical ) delete context.buttons.critical;
@@ -59544,7 +59544,7 @@ class DamageRollConfigurationDialog extends RollConfigurationDialog {
   /** @inheritDoc */
   async _prepareFormulasContext(context, options) {
     context = await super._prepareFormulasContext(context, options);
-    const allTypes = foundry.utils.mergeObject(CONFIG.DND5E.damageTypes, CONFIG.DND5E.healingTypes, { inplace: false });
+    const allTypes = foundry.utils.mergeObject(CONFIG.VARLYN5E.damageTypes, CONFIG.VARLYN5E.healingTypes, { inplace: false });
     context.rolls = context.rolls.map(({ roll }) => ({
       roll,
       damageConfig: allTypes[roll.options.type] ?? allTypes[roll.options.types?.[0]],
@@ -59619,7 +59619,7 @@ class ContainerSheet extends ItemSheet5e {
 
   /** @override */
   static TABS = [
-    { tab: "contents", label: "DND5E.ITEM.SECTIONS.Contents" },
+    { tab: "contents", label: "VARLYN5E.ITEM.SECTIONS.Contents" },
     ...super.TABS
   ];
 
@@ -59792,7 +59792,7 @@ class ContainerSheet extends ItemSheet5e {
     items = items.filter(i => i && !containers.has(i.system.container));
 
     // Display recursive warning, but continue with any remaining items
-    if ( recursiveWarning ) ui.notifications.warn("DND5E.ContainerRecursiveError");
+    if ( recursiveWarning ) ui.notifications.warn("VARLYN5E.ContainerRecursiveError");
     if ( !items.length ) return [];
 
     // Create any remaining items
@@ -59826,7 +59826,7 @@ class ContainerSheet extends ItemSheet5e {
     // Prevent dropping containers within themselves
     const parentContainers = await this.item.system.allContainers();
     if ( (this.item.uuid === item.uuid) || parentContainers.includes(item) ) {
-      ui.notifications.error("DND5E.ContainerRecursiveError");
+      ui.notifications.error("VARLYN5E.ContainerRecursiveError");
       return;
     }
 
@@ -60323,10 +60323,10 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
     context.systemFields = this.document.system.schema.fields;
 
     context.styleOptions = [
-      { value: "", label: _loc("JOURNALENTRYPAGE.DND5E.Class.Style.Inferred") },
+      { value: "", label: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Style.Inferred") },
       { rule: true },
-      { value: "2024", label: _loc("JOURNALENTRYPAGE.DND5E.Class.Style.Modern") },
-      { value: "2014", label: _loc("JOURNALENTRYPAGE.DND5E.Class.Style.Legacy") }
+      { value: "2024", label: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Style.Modern") },
+      { value: "2014", label: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Style.Legacy") }
     ];
 
     context.title = {
@@ -60366,7 +60366,7 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
     if ( linked.system.primaryAbility ) {
       context.primaryAbility = game.i18n.getListFormatter(
         { type: linked.system.primaryAbility.all ? "conjunction" : "disjunction" }
-      ).format(Array.from(linked.system.primaryAbility.value).map(v => CONFIG.DND5E.abilities[v]?.label));
+      ).format(Array.from(linked.system.primaryAbility.value).map(v => CONFIG.VARLYN5E.abilities[v]?.label));
     }
 
     return context;
@@ -60456,9 +60456,9 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
     const scaleValues = (item.advancement.byType.ScaleValue ?? []);
     const spellProgression = await this._getSpellProgression(item);
 
-    const headers = [[{content: _loc("DND5E.Level")}]];
-    if ( item.type === "class" ) headers[0].push({content: _loc("DND5E.ProficiencyBonus")});
-    if ( hasFeatures ) headers[0].push({content: _loc("DND5E.Features")});
+    const headers = [[{content: _loc("VARLYN5E.Level")}]];
+    if ( item.type === "class" ) headers[0].push({content: _loc("VARLYN5E.ProficiencyBonus")});
+    if ( hasFeatures ) headers[0].push({content: _loc("VARLYN5E.Features")});
     headers[0].push(...scaleValues.map(a => ({content: a.title})));
     if ( spellProgression?.headers?.length > 1 ) {
       headers[0].forEach(h => h.rowSpan = 2);
@@ -60481,7 +60481,7 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
     };
 
     const rows = [];
-    for ( const level of Array.fromRange((CONFIG.DND5E.maxLevel - (initialLevel - 1)), initialLevel) ) {
+    for ( const level of Array.fromRange((CONFIG.VARLYN5E.maxLevel - (initialLevel - 1)), initialLevel) ) {
       let features = [];
       for ( const advancement of item.advancement.byLevel[level] ) {
         switch ( advancement.constructor.typeName ) {
@@ -60532,7 +60532,7 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
     const spellcasting = foundry.utils.deepClone(item.spellcasting);
     if ( !spellcasting || (spellcasting.progression === "none") ) return null;
 
-    const spellcastingModel = CONFIG.DND5E.spellcasting[spellcasting.type];
+    const spellcastingModel = CONFIG.VARLYN5E.spellcasting[spellcasting.type];
     const table = {};
 
     if ( spellcastingModel?.isSingleLevel ) {
@@ -60540,14 +60540,14 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
       const spells = { [spellSlotKey]: {} };
 
       table.headers = [[
-        { content: _loc("JOURNALENTRYPAGE.DND5E.Class.SpellSlots") },
-        { content: _loc("JOURNALENTRYPAGE.DND5E.Class.SpellSlotLevel") }
+        { content: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.SpellSlots") },
+        { content: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.SpellSlotLevel") }
       ]];
       table.cols = [{class: "spellcasting", span: 2}];
 
       // Loop through each level, gathering "Spell Slots" & "Slot Level" for each one
       table.rows = [];
-      for ( const level of Array.fromRange(CONFIG.DND5E.maxLevel, 1) ) {
+      for ( const level of Array.fromRange(CONFIG.VARLYN5E.maxLevel, 1) ) {
         const progression = { [spellSlotKey]: 0 };
         spellcasting.levels = level;
         Actor5e.computeClassProgression(progression, item, { spellcasting });
@@ -60558,14 +60558,14 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
         ] : null);
       }
     } else if ( spellcastingModel?.slots ) {
-      const maxSpellLevel = Object.keys(CONFIG.DND5E.spellLevels).length - 1;
+      const maxSpellLevel = Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1;
       const spells = Object.fromEntries(Array.fromRange(maxSpellLevel, 1).map(l => {
         return [spellcastingModel.getSpellSlotKey(l), {}];
       }));
 
       let largestSlot;
       table.rows = [];
-      for ( const level of Array.fromRange(CONFIG.DND5E.maxLevel, 1).reverse() ) {
+      for ( const level of Array.fromRange(CONFIG.VARLYN5E.maxLevel, 1).reverse() ) {
         const progression = { [spellcasting.type]: 0 };
         spellcasting.levels = level;
         Actor5e.computeClassProgression(progression, item, { spellcasting });
@@ -60587,7 +60587,7 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
 
       // Prepare headers & columns
       table.headers = [
-        [{content: _loc("JOURNALENTRYPAGE.DND5E.Class.SpellSlotsPerSpellLevel"), colSpan: largestSlot}],
+        [{content: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.SpellSlotsPerSpellLevel"), colSpan: largestSlot}],
         Array.fromRange(largestSlot, 1).map(spellLevel => ({content: spellLevel.ordinalString()}))
       ];
       table.cols = [{class: "spellcasting", span: largestSlot}];
@@ -60620,8 +60620,8 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
    */
   async _getOptionalTable(item, { modernStyle }) {
     const headers = [[
-      { content: _loc("DND5E.Level") },
-      { content: _loc("DND5E.Features") }
+      { content: _loc("VARLYN5E.Level") },
+      { content: _loc("VARLYN5E.Features") }
     ]];
 
     const cols = [
@@ -60636,7 +60636,7 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
     };
 
     const rows = [];
-    for ( const level of Array.fromRange(CONFIG.DND5E.maxLevel, 1) ) {
+    for ( const level of Array.fromRange(CONFIG.VARLYN5E.maxLevel, 1) ) {
       let features = [];
       for ( const advancement of item.advancement.byLevel[level] ) {
         switch ( advancement.constructor.typeName ) {
@@ -60678,7 +60678,7 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
       if ( document?.type !== "feat" ) return null;
       return {
         document, level,
-        name: modernStyle ? _loc("JOURNALENTRYPAGE.DND5E.Class.Features.Name", {
+        name: modernStyle ? _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Features.Name", {
           name: document.name, level: formatNumber(level)
         }) : document.name,
         description: await TextEditor$4.enrichHTML(document.system.description.value, {
@@ -60701,22 +60701,22 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
     }, { levels: [], boons: [] });
     if ( asi.levels.length ) {
       const [firstLevel, ...otherLevels] = asi.levels.sort((a, b) => a - b);
-      const name = _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.Journal.Name");
+      const name = _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Journal.Name");
       features.push({
         description: _loc(
-          `DND5E.ADVANCEMENT.AbilityScoreImprovement.Journal.Description${modernStyle ? "Modern" : "Legacy"}`,
+          `VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Journal.Description${modernStyle ? "Modern" : "Legacy"}`,
           {
             class: item.name,
             firstLevel: formatNumber(firstLevel),
             firstLevelOrdinal: formatNumber(firstLevel, { ordinal: true }),
-            maxAbilityScore: formatNumber(CONFIG.DND5E.maxAbilityScore),
+            maxAbilityScore: formatNumber(CONFIG.VARLYN5E.maxAbilityScore),
             otherLevels: game.i18n.getListFormatter({ style: "long" }).format(otherLevels.map(l => formatNumber(l))),
             otherLevelsOrdinal: game.i18n.getListFormatter({ style: "long" })
               .format(otherLevels.map(l => formatNumber(l, { ordinal: true })))
           }
         ),
         level: asi.levels[0],
-        name: modernStyle ? _loc("JOURNALENTRYPAGE.DND5E.Class.Features.Name", {
+        name: modernStyle ? _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Features.Name", {
           name: name, level: formatNumber(firstLevel)
         }) : name
       });
@@ -60725,11 +60725,11 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
       const recommendation = await fromUuid(advancement.configuration.recommendation);
       features.push({
         description: _loc(
-          `DND5E.ADVANCEMENT.AbilityScoreImprovement.Journal.DescriptionEpic${recommendation ? "Recommendation" : ""}`,
+          `VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Journal.DescriptionEpic${recommendation ? "Recommendation" : ""}`,
           { recommendation: recommendation?.toAnchor().outerHTML }
         ),
         level: advancement.level,
-        name: _loc("JOURNALENTRYPAGE.DND5E.Class.Features.Name", {
+        name: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.Features.Name", {
           name: advancement._defaultTitle, level: formatNumber(advancement.level)
         })
       });
@@ -60908,7 +60908,7 @@ class JournalRulePageSheet extends foundry.applications.sheets.journal.JournalEn
   /** @inheritDoc */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    context.CONFIG = CONFIG.DND5E;
+    context.CONFIG = CONFIG.VARLYN5E;
     return context;
   }
 }
@@ -60928,7 +60928,7 @@ class JournalNavigationConfig extends DocumentSheet5e {
       width: 400
     },
     window: {
-      title: "DND5E.JOURNALENTRY.Navigation.Title"
+      title: "VARLYN5E.JOURNALENTRY.Navigation.Title"
     }
   };
 
@@ -60970,7 +60970,7 @@ class JournalNavigationConfig extends DocumentSheet5e {
     });
     context.fields = ["previous", "up", "next"].map(name => ({
       field: new StringField$t(),
-      label: _loc(`DND5E.JOURNALENTRY.Navigation.${name.capitalize()}`),
+      label: _loc(`VARLYN5E.JOURNALENTRY.Navigation.${name.capitalize()}`),
       name: `flags.dnd5e.navigation.${name}`,
       options: entryOptions,
       value: data[name]
@@ -61019,7 +61019,7 @@ class JournalEntrySheet5e extends foundry.applications.sheets.journal.JournalEnt
         {
           action: "configureNavigation",
           icon: "fa-solid fa-compass",
-          label: "DND5E.JOURNALENTRY.Action.ConfigureNavigation",
+          label: "VARLYN5E.JOURNALENTRY.Action.ConfigureNavigation",
           visible: JournalEntrySheet5e.#canConfigureNavigation
         }
       ]
@@ -61199,7 +61199,7 @@ class JournalEntrySheet5e extends foundry.applications.sheets.journal.JournalEnt
       anchor.dataset.tooltipDirection = dir === "prev" ? "LEFT" : "RIGHT";
     }
     const i18n = { prev: "Previous", next: "Next", up: "Up" };
-    Object.assign(anchor.dataset, { link: "", tooltip: `DND5E.JOURNALENTRY.Navigation.${i18n[dir]}`, uuid: doc.uuid });
+    Object.assign(anchor.dataset, { link: "", tooltip: `VARLYN5E.JOURNALENTRY.Navigation.${i18n[dir]}`, uuid: doc.uuid });
     anchor.append(doc.name);
     li.append(anchor);
     return li;
@@ -61331,7 +61331,7 @@ class SpellsUnlinkedConfig extends DocumentSheet5e {
 
   /** @inheritDoc */
   get title() {
-    return _loc("JOURNALENTRYPAGE.DND5E.SpellList.UnlinkedSpells.Configuration");
+    return _loc("JOURNALENTRYPAGE.VARLYN5E.SpellList.UnlinkedSpells.Configuration");
   }
 
   /* -------------------------------------------- */
@@ -61344,8 +61344,8 @@ class SpellsUnlinkedConfig extends DocumentSheet5e {
       ...await super._prepareContext(options),
       ...this.document.system.unlinkedSpells.find(u => u._id === this.options.unlinkedId),
       fields: this.document.system.schema.fields.unlinkedSpells.element.fields,
-      spellLevelOptions: Object.entries(CONFIG.DND5E.spellLevels).map(([value, label]) => ({ value, label })),
-      spellSchoolOptions: Object.entries(CONFIG.DND5E.spellSchools).map(([value, { label }]) => ({ value, label }))
+      spellLevelOptions: Object.entries(CONFIG.VARLYN5E.spellLevels).map(([value, label]) => ({ value, label })),
+      spellSchoolOptions: Object.entries(CONFIG.VARLYN5E.spellSchools).map(([value, { label }]) => ({ value, label }))
     };
     return context;
   }
@@ -61481,7 +61481,7 @@ class JournalSpellListPageSheet extends JournalEntryPageHandlebarsSheet {
   /** @inheritDoc */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    context.CONFIG = CONFIG.DND5E;
+    context.CONFIG = CONFIG.VARLYN5E;
     context.system = context.document.system;
     context.embedRendering = this.options.embedRendering ?? false;
 
@@ -61505,11 +61505,11 @@ class JournalSpellListPageSheet extends JournalEntryPageHandlebarsSheet {
       switch ( context.grouping ) {
         case "level":
           const level = spell.system.level;
-          section = context.sections[level] ??= { header: CONFIG.DND5E.spellLevels[level], spells: [] };
+          section = context.sections[level] ??= { header: CONFIG.VARLYN5E.spellLevels[level], spells: [] };
           break;
         case "school":
           const school = spell.system.school;
-          section = context.sections[school] ??= { header: CONFIG.DND5E.spellSchools[school]?.label, spells: [] };
+          section = context.sections[school] ??= { header: CONFIG.VARLYN5E.spellSchools[school]?.label, spells: [] };
           break;
         case "alphabetical":
           const letter = spell.name.slice(0, 1).toLowerCase();
@@ -61894,7 +61894,7 @@ class DifficultTerrainConfig extends foundry.applications.sheets.RegionBehaviorC
     for ( const fieldset of fieldsets ) {
       const typesField = fieldset.fields.find(f => f.field.name === "types")?.field;
       if ( typesField ) {
-        typesField.element.choices = CONFIG.DND5E.difficultTerrainTypes;
+        typesField.element.choices = CONFIG.VARLYN5E.difficultTerrainTypes;
         break;
       }
     }
@@ -62013,7 +62013,7 @@ class RotateAreaConfig extends foundry.applications.sheets.RegionBehaviorConfig 
   _prepareSubmitData(event, form, formData, updateData) {
     const submitData = super._prepareSubmitData(event, form, formData, updateData);
     if ( submitData.system?.regions?.ids?.includes(this.document.parent.id) ) {
-      throw new Error(_loc("DND5E.REGIONBEHAVIORS.ROTATEAREA.Warning.RecursiveRegion"));
+      throw new Error(_loc("VARLYN5E.REGIONBEHAVIORS.ROTATEAREA.Warning.RecursiveRegion"));
     }
     return submitData;
   }
@@ -62036,18 +62036,18 @@ function _generateLinks() {
   links.innerHTML = `
     <li>
       <a href="https://github.com/foundryvtt/dnd5e/releases/latest" target="_blank">
-        ${_loc("DND5E.Notes")}
+        ${_loc("VARLYN5E.Notes")}
       </a>
     </li>
     <li>
-      <a href="https://github.com/foundryvtt/dnd5e/issues" target="_blank">${_loc("DND5E.Issues")}</a>
+      <a href="https://github.com/foundryvtt/dnd5e/issues" target="_blank">${_loc("VARLYN5E.Issues")}</a>
     </li>
     <li>
-      <a href="https://github.com/foundryvtt/dnd5e/wiki" target="_blank">${_loc("DND5E.Wiki")}</a>
+      <a href="https://github.com/foundryvtt/dnd5e/wiki" target="_blank">${_loc("VARLYN5E.Wiki")}</a>
     </li>
     <li>
       <a href="https://discord.com/channels/170995199584108546/670336046164213761" target="_blank">
-        ${_loc("DND5E.Discord")}
+        ${_loc("VARLYN5E.Discord")}
       </a>
     </li>
   `;
@@ -62878,7 +62878,7 @@ class DamageRoll extends BasicRoll {
           if ( critical.powerfulCritical ) {
             const bonus = Roll.create(term.formula).evaluateSync({ maximize: true }).total;
             if ( bonus > 0 ) {
-              const flavor = term.flavor?.toLowerCase().trim() ?? _loc("DND5E.PowerfulCritical");
+              const flavor = term.flavor?.toLowerCase().trim() ?? _loc("VARLYN5E.PowerfulCritical");
               flatBonus.set(flavor, (flatBonus.get(flavor) ?? 0) + bonus);
             }
             cm = Math.max(1, cm-1);
@@ -63249,7 +63249,7 @@ class ChatMessage5e extends ChatMessage {
     if ( !game.user.isGM ) deleteButton?.remove();
     else deleteButton?.querySelector("i").classList.add("fa-fw");
     const anchor = document.createElement("a");
-    anchor.setAttribute("aria-label", _loc("DND5E.AdditionalControls"));
+    anchor.setAttribute("aria-label", _loc("VARLYN5E.AdditionalControls"));
     anchor.classList.add("chat-control");
     anchor.dataset.contextMenu = "";
     anchor.innerHTML = '<i class="fas fa-ellipsis-vertical fa-fw"></i>';
@@ -63270,8 +63270,8 @@ class ChatMessage5e extends ChatMessage {
       const isCritical = (roll.type === "damage") && this.rolls[0]?.isCritical;
       const subtitle = roll.type === "damage"
         ? isCritical
-          ? _loc("DND5E.CriticalHit")
-          : activity?.damageFlavor ?? _loc("DND5E.DamageRoll")
+          ? _loc("VARLYN5E.CriticalHit")
+          : activity?.damageFlavor ?? _loc("VARLYN5E.DamageRoll")
         : roll.type === "attack"
           ? (activity?.getActionLabel(roll.attackMode) ?? "")
           : (item.system.type?.label ?? _loc(CONFIG.Item.typeLabels[item.type]));
@@ -63353,7 +63353,7 @@ class ChatMessage5e extends ChatMessage {
     const attackRoll = this.rolls[0];
     if ( !(attackRoll instanceof varlyn5e.dice.D20Roll) ) return;
 
-    const masteryConfig = CONFIG.DND5E.weaponMasteries[attackRoll.options.mastery];
+    const masteryConfig = CONFIG.VARLYN5E.weaponMasteries[attackRoll.options.mastery];
     if ( masteryConfig ) {
       const p = document.createElement("p");
       p.classList.add("supplement");
@@ -63362,7 +63362,7 @@ class ChatMessage5e extends ChatMessage {
         <a class="content-link" draggable="true" data-link data-uuid="${masteryConfig.reference}"
            data-tooltip="${mastery}">${mastery}</a>
       `;
-      p.innerHTML = `<strong>${_loc("DND5E.WEAPON.Mastery.Flavor")}</strong> ${mastery}`;
+      p.innerHTML = `<strong>${_loc("VARLYN5E.WEAPON.Mastery.Flavor")}</strong> ${mastery}`;
       (html.querySelector(".chat-card") ?? html.querySelector(".message-content"))?.appendChild(p);
     }
 
@@ -63377,7 +63377,7 @@ class ChatMessage5e extends ChatMessage {
       <div class="card-tray targets-tray collapsible collapsed">
         <label class="roboto-upper">
           <i class="fas fa-bullseye" inert></i>
-          <span>${_loc("DND5E.TargetPl")}</span>
+          <span>${_loc("VARLYN5E.TargetPl")}</span>
           <i class="fas fa-caret-down" inert></i>
         </label>
         <div class="collapsible-content">
@@ -63428,9 +63428,9 @@ class ChatMessage5e extends ChatMessage {
    */
   _enrichDamageTooltip(rolls, html) {
     if ( !rolls.length ) return;
-    const aggregatedRolls = CONFIG.DND5E.aggregateDamageDisplay ? aggregateDamageRolls(rolls) : rolls;
+    const aggregatedRolls = CONFIG.VARLYN5E.aggregateDamageDisplay ? aggregateDamageRolls(rolls) : rolls;
     let { formula, total, breakdown } = aggregatedRolls.reduce((obj, r) => {
-      obj.formula.push(CONFIG.DND5E.aggregateDamageDisplay ? r.formula : ` + ${r.formula}`);
+      obj.formula.push(CONFIG.VARLYN5E.aggregateDamageDisplay ? r.formula : ` + ${r.formula}`);
       obj.total += Math.max(0, r.total);
       obj.breakdown.push(this._simplifyDamageRoll(r));
       return obj;
@@ -63441,7 +63441,7 @@ class ChatMessage5e extends ChatMessage {
     roll.classList.add("dice-roll");
 
     const tooltipContents = breakdown.reduce((str, { type, total, constant, dice, icon, method }) => {
-      const config = CONFIG.DND5E.damageTypes[type] ?? CONFIG.DND5E.healingTypes[type];
+      const config = CONFIG.VARLYN5E.damageTypes[type] ?? CONFIG.VARLYN5E.healingTypes[type];
       return `${str}
         <section class="tooltip-part">
           <div class="dice">
@@ -63482,8 +63482,8 @@ class ChatMessage5e extends ChatMessage {
     if ( damageOnSave ) {
       const p = document.createElement("p");
       p.classList.add("supplement");
-      p.innerHTML = `<strong>${_loc("DND5E.SAVE.OnSave")}</strong> ${
-        _loc(`DND5E.SAVE.FIELDS.damage.onSave.${damageOnSave.capitalize()}`)
+      p.innerHTML = `<strong>${_loc("VARLYN5E.SAVE.OnSave")}</strong> ${
+        _loc(`VARLYN5E.SAVE.FIELDS.damage.onSave.${damageOnSave.capitalize()}`)
       }`;
       html.querySelector(".chat-card, .message-content")?.appendChild(p);
     }
@@ -63572,8 +63572,8 @@ class ChatMessage5e extends ChatMessage {
     // If message has the `forceSuccess` flag, mark it as resisted
     if ( roll.forceSuccess ) content.insertAdjacentHTML("beforeend", `
       <p class="supplement">
-        <strong>${_loc("DND5E.ROLL.Status")}</strong>
-        ${_loc("DND5E.LegendaryResistance.Resisted")}
+        <strong>${_loc("VARLYN5E.ROLL.Status")}</strong>
+        ${_loc("VARLYN5E.LegendaryResistance.Resisted")}
       </p>
     `);
 
@@ -63583,7 +63583,7 @@ class ChatMessage5e extends ChatMessage {
         <div class="card-buttons">
           <button type="button">
             <i class="fa-solid fa-dragon" inert></i>
-            ${_loc("DND5E.LegendaryResistance.Action.Resist")}
+            ${_loc("VARLYN5E.LegendaryResistance.Action.Resist")}
           </button>
         </div>
       `);
@@ -63614,8 +63614,8 @@ class ChatMessage5e extends ChatMessage {
     // If concentration has already been broken from this save, mark it as lost.
     if ( roll?.concentrationBroken ) content.insertAdjacentHTML("beforeend", `
       <p class="supplement">
-        <strong>${_loc("DND5E.ROLL.Status")}</strong>
-        ${_loc("DND5E.ConcentrationLost")}
+        <strong>${_loc("VARLYN5E.ROLL.Status")}</strong>
+        ${_loc("VARLYN5E.ConcentrationLost")}
       </p>
     `);
 
@@ -63625,7 +63625,7 @@ class ChatMessage5e extends ChatMessage {
         <div class="card-buttons">
           <button type="button">
             <i class="fa-solid fa-ban" inert></i>
-            ${_loc("DND5E.ConcentrationBreak")}
+            ${_loc("VARLYN5E.ConcentrationBreak")}
           </button>
         </div>
       `);
@@ -63659,49 +63659,49 @@ class ChatMessage5e extends ChatMessage {
     const canTarget = li => game.messages.get(li.dataset.messageId)?.canSelectTargets;
     options.push(
       {
-        label: _loc("DND5E.ChatContextDamage"),
+        label: _loc("VARLYN5E.ChatContextDamage"),
         icon: '<i class="fas fa-user-minus"></i>',
         group: "damage",
         visible: canApply,
         onClick: (_, target) => game.messages.get(target.dataset.messageId)?.applyChatCardDamage(target, 1)
       },
       {
-        label: _loc("DND5E.ChatContextHealing"),
+        label: _loc("VARLYN5E.ChatContextHealing"),
         icon: '<i class="fas fa-user-plus"></i>',
         group: "damage",
         visible: canApply,
         onClick: (_, target) => game.messages.get(target.dataset.messageId)?.applyChatCardDamage(target, -1)
       },
       {
-        label: _loc("DND5E.ChatContextTempHP"),
+        label: _loc("VARLYN5E.ChatContextTempHP"),
         icon: '<i class="fas fa-user-clock"></i>',
         group: "damage",
         visible: canApply,
         onClick: (_, target) => game.messages.get(target.dataset.messageId)?.applyChatCardTemp(target)
       },
       {
-        label: _loc("DND5E.ChatContextDoubleDamage"),
+        label: _loc("VARLYN5E.ChatContextDoubleDamage"),
         icon: '<i class="fas fa-user-injured"></i>',
         group: "damage",
         visible: canApply,
         onClick: (_, target) => game.messages.get(target.dataset.messageId)?.applyChatCardDamage(target, 2)
       },
       {
-        label: _loc("DND5E.ChatContextHalfDamage"),
+        label: _loc("VARLYN5E.ChatContextHalfDamage"),
         icon: '<i class="fas fa-user-shield"></i>',
         group: "damage",
         visible: canApply,
         onClick: (_, target) => game.messages.get(target.dataset.messageId)?.applyChatCardDamage(target, 0.5)
       },
       {
-        label: _loc("DND5E.ChatContextSelectHit"),
+        label: _loc("VARLYN5E.ChatContextSelectHit"),
         icon: '<i class="fas fa-bullseye"></i>',
         group: "attack",
         visible: canTarget,
         onClick: (_, target) => game.messages.get(target.dataset.messageId)?.selectTargets(target, "hit")
       },
       {
-        label: _loc("DND5E.ChatContextSelectMiss"),
+        label: _loc("VARLYN5E.ChatContextSelectMiss"),
         icon: '<i class="fas fa-bullseye"></i>',
         group: "attack",
         visible: canTarget,
@@ -63774,7 +63774,7 @@ class ChatMessage5e extends ChatMessage {
    */
   applyChatCardDamage(li, multiplier) {
     const damages = aggregateDamageRolls(this.rolls, { respectProperties: true }).map(roll => ({
-      value: Math.max(0, roll.total) * (roll.options.type in CONFIG.DND5E.healingTypes ? -1 : 1),
+      value: Math.max(0, roll.total) * (roll.options.type in CONFIG.VARLYN5E.healingTypes ? -1 : 1),
       type: roll.options.type,
       properties: new Set(roll.options.properties ?? [])
     }));
@@ -64150,7 +64150,7 @@ class RollTableSheet5e extends ApplicationV2Mixin(RollTableSheet, { handlebars: 
       : this.isEditMode ? "view" : "edit";
     const button = this.element?.querySelector('[data-action="changeMode"]');
     if ( button ) {
-      const label = _loc(`DND5E.SheetMode${this.isEditMode ? "Edit" : "Play"}`);
+      const label = _loc(`VARLYN5E.SheetMode${this.isEditMode ? "Edit" : "Play"}`);
       button.checked = this.isEditMode;
       button.dataset.tooltip = label;
       button.setAttribute("aria-label", label);
@@ -64236,7 +64236,7 @@ class TokenConfig5e extends foundry.applications.sheets.TokenConfig {
       return arr;
     }, []) ?? [];
     if ( items.length ) {
-      const group = _loc("DND5E.ConsumeCharges");
+      const group = _loc("VARLYN5E.ConsumeCharges");
       items.sort(([, a], [, b]) => a.localeCompare(b, game.i18n.lang));
       attributes.push(...items.map(([value, label]) => ({ group, value, label })));
     }
@@ -64303,11 +64303,11 @@ class TokenConfig5e extends foundry.applications.sheets.TokenConfig {
     // Surface a notice atop the Vision tab linking to the senses config.
     const tab = html.querySelector('[data-application-part="vision"]');
     if ( !tab || tab.querySelector(".sense-sync-notice") ) return;
-    const link = `<a data-action="editSenses">${_loc("SETTINGS.DND5E.AUTOMATION.SenseVision.Senses")}</a>`;
+    const link = `<a data-action="editSenses">${_loc("SETTINGS.VARLYN5E.AUTOMATION.SenseVision.Senses")}</a>`;
     const notice = document.createElement("p");
     notice.className = "hint sense-sync-notice";
     notice.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${
-      _loc("SETTINGS.DND5E.AUTOMATION.SenseVision.Notice", { senses: link })}`;
+      _loc("SETTINGS.VARLYN5E.AUTOMATION.SenseVision.Notice", { senses: link })}`;
     notice.querySelector("[data-action=editSenses]")?.addEventListener("click", () => {
       new MovementSensesConfig({ document: actor, type: "senses" }).render({ force: true });
     });
@@ -64388,7 +64388,7 @@ class DetectionModeBlindsight extends foundry.canvas.perception.DetectionMode {
   constructor() {
     super({
       id: "blindsight",
-      label: "DND5E.SenseBlindsight",
+      label: "VARLYN5E.SenseBlindsight",
       type: (foundry.canvas?.perception?.DetectionMode ?? DetectionMode).DETECTION_TYPES.OTHER,
       walls: true,
       angle: false
@@ -64458,7 +64458,7 @@ class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
    * @returns {boolean} Whether the moving token should be blocked
    */
   isOccupiedGridSpaceBlocking(gridSpace, token, { preview=false }={}) {
-    const tokenSize = CONFIG.DND5E.actorSizes[token.actor?.system.traits.size]?.numerical ?? 2;
+    const tokenSize = CONFIG.VARLYN5E.actorSizes[token.actor?.system.traits.size]?.numerical ?? 2;
     const modernRules = varlyn5e.settings.rulesVersion === "modern";
     const halflingNimbleness = token.actor?.getFlag("dnd5e", "halflingNimbleness");
     const found = this.#getRelevantOccupyingTokens(gridSpace, token, { preview }).filter(t => {
@@ -64469,10 +64469,10 @@ class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
       if ( token.document.disposition === t.document.disposition ) return false;
 
       // If creature has any statuses that should never block movement, don't block movement
-      if ( t.actor.statuses.intersects(CONFIG.DND5E.neverBlockStatuses) ) return false;
+      if ( t.actor.statuses.intersects(CONFIG.VARLYN5E.neverBlockStatuses) ) return false;
 
       const size = t.actor.system.details?.type?.swarm || t.actor.system.traits?.size;
-      const occupiedSize = CONFIG.DND5E.actorSizes[size]?.numerical ?? 2;
+      const occupiedSize = CONFIG.VARLYN5E.actorSizes[size]?.numerical ?? 2;
       // In modern rules, Tiny creatures can be moved through
       if ( modernRules && (occupiedSize === 0) ) return false;
 
@@ -64519,7 +64519,7 @@ class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
 
       // In modern rules, friendly tokens are not difficult terrain
       if ( modernRules && friendlyToken ) return false;
-      const occupiedSize = CONFIG.DND5E.actorSizes[t.actor?.system.traits.size]?.numerical ?? 2;
+      const occupiedSize = CONFIG.VARLYN5E.actorSizes[t.actor?.system.traits.size]?.numerical ?? 2;
 
       // In modern rules, Tiny creatures are not difficult terrain
       if ( modernRules && (occupiedSize === 0) ) return false;
@@ -64635,7 +64635,7 @@ class Token5e extends foundry.canvas.placeables.Token {
 
     // Normal behavior if token blocking is disabled or this actor is not a creature or cannot block
     if ( (game.settings.get("dnd5e", "movementAutomation") !== "full") || !this.document.actor?.system.isCreature
-      || this.document.actor.statuses.intersects(CONFIG.DND5E.neverBlockStatuses) ) {
+      || this.document.actor.statuses.intersects(CONFIG.VARLYN5E.neverBlockStatuses) ) {
       return super.findMovementPath(waypoints, options);
     }
 
@@ -64694,7 +64694,7 @@ class Token5e extends foundry.canvas.placeables.Token {
 
     ignoreTokens ||= game.settings.get("dnd5e", "movementAutomation") !== "full";
     ignoreTokens ||= !this.actor?.system.isCreature;
-    ignoreTokens ||= this.actor?.statuses?.intersects(CONFIG.DND5E.neverBlockStatuses);
+    ignoreTokens ||= this.actor?.statuses?.intersects(CONFIG.VARLYN5E.neverBlockStatuses);
 
     // Ignore tokens if path contains resize
     ignoreTokens ||= waypoints.some(w => (w.width !== waypoints[0].width) || (w.height !== waypoints[0].height));
@@ -64783,7 +64783,7 @@ class Token5e extends foundry.canvas.placeables.Token {
 
     // Determine colors to use
     const blk = 0x000000;
-    const c = CONFIG.DND5E.tokenHPColors;
+    const c = CONFIG.VARLYN5E.tokenHPColors;
 
     // Determine the container size (logic borrowed from core)
     let s = canvas.dimensions.uiScale;
@@ -64952,13 +64952,13 @@ class TokenRuler5e extends foundry.canvas.placeables.tokens.TokenRuler {
     let currActionSpeed = movement[waypoint.action] ?? 0;
 
     // If current action can fall back to walk, treat "max" speed as maximum between current & walk
-    if ( CONFIG.DND5E.movementTypes[waypoint.action]?.walkFallback
-      || !CONFIG.DND5E.movementTypes[waypoint.action] ) {
+    if ( CONFIG.VARLYN5E.movementTypes[waypoint.action]?.walkFallback
+      || !CONFIG.VARLYN5E.movementTypes[waypoint.action] ) {
       currActionSpeed = Math.max(currActionSpeed, movement.walk);
     }
 
     // Color `normal` if <= max speed, else `double` if <= double max speed, else `triple`
-    const { normal, double, triple } = CONFIG.DND5E.tokenRulerColors;
+    const { normal, double, triple } = CONFIG.VARLYN5E.tokenRulerColors;
     const increment = (waypoint.measurement.cost - .1) / currActionSpeed;
     if ( increment <= 1 ) style.color = normal ?? style.color;
     else if ( increment <= 2 ) style.color = double ?? style.color;
@@ -65602,14 +65602,14 @@ const { StringField: StringField$s } = foundry.data.fields;
 class CreatureTypeField extends foundry.data.fields.SchemaField {
   constructor(fields={}, options={}) {
     fields = {
-      value: new StringField$s({ blank: true, label: "DND5E.CreatureType" }),
-      subtype: new StringField$s({ label: "DND5E.CreatureTypeSelectorSubtype" }),
-      swarm: new StringField$s({ blank: true, label: "DND5E.CreatureSwarmSize" }),
-      custom: new StringField$s({ label: "DND5E.CreatureTypeSelectorCustom" }),
+      value: new StringField$s({ blank: true, label: "VARLYN5E.CreatureType" }),
+      subtype: new StringField$s({ label: "VARLYN5E.CreatureTypeSelectorSubtype" }),
+      swarm: new StringField$s({ blank: true, label: "VARLYN5E.CreatureSwarmSize" }),
+      custom: new StringField$s({ label: "VARLYN5E.CreatureTypeSelectorCustom" }),
       ...fields
     };
     Object.entries(fields).forEach(([k, v]) => !v ? delete fields[k] : null);
-    super(fields, { label: "DND5E.CreatureType", ...options });
+    super(fields, { label: "VARLYN5E.CreatureType", ...options });
   }
 
   /* -------------------------------------------- */
@@ -65626,7 +65626,7 @@ class CreatureTypeField extends foundry.data.fields.SchemaField {
     });
     Object.defineProperty(obj, "config", {
       get() {
-        return CONFIG.DND5E.creatureTypes[this.value];
+        return CONFIG.VARLYN5E.creatureTypes[this.value];
       },
       enumerable: false
     });
@@ -65647,11 +65647,11 @@ class RollConfigField extends foundry.data.fields.SchemaField {
       ability: (ability === false) ? null : new StringField$r({
         required: true,
         initial: ability,
-        label: "DND5E.AbilityModifier"
+        label: "VARLYN5E.AbilityModifier"
       }),
       roll: new SchemaField$j({
-        min: new NumberField$i({...opts, label: "DND5E.ROLL.Range.Minimum"}),
-        max: new NumberField$i({...opts, label: "DND5E.ROLL.Range.Maximum"}),
+        min: new NumberField$i({...opts, label: "VARLYN5E.ROLL.Range.Minimum"}),
+        max: new NumberField$i({...opts, label: "VARLYN5E.ROLL.Range.Maximum"}),
         mode: new AdvantageModeField(),
         ...roll
       }),
@@ -65672,16 +65672,16 @@ class SensesField extends foundry.data.fields.SchemaField {
     fields = {
       ranges: new MappingField(
         new NumberField$h({ required: true, nullable: true, integer: true, min: 0, initial: null }),
-        { initialKeys: CONFIG.DND5E.senses, initialKeysOnly: true }
+        { initialKeys: CONFIG.VARLYN5E.senses, initialKeysOnly: true }
       ),
       units: new StringField$q({
-        required: true, nullable: true, blank: false, initial: initialUnits, label: "DND5E.SenseUnits"
+        required: true, nullable: true, blank: false, initial: initialUnits, label: "VARLYN5E.SenseUnits"
       }),
-      special: new StringField$q({ required: true, label: "DND5E.SenseSpecial" }),
+      special: new StringField$q({ required: true, label: "VARLYN5E.SenseSpecial" }),
       ...fields
     };
     Object.entries(fields).forEach(([k, v]) => !v ? delete fields[k] : null);
-    super(fields, { label: "DND5E.Senses", ...options });
+    super(fields, { label: "VARLYN5E.Senses", ...options });
   }
 
   /* -------------------------------------------- */
@@ -65747,8 +65747,8 @@ const { SchemaField: SchemaField$i, SetField: SetField$g, StringField: StringFie
 class SimpleTraitField extends SchemaField$i {
   constructor(fields={}, { initialValue=[], ...options }={}) {
     fields = {
-      value: new SetField$g(new StringField$p(), { label: "DND5E.TraitsChosen", initial: initialValue }),
-      custom: new StringField$p({ required: true, label: "DND5E.Special" }),
+      value: new SetField$g(new StringField$p(), { label: "VARLYN5E.TraitsChosen", initial: initialValue }),
+      custom: new StringField$p({ required: true, label: "VARLYN5E.Special" }),
       ...fields
     };
     Object.entries(fields).forEach(([k, v]) => !v ? delete fields[k] : null);
@@ -65768,24 +65768,24 @@ const { BooleanField: BooleanField$9, SetField: SetField$f, StringField: StringF
 class MovementField extends foundry.data.fields.SchemaField {
   constructor(fields={}, { initialUnits=null, ...options }={}) {
     fields = {
-      walk: new FormulaField({ deterministic: true, label: "DND5E.MOVEMENT.Type.Speed", speed: true }),
-      burrow: new FormulaField({ deterministic: true, label: "DND5E.MOVEMENT.Type.Burrow", speed: true }),
-      climb: new FormulaField({ deterministic: true, label: "DND5E.MOVEMENT.Type.Climb", speed: true }),
-      fly: new FormulaField({ deterministic: true, label: "DND5E.MOVEMENT.Type.Fly", speed: true }),
-      swim: new FormulaField({ deterministic: true, label: "DND5E.MOVEMENT.Type.Swim", speed: true }),
-      bonus: new FormulaField({ deterministic: true, label: "DND5E.MOVEMENT.FIELDS.bonus.label" }),
-      special: new StringField$o({ label: "DND5E.MOVEMENT.FIELDS.special.label" }),
+      walk: new FormulaField({ deterministic: true, label: "VARLYN5E.MOVEMENT.Type.Speed", speed: true }),
+      burrow: new FormulaField({ deterministic: true, label: "VARLYN5E.MOVEMENT.Type.Burrow", speed: true }),
+      climb: new FormulaField({ deterministic: true, label: "VARLYN5E.MOVEMENT.Type.Climb", speed: true }),
+      fly: new FormulaField({ deterministic: true, label: "VARLYN5E.MOVEMENT.Type.Fly", speed: true }),
+      swim: new FormulaField({ deterministic: true, label: "VARLYN5E.MOVEMENT.Type.Swim", speed: true }),
+      bonus: new FormulaField({ deterministic: true, label: "VARLYN5E.MOVEMENT.FIELDS.bonus.label" }),
+      special: new StringField$o({ label: "VARLYN5E.MOVEMENT.FIELDS.special.label" }),
       units: new StringField$o({
-        required: true, nullable: true, blank: false, initial: initialUnits, label: "DND5E.MOVEMENT.FIELDS.units.label"
+        required: true, nullable: true, blank: false, initial: initialUnits, label: "VARLYN5E.MOVEMENT.FIELDS.units.label"
       }),
-      hover: new BooleanField$9({ required: true, label: "DND5E.MOVEMENT.Hover" }),
+      hover: new BooleanField$9({ required: true, label: "VARLYN5E.MOVEMENT.Hover" }),
       ignoredDifficultTerrain: new SetField$f(new StringField$o(), {
-        label: "DND5E.MOVEMENT.FIELDS.ignoredDifficultTerrain.label"
+        label: "VARLYN5E.MOVEMENT.FIELDS.ignoredDifficultTerrain.label"
       }),
       ...fields
     };
     Object.entries(fields).forEach(([k, v]) => !v ? delete fields[k] : null);
-    super(fields, { label: "DND5E.Movement", ...options });
+    super(fields, { label: "VARLYN5E.Movement", ...options });
   }
 }
 
@@ -65808,10 +65808,10 @@ class AttributesFields {
     return {
       armor: new NumberField$g({ integer: true, min: 0, initial: 10, persisted: false }),
       bonus: new FormulaField({ deterministic: true, persisted: false }),
-      calc: new StringField$n({ initial: "default", label: "DND5E.ArmorClassCalculation" }),
-      flat: new NumberField$g({ required: true, integer: true, min: 0, label: "DND5E.ArmorClassFlat" }),
+      calc: new StringField$n({ initial: "default", label: "VARLYN5E.ArmorClassCalculation" }),
+      flat: new NumberField$g({ required: true, integer: true, min: 0, label: "VARLYN5E.ArmorClassFlat" }),
       cover: new NumberField$g({ integer: true, min: 0, initial: 0, persisted: false }),
-      formula: new FormulaField({ deterministic: true, label: "DND5E.ArmorClassFormula" }),
+      formula: new FormulaField({ deterministic: true, label: "VARLYN5E.ArmorClassFormula" }),
       min: new FormulaField({ deterministic: true, persisted: false }),
       shield: new NumberField$g({ integer: true, min: 0, initial: 0, persisted: false })
     };
@@ -65824,13 +65824,13 @@ class AttributesFields {
    */
   static get hitPoints() {
     return {
-      dt: new NumberField$g({ integer: true, min: 0, label: "DND5E.DamageThreshold" }),
-      max: new NumberField$g({ nullable: true, integer: true, min: 0, initial: null, label: "DND5E.HitPointsMax" }),
-      temp: new NumberField$g({ integer: true, initial: 0, min: 0, label: "DND5E.HitPointsTemp" }),
+      dt: new NumberField$g({ integer: true, min: 0, label: "VARLYN5E.DamageThreshold" }),
+      max: new NumberField$g({ nullable: true, integer: true, min: 0, initial: null, label: "VARLYN5E.HitPointsMax" }),
+      temp: new NumberField$g({ integer: true, initial: 0, min: 0, label: "VARLYN5E.HitPointsTemp" }),
       tempmax: new NumberField$g({
-        integer: true, initial: 0, label: "DND5E.HitPointsTempMax", hint: "DND5E.HitPointsTempMaxHint"
+        integer: true, initial: 0, label: "VARLYN5E.HitPointsTempMax", hint: "VARLYN5E.HitPointsTempMaxHint"
       }),
-      value: new NumberField$g({ nullable: true, integer: true, min: 0, initial: null, label: "DND5E.HitPointsCurrent" })
+      value: new NumberField$g({ nullable: true, integer: true, min: 0, initial: null, label: "VARLYN5E.HitPointsCurrent" })
     };
   }
 
@@ -65842,7 +65842,7 @@ class AttributesFields {
    */
   static get common() {
     return {
-      ac: new SchemaField$h(this.armorClass, { label: "DND5E.ArmorClass" }),
+      ac: new SchemaField$h(this.armorClass, { label: "VARLYN5E.ArmorClass" }),
       encumbrance: new SchemaField$h({
         bonuses: new SchemaField$h({
           encumbered: new FormulaField({ deterministic: true }),
@@ -65859,8 +65859,8 @@ class AttributesFields {
       }, { persisted: false }),
       init: new RollConfigField({
         ability: "",
-        bonus: new FormulaField({ required: true, label: "DND5E.InitiativeBonus" })
-      }, { label: "DND5E.Initiative" }),
+        bonus: new FormulaField({ required: true, label: "VARLYN5E.InitiativeBonus" })
+      }, { label: "VARLYN5E.Initiative" }),
       movement: new MovementField()
     };
   }
@@ -65875,29 +65875,29 @@ class AttributesFields {
     return {
       attunement: new SchemaField$h({
         max: new NumberField$g({
-          required: true, nullable: false, integer: true, min: 0, initial: 3, label: "DND5E.AttunementMax"
+          required: true, nullable: false, integer: true, min: 0, initial: 3, label: "VARLYN5E.AttunementMax"
         }),
         value: new NumberField$g({ integer: true, min: 0, initial: 0, persisted: false })
-      }, { label: "DND5E.Attunement" }),
+      }, { label: "VARLYN5E.Attunement" }),
       senses: new SensesField(),
       spell: new SchemaField$h({
         attack: new NumberField$g({ integer: true }),
         dc: new NumberField$g({ integer: true }),
         mod: new NumberField$g({ integer: true })
       }, { persisted: false }),
-      spellcasting: new StringField$n({ required: true, blank: true, label: "DND5E.SpellAbility" }),
+      spellcasting: new StringField$n({ required: true, blank: true, label: "VARLYN5E.SpellAbility" }),
       exhaustion: new NumberField$g({
-        required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.Exhaustion"
+        required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.Exhaustion"
       }),
       concentration: new RollConfigField({
         ability: "",
         bonuses: new SchemaField$h({
-          save: new FormulaField({ required: true, label: "DND5E.ConcentrationBonus" })
+          save: new FormulaField({ required: true, label: "VARLYN5E.ConcentrationBonus" })
         }),
-        limit: new NumberField$g({ integer: true, min: 0, initial: 1, label: "DND5E.ConcentrationLimit" })
-      }, { label: "DND5E.Concentration" }),
+        limit: new NumberField$g({ integer: true, min: 0, initial: 1, label: "VARLYN5E.ConcentrationLimit" })
+      }, { label: "VARLYN5E.Concentration" }),
       loyalty: new SchemaField$h({
-        value: new NumberField$g({ integer: true, min: 0, max: 20, label: "DND5E.Loyalty" })
+        value: new NumberField$g({ integer: true, min: 0, max: 20, label: "VARLYN5E.Loyalty" })
       })
     };
   }
@@ -65947,16 +65947,16 @@ class AttributesFields {
     const ac = this.attributes.ac;
 
     // Apply automatic migrations for older data structures
-    let cfg = CONFIG.DND5E.armorClasses[ac.calc];
+    let cfg = CONFIG.VARLYN5E.armorClasses[ac.calc];
     if ( !cfg ) {
       ac.calc = "flat";
       if ( Number.isNumeric(ac.value) ) ac.flat = Number(ac.value);
-      cfg = CONFIG.DND5E.armorClasses.flat;
+      cfg = CONFIG.VARLYN5E.armorClasses.flat;
     }
 
     // Identify Equipped Items
     const { armors, shields } = this.parent.itemTypes.equipment.reduce((obj, equip) => {
-      if ( !equip.system.equipped || !(equip.system.type.value in CONFIG.DND5E.armorTypes)) return obj;
+      if ( !equip.system.equipped || !(equip.system.type.value in CONFIG.VARLYN5E.armorTypes)) return obj;
       if ( equip.system.type.value === "shield" ) obj.shields.push(equip);
       else obj.armors.push(equip);
       return obj;
@@ -65967,7 +65967,7 @@ class AttributesFields {
       AdvantageModeField.setMode(this, "skills.ste.roll.mode", -1);
     }
 
-    ac.label = !["custom", "flat"].includes(ac.calc) ? CONFIG.DND5E.armorClasses[ac.calc]?.label : null;
+    ac.label = !["custom", "flat"].includes(ac.calc) ? CONFIG.VARLYN5E.armorClasses[ac.calc]?.label : null;
 
     // Determine base AC
     switch ( ac.calc ) {
@@ -65986,7 +65986,7 @@ class AttributesFields {
         let formula = ac.calc === "custom" ? ac.formula : cfg.formula;
         if ( armors.length ) {
           if ( armors.length > 1 ) this.parent._preparationWarnings.push({
-            message: _loc("DND5E.WarnMultipleArmor"), type: "warning"
+            message: _loc("VARLYN5E.WarnMultipleArmor"), type: "warning"
           });
           const armorData = armors[0].system.armor;
           const isHeavy = armors[0].system.type.value === "heavy";
@@ -66001,14 +66001,14 @@ class AttributesFields {
         rollData.attributes.ac = ac;
         try {
           const replaced = replaceFormulaData(formula, rollData, {
-            actor: this, missing: null, property: _loc("DND5E.ArmorClass")
+            actor: this, missing: null, property: _loc("VARLYN5E.ArmorClass")
           });
           ac.base = replaced ? new Roll(replaced).evaluateSync().total : 0;
         } catch(err) {
           this.parent._preparationWarnings.push({
-            message: _loc("DND5E.WarnBadACFormula", { formula }), link: "armor", type: "error"
+            message: _loc("VARLYN5E.WarnBadACFormula", { formula }), link: "armor", type: "error"
           });
-          const replaced = Roll.replaceFormulaData(CONFIG.DND5E.armorClasses.default.formula, rollData);
+          const replaced = Roll.replaceFormulaData(CONFIG.VARLYN5E.armorClasses.default.formula, rollData);
           ac.base = new Roll(replaced).evaluateSync().total;
         }
         break;
@@ -66017,7 +66017,7 @@ class AttributesFields {
     // Equipped Shield
     if ( shields.length ) {
       if ( shields.length > 1 ) this.parent._preparationWarnings.push({
-        message: _loc("DND5E.WarnMultipleShields"), type: "warning"
+        message: _loc("VARLYN5E.WarnMultipleShields"), type: "warning"
       });
       ac.shield = shields[0].system.armor.value ?? 0;
       ac.equippedShield = shields[0];
@@ -66041,7 +66041,7 @@ class AttributesFields {
    */
   static prepareConcentration(rollData) {
     const { concentration } = this.attributes;
-    const abilityId = concentration.ability || CONFIG.DND5E.defaultAbilities.concentration;
+    const abilityId = concentration.ability || CONFIG.VARLYN5E.defaultAbilities.concentration;
     const ability = this.abilities?.[abilityId] || {};
     const bonus = simplifyBonus(concentration.bonuses.save, rollData);
     concentration.save = (ability.save?.value ?? 0) + bonus;
@@ -66057,10 +66057,10 @@ class AttributesFields {
    * @param {Function} [options.validateItem]  Determine whether an item's weight should count toward encumbrance.
    */
   static prepareEncumbrance(rollData, { validateItem }={}) {
-    const config = CONFIG.DND5E.encumbrance;
+    const config = CONFIG.VARLYN5E.encumbrance;
     const encumbrance = this.attributes.encumbrance ??= {};
-    const baseUnits = CONFIG.DND5E.encumbrance.baseUnits[this.parent.type]
-      ?? CONFIG.DND5E.encumbrance.baseUnits.default;
+    const baseUnits = CONFIG.VARLYN5E.encumbrance.baseUnits[this.parent.type]
+      ?? CONFIG.VARLYN5E.encumbrance.baseUnits.default;
     const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
     const { attributes } = this;
 
@@ -66082,9 +66082,9 @@ class AttributesFields {
     }
 
     // Determine the Encumbrance size class
-    const keys = Object.keys(CONFIG.DND5E.actorSizes);
+    const keys = Object.keys(CONFIG.VARLYN5E.actorSizes);
     const index = keys.findIndex(k => k === this.traits.size);
-    const sizeConfig = CONFIG.DND5E.actorSizes[
+    const sizeConfig = CONFIG.VARLYN5E.actorSizes[
       keys[this.parent.flags.dnd5e?.powerfulBuild ? Math.min(index + 1, keys.length - 1) : index]
     ];
     const sizeMod = sizeConfig?.capacityMultiplier ?? sizeConfig?.token ?? 1;
@@ -66174,7 +66174,7 @@ class AttributesFields {
     const globalCheckBonus = simplifyBonus(this.bonuses?.abilities?.check, rollData);
 
     // Compute initiative modifier
-    const abilityId = init.ability || CONFIG.DND5E.defaultAbilities.initiative;
+    const abilityId = init.ability || CONFIG.VARLYN5E.defaultAbilities.initiative;
     const ability = this.abilities?.[abilityId] || {};
     init.mod = ability.mod ?? 0;
 
@@ -66201,7 +66201,7 @@ class AttributesFields {
     init.total = init.mod + initBonus + abilityBonus + globalCheckBonus + quality
       + (flags.initiativeAlert && isLegacy ? 5 : 0)
       + (Number.isNumeric(init.prof.term) ? init.prof.flat : 0);
-    init.score = CONFIG.DND5E.skillPassive.base + init.total + (init.roll.mode * CONFIG.DND5E.skillPassive.modifier);
+    init.score = CONFIG.VARLYN5E.skillPassive.base + init.total + (init.roll.mode * CONFIG.VARLYN5E.skillPassive.modifier);
   }
 
   /* -------------------------------------------- */
@@ -66215,7 +66215,7 @@ class AttributesFields {
     const statuses = this.parent.statuses;
     const noMovement = this.parent.hasConditionEffect("noMovement");
     const crawl = this.parent.hasConditionEffect("crawl");
-    for ( const type of Object.keys(CONFIG.DND5E.movementTypes) ) {
+    for ( const type of Object.keys(CONFIG.VARLYN5E.movementTypes) ) {
       if ( noMovement || (crawl && (type !== "walk")) ) this.attributes.movement[type] = 0;
       else this.attributes.movement[type] = Math.max(0, simplifyBonus(this.attributes.movement[type], rollData));
       if ( type === "walk" ) this.attributes.movement.speed = this.attributes.movement.walk;
@@ -66227,26 +66227,26 @@ class AttributesFields {
     const exceedingCarryingCapacity = statuses.has("exceedingCarryingCapacity");
     const units = this.attributes.movement.units ??= defaultUnits("length");
     let reduction = varlyn5e.settings.rulesVersion === "modern" && !this.traits?.ci?.value?.has("exhaustion")
-      ? (this.attributes.exhaustion ?? 0) * (CONFIG.DND5E.conditionTypes.exhaustion?.reduction?.speed ?? 0) : 0;
+      ? (this.attributes.exhaustion ?? 0) * (CONFIG.VARLYN5E.conditionTypes.exhaustion?.reduction?.speed ?? 0) : 0;
     if ( ((this.attributes.ac?.equippedArmor?.system.strength ?? 0) > (this.abilities?.str?.value ?? Infinity))
       && !this.parent.flags.dnd5e?.ignoreArmorSpeedReduction && this.isCreature ) {
-      reduction += CONFIG.DND5E.armorSpeedReduction;
+      reduction += CONFIG.VARLYN5E.armorSpeedReduction;
     }
-    reduction = convertLength(reduction, CONFIG.DND5E.defaultUnits.length.imperial, units);
+    reduction = convertLength(reduction, CONFIG.VARLYN5E.defaultUnits.length.imperial, units);
     const bonus = simplifyBonus(this.attributes.movement.bonus, rollData);
     this.attributes.movement.max = 0;
-    for ( const type of Object.keys(CONFIG.DND5E.movementTypes) ) {
+    for ( const type of Object.keys(CONFIG.VARLYN5E.movementTypes) ) {
       let speed = Math.max(0, this.attributes.movement[type] - reduction);
       if ( speed ) {
         speed = Math.max(0, speed + bonus);
         if ( halfMovement ) speed *= 0.5;
         if ( heavilyEncumbered ) {
-          speed = Math.max(0, speed - (CONFIG.DND5E.encumbrance.speedReduction.heavilyEncumbered[units] ?? 0));
+          speed = Math.max(0, speed - (CONFIG.VARLYN5E.encumbrance.speedReduction.heavilyEncumbered[units] ?? 0));
         } else if ( encumbered ) {
-          speed = Math.max(0, speed - (CONFIG.DND5E.encumbrance.speedReduction.encumbered[units] ?? 0));
+          speed = Math.max(0, speed - (CONFIG.VARLYN5E.encumbrance.speedReduction.encumbered[units] ?? 0));
         }
         if ( exceedingCarryingCapacity ) {
-          speed = Math.min(speed, CONFIG.DND5E.encumbrance.speedReduction.exceedingCarryingCapacity[units] ?? 0);
+          speed = Math.min(speed, CONFIG.VARLYN5E.encumbrance.speedReduction.exceedingCarryingCapacity[units] ?? 0);
         }
       }
       this.attributes.movement[type] = speed;
@@ -66269,7 +66269,7 @@ class AttributesFields {
    * @this {CharacterData|NPCData}
    */
   static prepareRace(race, { force=false }={}) {
-    for ( const key of Object.keys(CONFIG.DND5E.movementTypes) ) {
+    for ( const key of Object.keys(CONFIG.VARLYN5E.movementTypes) ) {
       if ( !race.system.movement[key] || (!force && this.attributes.movement[key]) ) continue;
       this.attributes.movement.fromSpecies ??= {};
       this.attributes.movement[key] = this.attributes.movement.fromSpecies[key] = race.system.movement[key];
@@ -66278,7 +66278,7 @@ class AttributesFields {
     if ( force && race.system.movement.units ) this.attributes.movement.units = race.system.movement.units;
     else this.attributes.movement.units ??= race.system.movement.units;
 
-    for ( const key of Object.keys(CONFIG.DND5E.senses) ) {
+    for ( const key of Object.keys(CONFIG.VARLYN5E.senses) ) {
       if ( !race.system.senses.ranges[key] || (!force && (this.attributes.senses.ranges[key] !== null)) ) continue;
       this.attributes.senses.ranges[key] = race.system.senses.ranges[key];
     }
@@ -66296,7 +66296,7 @@ class AttributesFields {
   static prepareSpellcastingAbility() {
     const ability = this.abilities?.[this.attributes.spellcasting];
     this.attributes.spell ??= {};
-    this.attributes.spell.abilityLabel = CONFIG.DND5E.abilities[this.attributes.spellcasting]?.label ?? "";
+    this.attributes.spell.abilityLabel = CONFIG.VARLYN5E.abilities[this.attributes.spellcasting]?.label ?? "";
     this.attributes.spell.attack = ability ? ability.attack : this.attributes.prof;
     this.attributes.spell.dc = ability ? ability.dc : 8 + this.attributes.prof;
     this.attributes.spell.mod = ability ? ability.mod : 0;
@@ -66392,23 +66392,23 @@ class CommonTemplate extends ActorDataModel.mixin(CurrencyTemplate) {
     return this.mergeSchema(super.defineSchema(), {
       abilities: new MappingField(new SchemaField$g({
         value: new NumberField$f({
-          required: true, nullable: false, integer: true, min: 0, initial: 10, label: "DND5E.AbilityScore"
+          required: true, nullable: false, integer: true, min: 0, initial: 10, label: "VARLYN5E.AbilityScore"
         }),
         proficient: new NumberField$f({
-          required: true, integer: true, min: 0, max: 1, initial: 0, label: "DND5E.ProficiencyLevel"
+          required: true, integer: true, min: 0, max: 1, initial: 0, label: "VARLYN5E.ProficiencyLevel"
         }),
         max: new NumberField$f({
-          required: true, integer: true, nullable: true, min: 0, initial: null, label: "DND5E.AbilityScoreMax"
+          required: true, integer: true, nullable: true, min: 0, initial: null, label: "VARLYN5E.AbilityScoreMax"
         }),
         bonuses: new SchemaField$g({
-          check: new FormulaField({ required: true, label: "DND5E.AbilityCheckBonus" }),
-          save: new FormulaField({ required: true, label: "DND5E.SaveBonus" })
-        }, { label: "DND5E.AbilityBonuses" }),
+          check: new FormulaField({ required: true, label: "VARLYN5E.AbilityCheckBonus" }),
+          save: new FormulaField({ required: true, label: "VARLYN5E.SaveBonus" })
+        }, { label: "VARLYN5E.AbilityBonuses" }),
         check: new RollConfigField({ ability: false }),
         save: new RollConfigField({ ability: false })
       }), {
-        initialKeys: CONFIG.DND5E.abilities, initialValue: this._initialAbilityValue.bind(this),
-        initialKeysOnly: true, label: "DND5E.Abilities"
+        initialKeys: CONFIG.VARLYN5E.abilities, initialValue: this._initialAbilityValue.bind(this),
+        initialKeysOnly: true, label: "VARLYN5E.Abilities"
       })
     });
   }
@@ -66424,7 +66424,7 @@ class CommonTemplate extends ActorDataModel.mixin(CurrencyTemplate) {
    * @private
    */
   static _initialAbilityValue(key, initial, existing) {
-    const config = CONFIG.DND5E.abilities[key];
+    const config = CONFIG.VARLYN5E.abilities[key];
     if ( config ) {
       let defaultValue = config.defaults?.[this._systemType] ?? initial.value;
       if ( typeof defaultValue === "string" ) defaultValue = existing?.[defaultValue]?.value ?? initial.value;
@@ -66524,10 +66524,10 @@ class CommonTemplate extends ActorDataModel.mixin(CurrencyTemplate) {
       abl.attack = abl.mod + prof;
       abl.dc = 8 + abl.mod + prof + dcBonus;
 
-      if ( !Number.isFinite(abl.max) ) abl.max = CONFIG.DND5E.maxAbilityScore;
+      if ( !Number.isFinite(abl.max) ) abl.max = CONFIG.VARLYN5E.maxAbilityScore;
 
       // Adjust rolling mode
-      const isPhysicalAbility = CONFIG.DND5E.abilities[id]?.type === "physical";
+      const isPhysicalAbility = CONFIG.VARLYN5E.abilities[id]?.type === "physical";
       if ( this.parent.hasConditionEffect("abilityCheckDisadvantage")
         || (isPhysicalAbility && this.parent.hasConditionEffect("physicalCheckDisadvantage")) ) {
         AdvantageModeField.setMode(this, `abilities.${id}.check.roll.mode`, -1);
@@ -66645,34 +66645,34 @@ class CreatureTemplate extends CommonTemplate {
       }),
       skills: new MappingField(new RollConfigField({
         value: new NumberField$e({
-          required: true, nullable: false, min: 0, max: 2, step: 0.5, initial: 0, label: "DND5E.ProficiencyLevel"
+          required: true, nullable: false, min: 0, max: 2, step: 0.5, initial: 0, label: "VARLYN5E.ProficiencyLevel"
         }),
         ability: "dex",
         bonuses: new SchemaField$f({
-          check: new FormulaField({ required: true, label: "DND5E.SkillBonusCheck" }),
-          passive: new FormulaField({ required: true, label: "DND5E.SkillBonusPassive" })
-        }, { label: "DND5E.SkillBonuses" })
+          check: new FormulaField({ required: true, label: "VARLYN5E.SkillBonusCheck" }),
+          passive: new FormulaField({ required: true, label: "VARLYN5E.SkillBonusPassive" })
+        }, { label: "VARLYN5E.SkillBonuses" })
       }), {
-        initialKeys: CONFIG.DND5E.skills, initialValue: this._initialSkillValue,
-        initialKeysOnly: true, label: "DND5E.Skills"
+        initialKeys: CONFIG.VARLYN5E.skills, initialValue: this._initialSkillValue,
+        initialKeysOnly: true, label: "VARLYN5E.Skills"
       }),
       tools: new MappingField(new RollConfigField({
         value: new NumberField$e({
-          required: true, nullable: false, min: 0, max: 2, step: 0.5, initial: 0, label: "DND5E.ProficiencyLevel"
+          required: true, nullable: false, min: 0, max: 2, step: 0.5, initial: 0, label: "VARLYN5E.ProficiencyLevel"
         }),
         ability: "int",
         bonuses: new SchemaField$f({
-          check: new FormulaField({ required: true, label: "DND5E.CheckBonus" })
-        }, { label: "DND5E.ToolBonuses" })
+          check: new FormulaField({ required: true, label: "VARLYN5E.CheckBonus" })
+        }, { label: "VARLYN5E.ToolBonuses" })
       })),
       spells: new MappingField(new SchemaField$f({
         value: new NumberField$e({
-          nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.SpellProgAvailable"
+          nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.SpellProgAvailable"
         }),
         override: new NumberField$e({
-          integer: true, min: 0, label: "DND5E.SpellProgOverride"
+          integer: true, min: 0, label: "VARLYN5E.SpellProgOverride"
         })
-      }), { initialKeys: this._spellLevels, label: "DND5E.SpellLevels" })
+      }), { initialKeys: this._spellLevels, label: "VARLYN5E.SpellLevels" })
     });
   }
 
@@ -66686,7 +66686,7 @@ class CreatureTemplate extends CommonTemplate {
    * @private
    */
   static _initialSkillValue(key, initial) {
-    if ( CONFIG.DND5E.skills[key]?.ability ) initial.ability = CONFIG.DND5E.skills[key].ability;
+    if ( CONFIG.VARLYN5E.skills[key]?.ability ) initial.ability = CONFIG.VARLYN5E.skills[key].ability;
     return initial;
   }
 
@@ -66698,7 +66698,7 @@ class CreatureTemplate extends CommonTemplate {
    * @private
    */
   static get _spellLevels() {
-    const levels = Object.keys(CONFIG.DND5E.spellLevels).filter(a => a !== "0").map(l => `spell${l}`);
+    const levels = Object.keys(CONFIG.VARLYN5E.spellLevels).filter(a => a !== "0").map(l => `spell${l}`);
     return [...levels, "pact"];
   }
 
@@ -66753,7 +66753,7 @@ class CreatureTemplate extends CommonTemplate {
       const match = s.match(pattern);
       if ( !match ) continue;
       const type = match[1].toLowerCase();
-      if ( (type in CONFIG.DND5E.senses) && !(type in source.attributes.senses) ) {
+      if ( (type in CONFIG.VARLYN5E.senses) && !(type in source.attributes.senses) ) {
         source.attributes.senses.ranges[type] = Number(match[2]).toNearest(0.5);
         wasMatched = true;
       }
@@ -66774,7 +66774,7 @@ class CreatureTemplate extends CommonTemplate {
     if ( !original || foundry.utils.isEmpty(original.value) ) return;
     source.tools ??= {};
     for ( const prof of original.value ) {
-      const validProf = (prof in CONFIG.DND5E.toolProficiencies) || (prof in CONFIG.DND5E.tools);
+      const validProf = (prof in CONFIG.VARLYN5E.toolProficiencies) || (prof in CONFIG.VARLYN5E.tools);
       if ( !validProf || (prof in source.tools) ) continue;
       source.tools[prof] = {
         value: 1,
@@ -66872,18 +66872,18 @@ class CreatureTemplate extends CommonTemplate {
 
     const isLegacy = false;
     if ( flags.remarkableAthlete
-      && CONFIG.DND5E.characterFlags.remarkableAthlete.skills.includes(skillId) && !isLegacy ) {
+      && CONFIG.VARLYN5E.characterFlags.remarkableAthlete.skills.includes(skillId) && !isLegacy ) {
       AdvantageModeField.setMode(this, `skills.${skillId}.roll.mode`, 1);
     }
 
     // Compute passive bonus
-    const passive = flags.observantFeat && CONFIG.DND5E.characterFlags.observantFeat.skills.includes(skillId) ? 5 : 0;
+    const passive = flags.observantFeat && CONFIG.VARLYN5E.characterFlags.observantFeat.skills.includes(skillId) ? 5 : 0;
     const passiveBonus = simplifyBonus(skillData.bonuses?.passive, rollData);
     const advantageMode = AdvantageModeField.combineFields(this, [
       `abilities.${ability}.check.roll.mode`, `skills.${skillId}.roll.mode`
     ])?.mode ?? 0;
-    skillData.passive = CONFIG.DND5E.skillPassive.base + skillData.mod + skillData.bonus + skillData.prof.flat
-      + passive + passiveBonus + (advantageMode * CONFIG.DND5E.skillPassive.modifier);
+    skillData.passive = CONFIG.VARLYN5E.skillPassive.base + skillData.mod + skillData.bonus + skillData.prof.flat
+      + passive + passiveBonus + (advantageMode * CONFIG.VARLYN5E.skillPassive.modifier);
 
     return skillData;
   }
@@ -66963,9 +66963,9 @@ class DetailsField {
   static get common() {
     return {
       biography: new SchemaField$e({
-        value: new HTMLField$4({ label: "DND5E.Biography" }),
-        public: new HTMLField$4({ label: "DND5E.BiographyPublic" })
-      }, {label: "DND5E.Biography"})
+        value: new HTMLField$4({ label: "VARLYN5E.Biography" }),
+        public: new HTMLField$4({ label: "VARLYN5E.BiographyPublic" })
+      }, {label: "VARLYN5E.Biography"})
     };
   }
 
@@ -66977,13 +66977,13 @@ class DetailsField {
    */
   static get creature() {
     return {
-      alignment: new StringField$m({ required: true, label: "DND5E.Alignment" }),
-      ideal: new StringField$m({ required: true, label: "DND5E.Ideals" }),
+      alignment: new StringField$m({ required: true, label: "VARLYN5E.Alignment" }),
+      ideal: new StringField$m({ required: true, label: "VARLYN5E.Ideals" }),
       level: new NumberField$d({ integer: true, min: 0, initial: 0, persisted: false }),
-      bond: new StringField$m({ required: true, label: "DND5E.Bonds" }),
-      flaw: new StringField$m({ required: true, label: "DND5E.Flaws" }),
+      bond: new StringField$m({ required: true, label: "VARLYN5E.Bonds" }),
+      flaw: new StringField$m({ required: true, label: "VARLYN5E.Flaws" }),
       race: new LocalDocumentField(foundry.documents.BaseItem, {
-        required: true, fallback: true, label: "DND5E.Species"
+        required: true, fallback: true, label: "VARLYN5E.Species"
       })
     };
   }
@@ -66998,7 +66998,7 @@ class DamageTraitField extends SimpleTraitField {
   constructor(fields={}, { initialBypasses=[], ...options }={}) {
     super({
       bypasses: new SetField$e(new StringField$l(), {
-        label: "DND5E.DAMAGE.PhysicalBypass.Label", hint: "DND5E.DAMAGE.PhysicalBypass.Hint", initial: initialBypasses
+        label: "VARLYN5E.DAMAGE.PhysicalBypass.Label", hint: "VARLYN5E.DAMAGE.PhysicalBypass.Hint", initial: initialBypasses
       })
     }, options);
   }
@@ -67020,17 +67020,17 @@ class TraitsField {
    */
   static get common() {
     return {
-      size: new StringField$k({ required: true, initial: "med", label: "DND5E.Size" }),
-      di: new DamageTraitField({}, { label: "DND5E.DamImm" }),
-      dr: new DamageTraitField({}, { label: "DND5E.DamRes" }),
-      dv: new DamageTraitField({}, { label: "DND5E.DamVuln" }),
+      size: new StringField$k({ required: true, initial: "med", label: "VARLYN5E.Size" }),
+      di: new DamageTraitField({}, { label: "VARLYN5E.DamImm" }),
+      dr: new DamageTraitField({}, { label: "VARLYN5E.DamRes" }),
+      dv: new DamageTraitField({}, { label: "VARLYN5E.DamVuln" }),
       dm: new SchemaField$d({
-        amount: new MappingField(new FormulaField({ deterministic: true }), { label: "DND5E.DamMod" }),
+        amount: new MappingField(new FormulaField({ deterministic: true }), { label: "VARLYN5E.DamMod" }),
         bypasses: new SetField$d(new StringField$k(), {
-          label: "DND5E.DAMAGE.PhysicalBypass.Label", hint: "DND5E.DAMAGE.PhysicalBypass.Hint"
+          label: "VARLYN5E.DAMAGE.PhysicalBypass.Label", hint: "VARLYN5E.DAMAGE.PhysicalBypass.Hint"
         })
       }),
-      ci: new SimpleTraitField({}, { label: "DND5E.ConImm" })
+      ci: new SimpleTraitField({}, { label: "VARLYN5E.ConImm" })
     };
   }
 
@@ -67047,7 +67047,7 @@ class TraitsField {
           units: new StringField$k({ initial: () => defaultUnits("length") }),
           value: new NumberField$c({ required: true, min: 0 })
         }))
-      }, { label: "DND5E.Languages" })
+      }, { label: "VARLYN5E.Languages" })
     };
   }
 
@@ -67063,7 +67063,7 @@ class TraitsField {
     const languages = this.traits.languages;
     const labels = languages.labels = { languages: [], ranged: [] };
 
-    if ( languages.value.has("ALL") ) labels.languages.push(_loc("DND5E.Language.All"));
+    if ( languages.value.has("ALL") ) labels.languages.push(_loc("VARLYN5E.Language.All"));
     else {
       const processCategory = (key, data, group) => {
         // If key is within languages, don't bother with children
@@ -67083,7 +67083,7 @@ class TraitsField {
         else if ( data.children ) Object.entries(data.children).forEach(([k, d]) => processCategory(k, d));
       };
 
-      for ( const [key, data] of Object.entries(CONFIG.DND5E.languages) ) {
+      for ( const [key, data] of Object.entries(CONFIG.VARLYN5E.languages) ) {
         if ( data.children ) Object.entries(data.children).forEach(([k, d]) => processCategory(k, d));
         else processCategory(key, data);
       }
@@ -67091,7 +67091,7 @@ class TraitsField {
 
     labels.languages.push(...splitSemicolons(languages.custom));
 
-    for ( const [key, { label }] of Object.entries(CONFIG.DND5E.communicationTypes) ) {
+    for ( const [key, { label }] of Object.entries(CONFIG.VARLYN5E.communicationTypes) ) {
       const data = languages.communication?.[key];
       if ( !data?.value ) continue;
       labels.ranged.push(`${label} ${formatLength(data.value, data.units)}`);
@@ -67143,7 +67143,7 @@ class TraitsField {
     if ( this.parent._stats?.compendiumSource?.startsWith("Compendium.") ) return;
     const prototypeToken = {};
     if ( "size" in this.traits ) {
-      const size = CONFIG.DND5E.actorSizes[this.traits.size || "med"].token ?? 1;
+      const size = CONFIG.VARLYN5E.actorSizes[this.traits.size || "med"].token ?? 1;
       if ( !foundry.utils.hasProperty(data, "prototypeToken.width") ) prototypeToken.width = size;
       if ( !foundry.utils.hasProperty(data, "prototypeToken.height") ) prototypeToken.height = size;
     }
@@ -67162,7 +67162,7 @@ class TraitsField {
     const newSize = foundry.utils.getProperty(changes, "system.traits.size");
     if ( !newSize || (newSize === this.traits.size)
       || foundry.utils.hasProperty(changes, "prototypeToken.width") ) return;
-    const size = CONFIG.DND5E.actorSizes[newSize].token ?? 1;
+    const size = CONFIG.VARLYN5E.actorSizes[newSize].token ?? 1;
     changes.prototypeToken ??= {};
     changes.prototypeToken.height = size;
     changes.prototypeToken.width = size;
@@ -67189,7 +67189,7 @@ class CharacterData extends CreatureTemplate {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.BONUSES"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.BONUSES"];
 
   /* -------------------------------------------- */
 
@@ -67214,48 +67214,48 @@ class CharacterData extends CreatureTemplate {
         hp: new SchemaField$c({
           ...AttributesFields.hitPoints,
           max: new NumberField$b({
-            nullable: true, integer: true, min: 0, initial: null, label: "DND5E.HitPointsOverride",
-            hint: "DND5E.HitPointsOverrideHint"
+            nullable: true, integer: true, min: 0, initial: null, label: "VARLYN5E.HitPointsOverride",
+            hint: "VARLYN5E.HitPointsOverrideHint"
           }),
           bonuses: new SchemaField$c({
-            level: new FormulaField({ deterministic: true, label: "DND5E.HitPointsBonusLevel" }),
-            overall: new FormulaField({ deterministic: true, label: "DND5E.HitPointsBonusOverall" })
+            level: new FormulaField({ deterministic: true, label: "VARLYN5E.HitPointsBonusLevel" }),
+            overall: new FormulaField({ deterministic: true, label: "VARLYN5E.HitPointsBonusOverall" })
           })
-        }, { label: "DND5E.HitPoints" }),
+        }, { label: "VARLYN5E.HitPoints" }),
         death: new RollConfigField({
           ability: false,
           success: new NumberField$b({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.DeathSaveSuccesses"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.DeathSaveSuccesses"
           }),
           failure: new NumberField$b({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.DeathSaveFailures"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.DeathSaveFailures"
           }),
           bonuses: new SchemaField$c({
-            save: new FormulaField({ required: true, label: "DND5E.DeathSaveBonus" })
+            save: new FormulaField({ required: true, label: "VARLYN5E.DeathSaveBonus" })
           })
-        }, { label: "DND5E.DeathSave" }),
-        inspiration: new BooleanField$8({ required: true, label: "DND5E.Inspiration" })
-      }, { label: "DND5E.Attributes" }),
+        }, { label: "VARLYN5E.DeathSave" }),
+        inspiration: new BooleanField$8({ required: true, label: "VARLYN5E.Inspiration" })
+      }, { label: "VARLYN5E.Attributes" }),
       details: new SchemaField$c({
         ...DetailsField.common,
         ...DetailsField.creature,
-        originalClass: new StringField$j({ required: true, label: "DND5E.ClassOriginal" }),
+        originalClass: new StringField$j({ required: true, label: "VARLYN5E.ClassOriginal" }),
         xp: new SchemaField$c({
           value: new NumberField$b({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.ExperiencePoints.Current"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.ExperiencePoints.Current"
           })
-        }, { label: "DND5E.ExperiencePoints.Label" }),
-        appearance: new StringField$j({ required: true, label: "DND5E.Appearance" }),
-        trait: new StringField$j({ required: true, label: "DND5E.PersonalityTraits" }),
-        gender: new StringField$j({ label: "DND5E.Gender" }),
-        eyes: new StringField$j({ label: "DND5E.Eyes" }),
-        height: new StringField$j({ label: "DND5E.Height" }),
-        faith: new StringField$j({ label: "DND5E.Faith" }),
-        hair: new StringField$j({ label: "DND5E.Hair" }),
-        skin: new StringField$j({ label: "DND5E.Skin" }),
-        age: new StringField$j({ label: "DND5E.Age" }),
-        weight: new StringField$j({ label: "DND5E.Weight" })
-      }, { label: "DND5E.Details" }),
+        }, { label: "VARLYN5E.ExperiencePoints.Label" }),
+        appearance: new StringField$j({ required: true, label: "VARLYN5E.Appearance" }),
+        trait: new StringField$j({ required: true, label: "VARLYN5E.PersonalityTraits" }),
+        gender: new StringField$j({ label: "VARLYN5E.Gender" }),
+        eyes: new StringField$j({ label: "VARLYN5E.Eyes" }),
+        height: new StringField$j({ label: "VARLYN5E.Height" }),
+        faith: new StringField$j({ label: "VARLYN5E.Faith" }),
+        hair: new StringField$j({ label: "VARLYN5E.Hair" }),
+        skin: new StringField$j({ label: "VARLYN5E.Skin" }),
+        age: new StringField$j({ label: "VARLYN5E.Age" }),
+        weight: new StringField$j({ label: "VARLYN5E.Weight" })
+      }, { label: "VARLYN5E.Details" }),
       traits: new SchemaField$c({
         ...TraitsField.common,
         ...TraitsField.creature,
@@ -67264,19 +67264,19 @@ class CharacterData extends CreatureTemplate {
             value: new SetField$c(new StringField$j()),
             bonus: new SetField$c(new StringField$j())
           })
-        }, { label: "DND5E.TraitWeaponProf" }),
-        armorProf: new SimpleTraitField({}, { label: "DND5E.TraitArmorProf" })
-      }, { label: "DND5E.Traits" }),
+        }, { label: "VARLYN5E.TraitWeaponProf" }),
+        armorProf: new SimpleTraitField({}, { label: "VARLYN5E.TraitArmorProf" })
+      }, { label: "VARLYN5E.Traits" }),
       resources: new SchemaField$c({
-        primary: makeResourceField({ label: "DND5E.ResourcePrimary" }),
-        secondary: makeResourceField({ label: "DND5E.ResourceSecondary" }),
-        tertiary: makeResourceField({ label: "DND5E.ResourceTertiary" })
-      }, { label: "DND5E.Resources" }),
+        primary: makeResourceField({ label: "VARLYN5E.ResourcePrimary" }),
+        secondary: makeResourceField({ label: "VARLYN5E.ResourceSecondary" }),
+        tertiary: makeResourceField({ label: "VARLYN5E.ResourceTertiary" })
+      }, { label: "VARLYN5E.Resources" }),
       favorites: new ArrayField$6(new SchemaField$c({
         type: new StringField$j({ required: true, blank: false }),
         id: new StringField$j({ required: true, blank: false }),
         sort: new IntegerSortField()
-      }), { label: "DND5E.Favorites" })
+      }), { label: "VARLYN5E.Favorites" })
     });
   }
 
@@ -67320,17 +67320,17 @@ class CharacterData extends CreatureTemplate {
 
     // Experience required for next level
     const { xp, level } = this.details;
-    xp.max = level >= CONFIG.DND5E.maxLevel ? Infinity : this.parent.getLevelExp(level || 1);
+    xp.max = level >= CONFIG.VARLYN5E.maxLevel ? Infinity : this.parent.getLevelExp(level || 1);
     xp.min = level ? this.parent.getLevelExp(level - 1) : 0;
     if ( Number.isFinite(xp.max) ) {
       const required = xp.max - xp.min;
       const pct = Math.round((xp.value - xp.min) * 100 / required);
       xp.pct = Math.clamp(pct, 0, 100);
     } else if ( game.settings.get("dnd5e", "levelingMode") === "xpBoons" ) {
-      const overflow = xp.value - this.parent.getLevelExp(CONFIG.DND5E.maxLevel);
-      xp.boonsEarned = Math.max(0, Math.floor(overflow / CONFIG.DND5E.epicBoonInterval));
-      const progress = overflow - (CONFIG.DND5E.epicBoonInterval * xp.boonsEarned);
-      xp.pct = Math.clamp(Math.round((progress / CONFIG.DND5E.epicBoonInterval) * 100), 0, 100);
+      const overflow = xp.value - this.parent.getLevelExp(CONFIG.VARLYN5E.maxLevel);
+      xp.boonsEarned = Math.max(0, Math.floor(overflow / CONFIG.VARLYN5E.epicBoonInterval));
+      const progress = overflow - (CONFIG.VARLYN5E.epicBoonInterval * xp.boonsEarned);
+      xp.pct = Math.clamp(Math.round((progress / CONFIG.VARLYN5E.epicBoonInterval) * 100), 0, 100);
     } else {
       xp.pct = 100;
     }
@@ -67353,8 +67353,8 @@ class CharacterData extends CreatureTemplate {
     } else {
       this.details.type = new CreatureTypeField({ swarm: false }).initialize({ value: "humanoid" }, this);
     }
-    for ( const key of Object.keys(CONFIG.DND5E.movementTypes) ) this.attributes.movement[key] ??= 0;
-    for ( const key of Object.keys(CONFIG.DND5E.senses) ) this.attributes.senses.ranges[key] ??= 0;
+    for ( const key of Object.keys(CONFIG.VARLYN5E.movementTypes) ) this.attributes.movement[key] ??= 0;
+    for ( const key of Object.keys(CONFIG.VARLYN5E.senses) ) this.attributes.senses.ranges[key] ??= 0;
     this.attributes.movement.units ??= defaultUnits("length");
     this.attributes.senses.units ??= defaultUnits("length");
   }
@@ -67391,7 +67391,7 @@ class CharacterData extends CreatureTemplate {
         .map(c => c.advancement.byType.HitPoints?.[0]).filter(a => a);
       hpOptions.bonus = (simplifyBonus(this.attributes.hp.bonuses.level, rollData) * this.details.level)
         + simplifyBonus(this.attributes.hp.bonuses.overall, rollData);
-      hpOptions.mod = this.abilities[CONFIG.DND5E.defaultAbilities.hitPoints ?? "con"]?.mod ?? 0;
+      hpOptions.mod = this.abilities[CONFIG.VARLYN5E.defaultAbilities.hitPoints ?? "con"]?.mod ?? 0;
     }
     AttributesFields.prepareHitPoints.call(this, this.attributes.hp, hpOptions);
   }
@@ -67505,11 +67505,11 @@ class CharacterData extends CreatureTemplate {
  */
 function makeResourceField(schemaOptions={}) {
   return new SchemaField$c({
-    value: new NumberField$b({required: true, integer: true, initial: 0, labels: "DND5E.ResourceValue"}),
-    max: new NumberField$b({required: true, integer: true, initial: 0, labels: "DND5E.ResourceMax"}),
-    sr: new BooleanField$8({required: true, labels: "DND5E.REST.Short.Recovery"}),
-    lr: new BooleanField$8({required: true, labels: "DND5E.REST.Long.Recovery"}),
-    label: new StringField$j({required: true, labels: "DND5E.ResourceLabel"})
+    value: new NumberField$b({required: true, integer: true, initial: 0, labels: "VARLYN5E.ResourceValue"}),
+    max: new NumberField$b({required: true, integer: true, initial: 0, labels: "VARLYN5E.ResourceMax"}),
+    sr: new BooleanField$8({required: true, labels: "VARLYN5E.REST.Short.Recovery"}),
+    lr: new BooleanField$8({required: true, labels: "VARLYN5E.REST.Long.Recovery"}),
+    label: new StringField$j({required: true, labels: "VARLYN5E.ResourceLabel"})
   }, schemaOptions);
 }
 
@@ -67532,7 +67532,7 @@ class NPCData extends CreatureTemplate {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.NPC", "DND5E.BONUSES", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.NPC", "VARLYN5E.BONUSES", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -67556,33 +67556,33 @@ class NPCData extends CreatureTemplate {
         ...AttributesFields.creature,
         hd: new SchemaField$b({
           spent: new NumberField$a({ integer: true, min: 0, initial: 0 })
-        }, { label: "DND5E.HitDice" }),
+        }, { label: "VARLYN5E.HitDice" }),
         hp: new SchemaField$b({
           ...AttributesFields.hitPoints,
-          formula: new FormulaField({ required: true, label: "DND5E.HPFormula" })
-        }, { label: "DND5E.HitPoints" }),
+          formula: new FormulaField({ required: true, label: "VARLYN5E.HPFormula" })
+        }, { label: "VARLYN5E.HitPoints" }),
         death: new RollConfigField({
           ability: false,
           success: new NumberField$a({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.DeathSaveSuccesses"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.DeathSaveSuccesses"
           }),
           failure: new NumberField$a({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.DeathSaveFailures"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.DeathSaveFailures"
           }),
           bonuses: new SchemaField$b({
-            save: new FormulaField({ required: true, label: "DND5E.DeathSaveBonus" })
+            save: new FormulaField({ required: true, label: "VARLYN5E.DeathSaveBonus" })
           })
-        }, { label: "DND5E.DeathSave" }),
+        }, { label: "VARLYN5E.DeathSave" }),
         price: new SchemaField$b({
           value: new NumberField$a({ initial: null, min: 0 }),
-          denomination: new StringField$i({ required: true, blank: false, initial: () => CONFIG.DND5E.defaultCurrency })
+          denomination: new StringField$i({ required: true, blank: false, initial: () => CONFIG.VARLYN5E.defaultCurrency })
         }),
         spell: new SchemaField$b({
           level: new NumberField$a({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.SpellcasterLevel"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.SpellcasterLevel"
           })
         })
-      }, { label: "DND5E.Attributes" }),
+      }, { label: "VARLYN5E.Attributes" }),
       details: new SchemaField$b({
         ...DetailsField.common,
         ...DetailsField.creature,
@@ -67595,43 +67595,43 @@ class NPCData extends CreatureTemplate {
           custom: new StringField$i({ required: true })
         }),
         cr: new NumberField$a({
-          required: true, nullable: true, min: 0, initial: 1, label: "DND5E.ChallengeRating"
+          required: true, nullable: true, min: 0, initial: 1, label: "VARLYN5E.ChallengeRating"
         }),
         treasure: new SchemaField$b({
           value: new SetField$b(new StringField$i())
         })
-      }, { label: "DND5E.Details" }),
+      }, { label: "VARLYN5E.Details" }),
       resources: new SchemaField$b({
         legact: new SchemaField$b({
           max: new NumberField$a({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.LegendaryAction.Max"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.LegendaryAction.Max"
           }),
           spent: new NumberField$a({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.LegendaryAction.Spent"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.LegendaryAction.Spent"
           })
-        }, { label: "DND5E.LegendaryAction.Label" }),
+        }, { label: "VARLYN5E.LegendaryAction.Label" }),
         legres: new SchemaField$b({
           max: new NumberField$a({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.LegendaryResistance.Max"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.LegendaryResistance.Max"
           }),
           spent: new NumberField$a({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.LegendaryResistance.Spent"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.LegendaryResistance.Spent"
           })
-        }, { label: "DND5E.LegendaryResistance.Label" }),
+        }, { label: "VARLYN5E.LegendaryResistance.Label" }),
         lair: new SchemaField$b({
-          value: new BooleanField$7({required: true, label: "DND5E.LAIR.Action.Uses"}),
+          value: new BooleanField$7({required: true, label: "VARLYN5E.LAIR.Action.Uses"}),
           initiative: new NumberField$a({
-            required: true, integer: true, label: "DND5E.LAIR.Action.Initiative"
+            required: true, integer: true, label: "VARLYN5E.LAIR.Action.Initiative"
           }),
-          inside: new BooleanField$7({ label: "DND5E.LAIR.Inside" })
-        }, { label: "DND5E.LAIR.Action.Label" })
-      }, { label: "DND5E.Resources" }),
+          inside: new BooleanField$7({ label: "VARLYN5E.LAIR.Inside" })
+        }, { label: "VARLYN5E.LAIR.Action.Label" })
+      }, { label: "VARLYN5E.Resources" }),
       source: new SourceField(),
       traits: new SchemaField$b({
         ...TraitsField.common,
         ...TraitsField.creature,
         important: new BooleanField$7()
-      }, { label: "DND5E.Traits" })
+      }, { label: "VARLYN5E.Traits" })
     });
   }
 
@@ -67641,26 +67641,26 @@ class NPCData extends CreatureTemplate {
   static get compendiumBrowserFilters() {
     return new Map([
       ["size", {
-        label: "DND5E.Size",
+        label: "VARLYN5E.Size",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.actorSizes,
+          choices: CONFIG.VARLYN5E.actorSizes,
           keyPath: "system.traits.size"
         }
       }],
       ["type", {
-        label: "DND5E.CreatureType",
+        label: "VARLYN5E.CreatureType",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.creatureTypes,
+          choices: CONFIG.VARLYN5E.creatureTypes,
           keyPath: "system.details.type.value"
         }
       }],
       ["habitat", {
-        label: "DND5E.Habitat.Configuration.Label",
+        label: "VARLYN5E.Habitat.Configuration.Label",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.habitats
+          choices: CONFIG.VARLYN5E.habitats
         },
         createFilter: (filters, value, def) => {
           const { include, exclude } = Object.entries(value).reduce((d, [key, value]) => {
@@ -67677,7 +67677,7 @@ class NPCData extends CreatureTemplate {
         }
       }],
       ["cr", {
-        label: "DND5E.ChallengeRating",
+        label: "VARLYN5E.ChallengeRating",
         type: "range",
         config: {
           keyPath: "system.details.cr",
@@ -67686,10 +67686,10 @@ class NPCData extends CreatureTemplate {
         }
       }],
       ["movement", {
-        label: "DND5E.Movement",
+        label: "VARLYN5E.Movement",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.movementTypes
+          choices: CONFIG.VARLYN5E.movementTypes
         },
         createFilter: (filters, value, def) => {
           for ( const [k, v] of Object.entries(value ?? {}) ) {
@@ -67812,7 +67812,7 @@ class NPCData extends CreatureTemplate {
 
       // Match a known creature type
       const typeLc = match.groups.type.trim().toLowerCase();
-      const typeMatch = Object.entries(CONFIG.DND5E.creatureTypes).find(([k, v]) => {
+      const typeMatch = Object.entries(CONFIG.VARLYN5E.creatureTypes).find(([k, v]) => {
         return (typeLc === k)
           || (typeLc === _loc(v.label).toLowerCase())
           || (typeLc === _loc(`${v.label}Pl`).toLowerCase());
@@ -67827,7 +67827,7 @@ class NPCData extends CreatureTemplate {
       // Match a swarm
       if ( match.groups.size ) {
         const sizeLc = match.groups.size ? match.groups.size.trim().toLowerCase() : "tiny";
-        const sizeMatch = Object.entries(CONFIG.DND5E.actorSizes).find(([k, v]) => {
+        const sizeMatch = Object.entries(CONFIG.VARLYN5E.actorSizes).find(([k, v]) => {
           return (sizeLc === k) || (sizeLc === _loc(v.label).toLowerCase());
         });
         source.type.swarm = sizeMatch ? sizeMatch[0] : "tiny";
@@ -67851,7 +67851,7 @@ class NPCData extends CreatureTemplate {
     // Determine hit dice denomination & max from hit points formula
     const [, max, denomination] = this.attributes.hp.formula?.match(/(\d*)d(\d+)/i) ?? [];
     this.attributes.hd.max = Number(max ?? 0);
-    this.attributes.hd.denomination = Number(denomination ?? CONFIG.DND5E.actorSizes[this.traits.size]?.hitDie ?? 4);
+    this.attributes.hd.denomination = Number(denomination ?? CONFIG.VARLYN5E.actorSizes[this.traits.size]?.hitDie ?? 4);
 
     for ( const item of this.parent.items ) {
       // Class levels & hit dice
@@ -67899,8 +67899,8 @@ class NPCData extends CreatureTemplate {
       AttributesFields.prepareRace.call(this, this.details.race, { force: true });
       this.details.type = this.details.race.system.type;
     }
-    for ( const key of Object.keys(CONFIG.DND5E.movementTypes) ) this.attributes.movement[key] ??= 0;
-    for ( const key of Object.keys(CONFIG.DND5E.senses) ) this.attributes.senses.ranges[key] ??= 0;
+    for ( const key of Object.keys(CONFIG.VARLYN5E.movementTypes) ) this.attributes.movement[key] ??= 0;
+    for ( const key of Object.keys(CONFIG.VARLYN5E.senses) ) this.attributes.senses.ranges[key] ??= 0;
     this.attributes.movement.units ??= defaultUnits("length");
     this.attributes.senses.units ??= defaultUnits("length");
   }
@@ -67935,7 +67935,7 @@ class NPCData extends CreatureTemplate {
     // Hit Points
     const hpOptions = {
       advancement: Object.values(this.parent.classes).map(c => c.advancement.byType.HitPoints?.[0]).filter(a => a),
-      mod: this.abilities[CONFIG.DND5E.defaultAbilities.hitPoints ?? "con"]?.mod ?? 0
+      mod: this.abilities[CONFIG.VARLYN5E.defaultAbilities.hitPoints ?? "con"]?.mod ?? 0
     };
     AttributesFields.prepareHitPoints.call(this, this.attributes.hp, hpOptions);
 
@@ -67950,8 +67950,8 @@ class NPCData extends CreatureTemplate {
       const modernRules = (this.source?.rules
         || (varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014")) === "2024";
       legendaryResistanceItem.system.uses.label = this.resources.lair.value && modernRules ? _loc(
-        "DND5E.LegendaryResistance.LairUses", { normal: formatNumber(max), lair: formatNumber(max + 1) }
-      ) : `${formatNumber(max)}/${CONFIG.DND5E.limitedUsePeriods.day?.label ?? ""}`;
+        "VARLYN5E.LegendaryResistance.LairUses", { normal: formatNumber(max), lair: formatNumber(max + 1) }
+      ) : `${formatNumber(max)}/${CONFIG.VARLYN5E.limitedUsePeriods.day?.label ?? ""}`;
     }
   }
 
@@ -68028,12 +68028,12 @@ class NPCData extends CreatureTemplate {
     const pr = getPluralRules().select(max);
     const rulesVersion = this.source?.rules
       || (varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014");
-    return _loc(`DND5E.LegendaryAction.Description${rulesVersion === "2014" ? "Legacy" : ""}`, {
+    return _loc(`VARLYN5E.LegendaryAction.Description${rulesVersion === "2014" ? "Legacy" : ""}`, {
       name: name.toLowerCase(),
-      uses: this.resources.lair.value ? _loc("DND5E.LegendaryAction.LairUses", {
+      uses: this.resources.lair.value ? _loc("VARLYN5E.LegendaryAction.LairUses", {
         normal: formatNumber(max), lair: formatNumber(max + 1)
       }) : formatNumber(max),
-      usesNamed: _loc(`DND5E.ACTIVATION.Type.Legendary.Counted.${pr}`, { number: formatNumber(max) })
+      usesNamed: _loc(`VARLYN5E.ACTIVATION.Type.Legendary.Counted.${pr}`, { number: formatNumber(max) })
     });
   }
 
@@ -68117,12 +68117,12 @@ class NPCData extends CreatureTemplate {
     const prepareSpeed = () => {
       const standard = formatter.format([
         prepareMeasured(this.attributes.movement.walk, this.attributes.movement.units),
-        ...Object.entries(CONFIG.DND5E.movementTypes)
+        ...Object.entries(CONFIG.VARLYN5E.movementTypes)
           .filter(([k, { hidden }]) => this.attributes.movement[k] && (k !== "walk") && !hidden)
           .map(([k, { label }]) => {
             let prepared = prepareMeasured(this.attributes.movement[k], this.attributes.movement.units, label);
             if ( (k === "fly") && this.attributes.movement.hover ) {
-              prepared = _loc("DND5E.MOVEMENT.HoverSpeed", { speed: prepared });
+              prepared = _loc("VARLYN5E.MOVEMENT.HoverSpeed", { speed: prepared });
             }
             return prepared;
           })
@@ -68132,13 +68132,13 @@ class NPCData extends CreatureTemplate {
     };
 
     const xp = rulesVersion === "2024"
-      ? `${o.xp ?? _loc(`DND5E.ExperiencePoints.StatBlock.${
+      ? `${o.xp ?? _loc(`VARLYN5E.ExperiencePoints.StatBlock.${
         (this.resources.lair.value) && (this.details.cr !== null) ? "Lair" : "Standard"}`, {
         value: formatNumber(this.parent.getCRExp(this.details.cr)),
         lair: formatNumber(this.parent.getCRExp(this.details.cr + 1))
-      })}; ${o.pb ?? `${_loc("DND5E.ProficiencyBonusAbbr")} ${
+      })}; ${o.pb ?? `${_loc("VARLYN5E.ProficiencyBonusAbbr")} ${
         formatNumber(this.attributes.prof, { signDisplay: "always" })}`}`
-      : o.xp ?? _loc("DND5E.ExperiencePoints.Format", {
+      : o.xp ?? _loc("VARLYN5E.ExperiencePoints.Format", {
         value: formatNumber(this.parent.getCRExp(this.details.cr))
       });
 
@@ -68146,34 +68146,34 @@ class NPCData extends CreatureTemplate {
       abilityTables: rulesVersion === "2024" ? Array.fromRange(3).map(_ => ({ abilities: [] })) : null,
       actionSections: {
         trait: {
-          label: _loc("DND5E.NPC.SECTIONS.Traits"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.Traits"),
           hideLabel: rulesVersion === "2014",
           actions: []
         },
         action: {
-          label: _loc("DND5E.NPC.SECTIONS.Actions"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.Actions"),
           actions: []
         },
         bonus: {
-          label: _loc("DND5E.NPC.SECTIONS.BonusActions"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.BonusActions"),
           actions: []
         },
         reaction: {
-          label: _loc("DND5E.NPC.SECTIONS.Reactions"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.Reactions"),
           actions: []
         },
         legendary: {
-          label: _loc("DND5E.NPC.SECTIONS.LegendaryActions"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.LegendaryActions"),
           description: "",
           actions: []
         },
         mythic: {
-          label: _loc("DND5E.NPC.SECTIONS.MythicActions"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.MythicActions"),
           description: "",
           actions: []
         }
       },
-      CONFIG: CONFIG.DND5E,
+      CONFIG: CONFIG.VARLYN5E,
       definitions: {
         lower: [],
         upper: []
@@ -68209,7 +68209,7 @@ class NPCData extends CreatureTemplate {
 
         // Saves (e.g. `Dex +7, Con +15, Wis +10, Cha +12`)
         saves: formatter.format(
-          Object.entries(CONFIG.DND5E.abilities)
+          Object.entries(CONFIG.VARLYN5E.abilities)
             .filter(([k]) => this.abilities[k].saveProf.multiplier !== 0)
             .map(([k, { abbreviation }]) =>
               `${abbreviation.capitalize()} ${formatNumber(this.abilities[k].save.value, { signDisplay: "always" })}`
@@ -68219,19 +68219,19 @@ class NPCData extends CreatureTemplate {
         // Senses (e.g. `Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 27`)
         senses: o.senses ?? [
           formatter.format([
-            ...Object.entries(CONFIG.DND5E.senses)
+            ...Object.entries(CONFIG.VARLYN5E.senses)
               .filter(([k]) => this.attributes.senses.ranges[k])
               .map(([k, { label }]) =>
                 prepareMeasured(this.attributes.senses.ranges[k], this.attributes.senses.units, label)
               ),
             ...splitSemicolons(this.attributes.senses.special)
           ].sort((lhs, rhs) => lhs.localeCompare(rhs, game.i18n.lang))),
-          `${_loc("DND5E.PassivePerception")} ${formatNumber(this.skills.prc.passive)}`
+          `${_loc("VARLYN5E.PassivePerception")} ${formatNumber(this.skills.prc.passive)}`
         ].filterJoin("; "),
 
         // Skills (e.g. `Perception +17, Stealth +7`)
         skills: o.skills ?? formatter.format(
-          Object.entries(CONFIG.DND5E.skills)
+          Object.entries(CONFIG.VARLYN5E.skills)
             .filter(([k]) => this.skills[k].value > 0)
             .map(([k, { label }]) => `${label} ${formatNumber(this.skills[k].total, { signDisplay: "always" })}`)
         ),
@@ -68240,8 +68240,8 @@ class NPCData extends CreatureTemplate {
         speed: o.speed ?? prepareSpeed(),
 
         // Tag (e.g. `Gargantuan Dragon, Lawful Evil`)
-        tag: o.tag ?? _loc("DND5E.CreatureTag", {
-          size: o.size ?? CONFIG.DND5E.actorSizes[this.traits.size]?.label ?? "",
+        tag: o.tag ?? _loc("VARLYN5E.CreatureTag", {
+          size: o.size ?? CONFIG.VARLYN5E.actorSizes[this.traits.size]?.label ?? "",
           type: o.type ?? Actor5e.formatCreatureType(this.details.type) ?? "",
           alignment: o.alignment ?? this.details.alignment
         }).replace(/, $/, "")
@@ -68260,18 +68260,18 @@ class NPCData extends CreatureTemplate {
         const trait = `${category[0]}${type[0]}`;
         const data = this.traits[trait];
         const { value, physical } = data.value.reduce((acc, t) => {
-          if ( data.bypasses?.size && CONFIG.DND5E.damageTypes[t]?.isPhysical ) acc.physical.push(t);
+          if ( data.bypasses?.size && CONFIG.VARLYN5E.damageTypes[t]?.isPhysical ) acc.physical.push(t);
           else acc.value.push(t);
           return acc;
         }, { value: [], physical: [] });
         const list = prepareTrait({ value, custom: data.custom }, trait);
         if ( list ) entries.push(list);
-        if ( physical.length ) entries.push(_loc("DND5E.DAMAGE.PhysicalBypass.Description", {
+        if ( physical.length ) entries.push(_loc("VARLYN5E.DAMAGE.PhysicalBypass.Description", {
           damageTypes: game.i18n.getListFormatter({ style: "long", type: "conjunction" }).format(
-            physical.map(t => CONFIG.DND5E.damageTypes[t].label)
+            physical.map(t => CONFIG.VARLYN5E.damageTypes[t].label)
           ),
           bypassTypes: game.i18n.getListFormatter({ style: "long", type: "disjunction" }).format(
-            Array.from(data.bypasses).map(t => CONFIG.DND5E.itemProperties[t]?.label).filter(_ => _)
+            Array.from(data.bypasses).map(t => CONFIG.VARLYN5E.itemProperties[t]?.label).filter(_ => _)
           )
         }));
       }
@@ -68280,27 +68280,27 @@ class NPCData extends CreatureTemplate {
 
     const { summary, system } = context;
     if ( rulesVersion === "2024" ) {
-      for ( const [index, [key, { abbreviation }]] of Object.entries(CONFIG.DND5E.abilities).entries() ) {
+      for ( const [index, [key, { abbreviation }]] of Object.entries(CONFIG.VARLYN5E.abilities).entries() ) {
         context.abilityTables[index % 3].abilities.push({ ...this.abilities[key], label: abbreviation.capitalize() });
       }
 
       context.definitions.upper = [
-        { label: "DND5E.AC", classes: "half-width", definitions: [o.ac ?? system.attributes.ac.value] },
-        { label: "DND5E.Initiative", classes: "half-width", definitions: [summary.initiative] },
-        { label: "DND5E.HP", definitions: o.hp ? [o.hp] : system.attributes.hp.formula ? [
+        { label: "VARLYN5E.AC", classes: "half-width", definitions: [o.ac ?? system.attributes.ac.value] },
+        { label: "VARLYN5E.Initiative", classes: "half-width", definitions: [summary.initiative] },
+        { label: "VARLYN5E.HP", definitions: o.hp ? [o.hp] : system.attributes.hp.formula ? [
           system.attributes.hp.max, `(${system.attributes.hp.formula})`
         ] : [system.attributes.hp.max] },
-        { label: "DND5E.Speed", definitions: [summary.speed] }
+        { label: "VARLYN5E.Speed", definitions: [summary.speed] }
       ];
       context.definitions.lower = [
-        summary.skills ? { label: "DND5E.Skills", definitions: [summary.skills] } : null,
-        summary.vulnerabilities ? { label: "DND5E.Vulnerabilities", definitions: [summary.vulnerabilities] } : null,
-        summary.resistances ? { label: "DND5E.Resistances", definitions: [summary.resistances] } : null,
-        summary.immunities ? { label: "DND5E.Immunities", definitions: [summary.immunities] } : null,
-        summary.gear ? { label: "DND5E.Gear.Label", definitions: [summary.gear], allowHTML: !o.gear } : null,
-        { label: "DND5E.Senses", definitions: [summary.senses] },
-        { label: "DND5E.Languages", definitions: [summary.languages] },
-        { label: "DND5E.AbbreviationCR", definitions: [summary.cr] }
+        summary.skills ? { label: "VARLYN5E.Skills", definitions: [summary.skills] } : null,
+        summary.vulnerabilities ? { label: "VARLYN5E.Vulnerabilities", definitions: [summary.vulnerabilities] } : null,
+        summary.resistances ? { label: "VARLYN5E.Resistances", definitions: [summary.resistances] } : null,
+        summary.immunities ? { label: "VARLYN5E.Immunities", definitions: [summary.immunities] } : null,
+        summary.gear ? { label: "VARLYN5E.Gear.Label", definitions: [summary.gear], allowHTML: !o.gear } : null,
+        { label: "VARLYN5E.Senses", definitions: [summary.senses] },
+        { label: "VARLYN5E.Languages", definitions: [summary.languages] },
+        { label: "VARLYN5E.AbbreviationCR", definitions: [summary.cr] }
       ].filter(_ => _);
     }
 
@@ -68310,26 +68310,26 @@ class NPCData extends CreatureTemplate {
         return def;
       };
       context.definitions.upper = [
-        { label: "DND5E.ArmorClass", definitions: o.ac ? [o.ac] : system.attributes.ac.label ? [
+        { label: "VARLYN5E.ArmorClass", definitions: o.ac ? [o.ac] : system.attributes.ac.label ? [
           system.attributes.ac.value, `(${system.attributes.ac.label})`
         ] : [system.attributes.ac.value] },
-        { label: "DND5E.HitPoints", definitions: o.hp ? [o.hp] : system.attributes.hp.formula ? [
+        { label: "VARLYN5E.HitPoints", definitions: o.hp ? [o.hp] : system.attributes.hp.formula ? [
           system.attributes.hp.max, `(${system.attributes.hp.formula})`
         ] : [system.attributes.hp.max] },
-        { label: "DND5E.Speed", definitions: [summary.speed] }
+        { label: "VARLYN5E.Speed", definitions: [summary.speed] }
       ].map(d => lowerCase(d));
       context.definitions.lower = [
-        summary.saves ? { label: "DND5E.ClassSaves", definitions: [summary.saves] } : null,
-        summary.skills ? { label: "DND5E.Skills", definitions: [summary.skills] } : null,
-        summary.vulnerabilities ? lowerCase({ label: "DND5E.DamVuln", definitions: [summary.vulnerabilities] }) : null,
-        summary.resistances ? lowerCase({ label: "DND5E.DamRes", definitions: [summary.resistances] }) : null,
-        summary.immunities ? lowerCase({ label: "DND5E.DamImm", definitions: [summary.immunities] }) : null,
+        summary.saves ? { label: "VARLYN5E.ClassSaves", definitions: [summary.saves] } : null,
+        summary.skills ? { label: "VARLYN5E.Skills", definitions: [summary.skills] } : null,
+        summary.vulnerabilities ? lowerCase({ label: "VARLYN5E.DamVuln", definitions: [summary.vulnerabilities] }) : null,
+        summary.resistances ? lowerCase({ label: "VARLYN5E.DamRes", definitions: [summary.resistances] }) : null,
+        summary.immunities ? lowerCase({ label: "VARLYN5E.DamImm", definitions: [summary.immunities] }) : null,
         summary.conditionImmunities
-          ? lowerCase({ label: "DND5E.TraitCIPlural.other", definitions: [summary.conditionImmunities] }) : null,
-        { label: "DND5E.Senses", definitions: [summary.senses] },
-        { label: "DND5E.Languages", definitions: [summary.languages] },
-        { label: "DND5E.Challenge", classes: "half-width", definitions: [summary.cr] },
-        { label: "DND5E.ProficiencyBonus", classes: "half-width", definitions: [
+          ? lowerCase({ label: "VARLYN5E.TraitCIPlural.other", definitions: [summary.conditionImmunities] }) : null,
+        { label: "VARLYN5E.Senses", definitions: [summary.senses] },
+        { label: "VARLYN5E.Languages", definitions: [summary.languages] },
+        { label: "VARLYN5E.Challenge", classes: "half-width", definitions: [summary.cr] },
+        { label: "VARLYN5E.ProficiencyBonus", classes: "half-width", definitions: [
           o.pb ?? formatNumber(this.attributes.prof, { signDisplay: "always" })
         ] }
       ].filter(_ => _);
@@ -68502,7 +68502,7 @@ class RequestMessageData extends ChatMessageDataModel {
     return {
       button: {
         icon: this.button.icon,
-        label: _loc(this.button.label || "DND5E.CHATMESSAGE.REQUEST.Action.Handle")
+        label: _loc(this.button.label || "VARLYN5E.CHATMESSAGE.REQUEST.Action.Handle")
       },
       content: await foundry.applications.ux.TextEditor.implementation.enrichHTML(
         this.parent.content, { rollData: this.parent.getRollData() }
@@ -68532,7 +68532,7 @@ class RequestMessageData extends ChatMessageDataModel {
    */
   static async #handleRequest(event, target) {
     const actor = fromUuidSync(target.closest("[data-uuid]").dataset.uuid);
-    const result = await CONFIG.DND5E.requests[this.handler](actor, this.parent, this.data, { event });
+    const result = await CONFIG.VARLYN5E.requests[this.handler](actor, this.parent, this.data, { event });
     if ( (result instanceof ChatMessage) && !result.getFlag("dnd5e", "requestResult") ) {
       return result.setFlag("dnd5e", "requestResult", { actorUuid: actor.uuid, requestId: this.parent.id });
     }
@@ -68955,7 +68955,7 @@ class ConsumableData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.CONSUMABLE", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.CONSUMABLE", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -68969,7 +68969,7 @@ class ConsumableData extends ItemDataModel.mixin(
       }),
       magicalBonus: new FormulaField({ deterministic: true }),
       properties: new SetField$9(new StringField$d()),
-      type: new ItemTypeField({ baseItem: false }, { label: "DND5E.ItemConsumableType" }),
+      type: new ItemTypeField({ baseItem: false }, { label: "VARLYN5E.ItemConsumableType" }),
       uses: new UsesField({
         autoDestroy: new BooleanField$6({ required: true })
       })
@@ -68990,10 +68990,10 @@ class ConsumableData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["type", {
-        label: "DND5E.ItemConsumableType",
+        label: "VARLYN5E.ItemConsumableType",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.consumableTypes,
+          choices: CONFIG.VARLYN5E.consumableTypes,
           keyPath: "system.type.value"
         }
       }],
@@ -69030,7 +69030,7 @@ class ConsumableData extends ItemDataModel.mixin(
   get chatProperties() {
     return [
       this.type.label,
-      this.hasLimitedUses ? `${this.uses.value}/${this.uses.max} ${_loc("DND5E.Charges")}` : null,
+      this.hasLimitedUses ? `${this.uses.value}/${this.uses.max} ${_loc("VARLYN5E.Charges")}` : null,
       this.priceLabel
     ];
   }
@@ -69047,7 +69047,7 @@ class ConsumableData extends ItemDataModel.mixin(
 
   /** @override */
   static get itemCategories() {
-    return CONFIG.DND5E.consumableTypes;
+    return CONFIG.VARLYN5E.consumableTypes;
   }
 
   /* -------------------------------------------- */
@@ -69076,11 +69076,11 @@ class ConsumableData extends ItemDataModel.mixin(
   /** @inheritDoc */
   get validProperties() {
     const valid = super.validProperties;
-    if ( this.type.value === "ammo" ) Object.entries(CONFIG.DND5E.itemProperties).forEach(([k, v]) => {
+    if ( this.type.value === "ammo" ) Object.entries(CONFIG.VARLYN5E.itemProperties).forEach(([k, v]) => {
       if ( v.isPhysical ) valid.add(k);
       valid.add("ret");
     });
-    else if ( this.type.value === "scroll" ) CONFIG.DND5E.validProperties.spell
+    else if ( this.type.value === "scroll" ) CONFIG.VARLYN5E.validProperties.spell
       .filter(p => p !== "material").forEach(p => valid.add(p));
     return valid;
   }
@@ -69134,7 +69134,7 @@ class ConsumableData extends ItemDataModel.mixin(
     this.prepareIdentifiable();
     this.preparePhysicalData();
     if ( !this.type.value ) return;
-    const config = CONFIG.DND5E.consumableTypes[this.type.value];
+    const config = CONFIG.VARLYN5E.consumableTypes[this.type.value];
     if ( config ) {
       this.type.label = config.subtypes?.[this.type.subtype] ?? config.label;
     } else {
@@ -69171,7 +69171,7 @@ class ConsumableData extends ItemDataModel.mixin(
     ];
 
     context.parts = ["dnd5e.details-consumable", "dnd5e.field-uses"];
-    context.damageTypes = Object.entries(CONFIG.DND5E.damageTypes).map(([value, { label }]) => {
+    context.damageTypes = Object.entries(CONFIG.VARLYN5E.damageTypes).map(([value, { label }]) => {
       return {
         value, label,
         selected: context.source.damage.base.types.includes?.(value) ?? context.source.damage.base.types.has(value)
@@ -69180,9 +69180,9 @@ class ConsumableData extends ItemDataModel.mixin(
     context.denominationOptions = [
       { value: "", label: "" },
       { rule: true },
-      ...CONFIG.DND5E.dieSteps.map(value => ({ value, label: `d${value}` }))
+      ...CONFIG.VARLYN5E.dieSteps.map(value => ({ value, label: `d${value}` }))
     ];
-    const itemTypes = CONFIG.DND5E.consumableTypes[this._source.type.value];
+    const itemTypes = CONFIG.VARLYN5E.consumableTypes[this._source.type.value];
     if ( itemTypes ) {
       context.itemType = itemTypes.label;
       context.itemSubtypes = itemTypes.subtypes;
@@ -69214,7 +69214,7 @@ class ConsumableData extends ItemDataModel.mixin(
   /** @inheritDoc */
   async getCraftCost(options={}) {
     const { days, gold } = await super.getCraftCost(options);
-    const { consumable, magic } = CONFIG.DND5E.crafting;
+    const { consumable, magic } = CONFIG.VARLYN5E.crafting;
     const { rarity } = this;
     if ( !this.properties.has("mgc") || !(rarity in magic) ) return { days, gold };
     const costs = magic[rarity];
@@ -69264,7 +69264,7 @@ class FeatData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.FEATURE", "DND5E.ENCHANTMENT", "DND5E.Prerequisites", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.FEATURE", "VARLYN5E.ENCHANTMENT", "VARLYN5E.Prerequisites", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -69302,15 +69302,15 @@ class FeatData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["category", {
-        label: "DND5E.ITEM.Category.Label",
+        label: "VARLYN5E.ITEM.Category.Label",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.featureTypes,
+          choices: CONFIG.VARLYN5E.featureTypes,
           keyPath: "system.type.value"
         }
       }],
       ["subtype", {
-        label: "DND5E.ItemFeatureType",
+        label: "VARLYN5E.ItemFeatureType",
         type: "set",
         config: {
           choices: filters => {
@@ -69319,7 +69319,7 @@ class FeatData extends ItemDataModel.mixin(
               o.anyNegative ||= v < 0;
               return o;
             }, { anyPositive: false, anyNegative: false });
-            return Object.entries(CONFIG.DND5E.featureTypes).reduce((obj, [type, config]) => {
+            return Object.entries(CONFIG.VARLYN5E.featureTypes).reduce((obj, [type, config]) => {
               if ( anyPositive && (filters.additional.category[type] !== 1) ) return obj;
               if ( anyNegative && (filters.additional.category[type] < 0) ) return obj;
               for ( const [key, label] of Object.entries(config.subtypes ?? {}) ) obj[key] = label;
@@ -69331,10 +69331,10 @@ class FeatData extends ItemDataModel.mixin(
       }],
       ["properties", this.compendiumBrowserPropertiesFilter("feat")],
       ["abilityScoreImprovement", {
-        label: "DND5E.ADVANCEMENT.AbilityScoreImprovement.Title",
+        label: "VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Title",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.abilities
+          choices: CONFIG.VARLYN5E.abilities
         },
         createFilter: (filters, value, def) => {
           const { include, exclude } = Object.entries(value).reduce((d, [key, value]) => {
@@ -69403,8 +69403,8 @@ class FeatData extends ItemDataModel.mixin(
    * @type {boolean}
    */
   get isEnchantmentSource() {
-    return CONFIG.DND5E.featureTypes[this.type?.value]?.subtypes?.[this.type?.subtype]
-      && (this.type?.subtype in CONFIG.DND5E.featureTypes.enchantment.subtypes);
+    return CONFIG.VARLYN5E.featureTypes[this.type?.value]?.subtypes?.[this.type?.subtype]
+      && (this.type?.subtype in CONFIG.VARLYN5E.featureTypes.enchantment.subtypes);
   }
 
   /* -------------------------------------------- */
@@ -69482,19 +69482,19 @@ class FeatData extends ItemDataModel.mixin(
     this.prepareDescriptionData();
 
     if ( this.type.value ) {
-      const config = CONFIG.DND5E.featureTypes[this.type.value];
+      const config = CONFIG.VARLYN5E.featureTypes[this.type.value];
       if ( config ) this.type.label = config.subtypes?.[this.type.subtype] ?? null;
       else this.type.label = _loc(CONFIG.Item.typeLabels.feat);
     }
 
     let label;
     const activation = this.activities.contents[0]?.activation.type;
-    if ( activation === "legendary" ) label = _loc("DND5E.LegendaryAction.Label");
-    if ( activation === "mythic" ) label = _loc("DND5E.MythicActionLabel");
-    else if ( activation === "lair" ) label = _loc("DND5E.LAIR.Action.Label");
-    else if ( activation === "action" && this.hasAttack ) label = _loc("DND5E.Attack");
-    else if ( activation ) label = _loc("DND5E.Action");
-    else label = _loc("DND5E.Passive");
+    if ( activation === "legendary" ) label = _loc("VARLYN5E.LegendaryAction.Label");
+    if ( activation === "mythic" ) label = _loc("VARLYN5E.MythicActionLabel");
+    else if ( activation === "lair" ) label = _loc("VARLYN5E.LAIR.Action.Label");
+    else if ( activation === "action" && this.hasAttack ) label = _loc("VARLYN5E.Attack");
+    else if ( activation ) label = _loc("VARLYN5E.Action");
+    else label = _loc("VARLYN5E.Passive");
     this.parent.labels ??= {};
     this.parent.labels.featType = label;
   }
@@ -69524,11 +69524,11 @@ class FeatData extends ItemDataModel.mixin(
       { label: this.type.label },
       { label: this.parent.labels.featType },
       { label: this.requirements, value: this._source.requirements, field: this.schema.getField("requirements"),
-        placeholder: "DND5E.Requirements" }
+        placeholder: "VARLYN5E.Requirements" }
     ];
 
     context.parts = ["dnd5e.details-feat", "dnd5e.field-uses"];
-    const itemTypes = CONFIG.DND5E.featureTypes[this._source.type.value];
+    const itemTypes = CONFIG.VARLYN5E.featureTypes[this._source.type.value];
     if ( itemTypes ) {
       context.itemType = itemTypes.label;
       context.itemSubtypes = itemTypes.subtypes;
@@ -69558,7 +69558,7 @@ class FeatData extends ItemDataModel.mixin(
     // If a feature has item pre-requisites, make sure the other items exist on the actor
     if ( this.prerequisites.items.size
       && !Array.from(this.prerequisites.items).some(i => actor.identifiedItems.get(i)?.size) ) {
-      messages.push(_loc("DND5E.Prerequisites.Warning.MissingItem", {
+      messages.push(_loc("VARLYN5E.Prerequisites.Warning.MissingItem", {
         items: game.i18n.getListFormatter({ type: "disjunction" }).format(Array.from(this.prerequisites.items))
       }));
     }
@@ -69566,12 +69566,12 @@ class FeatData extends ItemDataModel.mixin(
     // Check to ensure the item doesn't already exist on actor if it is not repeatable
     if ( !this.prerequisites.repeatable && actor.sourcedItems?.get(this.parent.uuid)?.size
       && !added.find(a => a.uuid === this.parent.uuid) ) {
-      messages.push(_loc("DND5E.Prerequisites.Warning.NotRepeatable", { name: this.parent.name }));
+      messages.push(_loc("VARLYN5E.Prerequisites.Warning.NotRepeatable", { name: this.parent.name }));
     }
 
     // If a feature has a level pre-requisite, make sure it is less than or equal to current level
     if ( (this.prerequisites.level ?? -Infinity) > (level ?? Infinity) ) {
-      messages.push(_loc("DND5E.Prerequisites.Warning.InvalidLevel", {
+      messages.push(_loc("VARLYN5E.Prerequisites.Warning.InvalidLevel", {
         level: this.prerequisites.level
       }));
     }
@@ -69579,7 +69579,7 @@ class FeatData extends ItemDataModel.mixin(
     if ( !messages.length ) return true;
 
     if ( showMessage || throwError ) {
-      const message = _loc("DND5E.Prerequisites.Warning.Message", {
+      const message = _loc("VARLYN5E.Prerequisites.Warning.Message", {
         actor: actor.name,
         requirements: game.i18n.getListFormatter().format(messages),
         type: _loc(CONFIG.Item.typeLabels[this.parent.type]).toLowerCase()
@@ -69642,7 +69642,7 @@ class RaceData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescriptionT
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -69668,7 +69668,7 @@ class RaceData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescriptionT
   static get compendiumBrowserFilters() {
     return new Map([
       ["hasDarkvision", {
-        label: "DND5E.CompendiumBrowser.Filters.HasDarkvision",
+        label: "VARLYN5E.CompendiumBrowser.Filters.HasDarkvision",
         type: "boolean",
         createFilter: (filters, value, def) => {
           if ( value === 0 ) return;
@@ -69690,7 +69690,7 @@ class RaceData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescriptionT
    */
   get movementLabels() {
     const units = this.movement.units || defaultUnits("length");
-    return Object.entries(CONFIG.DND5E.movementTypes).reduce((obj, [k, { label }]) => {
+    return Object.entries(CONFIG.VARLYN5E.movementTypes).reduce((obj, [k, { label }]) => {
       const value = this.movement[k];
       if ( value ) obj[k] = `${label} ${formatLength(value, units)}`;
       return obj;
@@ -69705,7 +69705,7 @@ class RaceData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescriptionT
    */
   get sensesLabels() {
     const units = this.senses.units || defaultUnits("length");
-    return Object.entries(CONFIG.DND5E.senses).reduce((arr, [k, { label }]) => {
+    return Object.entries(CONFIG.VARLYN5E.senses).reduce((arr, [k, { label }]) => {
       const value = this.senses.ranges[k];
       if ( value ) arr.push(`${label} ${formatLength(value, units)}`);
       return arr;
@@ -69754,18 +69754,18 @@ class RaceData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescriptionT
 
     context.parts = ["dnd5e.details-species"];
     context.info = [{
-      label: "DND5E.CreatureType",
+      label: "VARLYN5E.CreatureType",
       classes: "info-sm",
       value: this.typeLabel,
       config: "type",
-      tooltip: "DND5E.CreatureTypeTitle"
+      tooltip: "VARLYN5E.CreatureTypeTitle"
     },
     {
-      label: "DND5E.Movement",
+      label: "VARLYN5E.Movement",
       classes: "info-sm info-grid",
       config: "movement",
-      tooltip: "DND5E.MOVEMENT.Action.Configure",
-      value: Object.entries(CONFIG.DND5E.movementTypes).reduce((str, [k, { label }]) => {
+      tooltip: "VARLYN5E.MOVEMENT.Action.Configure",
+      value: Object.entries(CONFIG.VARLYN5E.movementTypes).reduce((str, [k, { label }]) => {
         const value = this.movement[k];
         if ( !value ) return str;
         return `${str}
@@ -69775,11 +69775,11 @@ class RaceData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescriptionT
       }, "")
     },
     {
-      label: "DND5E.Senses",
+      label: "VARLYN5E.Senses",
       classes: "info-sm info-grid",
       config: "senses",
-      tooltip: "DND5E.SensesConfig",
-      value: Object.entries(CONFIG.DND5E.senses).reduce((str, [k, { label }]) => {
+      tooltip: "VARLYN5E.SensesConfig",
+      value: Object.entries(CONFIG.VARLYN5E.senses).reduce((str, [k, { label }]) => {
         const value = this.senses.ranges[k];
         if ( !value ) return str;
         return `${str}
@@ -69852,7 +69852,7 @@ class SubclassData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescript
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -69860,7 +69860,7 @@ class SubclassData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescript
   static defineSchema() {
     return this.mergeSchema(super.defineSchema(), {
       classIdentifier: new IdentifierField({
-        required: true, label: "DND5E.ClassIdentifier", hint: "DND5E.ClassIdentifierHint"
+        required: true, label: "VARLYN5E.ClassIdentifier", hint: "VARLYN5E.ClassIdentifierHint"
       }),
       spellcasting: new SpellcastingField()
     });
@@ -69880,7 +69880,7 @@ class SubclassData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescript
         }
       }],
       ["hasSpellcasting", {
-        label: "DND5E.CompendiumBrowser.Filters.HasSpellcasting",
+        label: "VARLYN5E.CompendiumBrowser.Filters.HasSpellcasting",
         type: "boolean",
         createFilter: (filters, value, def) => {
           if ( value === 0 ) return;
@@ -69899,7 +69899,7 @@ class SubclassData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescript
   /** @inheritDoc */
   get tooltipSubtitle() {
     const cls = varlyn5e.registry.classes.get(this.classIdentifier)?.name;
-    if ( cls ) return [_loc("DND5E.SubclassOf", { class: cls })];
+    if ( cls ) return [_loc("VARLYN5E.SubclassOf", { class: cls })];
     return super.tooltipSubtitle;
   }
 
@@ -69998,21 +69998,21 @@ class ToolData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
   /** @inheritDoc */
   static defineSchema() {
     return this.mergeSchema(super.defineSchema(), {
-      ability: new StringField$b({ required: true, blank: true, label: "DND5E.DefaultAbilityCheck" }),
-      bonus: new FormulaField({ required: true, label: "DND5E.ItemToolBonus" }),
-      chatFlavor: new StringField$b({ required: true, label: "DND5E.ChatFlavor" }),
+      ability: new StringField$b({ required: true, blank: true, label: "VARLYN5E.DefaultAbilityCheck" }),
+      bonus: new FormulaField({ required: true, label: "VARLYN5E.ItemToolBonus" }),
+      chatFlavor: new StringField$b({ required: true, label: "VARLYN5E.ChatFlavor" }),
       proficient: new NumberField$7({
-        required: true, initial: null, min: 0, max: 2, step: 0.5, label: "DND5E.ItemToolProficiency"
+        required: true, initial: null, min: 0, max: 2, step: 0.5, label: "VARLYN5E.ItemToolProficiency"
       }),
-      properties: new SetField$7(new StringField$b(), { label: "DND5E.ItemToolProperties" }),
-      type: new ItemTypeField({ subtype: false }, { label: "DND5E.ItemToolType" })
+      properties: new SetField$7(new StringField$b(), { label: "VARLYN5E.ItemToolProperties" }),
+      type: new ItemTypeField({ subtype: false }, { label: "VARLYN5E.ItemToolType" })
     });
   }
 
@@ -70030,10 +70030,10 @@ class ToolData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["type", {
-        label: "DND5E.ItemToolType",
+        label: "VARLYN5E.ItemToolType",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.toolTypes,
+          choices: CONFIG.VARLYN5E.toolTypes,
           keyPath: "system.type.value"
         }
       }],
@@ -70068,7 +70068,7 @@ class ToolData extends ItemDataModel.mixin(
    * @type {string[]}
    */
   get chatProperties() {
-    return [CONFIG.DND5E.abilities[this.ability]?.label];
+    return [CONFIG.VARLYN5E.abilities[this.ability]?.label];
   }
 
   /* -------------------------------------------- */
@@ -70078,7 +70078,7 @@ class ToolData extends ItemDataModel.mixin(
    * @type {string[]}
    */
   get cardProperties() {
-    return [CONFIG.DND5E.abilities[this.ability]?.label];
+    return [CONFIG.VARLYN5E.abilities[this.ability]?.label];
   }
 
   /* -------------------------------------------- */
@@ -70095,7 +70095,7 @@ class ToolData extends ItemDataModel.mixin(
 
   /** @override */
   static get itemCategories() {
-    return CONFIG.DND5E.toolTypes;
+    return CONFIG.VARLYN5E.toolTypes;
   }
 
   /* -------------------------------------------- */
@@ -70146,8 +70146,8 @@ class ToolData extends ItemDataModel.mixin(
     this.prepareDescriptionData();
     this.prepareIdentifiable();
     this.preparePhysicalData();
-    this.type.label = CONFIG.DND5E.toolTypes[this.type.value] ?? _loc(CONFIG.Item.typeLabels.tool);
-    this.type.identifier = CONFIG.DND5E.tools[this.type.baseItem]?.id;
+    this.type.label = CONFIG.VARLYN5E.toolTypes[this.type.value] ?? _loc(CONFIG.Item.typeLabels.tool);
+    this.type.identifier = CONFIG.VARLYN5E.tools[this.type.baseItem]?.id;
   }
 
   /* -------------------------------------------- */
@@ -70189,7 +70189,7 @@ class ToolData extends ItemDataModel.mixin(
     this.preCreateGear(data, options, user);
     if ( this.activities.size ) return;
 
-    const activityData = new CONFIG.DND5E.activityTypes.check.documentClass({}, { parent: this.parent }).toObject();
+    const activityData = new CONFIG.VARLYN5E.activityTypes.check.documentClass({}, { parent: this.parent }).toObject();
     this.parent.updateSource({ [`system.activities.${activityData._id}`]: activityData });
   }
 
@@ -70238,7 +70238,7 @@ class WeaponData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.WEAPON", "DND5E.VEHICLE.MOUNTABLE", "DND5E.RANGE", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.WEAPON", "VARLYN5E.VEHICLE.MOUNTABLE", "VARLYN5E.RANGE", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -70256,11 +70256,11 @@ class WeaponData extends ItemDataModel.mixin(
         bonus: new FormulaField({ persisted: false }),
         versatile: new DamageField()
       }),
-      magicalBonus: new FormulaField({ deterministic: true, label: "DND5E.MagicalBonus" }),
+      magicalBonus: new FormulaField({ deterministic: true, label: "VARLYN5E.MagicalBonus" }),
       mastery: new StringField$a(),
-      properties: new SetField$6(new StringField$a(), { label: "DND5E.ItemWeaponProperties" }),
+      properties: new SetField$6(new StringField$a(), { label: "VARLYN5E.ItemWeaponProperties" }),
       proficient: new NumberField$6({
-        required: true, min: 0, max: 1, integer: true, initial: null, label: "DND5E.ProficiencyLevel"
+        required: true, min: 0, max: 1, integer: true, initial: null, label: "VARLYN5E.ProficiencyLevel"
       }),
       range: new SchemaField$6({
         value: new NumberField$6({ min: 0 }),
@@ -70268,7 +70268,7 @@ class WeaponData extends ItemDataModel.mixin(
         reach: new NumberField$6({ min: 0 }),
         units: new StringField$a({ required: true, blank: false, initial: () => defaultUnits("length") })
       }),
-      type: new ItemTypeField({ value: "simpleM", subtype: false }, {label: "DND5E.ItemWeaponType"})
+      type: new ItemTypeField({ value: "simpleM", subtype: false }, {label: "VARLYN5E.ItemWeaponType"})
     });
   }
 
@@ -70287,18 +70287,18 @@ class WeaponData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["type", {
-        label: "DND5E.ItemWeaponType",
+        label: "VARLYN5E.ItemWeaponType",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.weaponTypes,
+          choices: CONFIG.VARLYN5E.weaponTypes,
           keyPath: "system.type.value"
         }
       }],
       ["mastery", {
-        label: "DND5E.WEAPON.Mastery.Label",
+        label: "VARLYN5E.WEAPON.Mastery.Label",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.weaponMasteries,
+          choices: CONFIG.VARLYN5E.weaponMasteries,
           keyPath: "system.mastery"
         }
       }],
@@ -70353,7 +70353,7 @@ class WeaponData extends ItemDataModel.mixin(
    * @type {"weapon"|"unarmed"}
    */
   get attackClassification() {
-    return CONFIG.DND5E.weaponClassificationMap[this.type.value] ?? "weapon";
+    return CONFIG.VARLYN5E.weaponClassificationMap[this.type.value] ?? "weapon";
   }
 
   /* -------------------------------------------- */
@@ -70366,12 +70366,12 @@ class WeaponData extends ItemDataModel.mixin(
     if ( !(this.properties.has("thr") && (this.attackType === "ranged")) ) {
       // Weapons without the "Two-Handed" property or with the "Versatile" property will have One-Handed attack
       if ( this.isVersatile || !this.properties.has("two") ) modes.push({
-        value: "oneHanded", label: CONFIG.DND5E.attackModes.oneHanded.label
+        value: "oneHanded", label: CONFIG.VARLYN5E.attackModes.oneHanded.label
       });
 
       // Weapons with the "Two-Handed" property or with the "Versatile" property will have Two-Handed attack
       if ( this.isVersatile || this.properties.has("two") ) modes.push({
-        value: "twoHanded", label: CONFIG.DND5E.attackModes.twoHanded.label
+        value: "twoHanded", label: CONFIG.VARLYN5E.attackModes.twoHanded.label
       });
     }
 
@@ -70381,23 +70381,23 @@ class WeaponData extends ItemDataModel.mixin(
     // Weapons with the "Light" property will have Offhand attack
     // If player has the "Enhanced Dual Wielding" flag, then allow any melee weapon without the "Two-Handed" property
     if ( isLight ) modes.push({
-      value: "offhand", label: CONFIG.DND5E.attackModes.offhand.label
+      value: "offhand", label: CONFIG.VARLYN5E.attackModes.offhand.label
     });
 
     // Weapons with the "Thrown" property will have Thrown attack
     if ( this.properties.has("thr") ) {
       if ( modes.length ) modes.push({ rule: true });
-      modes.push({ value: "thrown", label: CONFIG.DND5E.attackModes.thrown.label });
+      modes.push({ value: "thrown", label: CONFIG.VARLYN5E.attackModes.thrown.label });
 
       // Weapons with the "Thrown" & "Light" properties will have an Offhand Throw attack
       if ( isLight ) modes.push({
-        value: "thrown-offhand", label: CONFIG.DND5E.attackModes["thrown-offhand"].label
+        value: "thrown-offhand", label: CONFIG.VARLYN5E.attackModes["thrown-offhand"].label
       });
     }
 
     else if ( !this.attackType && ((this.range.value ?? 0) > (this.range.reach ?? 0)) ) {
       if ( modes.length ) modes.push({ rule: true });
-      modes.push({ value: "ranged", label: CONFIG.DND5E.attackModes.ranged.label });
+      modes.push({ value: "ranged", label: CONFIG.VARLYN5E.attackModes.ranged.label });
     }
 
     return modes;
@@ -70410,15 +70410,15 @@ class WeaponData extends ItemDataModel.mixin(
    * @type {"melee"|"ranged"|null}
    */
   get attackType() {
-    return CONFIG.DND5E.weaponTypeMap[this.type.value] ?? null;
+    return CONFIG.VARLYN5E.weaponTypeMap[this.type.value] ?? null;
   }
 
   /* -------------------------------------------- */
 
   /** @override */
   get availableAbilities() {
-    const melee = CONFIG.DND5E.defaultAbilities.meleeAttack;
-    const ranged = CONFIG.DND5E.defaultAbilities.rangedAttack;
+    const melee = CONFIG.VARLYN5E.defaultAbilities.meleeAttack;
+    const ranged = CONFIG.VARLYN5E.defaultAbilities.rangedAttack;
     if ( this.properties.has("fin") || (this.type.value === "natural") ) return new Set([melee, ranged]);
     if ( !this.attackType ) return null;
     return new Set([this.attackType === "melee" ? melee : ranged]);
@@ -70433,7 +70433,7 @@ class WeaponData extends ItemDataModel.mixin(
   get chatProperties() {
     return [
       this.type.label,
-      CONFIG.DND5E.weaponMasteries[this.mastery]?.label,
+      CONFIG.VARLYN5E.weaponMasteries[this.mastery]?.label,
       this.isMountable ? (this.parent.labels?.armor ?? null) : null
     ];
   }
@@ -70496,7 +70496,7 @@ class WeaponData extends ItemDataModel.mixin(
 
   /** @override */
   static get itemCategories() {
-    return CONFIG.DND5E.weaponTypes;
+    return CONFIG.VARLYN5E.weaponTypes;
   }
 
   /* -------------------------------------------- */
@@ -70522,11 +70522,11 @@ class WeaponData extends ItemDataModel.mixin(
     const extras = [];
     for ( const mastery of this.parent.actor.system.traits.weaponProf.mastery.bonus ?? [] ) {
       if ( mastery === this.mastery ) continue;
-      extras.push({ value: mastery, label: CONFIG.DND5E.weaponMasteries[mastery]?.label ?? mastery });
+      extras.push({ value: mastery, label: CONFIG.VARLYN5E.weaponMasteries[mastery]?.label ?? mastery });
     }
     return [{
       value: this.mastery,
-      label: CONFIG.DND5E.weaponMasteries[this.mastery]?.label ?? this.mastery,
+      label: CONFIG.VARLYN5E.weaponMasteries[this.mastery]?.label ?? this.mastery,
       rule: !!extras.length
     }, ...extras];
   }
@@ -70552,7 +70552,7 @@ class WeaponData extends ItemDataModel.mixin(
     const actor = this.parent.actor;
     if ( !actor ) return 0;
     if ( actor.system.isNPC ) return 1; // NPCs are always considered proficient with any weapon in their stat block.
-    const config = CONFIG.DND5E.weaponProficienciesMap;
+    const config = CONFIG.VARLYN5E.weaponProficienciesMap;
     const itemProf = config[this.type.value];
     const actorProfs = actor.system.traits?.weaponProf?.value ?? new Set();
     const natural = this.type.value === "natural";
@@ -70565,7 +70565,7 @@ class WeaponData extends ItemDataModel.mixin(
 
   /** @inheritDoc */
   get tooltipSubtitle() {
-    return [...super.tooltipSubtitle, CONFIG.DND5E.weaponMasteries[this.mastery]?.label];
+    return [...super.tooltipSubtitle, CONFIG.VARLYN5E.weaponMasteries[this.mastery]?.label];
   }
 
   /* -------------------------------------------- */
@@ -70647,7 +70647,7 @@ class WeaponData extends ItemDataModel.mixin(
   static #migrateReach(source) {
     if ( !source.properties || !source.range?.value || !source.type?.value
       || (source.range?.reach !== undefined) ) return;
-    if ( (CONFIG.DND5E.weaponTypeMap[source.type.value] !== "melee") || source.properties.includes("thr") ) return;
+    if ( (CONFIG.VARLYN5E.weaponTypeMap[source.type.value] !== "melee") || source.properties.includes("thr") ) return;
     // Range of `0` or greater than `10` is always included, and so is range longer than `5` without reach property
     if ( (source.range.value === 0) || (source.range.value > 10)
       || (!source.properties.includes("rch") && (source.range.value > 5)) ) {
@@ -70667,14 +70667,14 @@ class WeaponData extends ItemDataModel.mixin(
     this.prepareIdentifiable();
     this.preparePhysicalData();
     this.prepareMountableData();
-    this.type.label = CONFIG.DND5E.weaponTypes[this.type.value] ?? _loc(CONFIG.Item.typeLabels.weapon);
-    this.type.identifier = CONFIG.DND5E.weaponIds[this.type.baseItem];
+    this.type.label = CONFIG.VARLYN5E.weaponTypes[this.type.value] ?? _loc(CONFIG.Item.typeLabels.weapon);
+    this.type.identifier = CONFIG.VARLYN5E.weaponIds[this.type.baseItem];
 
     const labels = this.parent.labels ??= {};
-    labels.armor = this.armor.value ? `${this.armor.value} ${_loc("DND5E.AC")}` : "";
+    labels.armor = this.armor.value ? `${this.armor.value} ${_loc("VARLYN5E.AC")}` : "";
     labels.damage = this.damage.base.formula;
     labels.damageTypes = game.i18n.getListFormatter({ style: "narrow" }).format(
-      Array.from(this.damage.base.types).map(t => CONFIG.DND5E.damageTypes[t]?.label).filter(t => t)
+      Array.from(this.damage.base.types).map(t => CONFIG.VARLYN5E.damageTypes[t]?.label).filter(t => t)
     );
 
     if ( this.attackType === "ranged" ) this.range.reach = null;
@@ -70696,7 +70696,7 @@ class WeaponData extends ItemDataModel.mixin(
     units ??= defaultUnits("length");
     if ( this.hasRange ) labels.range = !long || (long === value) ? formatLength(value, units)
       : `${formatNumber(value)}/${formatLength(long, units)}`;
-    if ( reach ) labels.reach = _loc("DND5E.RANGE.Formatted.Reach", { reach: formatLength(reach, units) });
+    if ( reach ) labels.reach = _loc("VARLYN5E.RANGE.Formatted.Reach", { reach: formatLength(reach, units) });
   }
 
   /* -------------------------------------------- */
@@ -70704,7 +70704,7 @@ class WeaponData extends ItemDataModel.mixin(
   /** @inheritDoc */
   async getFavoriteData() {
     return foundry.utils.mergeObject(await super.getFavoriteData(), {
-      subtitle: CONFIG.DND5E.itemActionTypes[this.activities.contents[0]?.actionType],
+      subtitle: CONFIG.VARLYN5E.itemActionTypes[this.activities.contents[0]?.actionType],
       modifier: this.parent.labels.modifier,
       range: this.range
     });
@@ -70721,12 +70721,12 @@ class WeaponData extends ItemDataModel.mixin(
     ];
 
     context.info = [{
-      label: "DND5E.ToHit",
+      label: "VARLYN5E.ToHit",
       classes: "info-lg",
       value: varlyn5e.utils.formatModifier(parseInt(this.parent.labels.modifier))
     }];
     if ( this.parent.labels.damages?.length ) {
-      const config = { ...CONFIG.DND5E.damageTypes, ...CONFIG.DND5E.healingTypes };
+      const config = { ...CONFIG.VARLYN5E.damageTypes, ...CONFIG.VARLYN5E.healingTypes };
       context.info.push({ value: this.parent.labels.damages.reduce((str, { formula, damageType, firstDamage }) => {
         if ( !firstDamage ) return str;
         const type = config[damageType];
@@ -70740,7 +70740,7 @@ class WeaponData extends ItemDataModel.mixin(
     }
 
     context.parts = ["dnd5e.details-weapon", "dnd5e.field-uses"];
-    const typeOptions = Object.entries(CONFIG.DND5E.damageTypes).map(([value, config]) => {
+    const typeOptions = Object.entries(CONFIG.VARLYN5E.damageTypes).map(([value, config]) => {
       return {
         ...config, value,
         selected: context.source.damage.base.types.includes?.(value) ?? context.source.damage.base.types.has(value)
@@ -70749,12 +70749,12 @@ class WeaponData extends ItemDataModel.mixin(
     const [other, physical] = typeOptions.partition(config => !!config.isPhysical);
     context.damageTypes = [
       ...physical, { rule: true }, ...other, { rule: true },
-      { value: "maximum", label: CONFIG.DND5E.healingTypes.maximum.label }
+      { value: "maximum", label: CONFIG.VARLYN5E.healingTypes.maximum.label }
     ];
     const makeDenominationOptions = placeholder => [
       { value: "", label: placeholder ? `d${placeholder}` : "" },
       { rule: true },
-      ...CONFIG.DND5E.dieSteps.map(value => ({ value, label: `d${value}` }))
+      ...CONFIG.VARLYN5E.dieSteps.map(value => ({ value, label: `d${value}` }))
     ];
     context.denominationOptions = {
       base: makeDenominationOptions(),
@@ -70773,7 +70773,7 @@ class WeaponData extends ItemDataModel.mixin(
     this.preCreateGear(data, options, user);
     if ( this.activities.size ) return;
 
-    const activityData = new CONFIG.DND5E.activityTypes.attack.documentClass({}, { parent: this.parent }).toObject();
+    const activityData = new CONFIG.VARLYN5E.activityTypes.attack.documentClass({}, { parent: this.parent }).toObject();
     this.parent.updateSource({ [`system.activities.${activityData._id}`]: activityData });
   }
 
@@ -70839,7 +70839,7 @@ const { HTMLField: HTMLField$3, SchemaField: SchemaField$5, SetField: SetField$5
 class ClassJournalPageData extends foundry.abstract.TypeDataModel {
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = ["JOURNALENTRYPAGE.DND5E.Class"];
+  static LOCALIZATION_PREFIXES = ["JOURNALENTRYPAGE.VARLYN5E.Class"];
 
   /* -------------------------------------------- */
 
@@ -70903,8 +70903,8 @@ class MapLocationJournalPageData extends foundry.abstract.TypeDataModel {
   getControlIcon(options) {
     if ( !this.code ) return;
     const { icon: IconClass, ...style } = foundry.utils.mergeObject(
-      CONFIG.DND5E.mapLocationMarker.default,
-      CONFIG.DND5E.mapLocationMarker[this.parent.getFlag("dnd5e", "mapMarkerStyle")] ?? {},
+      CONFIG.VARLYN5E.mapLocationMarker.default,
+      CONFIG.VARLYN5E.mapLocationMarker[this.parent.getFlag("dnd5e", "mapMarkerStyle")] ?? {},
       {inplace: false}
     );
     return new IconClass({code: this.code, ...options, ...style});
@@ -70935,8 +70935,8 @@ class RuleJournalPageData extends foundry.abstract.TypeDataModel {
   /** @inheritDoc */
   static defineSchema() {
     return {
-      tooltip: new HTMLField$2({textSearch: true, label: "DND5E.Rule.Tooltip"}),
-      type: new StringField$7({blank: false, initial: "rule", label: "DND5E.Rule.Type.Label"})
+      tooltip: new HTMLField$2({textSearch: true, label: "VARLYN5E.Rule.Tooltip"}),
+      type: new StringField$7({blank: false, initial: "rule", label: "VARLYN5E.Rule.Type.Label"})
     };
   }
 
@@ -70950,7 +70950,7 @@ class RuleJournalPageData extends foundry.abstract.TypeDataModel {
   async richTooltip(enrichmentOptions={}) {
     const context = {
       page: this.parent,
-      type: CONFIG.DND5E.ruleTypes[this.type].label,
+      type: CONFIG.VARLYN5E.ruleTypes[this.type].label,
       content: await TextEditor.enrichHTML(this.tooltip || this.parent.text.content, {
         secrets: false, relativeTo: this.parent, ...enrichmentOptions
       })
@@ -70987,28 +70987,28 @@ class SpellListJournalPageData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       type: new StringField$6({
-        initial: "class", label: "JOURNALENTRYPAGE.DND5E.SpellList.Type.Label"
+        initial: "class", label: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Type.Label"
       }),
-      identifier: new IdentifierField({ label: "DND5E.Identifier" }),
+      identifier: new IdentifierField({ label: "VARLYN5E.Identifier" }),
       grouping: new StringField$6({
         initial: "level", choices: this.GROUPING_MODES,
-        label: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.Label",
-        hint: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.Hint"
+        label: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.Label",
+        hint: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.Hint"
       }),
       description: new SchemaField$4({
-        value: new HTMLField$1({ textSearch: true, label: "DND5E.Description" })
+        value: new HTMLField$1({ textSearch: true, label: "VARLYN5E.Description" })
       }),
-      spells: new SetField$4(new StringField$6(), { label: "DND5E.ItemTypeSpellPl" }),
+      spells: new SetField$4(new StringField$6(), { label: "VARLYN5E.ItemTypeSpellPl" }),
       unlinkedSpells: new ArrayField$2(new SchemaField$4({
         _id: new DocumentIdField$1({ initial: () => foundry.utils.randomID() }),
-        identifier: new IdentifierField({ label: "DND5E.Identifier" }),
+        identifier: new IdentifierField({ label: "VARLYN5E.Identifier" }),
         name: new StringField$6({ required: true, label: "DOCUMENT.FIELDS.name.label" }),
         system: new SchemaField$4({
-          level: new NumberField$5({ min: 0, integer: true, label: "DND5E.Level" }),
-          school: new StringField$6({ label: "DND5E.School" })
+          level: new NumberField$5({ min: 0, integer: true, label: "VARLYN5E.Level" }),
+          school: new StringField$6({ label: "VARLYN5E.School" })
         }),
         source: new SourceField({license: false, revision: false, rules: false, uuid: new StringField$6()})
-      }), { label: "JOURNALENTRYPAGE.DND5E.SpellList.UnlinkedSpells.Label" })
+      }), { label: "JOURNALENTRYPAGE.VARLYN5E.SpellList.UnlinkedSpells.Label" })
     };
   }
 
@@ -71019,10 +71019,10 @@ class SpellListJournalPageData extends foundry.abstract.TypeDataModel {
    * @enum {string}
    */
   static GROUPING_MODES = {
-    none: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.None",
-    alphabetical: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.Alphabetical",
-    level: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.Level",
-    school: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.School"
+    none: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.None",
+    alphabetical: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.Alphabetical",
+    level: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.Level",
+    school: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.School"
   };
 
   /* -------------------------------------------- */
@@ -71073,7 +71073,7 @@ const { HTMLField, SchemaField: SchemaField$3, StringField: StringField$5 } = fo
 class SubclassJournalPageData extends foundry.abstract.TypeDataModel {
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = ["JOURNALENTRYPAGE.DND5E.Subclass"];
+  static LOCALIZATION_PREFIXES = ["JOURNALENTRYPAGE.VARLYN5E.Subclass"];
 
   /* -------------------------------------------- */
   /** @inheritDoc */
@@ -71120,7 +71120,7 @@ const { DocumentUUIDField, NumberField: NumberField$4, SetField: SetField$3, Str
 class ApplyActiveEffect5eRegionBehaviorType extends foundry.data.regionBehaviors.RegionBehaviorType {
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.REGIONBEHAVIORS.APPLYACTIVEEFFECT"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.REGIONBEHAVIORS.APPLYACTIVEEFFECT"];
 
   /* ---------------------------------------- */
 
@@ -71131,8 +71131,8 @@ class ApplyActiveEffect5eRegionBehaviorType extends foundry.data.regionBehaviors
     return {
       effects: new SetField$3(new DocumentUUIDField({ type: "ActiveEffect", nullable: false })),
       dispositions: new SetField$3(new NumberField$4({ choices: dispositions })),
-      sizes: new SetField$3(new StringField$4({ choices: () => CONFIG.DND5E.actorSizes })),
-      types: new SetField$3(new StringField$4({ choices: () => CONFIG.DND5E.creatureTypes }))
+      sizes: new SetField$3(new StringField$4({ choices: () => CONFIG.VARLYN5E.actorSizes })),
+      types: new SetField$3(new StringField$4({ choices: () => CONFIG.VARLYN5E.creatureTypes }))
       // TODO: Add FiltersField for arbitrary conditions once https://github.com/foundryvtt/dnd5e/issues/6672 is done
     };
   }
@@ -71300,7 +71300,7 @@ const { BooleanField: BooleanField$4, NumberField: NumberField$3, SetField: SetF
 class DifficultTerrainRegionBehaviorType extends foundry.data.regionBehaviors.RegionBehaviorType {
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN"];
 
   /* ---------------------------------------- */
 
@@ -71401,7 +71401,7 @@ const { Ray } = foundry.canvas.geometry;
 class RotateAreaRegionBehaviorType extends foundry.data.regionBehaviors.RegionBehaviorType {
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.REGIONBEHAVIORS.ROTATEAREA"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.REGIONBEHAVIORS.ROTATEAREA"];
 
   /* ---------------------------------------- */
 
@@ -71451,10 +71451,10 @@ class RotateAreaRegionBehaviorType extends foundry.data.regionBehaviors.RegionBe
    * @type {Record<RotateAreaDirectionMode, string>}
    */
   static DIRECTION_MODES = Object.seal({
-    cw: "DND5E.REGIONBEHAVIORS.ROTATEAREA.DirectionMode.Clockwise",
-    ccw: "DND5E.REGIONBEHAVIORS.ROTATEAREA.DirectionMode.CounterClockwise",
-    short: "DND5E.REGIONBEHAVIORS.ROTATEAREA.DirectionMode.Shortest",
-    long: "DND5E.REGIONBEHAVIORS.ROTATEAREA.DirectionMode.Longest"
+    cw: "VARLYN5E.REGIONBEHAVIORS.ROTATEAREA.DirectionMode.Clockwise",
+    ccw: "VARLYN5E.REGIONBEHAVIORS.ROTATEAREA.DirectionMode.CounterClockwise",
+    short: "VARLYN5E.REGIONBEHAVIORS.ROTATEAREA.DirectionMode.Shortest",
+    long: "VARLYN5E.REGIONBEHAVIORS.ROTATEAREA.DirectionMode.Longest"
   });
 
   /* ---------------------------------------- */
@@ -71464,8 +71464,8 @@ class RotateAreaRegionBehaviorType extends foundry.data.regionBehaviors.RegionBe
    * @type {Record<RotateAreaSpeedMode, string>}
    */
   static SPEED_MODES = Object.seal({
-    fixed: "DND5E.REGIONBEHAVIORS.ROTATEAREA.SpeedMode.Fixed",
-    variable: "DND5E.REGIONBEHAVIORS.ROTATEAREA.SpeedMode.Variable"
+    fixed: "VARLYN5E.REGIONBEHAVIORS.ROTATEAREA.SpeedMode.Fixed",
+    variable: "VARLYN5E.REGIONBEHAVIORS.ROTATEAREA.SpeedMode.Variable"
   });
 
   /* ---------------------------------------- */
@@ -71885,7 +71885,7 @@ class SpellcastingModel extends foundry.abstract.DataModel {
       img: new FilePathField({
         required: true, categories: ["IMAGE"], initial: "icons/magic/unholy/silhouette-robe-evil-power.webp"
       }),
-      label: new StringField$1({ required: true, initial: () => _loc("DND5E.SPELLCASTING.Unlabeled") }),
+      label: new StringField$1({ required: true, initial: () => _loc("VARLYN5E.SPELLCASTING.Unlabeled") }),
       order: new NumberField$1({ required: true, integer: true, nullable: false, initial: 0 }),
       type: new StringField$1({ required: true, readonly: true, initial: () => this.TYPE })
     };
@@ -71942,10 +71942,10 @@ class SpellcastingModel extends foundry.abstract.DataModel {
    * Initialize data models from global config.
    */
   static fromConfig() {
-    const { spellcasting } = CONFIG.DND5E;
+    const { spellcasting } = CONFIG.VARLYN5E;
 
     // Map progressions to spellcasting for faster lookup.
-    CONFIG.DND5E.spellProgression = { none: { label: _loc("DND5E.SpellNone") } };
+    CONFIG.VARLYN5E.spellProgression = { none: { label: _loc("VARLYN5E.SpellNone") } };
 
     // Initialize models.
     Object.entries(spellcasting).forEach(([key, config]) => {
@@ -71958,12 +71958,12 @@ class SpellcastingModel extends foundry.abstract.DataModel {
         return delete spellcasting[key];
       }
       Object.entries(config.progression ?? {}).forEach(([k, v]) => {
-        if ( k in CONFIG.DND5E.spellProgression ) console.warn(`Duplicate spell progression key '${k}' detected.`);
-        CONFIG.DND5E.spellProgression[k] = { ...v, type: key };
+        if ( k in CONFIG.VARLYN5E.spellProgression ) console.warn(`Duplicate spell progression key '${k}' detected.`);
+        CONFIG.VARLYN5E.spellProgression[k] = { ...v, type: key };
       });
     });
 
-    Object.freeze(CONFIG.DND5E.spellProgression);
+    Object.freeze(CONFIG.VARLYN5E.spellProgression);
   }
 
   /* -------------------------------------------- */
@@ -72000,7 +72000,7 @@ class SlotSpellcasting extends SpellcastingModel {
       prepares: new BooleanField$2(),
       progression: new TypedObjectField(new SchemaField$1({
         divisor: new NumberField$1({ required: true, nullable: false, integer: true, positive: true, initial: 1 }),
-        label: new StringField$1({ required: true, initial: () => _loc("DND5E.SPELLCASTING.Unlabeled") }),
+        label: new StringField$1({ required: true, initial: () => _loc("VARLYN5E.SPELLCASTING.Unlabeled") }),
         roundUp: new BooleanField$2()
       }))
     };
@@ -72036,7 +72036,7 @@ class SlotSpellcasting extends SpellcastingModel {
    */
   get recovery() {
     if ( this.#recovery ) return this.#recovery;
-    return this.#recovery = Object.entries(CONFIG.DND5E.restTypes).reduce((acc, [k, v]) => {
+    return this.#recovery = Object.entries(CONFIG.VARLYN5E.restTypes).reduce((acc, [k, v]) => {
       if ( v.recoverSpellSlotTypes?.has(this.key) ) acc.add(k);
       return acc;
     }, new Set());
@@ -72194,16 +72194,16 @@ class SingleLevelSpellcasting extends SlotSpellcasting {
 
   /** @override */
   getLabel({ level, format }={}) {
-    if ( !(level in CONFIG.DND5E.spellLevels) ) return this.label;
+    if ( !(level in CONFIG.VARLYN5E.spellLevels) ) return this.label;
     const short = format === "short";
-    return [this.label, short ? "" : "—", short ? "" : CONFIG.DND5E.spellLevels[level]].filterJoin(" ");
+    return [this.label, short ? "" : "—", short ? "" : CONFIG.VARLYN5E.spellLevels[level]].filterJoin(" ");
   }
 
   /* -------------------------------------------- */
 
   /** @override */
   prepareSlots(spells, actor, progression) {
-    let level = Math.clamp(progression[this.key], 0, CONFIG.DND5E.maxLevel);
+    let level = Math.clamp(progression[this.key], 0, CONFIG.VARLYN5E.maxLevel);
     const slot = spells[this.key] ??= { value: 0 };
     slot.type = this.key;
     slot.label = this.label;
@@ -72259,7 +72259,7 @@ class MultiLevelSpellcasting extends SlotSpellcasting {
 
   /** @override */
   getAvailableLevels(actor) {
-    return Array.fromRange(Object.keys(CONFIG.DND5E.spellLevels).length - 1, 1).reduce((arr, l) => {
+    return Array.fromRange(Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1, 1).reduce((arr, l) => {
       const spells = foundry.utils.getProperty(actor, `system.spells.${this.getSpellSlotKey(l)}`);
       if ( spells?.max ) arr.push(l);
       return arr;
@@ -72270,7 +72270,7 @@ class MultiLevelSpellcasting extends SlotSpellcasting {
 
   /** @override */
   getLabel({ level }={}) {
-    return _loc(`DND5E.SPELLCASTING.SLOTS.${this.getSpellSlotKey(level)}`);
+    return _loc(`VARLYN5E.SPELLCASTING.SLOTS.${this.getSpellSlotKey(level)}`);
   }
 
   /* -------------------------------------------- */
@@ -72285,7 +72285,7 @@ class MultiLevelSpellcasting extends SlotSpellcasting {
   /** @override */
   prepareSlots(spells, actor, progression) {
     const slots = this.calculateSlots(progression[this.key]);
-    for ( const level of Array.fromRange(Object.keys(CONFIG.DND5E.spellLevels).length - 1, 1) ) {
+    for ( const level of Array.fromRange(Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1, 1) ) {
       const slot = spells[this.getSpellSlotKey(level)] ??= { value: 0 };
       slot.label = this.getLabel({ level });
       slot.level = level;
@@ -72717,7 +72717,7 @@ class D20Roll extends BasicRoll {
     let advantage = true;
     let disadvantage = true;
 
-    const rtLabel = _loc("DND5E.FlagsReliableTalent");
+    const rtLabel = _loc("VARLYN5E.FlagsReliableTalent");
     for ( const roll of rolls ) {
       if ( !roll.validD20Roll ) continue;
       if ( !roll.hasAdvantage ) advantage = false;
@@ -72728,8 +72728,8 @@ class D20Roll extends BasicRoll {
     }
 
     messageData.flavor ??= "";
-    if ( advantage ) messageData.flavor += ` (${_loc("DND5E.Advantage")})`;
-    else if ( disadvantage ) messageData.flavor += ` (${_loc("DND5E.Disadvantage")})`;
+    if ( advantage ) messageData.flavor += ` (${_loc("VARLYN5E.Advantage")})`;
+    else if ( disadvantage ) messageData.flavor += ` (${_loc("VARLYN5E.Disadvantage")})`;
   }
 
   /* -------------------------------------------- */
@@ -73329,7 +73329,7 @@ class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
     let maxSightRange = 0;
     let sightVisionMode = null;
 
-    for ( const [key, config] of Object.entries(CONFIG.DND5E.senses) ) {
+    for ( const [key, config] of Object.entries(CONFIG.VARLYN5E.senses) ) {
       const range = senses.ranges?.[key];
       if ( !range ) continue;
 
@@ -73400,7 +73400,7 @@ class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
    * @returns {string[]}
    */
   static getConsumedAttributes(data) {
-    return CONFIG.DND5E.consumableResources;
+    return CONFIG.VARLYN5E.consumableResources;
   }
 
   /* -------------------------------------------- */
@@ -73409,11 +73409,11 @@ class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
   static getTrackedAttributeChoices(attributes) {
     const groups = super.getTrackedAttributeChoices(attributes);
     const i18n = {
-      abilities: _loc("DND5E.AbilityScorePl"),
-      movement: _loc("DND5E.MOVEMENT.FIELDS.speeds.label"),
-      senses: _loc("DND5E.Senses"),
-      skills: _loc("DND5E.SkillPassives"),
-      slots: _loc("JOURNALENTRYPAGE.DND5E.Class.SpellSlots")
+      abilities: _loc("VARLYN5E.AbilityScorePl"),
+      movement: _loc("VARLYN5E.MOVEMENT.FIELDS.speeds.label"),
+      senses: _loc("VARLYN5E.Senses"),
+      skills: _loc("VARLYN5E.SkillPassives"),
+      slots: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.SpellSlots")
     };
     for ( const entry of groups ) {
       const { value } = entry;
@@ -73438,7 +73438,7 @@ class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
       if ( deltaSize ) size = deltaSize;
     }
     if ( !size ) return;
-    const dts = CONFIG.DND5E.actorSizes[size].dynamicTokenScale ?? 1;
+    const dts = CONFIG.VARLYN5E.actorSizes[size].dynamicTokenScale ?? 1;
     this.texture.scaleX = this._source.texture.scaleX * dts;
     this.texture.scaleY = this._source.texture.scaleY * dts;
   }
@@ -73451,7 +73451,7 @@ class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
    * Set up the system's movement action customization.
    */
   static registerMovementActions() {
-    for ( const type of Object.keys(CONFIG.DND5E.movementTypes) ) {
+    for ( const type of Object.keys(CONFIG.VARLYN5E.movementTypes) ) {
       const actionConfig = CONFIG.Token.movement.actions[type];
       if ( !actionConfig ) continue;
       actionConfig.getAnimationOptions = token => {
@@ -73487,7 +73487,7 @@ class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
     const noAutomation = game.settings.get("dnd5e", "movementAutomation") === "none";
     const { actor } = token;
     const actorMovement = actor?.system.attributes?.movement;
-    const walkFallback = CONFIG.DND5E.movementTypes[type]?.walkFallback;
+    const walkFallback = CONFIG.VARLYN5E.movementTypes[type]?.walkFallback;
     const hasMovement = actorMovement !== undefined;
     const speed = actorMovement?.[type];
     return noAutomation || !actor?.system.isCreature || !hasMovement || speed || (!speed && !walkFallback)
@@ -73506,7 +73506,7 @@ class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
   getRingColors() {
     const colors = {};
     if ( this.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED) ) {
-      colors.ring = CONFIG.DND5E.tokenRingColors.defeated;
+      colors.ring = CONFIG.VARLYN5E.tokenRingColors.defeated;
     }
     return colors;
   }
@@ -73533,7 +73533,7 @@ class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
    */
   flashRing(type) {
     if ( !this.rendered ) return;
-    const color = CONFIG.DND5E.tokenRingColors[type];
+    const color = CONFIG.VARLYN5E.tokenRingColors[type];
     if ( !color ) return;
     const options = {};
     if ( type === "damage" ) {
@@ -73675,7 +73675,7 @@ const registerMethods = [registerSourceBooks, registerSpellLists];
  */
 function registerSourceBooks(manifest) {
   if ( !manifest.flags.dnd5e?.sourceBooks ) return;
-  Object.assign(CONFIG.DND5E.sourceBooks, manifest.flags.dnd5e.sourceBooks);
+  Object.assign(CONFIG.VARLYN5E.sourceBooks, manifest.flags.dnd5e.sourceBooks);
   return "source books";
 }
 
@@ -74156,7 +74156,7 @@ class SpellListRegistry {
    * @type {FormSelectOption[]}
    */
   static get options() {
-    return Object.entries(CONFIG.DND5E.spellListTypes).map(([type, group]) => {
+    return Object.entries(CONFIG.VARLYN5E.spellListTypes).map(([type, group]) => {
       const lists = this.#byType.get(type);
       if ( !lists ) return [];
       return Array.from(lists.entries())
@@ -74192,7 +74192,7 @@ class SpellListRegistry {
 
   /**
    * Retrieve a specific spell list from the registry.
-   * @param {string} type          Type of list as defined in `CONFIG.DND5E.spellListTypes`. Can also be a combination
+   * @param {string} type          Type of list as defined in `CONFIG.VARLYN5E.spellListTypes`. Can also be a combination
    *                               of the type and identifier split by a colon (e.g. `class:bard`).
    * @param {string} [identifier]  Identifier of the specific spell list.
    * @returns {SpellList|null}
@@ -74646,7 +74646,7 @@ class Tooltips5e {
    * @protected
    */
   async _onHoverPassiveLanguage(language) {
-    const label = CONFIG.DND5E.enrichmentLookup.languages[language];
+    const label = CONFIG.VARLYN5E.enrichmentLookup.languages[language];
     this._onHoverPassive({ label }, actor => {
       if ( !actor.system.traits?.languages?.value ) return false;
       return { status: actor.system.traits.languages.value.has(language) ? "success" : "failure" };
@@ -74664,16 +74664,16 @@ class Tooltips5e {
    * @protected
    */
   async _onHoverPassiveCheck(skill, ability, dc) {
-    const skillConfig = CONFIG.DND5E.skills[skill];
-    const abilityConfig = CONFIG.DND5E.abilities[ability ?? skillConfig.ability];
+    const skillConfig = CONFIG.VARLYN5E.skills[skill];
+    const abilityConfig = CONFIG.VARLYN5E.abilities[ability ?? skillConfig.ability];
 
     let label;
     if ( skillConfig ) {
-      label = _loc("DND5E.SkillPassiveSpecificHint", { skill: skillConfig.label, ability: abilityConfig.label });
+      label = _loc("VARLYN5E.SkillPassiveSpecificHint", { skill: skillConfig.label, ability: abilityConfig.label });
     } else {
       // If no skill was provided, we're doing a passive ability check.
       // This isn't technically a thing in the rules, but we can support it anyway if people want to use it.
-      label = _loc("DND5E.SkillPassiveHint", { skill: abilityConfig.label });
+      label = _loc("VARLYN5E.SkillPassiveHint", { skill: abilityConfig.label });
     }
 
     this._onHoverPassive({ label }, actor => {
@@ -74811,7 +74811,7 @@ class Tooltips5e {
 globalThis.varlyn5e = {
   applications,
   canvas: canvas$1,
-  config: DND5E,
+  config: VARLYN5E,
   dataModels,
   dice,
   documents,
@@ -74831,7 +74831,7 @@ Hooks.once("init", function() {
   log(`Initializing the D&D Fifth Game System - Version ${varlyn5e.version}`);
 
   // Record Configuration Values
-  CONFIG.DND5E = DND5E;
+  CONFIG.VARLYN5E = VARLYN5E;
   CONFIG.ActiveEffect.documentClass = ActiveEffect5e;
   CONFIG.ActiveEffect.legacyTransferral = false;
   CONFIG.Actor.collection = Actors5e;
@@ -74873,7 +74873,7 @@ Hooks.once("init", function() {
   game.varlyn5e.tooltips = new Tooltips5e();
 
   // Register system
-  DND5E.SPELL_LISTS.forEach(uuid => varlyn5e.registry.spellLists.register(uuid));
+  VARLYN5E.SPELL_LISTS.forEach(uuid => varlyn5e.registry.spellLists.register(uuid));
 
   // Register module data from manifests
   registerModuleData();
@@ -74900,50 +74900,50 @@ Hooks.once("init", function() {
   DocumentSheetConfig.registerSheet(Actor, "dnd5e", CharacterActorSheet, {
     types: ["character"],
     makeDefault: true,
-    label: "DND5E.SheetClass.Character"
+    label: "VARLYN5E.SheetClass.Character"
   });
   DocumentSheetConfig.registerSheet(Actor, "dnd5e", NPCActorSheet, {
     types: ["npc"],
     makeDefault: true,
-    label: "DND5E.SheetClass.NPC"
+    label: "VARLYN5E.SheetClass.NPC"
   });
 
   DocumentSheetConfig.unregisterSheet(Item, "core", foundry.appv1.sheets.ItemSheet);
   DocumentSheetConfig.registerSheet(Item, "dnd5e", ItemSheet5e, {
     makeDefault: true,
-    label: "DND5E.SheetClass.Item"
+    label: "VARLYN5E.SheetClass.Item"
   });
   DocumentSheetConfig.unregisterSheet(Item, "dnd5e", ItemSheet5e, { types: ["container"] });
   DocumentSheetConfig.registerSheet(Item, "dnd5e", ContainerSheet, {
     makeDefault: true,
     types: ["container"],
-    label: "DND5E.SheetClass.Container"
+    label: "VARLYN5E.SheetClass.Container"
   });
 
   DocumentSheetConfig.registerSheet(JournalEntry, "dnd5e", JournalEntrySheet5e, {
     makeDefault: true,
-    label: "DND5E.SheetClass.JournalEntry"
+    label: "VARLYN5E.SheetClass.JournalEntry"
   });
   DocumentSheetConfig.registerSheet(JournalEntry, "dnd5e", JournalSheet5e, {
     makeDefault: false,
     canConfigure: false,
     canBeDefault: false,
-    label: "DND5E.SheetClass.JournalEntrySheetLegacy"
+    label: "VARLYN5E.SheetClass.JournalEntrySheetLegacy"
   });
   DocumentSheetConfig.registerSheet(JournalEntryPage, "dnd5e", JournalClassPageSheet, {
-    label: "DND5E.SheetClass.ClassSummary",
+    label: "VARLYN5E.SheetClass.ClassSummary",
     types: ["class", "subclass"]
   });
   DocumentSheetConfig.registerSheet(JournalEntryPage, "dnd5e", JournalMapLocationPageSheet, {
-    label: "DND5E.SheetClass.MapLocation",
+    label: "VARLYN5E.SheetClass.MapLocation",
     types: ["map"]
   });
   DocumentSheetConfig.registerSheet(JournalEntryPage, "dnd5e", JournalRulePageSheet, {
-    label: "DND5E.SheetClass.Rule",
+    label: "VARLYN5E.SheetClass.Rule",
     types: ["rule"]
   });
   DocumentSheetConfig.registerSheet(JournalEntryPage, "dnd5e", JournalSpellListPageSheet, {
-    label: "DND5E.SheetClass.SpellList",
+    label: "VARLYN5E.SheetClass.SpellList",
     types: ["spells"]
   });
 
@@ -74951,23 +74951,23 @@ Hooks.once("init", function() {
     types: ["dnd5e.difficultTerrain", "dnd5e.rotateArea"]
   });
   DocumentSheetConfig.registerSheet(RegionBehavior, "dnd5e", DifficultTerrainConfig, {
-    label: "DND5E.SheetClass.DifficultTerrain",
+    label: "VARLYN5E.SheetClass.DifficultTerrain",
     types: ["dnd5e.difficultTerrain"]
   });
   DocumentSheetConfig.registerSheet(RegionBehavior, "dnd5e", RotateAreaConfig, {
-    label: "DND5E.SheetClass.RotateArea",
+    label: "VARLYN5E.SheetClass.RotateArea",
     types: ["dnd5e.rotateArea"]
   });
 
   DocumentSheetConfig.registerSheet(RollTable, "dnd5e", RollTableSheet5e, {
     makeDefault: true,
-    label: "DND5E.SheetClass.RollTable"
+    label: "VARLYN5E.SheetClass.RollTable"
   });
 
   CONFIG.Token.prototypeSheetClass = PrototypeTokenConfig5e;
   DocumentSheetConfig.unregisterSheet(TokenDocument, "core", foundry.applications.sheets.TokenConfig);
   DocumentSheetConfig.registerSheet(TokenDocument, "dnd5e", TokenConfig5e, {
-    label: "DND5E.SheetClass.Token"
+    label: "VARLYN5E.SheetClass.Token"
   });
 
   // Preload Handlebars helpers & partials
@@ -75011,7 +75011,7 @@ function _configureCalendar() {
   if ( Hooks.call("varlyn5e.setupCalendar") === false ) return;
 
   const calendar = game.settings.get("dnd5e", "calendar");
-  const calendarConfig = CONFIG.DND5E.calendar.calendars.find(c => c.value === calendar);
+  const calendarConfig = CONFIG.VARLYN5E.calendar.calendars.find(c => c.value === calendar);
   if ( calendarConfig ) {
     CONFIG.time.worldCalendarConfig = calendarConfig.config;
     if ( calendarConfig.class ) CONFIG.time.worldCalendarClass = calendarConfig.class;
@@ -75028,8 +75028,8 @@ function _configureTrackableAttributes() {
   const common = {
     bar: [],
     value: [
-      ...Object.keys(DND5E.abilities).map(ability => `abilities.${ability}.value`),
-      ...Object.keys(DND5E.movementTypes).map(movement => `attributes.movement.${movement}`),
+      ...Object.keys(VARLYN5E.abilities).map(ability => `abilities.${ability}.value`),
+      ...Object.keys(VARLYN5E.movementTypes).map(movement => `attributes.movement.${movement}`),
       "attributes.ac.value", "attributes.init.total"
     ]
   };
@@ -75042,8 +75042,8 @@ function _configureTrackableAttributes() {
     ],
     value: [
       ...common.value,
-      ...Object.keys(DND5E.skills).map(skill => `skills.${skill}.passive`),
-      ...Object.keys(DND5E.senses).map(sense => `attributes.senses.ranges.${sense}`),
+      ...Object.keys(VARLYN5E.skills).map(skill => `skills.${skill}.passive`),
+      ...Object.keys(VARLYN5E.senses).map(sense => `attributes.senses.ranges.${sense}`),
       "attributes.hp.temp", "attributes.spell.attack", "attributes.spell.dc"
     ]
   };
@@ -75069,8 +75069,8 @@ function _configureTrackableAttributes() {
  * @internal
  */
 function _trackedSpellAttributes(suffix="") {
-  return Object.entries(DND5E.spellcasting).reduce((acc, [k, v]) => {
-    if ( v.slots ) Array.fromRange(Object.keys(DND5E.spellLevels).length - 1, 1).forEach(l => {
+  return Object.entries(VARLYN5E.spellcasting).reduce((acc, [k, v]) => {
+    if ( v.slots ) Array.fromRange(Object.keys(VARLYN5E.spellLevels).length - 1, 1).forEach(l => {
       acc.add(`spells.${v.getSpellSlotKey(l)}${suffix}`);
     });
     return acc;
@@ -75084,14 +75084,14 @@ function _trackedSpellAttributes(suffix="") {
  * @internal
  */
 function _configureConsumableAttributes() {
-  CONFIG.DND5E.consumableResources = [
-    ...Object.keys(DND5E.abilities).map(ability => `abilities.${ability}.value`),
+  CONFIG.VARLYN5E.consumableResources = [
+    ...Object.keys(VARLYN5E.abilities).map(ability => `abilities.${ability}.value`),
     "attributes.ac.flat",
     "attributes.hp.value",
     "attributes.exhaustion",
-    ...Object.keys(DND5E.senses).map(sense => `attributes.senses.ranges.${sense}`),
-    ...Object.keys(DND5E.movementTypes).map(type => `attributes.movement.${type}`),
-    ...Object.keys(DND5E.currencies).map(denom => `currency.${denom}`),
+    ...Object.keys(VARLYN5E.senses).map(sense => `attributes.senses.ranges.${sense}`),
+    ...Object.keys(VARLYN5E.movementTypes).map(type => `attributes.movement.${type}`),
+    ...Object.keys(VARLYN5E.currencies).map(denom => `currency.${denom}`),
     "details.xp.value",
     "resources.primary.value", "resources.secondary.value", "resources.tertiary.value",
     "resources.legact.value", "resources.legres.value", "attributes.actions.value",
@@ -75149,17 +75149,17 @@ function _configureStatusEffects() {
     data.order ??= Infinity;
     effects.push(data);
     if ( special ) CONFIG.specialStatusEffects[special] = data.id;
-    if ( data.neverBlockMovement ) DND5E.neverBlockStatuses.add(data.id);
+    if ( data.neverBlockMovement ) VARLYN5E.neverBlockStatuses.add(data.id);
   };
-  CONFIG.statusEffects = Object.entries(CONFIG.DND5E.statusEffects).reduce((arr, [id, data]) => {
+  CONFIG.statusEffects = Object.entries(CONFIG.VARLYN5E.statusEffects).reduce((arr, [id, data]) => {
     const original = CONFIG.statusEffects.find(s => s.id === id);
     addEffect(arr, foundry.utils.mergeObject(original ?? {}, { id, ...data }, { inplace: false }));
     return arr;
   }, []);
-  for ( const [id, data] of Object.entries(CONFIG.DND5E.conditionTypes) ) {
+  for ( const [id, data] of Object.entries(CONFIG.VARLYN5E.conditionTypes) ) {
     addEffect(CONFIG.statusEffects, { id, ...data });
   }
-  for ( const [id, data] of Object.entries(CONFIG.DND5E.encumbrance.effects) ) {
+  for ( const [id, data] of Object.entries(CONFIG.VARLYN5E.encumbrance.effects) ) {
     addEffect(CONFIG.statusEffects, { id, ...data, hud: false });
   }
 }
@@ -75176,7 +75176,7 @@ Hooks.once("setup", function() {
   _configureTrackableAttributes();
   _configureConsumableAttributes();
 
-  CONFIG.DND5E.trackableAttributes = expandAttributeList(CONFIG.DND5E.trackableAttributes);
+  CONFIG.VARLYN5E.trackableAttributes = expandAttributeList(CONFIG.VARLYN5E.trackableAttributes);
   Tooltips5e.activateListeners();
   game.varlyn5e.tooltips.observe();
 
@@ -75188,7 +75188,7 @@ Hooks.once("setup", function() {
 
   // Create CSS for currencies
   const style = document.createElement("style");
-  const currencies = append => Object.entries(CONFIG.DND5E.currencies)
+  const currencies = append => Object.entries(CONFIG.VARLYN5E.currencies)
     .map(([key, { icon }]) => `&.${key}${append ?? ""} { background-image: url("${icon}"); }`);
   style.innerHTML = `
     :is(.dnd5e2, .dnd5e2-journal) :is(i, span).currency {
@@ -75224,9 +75224,9 @@ Hooks.once("i18nInit", () => {
   // Set up status effects. Explicitly performed after init and before prelocalization.
   _configureStatusEffects();
 
-  performPreLocalization(CONFIG.DND5E);
-  Object.values(CONFIG.DND5E.activityTypes).forEach(c => c.documentClass.localize());
-  Object.values(CONFIG.DND5E.advancementTypes).forEach(c => c.documentClass.localize());
+  performPreLocalization(CONFIG.VARLYN5E);
+  Object.values(CONFIG.VARLYN5E.activityTypes).forEach(c => c.documentClass.localize());
+  Object.values(CONFIG.VARLYN5E.advancementTypes).forEach(c => c.documentClass.localize());
   foundry.helpers.Localization.localizeDataModel(CalendarConfigSetting);
   foundry.helpers.Localization.localizeDataModel(CalendarPreferencesSetting);
   foundry.helpers.Localization.localizeDataModel(TransformationSetting);
@@ -75262,8 +75262,8 @@ Hooks.once("ready", function() {
   ChatMessage5e.activateListeners();
 
   // Display the calendar HUD
-  if ( CONFIG.DND5E.calendar.application ) {
-    varlyn5e.ui.calendar = new CONFIG.DND5E.calendar.application();
+  if ( CONFIG.VARLYN5E.calendar.application ) {
+    varlyn5e.ui.calendar = new CONFIG.VARLYN5E.calendar.application();
     varlyn5e.ui.calendar.render({ force: true });
   }
 });
@@ -75340,8 +75340,8 @@ Hooks.on("preCreateScene", (doc, createData, options, userId) => {
 
 Hooks.on("updateWorldTime", (...args) => {
   CalendarData5e.onUpdateWorldTime(...args);
-  CONFIG.DND5E.calendar.application?.onUpdateWorldTime?.(...args);
+  CONFIG.VARLYN5E.calendar.application?.onUpdateWorldTime?.(...args);
 });
 
-export { DND5E, Filter, applications, canvas$1 as canvas, dataModels, dice, documents, enrichers, registry, utils };
+export { Filter, VARLYN5E, applications, canvas$1 as canvas, dataModels, dice, documents, enrichers, registry, utils };
 //# sourceMappingURL=varlyn-dnd5e-compiled.mjs.map

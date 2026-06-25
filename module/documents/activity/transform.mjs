@@ -18,7 +18,7 @@ export default class TransformActivity extends ActivityMixin(BaseTransformActivi
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.TRANSFORM"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.TRANSFORM"];
 
   /* -------------------------------------------- */
 
@@ -27,8 +27,8 @@ export default class TransformActivity extends ActivityMixin(BaseTransformActivi
     foundry.utils.mergeObject(super.metadata, {
       type: "transform",
       img: "systems/dnd5e/icons/svg/activity/transform.svg",
-      title: "DND5E.TRANSFORM.Title",
-      hint: "DND5E.TRANSFORM.Hint",
+      title: "VARLYN5E.TRANSFORM.Title",
+      hint: "VARLYN5E.TRANSFORM.Hint",
       sheetClass: TransformSheet,
       usage: {
         actions: {
@@ -86,7 +86,7 @@ export default class TransformActivity extends ActivityMixin(BaseTransformActivi
   _usageChatButtons(message) {
     if ( !this.availableProfiles.length ) return super._usageChatButtons(message);
     return [{
-      label: _loc("DND5E.TRANSFORM.Action.Transform"),
+      label: _loc("VARLYN5E.TRANSFORM.Action.Transform"),
       icon: '<i class="fa-solid fa-frog" inert></i>',
       dataset: {
         action: "transformActor"
@@ -154,7 +154,7 @@ export default class TransformActivity extends ActivityMixin(BaseTransformActivi
     const targets = getSceneTargets();
     if ( !targets.length && game.user.character ) targets.push(game.user.character);
     if ( !targets.length ) {
-      ui.notifications.warn("DND5E.ActionWarningNoToken");
+      ui.notifications.warn("VARLYN5E.ActionWarningNoToken");
       return;
     }
 
@@ -163,7 +163,7 @@ export default class TransformActivity extends ActivityMixin(BaseTransformActivi
     const uuid = message.getFlag("dnd5e", "transform.uuid") ?? await this.queryActor(profile);
     const source = await fromUuid(uuid);
     if ( !source ) {
-      ui.notifications.warn("DND5E.TRANSFORM.Warning.SourceActor");
+      ui.notifications.warn("VARLYN5E.TRANSFORM.Warning.SourceActor");
       return;
     }
 

@@ -21,14 +21,14 @@ export default class ItemListControlsElement extends MaybeAdoptable {
    */
   static CONFIG = {
     inventory: {
-      label: "DND5E.InventorySearch",
+      label: "VARLYN5E.InventorySearch",
       list: "inventory",
       filters: [
-        { key: "action", label: "DND5E.Action" },
-        { key: "bonus", label: "DND5E.BonusAction" },
-        { key: "reaction", label: "DND5E.Reaction" },
-        { key: "equipped", label: "DND5E.Equipped" },
-        { key: "mgc", label: "DND5E.ITEM.Property.Magical" }
+        { key: "action", label: "VARLYN5E.Action" },
+        { key: "bonus", label: "VARLYN5E.BonusAction" },
+        { key: "reaction", label: "VARLYN5E.Reaction" },
+        { key: "equipped", label: "VARLYN5E.Equipped" },
+        { key: "mgc", label: "VARLYN5E.ITEM.Property.Magical" }
       ],
       sorting: [
         { key: "m", label: "SIDEBAR.SortModeManual", dataset: { icon: "fa-solid fa-arrow-down-short-wide" } },
@@ -37,10 +37,10 @@ export default class ItemListControlsElement extends MaybeAdoptable {
       grouping: [
         {
           key: "type",
-          label: "DND5E.FilterGroupCategory",
+          label: "VARLYN5E.FilterGroupCategory",
           dataset: { icon: "fa-solid fa-layer-group", classes: "active" }
         },
-        { key: "contents", label: "DND5E.FilterGroupCategory", dataset: { icon: "fa-solid fa-layer-group" } }
+        { key: "contents", label: "VARLYN5E.FilterGroupCategory", dataset: { icon: "fa-solid fa-layer-group" } }
       ]
     }
   };
@@ -230,7 +230,7 @@ export default class ItemListControlsElement extends MaybeAdoptable {
       <ul class="unlist controls">
         <li>
           <button type="button" class="unbutton filter-control always-interactive" data-action="clear"
-                  data-tooltip aria-label="${_loc("DND5E.FilterClear")}">
+                  data-tooltip aria-label="${_loc("VARLYN5E.FilterClear")}">
             <i class="fas fa-xmark"></i>
           </button>
         </li>
@@ -248,7 +248,7 @@ export default class ItemListControlsElement extends MaybeAdoptable {
       const item = document.createElement("li");
       item.innerHTML = `
         <button type="button" class="unbutton filter-control filter always-interactive" data-action="filter"
-                aria-label="${_loc("DND5E.Filter")}">
+                aria-label="${_loc("VARLYN5E.Filter")}">
           <i class="fa-solid fa-filter" inert></i>
         </button>
       `;

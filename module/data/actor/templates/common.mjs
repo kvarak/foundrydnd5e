@@ -32,23 +32,23 @@ export default class CommonTemplate extends ActorDataModel.mixin(CurrencyTemplat
     return this.mergeSchema(super.defineSchema(), {
       abilities: new MappingField(new SchemaField({
         value: new NumberField({
-          required: true, nullable: false, integer: true, min: 0, initial: 10, label: "DND5E.AbilityScore"
+          required: true, nullable: false, integer: true, min: 0, initial: 10, label: "VARLYN5E.AbilityScore"
         }),
         proficient: new NumberField({
-          required: true, integer: true, min: 0, max: 1, initial: 0, label: "DND5E.ProficiencyLevel"
+          required: true, integer: true, min: 0, max: 1, initial: 0, label: "VARLYN5E.ProficiencyLevel"
         }),
         max: new NumberField({
-          required: true, integer: true, nullable: true, min: 0, initial: null, label: "DND5E.AbilityScoreMax"
+          required: true, integer: true, nullable: true, min: 0, initial: null, label: "VARLYN5E.AbilityScoreMax"
         }),
         bonuses: new SchemaField({
-          check: new FormulaField({ required: true, label: "DND5E.AbilityCheckBonus" }),
-          save: new FormulaField({ required: true, label: "DND5E.SaveBonus" })
-        }, { label: "DND5E.AbilityBonuses" }),
+          check: new FormulaField({ required: true, label: "VARLYN5E.AbilityCheckBonus" }),
+          save: new FormulaField({ required: true, label: "VARLYN5E.SaveBonus" })
+        }, { label: "VARLYN5E.AbilityBonuses" }),
         check: new RollConfigField({ ability: false }),
         save: new RollConfigField({ ability: false })
       }), {
-        initialKeys: CONFIG.DND5E.abilities, initialValue: this._initialAbilityValue.bind(this),
-        initialKeysOnly: true, label: "DND5E.Abilities"
+        initialKeys: CONFIG.VARLYN5E.abilities, initialValue: this._initialAbilityValue.bind(this),
+        initialKeysOnly: true, label: "VARLYN5E.Abilities"
       })
     });
   }
@@ -64,7 +64,7 @@ export default class CommonTemplate extends ActorDataModel.mixin(CurrencyTemplat
    * @private
    */
   static _initialAbilityValue(key, initial, existing) {
-    const config = CONFIG.DND5E.abilities[key];
+    const config = CONFIG.VARLYN5E.abilities[key];
     if ( config ) {
       let defaultValue = config.defaults?.[this._systemType] ?? initial.value;
       if ( typeof defaultValue === "string" ) defaultValue = existing?.[defaultValue]?.value ?? initial.value;
@@ -164,10 +164,10 @@ export default class CommonTemplate extends ActorDataModel.mixin(CurrencyTemplat
       abl.attack = abl.mod + prof;
       abl.dc = 8 + abl.mod + prof + dcBonus;
 
-      if ( !Number.isFinite(abl.max) ) abl.max = CONFIG.DND5E.maxAbilityScore;
+      if ( !Number.isFinite(abl.max) ) abl.max = CONFIG.VARLYN5E.maxAbilityScore;
 
       // Adjust rolling mode
-      const isPhysicalAbility = CONFIG.DND5E.abilities[id]?.type === "physical";
+      const isPhysicalAbility = CONFIG.VARLYN5E.abilities[id]?.type === "physical";
       if ( this.parent.hasConditionEffect("abilityCheckDisadvantage")
         || (isPhysicalAbility && this.parent.hasConditionEffect("physicalCheckDisadvantage")) ) {
         AdvantageModeField.setMode(this, `abilities.${id}.check.roll.mode`, -1);

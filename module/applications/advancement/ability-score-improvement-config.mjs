@@ -36,7 +36,7 @@ export default class AbilityScoreImprovementConfig extends AdvancementConfig {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
 
-    context.abilities = Object.entries(CONFIG.DND5E.abilities).reduce((obj, [key, data]) => {
+    context.abilities = Object.entries(CONFIG.VARLYN5E.abilities).reduce((obj, [key, data]) => {
       if ( !this.advancement.canImprove(key) ) return obj;
       const fixed = this.advancement.configuration.fixed[key] ?? 0;
       const locked = this.advancement.configuration.locked.has(key);
@@ -46,7 +46,7 @@ export default class AbilityScoreImprovementConfig extends AdvancementConfig {
         label: data.label,
         locked: {
           value: locked,
-          hint: `DND5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.locked.${locked ? "locked" : "unlocked"}`
+          hint: `VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.locked.${locked ? "locked" : "unlocked"}`
         },
         value: fixed,
         canIncrease: true,
@@ -58,7 +58,7 @@ export default class AbilityScoreImprovementConfig extends AdvancementConfig {
     context.points = {
       key: "points",
       name: "configuration.points",
-      label: _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.label"),
+      label: _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.label"),
       min: 0,
       value: this.advancement.configuration.points,
       canIncrease: true,

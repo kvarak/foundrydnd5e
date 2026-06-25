@@ -31,7 +31,7 @@ export default class CharacterData extends CreatureTemplate {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.BONUSES"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.BONUSES"];
 
   /* -------------------------------------------- */
 
@@ -56,48 +56,48 @@ export default class CharacterData extends CreatureTemplate {
         hp: new SchemaField({
           ...AttributesFields.hitPoints,
           max: new NumberField({
-            nullable: true, integer: true, min: 0, initial: null, label: "DND5E.HitPointsOverride",
-            hint: "DND5E.HitPointsOverrideHint"
+            nullable: true, integer: true, min: 0, initial: null, label: "VARLYN5E.HitPointsOverride",
+            hint: "VARLYN5E.HitPointsOverrideHint"
           }),
           bonuses: new SchemaField({
-            level: new FormulaField({ deterministic: true, label: "DND5E.HitPointsBonusLevel" }),
-            overall: new FormulaField({ deterministic: true, label: "DND5E.HitPointsBonusOverall" })
+            level: new FormulaField({ deterministic: true, label: "VARLYN5E.HitPointsBonusLevel" }),
+            overall: new FormulaField({ deterministic: true, label: "VARLYN5E.HitPointsBonusOverall" })
           })
-        }, { label: "DND5E.HitPoints" }),
+        }, { label: "VARLYN5E.HitPoints" }),
         death: new RollConfigField({
           ability: false,
           success: new NumberField({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.DeathSaveSuccesses"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.DeathSaveSuccesses"
           }),
           failure: new NumberField({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.DeathSaveFailures"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.DeathSaveFailures"
           }),
           bonuses: new SchemaField({
-            save: new FormulaField({ required: true, label: "DND5E.DeathSaveBonus" })
+            save: new FormulaField({ required: true, label: "VARLYN5E.DeathSaveBonus" })
           })
-        }, { label: "DND5E.DeathSave" }),
-        inspiration: new BooleanField({ required: true, label: "DND5E.Inspiration" })
-      }, { label: "DND5E.Attributes" }),
+        }, { label: "VARLYN5E.DeathSave" }),
+        inspiration: new BooleanField({ required: true, label: "VARLYN5E.Inspiration" })
+      }, { label: "VARLYN5E.Attributes" }),
       details: new SchemaField({
         ...DetailsFields.common,
         ...DetailsFields.creature,
-        originalClass: new StringField({ required: true, label: "DND5E.ClassOriginal" }),
+        originalClass: new StringField({ required: true, label: "VARLYN5E.ClassOriginal" }),
         xp: new SchemaField({
           value: new NumberField({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.ExperiencePoints.Current"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.ExperiencePoints.Current"
           })
-        }, { label: "DND5E.ExperiencePoints.Label" }),
-        appearance: new StringField({ required: true, label: "DND5E.Appearance" }),
-        trait: new StringField({ required: true, label: "DND5E.PersonalityTraits" }),
-        gender: new StringField({ label: "DND5E.Gender" }),
-        eyes: new StringField({ label: "DND5E.Eyes" }),
-        height: new StringField({ label: "DND5E.Height" }),
-        faith: new StringField({ label: "DND5E.Faith" }),
-        hair: new StringField({ label: "DND5E.Hair" }),
-        skin: new StringField({ label: "DND5E.Skin" }),
-        age: new StringField({ label: "DND5E.Age" }),
-        weight: new StringField({ label: "DND5E.Weight" })
-      }, { label: "DND5E.Details" }),
+        }, { label: "VARLYN5E.ExperiencePoints.Label" }),
+        appearance: new StringField({ required: true, label: "VARLYN5E.Appearance" }),
+        trait: new StringField({ required: true, label: "VARLYN5E.PersonalityTraits" }),
+        gender: new StringField({ label: "VARLYN5E.Gender" }),
+        eyes: new StringField({ label: "VARLYN5E.Eyes" }),
+        height: new StringField({ label: "VARLYN5E.Height" }),
+        faith: new StringField({ label: "VARLYN5E.Faith" }),
+        hair: new StringField({ label: "VARLYN5E.Hair" }),
+        skin: new StringField({ label: "VARLYN5E.Skin" }),
+        age: new StringField({ label: "VARLYN5E.Age" }),
+        weight: new StringField({ label: "VARLYN5E.Weight" })
+      }, { label: "VARLYN5E.Details" }),
       traits: new SchemaField({
         ...TraitsFields.common,
         ...TraitsFields.creature,
@@ -106,19 +106,19 @@ export default class CharacterData extends CreatureTemplate {
             value: new SetField(new StringField()),
             bonus: new SetField(new StringField())
           })
-        }, { label: "DND5E.TraitWeaponProf" }),
-        armorProf: new SimpleTraitField({}, { label: "DND5E.TraitArmorProf" })
-      }, { label: "DND5E.Traits" }),
+        }, { label: "VARLYN5E.TraitWeaponProf" }),
+        armorProf: new SimpleTraitField({}, { label: "VARLYN5E.TraitArmorProf" })
+      }, { label: "VARLYN5E.Traits" }),
       resources: new SchemaField({
-        primary: makeResourceField({ label: "DND5E.ResourcePrimary" }),
-        secondary: makeResourceField({ label: "DND5E.ResourceSecondary" }),
-        tertiary: makeResourceField({ label: "DND5E.ResourceTertiary" })
-      }, { label: "DND5E.Resources" }),
+        primary: makeResourceField({ label: "VARLYN5E.ResourcePrimary" }),
+        secondary: makeResourceField({ label: "VARLYN5E.ResourceSecondary" }),
+        tertiary: makeResourceField({ label: "VARLYN5E.ResourceTertiary" })
+      }, { label: "VARLYN5E.Resources" }),
       favorites: new ArrayField(new SchemaField({
         type: new StringField({ required: true, blank: false }),
         id: new StringField({ required: true, blank: false }),
         sort: new IntegerSortField()
-      }), { label: "DND5E.Favorites" })
+      }), { label: "VARLYN5E.Favorites" })
     });
   }
 
@@ -162,17 +162,17 @@ export default class CharacterData extends CreatureTemplate {
 
     // Experience required for next level
     const { xp, level } = this.details;
-    xp.max = level >= CONFIG.DND5E.maxLevel ? Infinity : this.parent.getLevelExp(level || 1);
+    xp.max = level >= CONFIG.VARLYN5E.maxLevel ? Infinity : this.parent.getLevelExp(level || 1);
     xp.min = level ? this.parent.getLevelExp(level - 1) : 0;
     if ( Number.isFinite(xp.max) ) {
       const required = xp.max - xp.min;
       const pct = Math.round((xp.value - xp.min) * 100 / required);
       xp.pct = Math.clamp(pct, 0, 100);
     } else if ( game.settings.get("dnd5e", "levelingMode") === "xpBoons" ) {
-      const overflow = xp.value - this.parent.getLevelExp(CONFIG.DND5E.maxLevel);
-      xp.boonsEarned = Math.max(0, Math.floor(overflow / CONFIG.DND5E.epicBoonInterval));
-      const progress = overflow - (CONFIG.DND5E.epicBoonInterval * xp.boonsEarned);
-      xp.pct = Math.clamp(Math.round((progress / CONFIG.DND5E.epicBoonInterval) * 100), 0, 100);
+      const overflow = xp.value - this.parent.getLevelExp(CONFIG.VARLYN5E.maxLevel);
+      xp.boonsEarned = Math.max(0, Math.floor(overflow / CONFIG.VARLYN5E.epicBoonInterval));
+      const progress = overflow - (CONFIG.VARLYN5E.epicBoonInterval * xp.boonsEarned);
+      xp.pct = Math.clamp(Math.round((progress / CONFIG.VARLYN5E.epicBoonInterval) * 100), 0, 100);
     } else {
       xp.pct = 100;
     }
@@ -195,8 +195,8 @@ export default class CharacterData extends CreatureTemplate {
     } else {
       this.details.type = new CreatureTypeField({ swarm: false }).initialize({ value: "humanoid" }, this);
     }
-    for ( const key of Object.keys(CONFIG.DND5E.movementTypes) ) this.attributes.movement[key] ??= 0;
-    for ( const key of Object.keys(CONFIG.DND5E.senses) ) this.attributes.senses.ranges[key] ??= 0;
+    for ( const key of Object.keys(CONFIG.VARLYN5E.movementTypes) ) this.attributes.movement[key] ??= 0;
+    for ( const key of Object.keys(CONFIG.VARLYN5E.senses) ) this.attributes.senses.ranges[key] ??= 0;
     this.attributes.movement.units ??= defaultUnits("length");
     this.attributes.senses.units ??= defaultUnits("length");
   }
@@ -233,7 +233,7 @@ export default class CharacterData extends CreatureTemplate {
         .map(c => c.advancement.byType.HitPoints?.[0]).filter(a => a);
       hpOptions.bonus = (simplifyBonus(this.attributes.hp.bonuses.level, rollData) * this.details.level)
         + simplifyBonus(this.attributes.hp.bonuses.overall, rollData);
-      hpOptions.mod = this.abilities[CONFIG.DND5E.defaultAbilities.hitPoints ?? "con"]?.mod ?? 0;
+      hpOptions.mod = this.abilities[CONFIG.VARLYN5E.defaultAbilities.hitPoints ?? "con"]?.mod ?? 0;
     }
     AttributesFields.prepareHitPoints.call(this, this.attributes.hp, hpOptions);
   }
@@ -347,10 +347,10 @@ export default class CharacterData extends CreatureTemplate {
  */
 function makeResourceField(schemaOptions={}) {
   return new SchemaField({
-    value: new NumberField({required: true, integer: true, initial: 0, labels: "DND5E.ResourceValue"}),
-    max: new NumberField({required: true, integer: true, initial: 0, labels: "DND5E.ResourceMax"}),
-    sr: new BooleanField({required: true, labels: "DND5E.REST.Short.Recovery"}),
-    lr: new BooleanField({required: true, labels: "DND5E.REST.Long.Recovery"}),
-    label: new StringField({required: true, labels: "DND5E.ResourceLabel"})
+    value: new NumberField({required: true, integer: true, initial: 0, labels: "VARLYN5E.ResourceValue"}),
+    max: new NumberField({required: true, integer: true, initial: 0, labels: "VARLYN5E.ResourceMax"}),
+    sr: new BooleanField({required: true, labels: "VARLYN5E.REST.Short.Recovery"}),
+    lr: new BooleanField({required: true, labels: "VARLYN5E.REST.Long.Recovery"}),
+    label: new StringField({required: true, labels: "VARLYN5E.ResourceLabel"})
   }, schemaOptions);
 }

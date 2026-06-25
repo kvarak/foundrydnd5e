@@ -83,7 +83,7 @@ export default class RequestMessageData extends ChatMessageDataModel {
     return {
       button: {
         icon: this.button.icon,
-        label: _loc(this.button.label || "DND5E.CHATMESSAGE.REQUEST.Action.Handle")
+        label: _loc(this.button.label || "VARLYN5E.CHATMESSAGE.REQUEST.Action.Handle")
       },
       content: await foundry.applications.ux.TextEditor.implementation.enrichHTML(
         this.parent.content, { rollData: this.parent.getRollData() }
@@ -113,7 +113,7 @@ export default class RequestMessageData extends ChatMessageDataModel {
    */
   static async #handleRequest(event, target) {
     const actor = fromUuidSync(target.closest("[data-uuid]").dataset.uuid);
-    const result = await CONFIG.DND5E.requests[this.handler](actor, this.parent, this.data, { event });
+    const result = await CONFIG.VARLYN5E.requests[this.handler](actor, this.parent, this.data, { event });
     if ( (result instanceof ChatMessage) && !result.getFlag("dnd5e", "requestResult") ) {
       return result.setFlag("dnd5e", "requestResult", { actorUuid: actor.uuid, requestId: this.parent.id });
     }

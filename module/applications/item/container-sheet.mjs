@@ -32,7 +32,7 @@ export default class ContainerSheet extends ItemSheet5e {
 
   /** @override */
   static TABS = [
-    { tab: "contents", label: "DND5E.ITEM.SECTIONS.Contents" },
+    { tab: "contents", label: "VARLYN5E.ITEM.SECTIONS.Contents" },
     ...super.TABS
   ];
 
@@ -205,7 +205,7 @@ export default class ContainerSheet extends ItemSheet5e {
     items = items.filter(i => i && !containers.has(i.system.container));
 
     // Display recursive warning, but continue with any remaining items
-    if ( recursiveWarning ) ui.notifications.warn("DND5E.ContainerRecursiveError");
+    if ( recursiveWarning ) ui.notifications.warn("VARLYN5E.ContainerRecursiveError");
     if ( !items.length ) return [];
 
     // Create any remaining items
@@ -239,7 +239,7 @@ export default class ContainerSheet extends ItemSheet5e {
     // Prevent dropping containers within themselves
     const parentContainers = await this.item.system.allContainers();
     if ( (this.item.uuid === item.uuid) || parentContainers.includes(item) ) {
-      ui.notifications.error("DND5E.ContainerRecursiveError");
+      ui.notifications.error("VARLYN5E.ContainerRecursiveError");
       return;
     }
 

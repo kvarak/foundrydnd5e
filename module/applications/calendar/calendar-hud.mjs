@@ -91,13 +91,13 @@ export default class CalendarHUD extends BaseCalendarHUD {
         dataset: defaultTime,
         icon: "fa-solid fa-angles-left",
         position: "start",
-        tooltip: _loc("DND5E.CALENDAR.Action.ReverseTime", { amount: defaultAmount }),
+        tooltip: _loc("VARLYN5E.CALENDAR.Action.ReverseTime", { amount: defaultAmount }),
         visible: game.user.isGM,
         additional: CalendarHUD.TIME_CONTROL_VALUES.map(({ value, unit }) => ({
           action: "reverse",
           dataset: { value, unit },
           label: `-${formatTime(value, unit, { unitDisplay: "narrow" })}`,
-          tooltip: _loc("DND5E.CALENDAR.Action.ReverseTime", {
+          tooltip: _loc("VARLYN5E.CALENDAR.Action.ReverseTime", {
             amount: formatTime(value, unit).titleCase()
           })
         }))
@@ -106,14 +106,14 @@ export default class CalendarHUD extends BaseCalendarHUD {
         action: "setDate",
         icon: "fa-solid fa-calendar-days",
         position: "start",
-        tooltip: _loc("DND5E.CALENDAR.Action.SetDate"),
+        tooltip: _loc("VARLYN5E.CALENDAR.Action.SetDate"),
         visible: game.user.isGM
       },
       {
         action: "openCharacterSheet",
         icon: "fa-solid fa-user",
         position: "start",
-        tooltip: _loc("DND5E.CALENDAR.Action.OpenCharacterSheet"),
+        tooltip: _loc("VARLYN5E.CALENDAR.Action.OpenCharacterSheet"),
         visible: !!game.user.character
       },
       {
@@ -121,13 +121,13 @@ export default class CalendarHUD extends BaseCalendarHUD {
         dataset: defaultTime,
         icon: "fa-solid fa-angles-right",
         position: "end",
-        tooltip: _loc("DND5E.CALENDAR.Action.AdvanceTime", { amount: defaultAmount }),
+        tooltip: _loc("VARLYN5E.CALENDAR.Action.AdvanceTime", { amount: defaultAmount }),
         visible: game.user.isGM,
         additional: CalendarHUD.TIME_CONTROL_VALUES.map(({ value, unit }) => ({
           action: "advance",
           dataset: { value, unit },
           label: `+${formatTime(value, unit, { unitDisplay: "narrow" })}`,
-          tooltip: _loc("DND5E.CALENDAR.Action.AdvanceTime", {
+          tooltip: _loc("VARLYN5E.CALENDAR.Action.AdvanceTime", {
             amount: formatTime(value, unit).titleCase()
           })
         }))
@@ -136,7 +136,7 @@ export default class CalendarHUD extends BaseCalendarHUD {
         action: "openPartySheet",
         icon: "fa-solid fa-users",
         position: "end",
-        tooltip: _loc("DND5E.CALENDAR.Action.OpenPartySheet"),
+        tooltip: _loc("VARLYN5E.CALENDAR.Action.OpenPartySheet"),
         visible: game.actors.party?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED)
       }
     ];
@@ -210,11 +210,11 @@ export default class CalendarHUD extends BaseCalendarHUD {
    */
   async renderCore(deltas={}) {
     const prefs = game.settings.get("dnd5e", "calendarPreferences");
-    const dateFormatter = CONFIG.DND5E.calendar.formatters.find(f => f.value === prefs.formatters.date);
+    const dateFormatter = CONFIG.VARLYN5E.calendar.formatters.find(f => f.value === prefs.formatters.date);
     this.element.querySelector(".calendar-date").innerText = dateFormatter ? game.time.calendar.format(
       game.time.components, dateFormatter.formatter
     ) : "";
-    const timeFormatter = CONFIG.DND5E.calendar.formatters.find(f => f.value === prefs.formatters.time);
+    const timeFormatter = CONFIG.VARLYN5E.calendar.formatters.find(f => f.value === prefs.formatters.time);
     this.element.querySelector(".calendar-time").innerText = timeFormatter ? game.time.calendar.format(
       game.time.components, timeFormatter.formatter
     ) : "";

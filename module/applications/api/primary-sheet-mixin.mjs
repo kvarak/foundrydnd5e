@@ -131,7 +131,7 @@ export default function PrimarySheetMixin(Base) {
       elements.innerHTML = `
         <div class="source-book">
           <button type="button" class="unbutton control-button header-control" data-action="showConfiguration"
-                  data-config="source" data-tooltip aria-label="${_loc("DND5E.SOURCE.Action.Configure")}">
+                  data-config="source" data-tooltip aria-label="${_loc("VARLYN5E.SOURCE.Action.Configure")}">
             <i class="fas fa-cog" inert></i>
           </button>
           <span></span>
@@ -153,7 +153,7 @@ export default function PrimarySheetMixin(Base) {
       const editable = this.isEditable && this.isEditMode;
       elements.querySelector("button")?.toggleAttribute("hidden", !editable);
       elements.querySelector("span").innerText = editable
-        ? (source.label || _loc("DND5E.SOURCE.FIELDS.source.label"))
+        ? (source.label || _loc("VARLYN5E.SOURCE.FIELDS.source.label"))
         : source.label;
     }
 
@@ -333,7 +333,7 @@ export default function PrimarySheetMixin(Base) {
      */
     async _onChangeSheetMode(event, target=event.currentTarget) {
       const { MODES } = this.constructor;
-      const label = _loc(`DND5E.SheetMode${target.checked ? "Play" : "Edit"}`);
+      const label = _loc(`VARLYN5E.SheetMode${target.checked ? "Play" : "Edit"}`);
       target.dataset.tooltip = label;
       target.setAttribute("aria-label", label);
       this._mode = target.checked ? MODES.EDIT : MODES.PLAY;

@@ -28,7 +28,7 @@ export class SpellcastingModel extends foundry.abstract.DataModel {
       img: new FilePathField({
         required: true, categories: ["IMAGE"], initial: "icons/magic/unholy/silhouette-robe-evil-power.webp"
       }),
-      label: new StringField({ required: true, initial: () => _loc("DND5E.SPELLCASTING.Unlabeled") }),
+      label: new StringField({ required: true, initial: () => _loc("VARLYN5E.SPELLCASTING.Unlabeled") }),
       order: new NumberField({ required: true, integer: true, nullable: false, initial: 0 }),
       type: new StringField({ required: true, readonly: true, initial: () => this.TYPE })
     };
@@ -85,10 +85,10 @@ export class SpellcastingModel extends foundry.abstract.DataModel {
    * Initialize data models from global config.
    */
   static fromConfig() {
-    const { spellcasting } = CONFIG.DND5E;
+    const { spellcasting } = CONFIG.VARLYN5E;
 
     // Map progressions to spellcasting for faster lookup.
-    CONFIG.DND5E.spellProgression = { none: { label: _loc("DND5E.SpellNone") } };
+    CONFIG.VARLYN5E.spellProgression = { none: { label: _loc("VARLYN5E.SpellNone") } };
 
     // Initialize models.
     Object.entries(spellcasting).forEach(([key, config]) => {
@@ -101,12 +101,12 @@ export class SpellcastingModel extends foundry.abstract.DataModel {
         return delete spellcasting[key];
       }
       Object.entries(config.progression ?? {}).forEach(([k, v]) => {
-        if ( k in CONFIG.DND5E.spellProgression ) console.warn(`Duplicate spell progression key '${k}' detected.`);
-        CONFIG.DND5E.spellProgression[k] = { ...v, type: key };
+        if ( k in CONFIG.VARLYN5E.spellProgression ) console.warn(`Duplicate spell progression key '${k}' detected.`);
+        CONFIG.VARLYN5E.spellProgression[k] = { ...v, type: key };
       });
     });
 
-    Object.freeze(CONFIG.DND5E.spellProgression);
+    Object.freeze(CONFIG.VARLYN5E.spellProgression);
   }
 
   /* -------------------------------------------- */
@@ -143,7 +143,7 @@ export class SlotSpellcasting extends SpellcastingModel {
       prepares: new BooleanField(),
       progression: new TypedObjectField(new SchemaField({
         divisor: new NumberField({ required: true, nullable: false, integer: true, positive: true, initial: 1 }),
-        label: new StringField({ required: true, initial: () => _loc("DND5E.SPELLCASTING.Unlabeled") }),
+        label: new StringField({ required: true, initial: () => _loc("VARLYN5E.SPELLCASTING.Unlabeled") }),
         roundUp: new BooleanField()
       }))
     };
@@ -179,7 +179,7 @@ export class SlotSpellcasting extends SpellcastingModel {
    */
   get recovery() {
     if ( this.#recovery ) return this.#recovery;
-    return this.#recovery = Object.entries(CONFIG.DND5E.restTypes).reduce((acc, [k, v]) => {
+    return this.#recovery = Object.entries(CONFIG.VARLYN5E.restTypes).reduce((acc, [k, v]) => {
       if ( v.recoverSpellSlotTypes?.has(this.key) ) acc.add(k);
       return acc;
     }, new Set());
@@ -337,16 +337,16 @@ export class SingleLevelSpellcasting extends SlotSpellcasting {
 
   /** @override */
   getLabel({ level, format }={}) {
-    if ( !(level in CONFIG.DND5E.spellLevels) ) return this.label;
+    if ( !(level in CONFIG.VARLYN5E.spellLevels) ) return this.label;
     const short = format === "short";
-    return [this.label, short ? "" : "—", short ? "" : CONFIG.DND5E.spellLevels[level]].filterJoin(" ");
+    return [this.label, short ? "" : "—", short ? "" : CONFIG.VARLYN5E.spellLevels[level]].filterJoin(" ");
   }
 
   /* -------------------------------------------- */
 
   /** @override */
   prepareSlots(spells, actor, progression) {
-    let level = Math.clamp(progression[this.key], 0, CONFIG.DND5E.maxLevel);
+    let level = Math.clamp(progression[this.key], 0, CONFIG.VARLYN5E.maxLevel);
     const slot = spells[this.key] ??= { value: 0 };
     slot.type = this.key;
     slot.label = this.label;
@@ -402,7 +402,7 @@ export class MultiLevelSpellcasting extends SlotSpellcasting {
 
   /** @override */
   getAvailableLevels(actor) {
-    return Array.fromRange(Object.keys(CONFIG.DND5E.spellLevels).length - 1, 1).reduce((arr, l) => {
+    return Array.fromRange(Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1, 1).reduce((arr, l) => {
       const spells = foundry.utils.getProperty(actor, `system.spells.${this.getSpellSlotKey(l)}`);
       if ( spells?.max ) arr.push(l);
       return arr;
@@ -413,7 +413,7 @@ export class MultiLevelSpellcasting extends SlotSpellcasting {
 
   /** @override */
   getLabel({ level }={}) {
-    return _loc(`DND5E.SPELLCASTING.SLOTS.${this.getSpellSlotKey(level)}`);
+    return _loc(`VARLYN5E.SPELLCASTING.SLOTS.${this.getSpellSlotKey(level)}`);
   }
 
   /* -------------------------------------------- */
@@ -428,7 +428,7 @@ export class MultiLevelSpellcasting extends SlotSpellcasting {
   /** @override */
   prepareSlots(spells, actor, progression) {
     const slots = this.calculateSlots(progression[this.key]);
-    for ( const level of Array.fromRange(Object.keys(CONFIG.DND5E.spellLevels).length - 1, 1) ) {
+    for ( const level of Array.fromRange(Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1, 1) ) {
       const slot = spells[this.getSpellSlotKey(level)] ??= { value: 0 };
       slot.label = this.getLabel({ level });
       slot.level = level;

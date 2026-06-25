@@ -17,7 +17,7 @@ export class ModifyItemConfigurationData extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.ModifyItem"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.ModifyItem"];
 
   /* -------------------------------------------- */
 

@@ -191,7 +191,7 @@ export default class SystemDataModel extends foundry.abstract.TypeDataModel {
     const actor = this.parent.actor;
     if ( !actor?.system.isCharacter || !this.metadata?.singleton ) return;
     if ( actor.itemTypes[data.type]?.length ) {
-      ui.notifications.error("DND5E.ACTOR.Warning.Singleton", {
+      ui.notifications.error("VARLYN5E.ACTOR.Warning.Singleton", {
         format: {
           itemType: _loc(CONFIG.Item.typeLabels[data.type]),
           actorType: _loc(CONFIG.Actor.typeLabels[actor.type])

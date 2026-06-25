@@ -46,7 +46,7 @@ export default class ForwardSheet extends ActivitySheet {
     context.activityOptions = [
       { value: "", label: "" },
       ...this.item.system.activities.contents
-        .filter(a => (a.type !== "forward") && (CONFIG.DND5E.activityTypes[a.type] !== false))
+        .filter(a => (a.type !== "forward") && (CONFIG.VARLYN5E.activityTypes[a.type] !== false))
         .map(activity => ({ value: activity.id, label: activity.name }))
     ];
     return context;
@@ -72,15 +72,15 @@ export default class ForwardSheet extends ActivitySheet {
     return this._markTabs({
       identity: {
         id: "identity", group: "sheet", icon: "fa-solid fa-tag",
-        label: "DND5E.ACTIVITY.SECTIONS.Identity"
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Identity"
       },
       activation: {
         id: "activation", group: "sheet", icon: "fa-solid fa-clapperboard",
-        label: "DND5E.ACTIVITY.SECTIONS.Activation"
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Activation"
       },
       effect: {
         id: "effect", group: "sheet", icon: "fa-solid fa-sun",
-        label: "DND5E.ACTIVITY.SECTIONS.Effect"
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Effect"
       }
     });
   }

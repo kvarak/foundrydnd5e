@@ -1,7 +1,7 @@
 <div class="chat-card rest-card">
     {{{ content }}}
     <section class="targets">
-        <strong class="roboto-condensed-upper">{{ localize "DND5E.CHATMESSAGE.REQUEST.PartyMembers" }}</strong>
+        <strong class="roboto-condensed-upper">{{ localize "VARLYN5E.CHATMESSAGE.REQUEST.PartyMembers" }}</strong>
         <ul class="action-list unlist">
             {{#each targets}}
             <li class="flexrow" data-uuid="{{ actor.uuid }}">
@@ -14,7 +14,7 @@
                     <span class="total">{{ total }}</span>
                     {{else if completed}}
                     <i class="fa-solid fa-check" data-tooltip
-                       aria-label="{{ localize 'DND5E.CHATMESSAGE.REQUEST.Complete' }}"></i>
+                       aria-label="{{ localize 'VARLYN5E.CHATMESSAGE.REQUEST.Complete' }}"></i>
                     {{else if visible}}
                     <button type="button" class="gold-button" data-tooltip="{{ @root.button.label }}"
                             aria-label="{{ @root.button.label }}" data-action="handleRequest">

@@ -11,7 +11,7 @@ export default class DamageActivity extends ActivityMixin(BaseDamageActivityData
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.DAMAGE"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.DAMAGE"];
 
   /* -------------------------------------------- */
 
@@ -20,8 +20,8 @@ export default class DamageActivity extends ActivityMixin(BaseDamageActivityData
     foundry.utils.mergeObject(super.metadata, {
       type: "damage",
       img: "systems/dnd5e/icons/svg/activity/damage.svg",
-      title: "DND5E.DAMAGE.Title",
-      hint: "DND5E.DAMAGE.Hint",
+      title: "VARLYN5E.DAMAGE.Title",
+      hint: "VARLYN5E.DAMAGE.Hint",
       sheetClass: DamageSheet,
       usage: {
         actions: {
@@ -39,7 +39,7 @@ export default class DamageActivity extends ActivityMixin(BaseDamageActivityData
   _usageChatButtons(message) {
     if ( !this.damage.parts.length ) return super._usageChatButtons(message);
     return [{
-      label: _loc("DND5E.Damage"),
+      label: _loc("VARLYN5E.Damage"),
       icon: '<i class="fa-solid fa-burst" inert></i>',
       dataset: {
         action: "rollDamage"

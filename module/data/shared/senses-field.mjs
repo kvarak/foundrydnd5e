@@ -10,16 +10,16 @@ export default class SensesField extends foundry.data.fields.SchemaField {
     fields = {
       ranges: new MappingField(
         new NumberField({ required: true, nullable: true, integer: true, min: 0, initial: null }),
-        { initialKeys: CONFIG.DND5E.senses, initialKeysOnly: true }
+        { initialKeys: CONFIG.VARLYN5E.senses, initialKeysOnly: true }
       ),
       units: new StringField({
-        required: true, nullable: true, blank: false, initial: initialUnits, label: "DND5E.SenseUnits"
+        required: true, nullable: true, blank: false, initial: initialUnits, label: "VARLYN5E.SenseUnits"
       }),
-      special: new StringField({ required: true, label: "DND5E.SenseSpecial" }),
+      special: new StringField({ required: true, label: "VARLYN5E.SenseSpecial" }),
       ...fields
     };
     Object.entries(fields).forEach(([k, v]) => !v ? delete fields[k] : null);
-    super(fields, { label: "DND5E.Senses", ...options });
+    super(fields, { label: "VARLYN5E.Senses", ...options });
   }
 
   /* -------------------------------------------- */

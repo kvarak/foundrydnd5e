@@ -24,7 +24,7 @@ export default class JournalRulePageSheet extends foundry.applications.sheets.jo
   /** @inheritDoc */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    context.CONFIG = CONFIG.DND5E;
+    context.CONFIG = CONFIG.VARLYN5E;
     return context;
   }
 }

@@ -36,7 +36,7 @@ export default class FeatData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.FEATURE", "DND5E.ENCHANTMENT", "DND5E.Prerequisites", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.FEATURE", "VARLYN5E.ENCHANTMENT", "VARLYN5E.Prerequisites", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -74,15 +74,15 @@ export default class FeatData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["category", {
-        label: "DND5E.ITEM.Category.Label",
+        label: "VARLYN5E.ITEM.Category.Label",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.featureTypes,
+          choices: CONFIG.VARLYN5E.featureTypes,
           keyPath: "system.type.value"
         }
       }],
       ["subtype", {
-        label: "DND5E.ItemFeatureType",
+        label: "VARLYN5E.ItemFeatureType",
         type: "set",
         config: {
           choices: filters => {
@@ -91,7 +91,7 @@ export default class FeatData extends ItemDataModel.mixin(
               o.anyNegative ||= v < 0;
               return o;
             }, { anyPositive: false, anyNegative: false });
-            return Object.entries(CONFIG.DND5E.featureTypes).reduce((obj, [type, config]) => {
+            return Object.entries(CONFIG.VARLYN5E.featureTypes).reduce((obj, [type, config]) => {
               if ( anyPositive && (filters.additional.category[type] !== 1) ) return obj;
               if ( anyNegative && (filters.additional.category[type] < 0) ) return obj;
               for ( const [key, label] of Object.entries(config.subtypes ?? {}) ) obj[key] = label;
@@ -103,10 +103,10 @@ export default class FeatData extends ItemDataModel.mixin(
       }],
       ["properties", this.compendiumBrowserPropertiesFilter("feat")],
       ["abilityScoreImprovement", {
-        label: "DND5E.ADVANCEMENT.AbilityScoreImprovement.Title",
+        label: "VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Title",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.abilities
+          choices: CONFIG.VARLYN5E.abilities
         },
         createFilter: (filters, value, def) => {
           const { include, exclude } = Object.entries(value).reduce((d, [key, value]) => {
@@ -175,8 +175,8 @@ export default class FeatData extends ItemDataModel.mixin(
    * @type {boolean}
    */
   get isEnchantmentSource() {
-    return CONFIG.DND5E.featureTypes[this.type?.value]?.subtypes?.[this.type?.subtype]
-      && (this.type?.subtype in CONFIG.DND5E.featureTypes.enchantment.subtypes);
+    return CONFIG.VARLYN5E.featureTypes[this.type?.value]?.subtypes?.[this.type?.subtype]
+      && (this.type?.subtype in CONFIG.VARLYN5E.featureTypes.enchantment.subtypes);
   }
 
   /* -------------------------------------------- */
@@ -254,19 +254,19 @@ export default class FeatData extends ItemDataModel.mixin(
     this.prepareDescriptionData();
 
     if ( this.type.value ) {
-      const config = CONFIG.DND5E.featureTypes[this.type.value];
+      const config = CONFIG.VARLYN5E.featureTypes[this.type.value];
       if ( config ) this.type.label = config.subtypes?.[this.type.subtype] ?? null;
       else this.type.label = _loc(CONFIG.Item.typeLabels.feat);
     }
 
     let label;
     const activation = this.activities.contents[0]?.activation.type;
-    if ( activation === "legendary" ) label = _loc("DND5E.LegendaryAction.Label");
-    if ( activation === "mythic" ) label = _loc("DND5E.MythicActionLabel");
-    else if ( activation === "lair" ) label = _loc("DND5E.LAIR.Action.Label");
-    else if ( activation === "action" && this.hasAttack ) label = _loc("DND5E.Attack");
-    else if ( activation ) label = _loc("DND5E.Action");
-    else label = _loc("DND5E.Passive");
+    if ( activation === "legendary" ) label = _loc("VARLYN5E.LegendaryAction.Label");
+    if ( activation === "mythic" ) label = _loc("VARLYN5E.MythicActionLabel");
+    else if ( activation === "lair" ) label = _loc("VARLYN5E.LAIR.Action.Label");
+    else if ( activation === "action" && this.hasAttack ) label = _loc("VARLYN5E.Attack");
+    else if ( activation ) label = _loc("VARLYN5E.Action");
+    else label = _loc("VARLYN5E.Passive");
     this.parent.labels ??= {};
     this.parent.labels.featType = label;
   }
@@ -296,11 +296,11 @@ export default class FeatData extends ItemDataModel.mixin(
       { label: this.type.label },
       { label: this.parent.labels.featType },
       { label: this.requirements, value: this._source.requirements, field: this.schema.getField("requirements"),
-        placeholder: "DND5E.Requirements" }
+        placeholder: "VARLYN5E.Requirements" }
     ];
 
     context.parts = ["dnd5e.details-feat", "dnd5e.field-uses"];
-    const itemTypes = CONFIG.DND5E.featureTypes[this._source.type.value];
+    const itemTypes = CONFIG.VARLYN5E.featureTypes[this._source.type.value];
     if ( itemTypes ) {
       context.itemType = itemTypes.label;
       context.itemSubtypes = itemTypes.subtypes;
@@ -330,7 +330,7 @@ export default class FeatData extends ItemDataModel.mixin(
     // If a feature has item pre-requisites, make sure the other items exist on the actor
     if ( this.prerequisites.items.size
       && !Array.from(this.prerequisites.items).some(i => actor.identifiedItems.get(i)?.size) ) {
-      messages.push(_loc("DND5E.Prerequisites.Warning.MissingItem", {
+      messages.push(_loc("VARLYN5E.Prerequisites.Warning.MissingItem", {
         items: game.i18n.getListFormatter({ type: "disjunction" }).format(Array.from(this.prerequisites.items))
       }));
     }
@@ -338,12 +338,12 @@ export default class FeatData extends ItemDataModel.mixin(
     // Check to ensure the item doesn't already exist on actor if it is not repeatable
     if ( !this.prerequisites.repeatable && actor.sourcedItems?.get(this.parent.uuid)?.size
       && !added.find(a => a.uuid === this.parent.uuid) ) {
-      messages.push(_loc("DND5E.Prerequisites.Warning.NotRepeatable", { name: this.parent.name }));
+      messages.push(_loc("VARLYN5E.Prerequisites.Warning.NotRepeatable", { name: this.parent.name }));
     }
 
     // If a feature has a level pre-requisite, make sure it is less than or equal to current level
     if ( (this.prerequisites.level ?? -Infinity) > (level ?? Infinity) ) {
-      messages.push(_loc("DND5E.Prerequisites.Warning.InvalidLevel", {
+      messages.push(_loc("VARLYN5E.Prerequisites.Warning.InvalidLevel", {
         level: this.prerequisites.level
       }));
     }
@@ -351,7 +351,7 @@ export default class FeatData extends ItemDataModel.mixin(
     if ( !messages.length ) return true;
 
     if ( showMessage || throwError ) {
-      const message = _loc("DND5E.Prerequisites.Warning.Message", {
+      const message = _loc("VARLYN5E.Prerequisites.Warning.Message", {
         actor: actor.name,
         requirements: game.i18n.getListFormatter().format(messages),
         type: _loc(CONFIG.Item.typeLabels[this.parent.type]).toLowerCase()

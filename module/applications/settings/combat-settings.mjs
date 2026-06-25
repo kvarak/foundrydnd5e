@@ -7,7 +7,7 @@ export default class CombatSettingsConfig extends BaseSettingsConfig {
   /** @override */
   static DEFAULT_OPTIONS = {
     window: {
-      title: "SETTINGS.DND5E.COMBAT.Label"
+      title: "SETTINGS.VARLYN5E.COMBAT.Label"
     }
   };
 
@@ -47,27 +47,27 @@ export default class CombatSettingsConfig extends BaseSettingsConfig {
           this.createSettingField("initiativeGroupRoll"),
           this.createSettingField("initiativeGroupCombatants")
         ];
-        context.legend = _loc("DND5E.Initiative");
+        context.legend = _loc("VARLYN5E.Initiative");
         break;
       case "criticals":
         context.fields = [
           this.createSettingField("criticalDamageModifiers"),
           this.createSettingField("criticalDamageMaxDice")
         ];
-        context.legend = _loc("SETTINGS.DND5E.CRITICAL.Name");
+        context.legend = _loc("SETTINGS.VARLYN5E.CRITICAL.Name");
         break;
       case "npcs":
         context.fields = [
           this.createSettingField("autoRecharge"),
           this.createSettingField("autoRollNPCHP")
         ];
-        context.legend = _loc("SETTINGS.DND5E.NPCS.Name");
+        context.legend = _loc("SETTINGS.VARLYN5E.NPCS.Name");
         break;
       case "encounterPlacement":
         context.fields = [
           this.createSettingField("encounterPlacementBehavior")
         ];
-        context.legend = _loc("SETTINGS.DND5E.ENCOUNTERS.Name");
+        context.legend = _loc("SETTINGS.VARLYN5E.ENCOUNTERS.Name");
         break;
     }
     return context;

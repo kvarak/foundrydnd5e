@@ -32,7 +32,7 @@ export default class NPCData extends CreatureTemplate {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.NPC", "DND5E.BONUSES", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.NPC", "VARLYN5E.BONUSES", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -56,33 +56,33 @@ export default class NPCData extends CreatureTemplate {
         ...AttributesFields.creature,
         hd: new SchemaField({
           spent: new NumberField({ integer: true, min: 0, initial: 0 })
-        }, { label: "DND5E.HitDice" }),
+        }, { label: "VARLYN5E.HitDice" }),
         hp: new SchemaField({
           ...AttributesFields.hitPoints,
-          formula: new FormulaField({ required: true, label: "DND5E.HPFormula" })
-        }, { label: "DND5E.HitPoints" }),
+          formula: new FormulaField({ required: true, label: "VARLYN5E.HPFormula" })
+        }, { label: "VARLYN5E.HitPoints" }),
         death: new RollConfigField({
           ability: false,
           success: new NumberField({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.DeathSaveSuccesses"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.DeathSaveSuccesses"
           }),
           failure: new NumberField({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.DeathSaveFailures"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.DeathSaveFailures"
           }),
           bonuses: new SchemaField({
-            save: new FormulaField({ required: true, label: "DND5E.DeathSaveBonus" })
+            save: new FormulaField({ required: true, label: "VARLYN5E.DeathSaveBonus" })
           })
-        }, { label: "DND5E.DeathSave" }),
+        }, { label: "VARLYN5E.DeathSave" }),
         price: new SchemaField({
           value: new NumberField({ initial: null, min: 0 }),
-          denomination: new StringField({ required: true, blank: false, initial: () => CONFIG.DND5E.defaultCurrency })
+          denomination: new StringField({ required: true, blank: false, initial: () => CONFIG.VARLYN5E.defaultCurrency })
         }),
         spell: new SchemaField({
           level: new NumberField({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.SpellcasterLevel"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.SpellcasterLevel"
           })
         })
-      }, { label: "DND5E.Attributes" }),
+      }, { label: "VARLYN5E.Attributes" }),
       details: new SchemaField({
         ...DetailsFields.common,
         ...DetailsFields.creature,
@@ -95,43 +95,43 @@ export default class NPCData extends CreatureTemplate {
           custom: new StringField({ required: true })
         }),
         cr: new NumberField({
-          required: true, nullable: true, min: 0, initial: 1, label: "DND5E.ChallengeRating"
+          required: true, nullable: true, min: 0, initial: 1, label: "VARLYN5E.ChallengeRating"
         }),
         treasure: new SchemaField({
           value: new SetField(new StringField())
         })
-      }, { label: "DND5E.Details" }),
+      }, { label: "VARLYN5E.Details" }),
       resources: new SchemaField({
         legact: new SchemaField({
           max: new NumberField({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.LegendaryAction.Max"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.LegendaryAction.Max"
           }),
           spent: new NumberField({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.LegendaryAction.Spent"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.LegendaryAction.Spent"
           })
-        }, { label: "DND5E.LegendaryAction.Label" }),
+        }, { label: "VARLYN5E.LegendaryAction.Label" }),
         legres: new SchemaField({
           max: new NumberField({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.LegendaryResistance.Max"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.LegendaryResistance.Max"
           }),
           spent: new NumberField({
-            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "DND5E.LegendaryResistance.Spent"
+            required: true, nullable: false, integer: true, min: 0, initial: 0, label: "VARLYN5E.LegendaryResistance.Spent"
           })
-        }, { label: "DND5E.LegendaryResistance.Label" }),
+        }, { label: "VARLYN5E.LegendaryResistance.Label" }),
         lair: new SchemaField({
-          value: new BooleanField({required: true, label: "DND5E.LAIR.Action.Uses"}),
+          value: new BooleanField({required: true, label: "VARLYN5E.LAIR.Action.Uses"}),
           initiative: new NumberField({
-            required: true, integer: true, label: "DND5E.LAIR.Action.Initiative"
+            required: true, integer: true, label: "VARLYN5E.LAIR.Action.Initiative"
           }),
-          inside: new BooleanField({ label: "DND5E.LAIR.Inside" })
-        }, { label: "DND5E.LAIR.Action.Label" })
-      }, { label: "DND5E.Resources" }),
+          inside: new BooleanField({ label: "VARLYN5E.LAIR.Inside" })
+        }, { label: "VARLYN5E.LAIR.Action.Label" })
+      }, { label: "VARLYN5E.Resources" }),
       source: new SourceField(),
       traits: new SchemaField({
         ...TraitsFields.common,
         ...TraitsFields.creature,
         important: new BooleanField()
-      }, { label: "DND5E.Traits" })
+      }, { label: "VARLYN5E.Traits" })
     });
   }
 
@@ -141,26 +141,26 @@ export default class NPCData extends CreatureTemplate {
   static get compendiumBrowserFilters() {
     return new Map([
       ["size", {
-        label: "DND5E.Size",
+        label: "VARLYN5E.Size",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.actorSizes,
+          choices: CONFIG.VARLYN5E.actorSizes,
           keyPath: "system.traits.size"
         }
       }],
       ["type", {
-        label: "DND5E.CreatureType",
+        label: "VARLYN5E.CreatureType",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.creatureTypes,
+          choices: CONFIG.VARLYN5E.creatureTypes,
           keyPath: "system.details.type.value"
         }
       }],
       ["habitat", {
-        label: "DND5E.Habitat.Configuration.Label",
+        label: "VARLYN5E.Habitat.Configuration.Label",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.habitats
+          choices: CONFIG.VARLYN5E.habitats
         },
         createFilter: (filters, value, def) => {
           const { include, exclude } = Object.entries(value).reduce((d, [key, value]) => {
@@ -177,7 +177,7 @@ export default class NPCData extends CreatureTemplate {
         }
       }],
       ["cr", {
-        label: "DND5E.ChallengeRating",
+        label: "VARLYN5E.ChallengeRating",
         type: "range",
         config: {
           keyPath: "system.details.cr",
@@ -186,10 +186,10 @@ export default class NPCData extends CreatureTemplate {
         }
       }],
       ["movement", {
-        label: "DND5E.Movement",
+        label: "VARLYN5E.Movement",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.movementTypes
+          choices: CONFIG.VARLYN5E.movementTypes
         },
         createFilter: (filters, value, def) => {
           for ( const [k, v] of Object.entries(value ?? {}) ) {
@@ -312,7 +312,7 @@ export default class NPCData extends CreatureTemplate {
 
       // Match a known creature type
       const typeLc = match.groups.type.trim().toLowerCase();
-      const typeMatch = Object.entries(CONFIG.DND5E.creatureTypes).find(([k, v]) => {
+      const typeMatch = Object.entries(CONFIG.VARLYN5E.creatureTypes).find(([k, v]) => {
         return (typeLc === k)
           || (typeLc === _loc(v.label).toLowerCase())
           || (typeLc === _loc(`${v.label}Pl`).toLowerCase());
@@ -327,7 +327,7 @@ export default class NPCData extends CreatureTemplate {
       // Match a swarm
       if ( match.groups.size ) {
         const sizeLc = match.groups.size ? match.groups.size.trim().toLowerCase() : "tiny";
-        const sizeMatch = Object.entries(CONFIG.DND5E.actorSizes).find(([k, v]) => {
+        const sizeMatch = Object.entries(CONFIG.VARLYN5E.actorSizes).find(([k, v]) => {
           return (sizeLc === k) || (sizeLc === _loc(v.label).toLowerCase());
         });
         source.type.swarm = sizeMatch ? sizeMatch[0] : "tiny";
@@ -351,7 +351,7 @@ export default class NPCData extends CreatureTemplate {
     // Determine hit dice denomination & max from hit points formula
     const [, max, denomination] = this.attributes.hp.formula?.match(/(\d*)d(\d+)/i) ?? [];
     this.attributes.hd.max = Number(max ?? 0);
-    this.attributes.hd.denomination = Number(denomination ?? CONFIG.DND5E.actorSizes[this.traits.size]?.hitDie ?? 4);
+    this.attributes.hd.denomination = Number(denomination ?? CONFIG.VARLYN5E.actorSizes[this.traits.size]?.hitDie ?? 4);
 
     for ( const item of this.parent.items ) {
       // Class levels & hit dice
@@ -399,8 +399,8 @@ export default class NPCData extends CreatureTemplate {
       AttributesFields.prepareRace.call(this, this.details.race, { force: true });
       this.details.type = this.details.race.system.type;
     }
-    for ( const key of Object.keys(CONFIG.DND5E.movementTypes) ) this.attributes.movement[key] ??= 0;
-    for ( const key of Object.keys(CONFIG.DND5E.senses) ) this.attributes.senses.ranges[key] ??= 0;
+    for ( const key of Object.keys(CONFIG.VARLYN5E.movementTypes) ) this.attributes.movement[key] ??= 0;
+    for ( const key of Object.keys(CONFIG.VARLYN5E.senses) ) this.attributes.senses.ranges[key] ??= 0;
     this.attributes.movement.units ??= defaultUnits("length");
     this.attributes.senses.units ??= defaultUnits("length");
   }
@@ -435,7 +435,7 @@ export default class NPCData extends CreatureTemplate {
     // Hit Points
     const hpOptions = {
       advancement: Object.values(this.parent.classes).map(c => c.advancement.byType.HitPoints?.[0]).filter(a => a),
-      mod: this.abilities[CONFIG.DND5E.defaultAbilities.hitPoints ?? "con"]?.mod ?? 0
+      mod: this.abilities[CONFIG.VARLYN5E.defaultAbilities.hitPoints ?? "con"]?.mod ?? 0
     };
     AttributesFields.prepareHitPoints.call(this, this.attributes.hp, hpOptions);
 
@@ -450,8 +450,8 @@ export default class NPCData extends CreatureTemplate {
       const modernRules = (this.source?.rules
         || (varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014")) === "2024";
       legendaryResistanceItem.system.uses.label = this.resources.lair.value && modernRules ? _loc(
-        "DND5E.LegendaryResistance.LairUses", { normal: formatNumber(max), lair: formatNumber(max + 1) }
-      ) : `${formatNumber(max)}/${CONFIG.DND5E.limitedUsePeriods.day?.label ?? ""}`;
+        "VARLYN5E.LegendaryResistance.LairUses", { normal: formatNumber(max), lair: formatNumber(max + 1) }
+      ) : `${formatNumber(max)}/${CONFIG.VARLYN5E.limitedUsePeriods.day?.label ?? ""}`;
     }
   }
 
@@ -528,12 +528,12 @@ export default class NPCData extends CreatureTemplate {
     const pr = getPluralRules().select(max);
     const rulesVersion = this.source?.rules
       || (varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014");
-    return _loc(`DND5E.LegendaryAction.Description${rulesVersion === "2014" ? "Legacy" : ""}`, {
+    return _loc(`VARLYN5E.LegendaryAction.Description${rulesVersion === "2014" ? "Legacy" : ""}`, {
       name: name.toLowerCase(),
-      uses: this.resources.lair.value ? _loc("DND5E.LegendaryAction.LairUses", {
+      uses: this.resources.lair.value ? _loc("VARLYN5E.LegendaryAction.LairUses", {
         normal: formatNumber(max), lair: formatNumber(max + 1)
       }) : formatNumber(max),
-      usesNamed: _loc(`DND5E.ACTIVATION.Type.Legendary.Counted.${pr}`, { number: formatNumber(max) })
+      usesNamed: _loc(`VARLYN5E.ACTIVATION.Type.Legendary.Counted.${pr}`, { number: formatNumber(max) })
     });
   }
 
@@ -617,12 +617,12 @@ export default class NPCData extends CreatureTemplate {
     const prepareSpeed = () => {
       const standard = formatter.format([
         prepareMeasured(this.attributes.movement.walk, this.attributes.movement.units),
-        ...Object.entries(CONFIG.DND5E.movementTypes)
+        ...Object.entries(CONFIG.VARLYN5E.movementTypes)
           .filter(([k, { hidden }]) => this.attributes.movement[k] && (k !== "walk") && !hidden)
           .map(([k, { label }]) => {
             let prepared = prepareMeasured(this.attributes.movement[k], this.attributes.movement.units, label);
             if ( (k === "fly") && this.attributes.movement.hover ) {
-              prepared = _loc("DND5E.MOVEMENT.HoverSpeed", { speed: prepared });
+              prepared = _loc("VARLYN5E.MOVEMENT.HoverSpeed", { speed: prepared });
             }
             return prepared;
           })
@@ -632,13 +632,13 @@ export default class NPCData extends CreatureTemplate {
     };
 
     const xp = rulesVersion === "2024"
-      ? `${o.xp ?? _loc(`DND5E.ExperiencePoints.StatBlock.${
+      ? `${o.xp ?? _loc(`VARLYN5E.ExperiencePoints.StatBlock.${
         (this.resources.lair.value) && (this.details.cr !== null) ? "Lair" : "Standard"}`, {
         value: formatNumber(this.parent.getCRExp(this.details.cr)),
         lair: formatNumber(this.parent.getCRExp(this.details.cr + 1))
-      })}; ${o.pb ?? `${_loc("DND5E.ProficiencyBonusAbbr")} ${
+      })}; ${o.pb ?? `${_loc("VARLYN5E.ProficiencyBonusAbbr")} ${
         formatNumber(this.attributes.prof, { signDisplay: "always" })}`}`
-      : o.xp ?? _loc("DND5E.ExperiencePoints.Format", {
+      : o.xp ?? _loc("VARLYN5E.ExperiencePoints.Format", {
         value: formatNumber(this.parent.getCRExp(this.details.cr))
       });
 
@@ -646,34 +646,34 @@ export default class NPCData extends CreatureTemplate {
       abilityTables: rulesVersion === "2024" ? Array.fromRange(3).map(_ => ({ abilities: [] })) : null,
       actionSections: {
         trait: {
-          label: _loc("DND5E.NPC.SECTIONS.Traits"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.Traits"),
           hideLabel: rulesVersion === "2014",
           actions: []
         },
         action: {
-          label: _loc("DND5E.NPC.SECTIONS.Actions"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.Actions"),
           actions: []
         },
         bonus: {
-          label: _loc("DND5E.NPC.SECTIONS.BonusActions"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.BonusActions"),
           actions: []
         },
         reaction: {
-          label: _loc("DND5E.NPC.SECTIONS.Reactions"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.Reactions"),
           actions: []
         },
         legendary: {
-          label: _loc("DND5E.NPC.SECTIONS.LegendaryActions"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.LegendaryActions"),
           description: "",
           actions: []
         },
         mythic: {
-          label: _loc("DND5E.NPC.SECTIONS.MythicActions"),
+          label: _loc("VARLYN5E.NPC.SECTIONS.MythicActions"),
           description: "",
           actions: []
         }
       },
-      CONFIG: CONFIG.DND5E,
+      CONFIG: CONFIG.VARLYN5E,
       definitions: {
         lower: [],
         upper: []
@@ -709,7 +709,7 @@ export default class NPCData extends CreatureTemplate {
 
         // Saves (e.g. `Dex +7, Con +15, Wis +10, Cha +12`)
         saves: formatter.format(
-          Object.entries(CONFIG.DND5E.abilities)
+          Object.entries(CONFIG.VARLYN5E.abilities)
             .filter(([k]) => this.abilities[k].saveProf.multiplier !== 0)
             .map(([k, { abbreviation }]) =>
               `${abbreviation.capitalize()} ${formatNumber(this.abilities[k].save.value, { signDisplay: "always" })}`
@@ -719,19 +719,19 @@ export default class NPCData extends CreatureTemplate {
         // Senses (e.g. `Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 27`)
         senses: o.senses ?? [
           formatter.format([
-            ...Object.entries(CONFIG.DND5E.senses)
+            ...Object.entries(CONFIG.VARLYN5E.senses)
               .filter(([k]) => this.attributes.senses.ranges[k])
               .map(([k, { label }]) =>
                 prepareMeasured(this.attributes.senses.ranges[k], this.attributes.senses.units, label)
               ),
             ...splitSemicolons(this.attributes.senses.special)
           ].sort((lhs, rhs) => lhs.localeCompare(rhs, game.i18n.lang))),
-          `${_loc("DND5E.PassivePerception")} ${formatNumber(this.skills.prc.passive)}`
+          `${_loc("VARLYN5E.PassivePerception")} ${formatNumber(this.skills.prc.passive)}`
         ].filterJoin("; "),
 
         // Skills (e.g. `Perception +17, Stealth +7`)
         skills: o.skills ?? formatter.format(
-          Object.entries(CONFIG.DND5E.skills)
+          Object.entries(CONFIG.VARLYN5E.skills)
             .filter(([k]) => this.skills[k].value > 0)
             .map(([k, { label }]) => `${label} ${formatNumber(this.skills[k].total, { signDisplay: "always" })}`)
         ),
@@ -740,8 +740,8 @@ export default class NPCData extends CreatureTemplate {
         speed: o.speed ?? prepareSpeed(),
 
         // Tag (e.g. `Gargantuan Dragon, Lawful Evil`)
-        tag: o.tag ?? _loc("DND5E.CreatureTag", {
-          size: o.size ?? CONFIG.DND5E.actorSizes[this.traits.size]?.label ?? "",
+        tag: o.tag ?? _loc("VARLYN5E.CreatureTag", {
+          size: o.size ?? CONFIG.VARLYN5E.actorSizes[this.traits.size]?.label ?? "",
           type: o.type ?? Actor5e.formatCreatureType(this.details.type) ?? "",
           alignment: o.alignment ?? this.details.alignment
         }).replace(/, $/, "")
@@ -760,18 +760,18 @@ export default class NPCData extends CreatureTemplate {
         const trait = `${category[0]}${type[0]}`;
         const data = this.traits[trait];
         const { value, physical } = data.value.reduce((acc, t) => {
-          if ( data.bypasses?.size && CONFIG.DND5E.damageTypes[t]?.isPhysical ) acc.physical.push(t);
+          if ( data.bypasses?.size && CONFIG.VARLYN5E.damageTypes[t]?.isPhysical ) acc.physical.push(t);
           else acc.value.push(t);
           return acc;
         }, { value: [], physical: [] });
         const list = prepareTrait({ value, custom: data.custom }, trait);
         if ( list ) entries.push(list);
-        if ( physical.length ) entries.push(_loc("DND5E.DAMAGE.PhysicalBypass.Description", {
+        if ( physical.length ) entries.push(_loc("VARLYN5E.DAMAGE.PhysicalBypass.Description", {
           damageTypes: game.i18n.getListFormatter({ style: "long", type: "conjunction" }).format(
-            physical.map(t => CONFIG.DND5E.damageTypes[t].label)
+            physical.map(t => CONFIG.VARLYN5E.damageTypes[t].label)
           ),
           bypassTypes: game.i18n.getListFormatter({ style: "long", type: "disjunction" }).format(
-            Array.from(data.bypasses).map(t => CONFIG.DND5E.itemProperties[t]?.label).filter(_ => _)
+            Array.from(data.bypasses).map(t => CONFIG.VARLYN5E.itemProperties[t]?.label).filter(_ => _)
           )
         }));
       }
@@ -780,27 +780,27 @@ export default class NPCData extends CreatureTemplate {
 
     const { summary, system } = context;
     if ( rulesVersion === "2024" ) {
-      for ( const [index, [key, { abbreviation }]] of Object.entries(CONFIG.DND5E.abilities).entries() ) {
+      for ( const [index, [key, { abbreviation }]] of Object.entries(CONFIG.VARLYN5E.abilities).entries() ) {
         context.abilityTables[index % 3].abilities.push({ ...this.abilities[key], label: abbreviation.capitalize() });
       }
 
       context.definitions.upper = [
-        { label: "DND5E.AC", classes: "half-width", definitions: [o.ac ?? system.attributes.ac.value] },
-        { label: "DND5E.Initiative", classes: "half-width", definitions: [summary.initiative] },
-        { label: "DND5E.HP", definitions: o.hp ? [o.hp] : system.attributes.hp.formula ? [
+        { label: "VARLYN5E.AC", classes: "half-width", definitions: [o.ac ?? system.attributes.ac.value] },
+        { label: "VARLYN5E.Initiative", classes: "half-width", definitions: [summary.initiative] },
+        { label: "VARLYN5E.HP", definitions: o.hp ? [o.hp] : system.attributes.hp.formula ? [
           system.attributes.hp.max, `(${system.attributes.hp.formula})`
         ] : [system.attributes.hp.max] },
-        { label: "DND5E.Speed", definitions: [summary.speed] }
+        { label: "VARLYN5E.Speed", definitions: [summary.speed] }
       ];
       context.definitions.lower = [
-        summary.skills ? { label: "DND5E.Skills", definitions: [summary.skills] } : null,
-        summary.vulnerabilities ? { label: "DND5E.Vulnerabilities", definitions: [summary.vulnerabilities] } : null,
-        summary.resistances ? { label: "DND5E.Resistances", definitions: [summary.resistances] } : null,
-        summary.immunities ? { label: "DND5E.Immunities", definitions: [summary.immunities] } : null,
-        summary.gear ? { label: "DND5E.Gear.Label", definitions: [summary.gear], allowHTML: !o.gear } : null,
-        { label: "DND5E.Senses", definitions: [summary.senses] },
-        { label: "DND5E.Languages", definitions: [summary.languages] },
-        { label: "DND5E.AbbreviationCR", definitions: [summary.cr] }
+        summary.skills ? { label: "VARLYN5E.Skills", definitions: [summary.skills] } : null,
+        summary.vulnerabilities ? { label: "VARLYN5E.Vulnerabilities", definitions: [summary.vulnerabilities] } : null,
+        summary.resistances ? { label: "VARLYN5E.Resistances", definitions: [summary.resistances] } : null,
+        summary.immunities ? { label: "VARLYN5E.Immunities", definitions: [summary.immunities] } : null,
+        summary.gear ? { label: "VARLYN5E.Gear.Label", definitions: [summary.gear], allowHTML: !o.gear } : null,
+        { label: "VARLYN5E.Senses", definitions: [summary.senses] },
+        { label: "VARLYN5E.Languages", definitions: [summary.languages] },
+        { label: "VARLYN5E.AbbreviationCR", definitions: [summary.cr] }
       ].filter(_ => _);
     }
 
@@ -810,26 +810,26 @@ export default class NPCData extends CreatureTemplate {
         return def;
       };
       context.definitions.upper = [
-        { label: "DND5E.ArmorClass", definitions: o.ac ? [o.ac] : system.attributes.ac.label ? [
+        { label: "VARLYN5E.ArmorClass", definitions: o.ac ? [o.ac] : system.attributes.ac.label ? [
           system.attributes.ac.value, `(${system.attributes.ac.label})`
         ] : [system.attributes.ac.value] },
-        { label: "DND5E.HitPoints", definitions: o.hp ? [o.hp] : system.attributes.hp.formula ? [
+        { label: "VARLYN5E.HitPoints", definitions: o.hp ? [o.hp] : system.attributes.hp.formula ? [
           system.attributes.hp.max, `(${system.attributes.hp.formula})`
         ] : [system.attributes.hp.max] },
-        { label: "DND5E.Speed", definitions: [summary.speed] }
+        { label: "VARLYN5E.Speed", definitions: [summary.speed] }
       ].map(d => lowerCase(d));
       context.definitions.lower = [
-        summary.saves ? { label: "DND5E.ClassSaves", definitions: [summary.saves] } : null,
-        summary.skills ? { label: "DND5E.Skills", definitions: [summary.skills] } : null,
-        summary.vulnerabilities ? lowerCase({ label: "DND5E.DamVuln", definitions: [summary.vulnerabilities] }) : null,
-        summary.resistances ? lowerCase({ label: "DND5E.DamRes", definitions: [summary.resistances] }) : null,
-        summary.immunities ? lowerCase({ label: "DND5E.DamImm", definitions: [summary.immunities] }) : null,
+        summary.saves ? { label: "VARLYN5E.ClassSaves", definitions: [summary.saves] } : null,
+        summary.skills ? { label: "VARLYN5E.Skills", definitions: [summary.skills] } : null,
+        summary.vulnerabilities ? lowerCase({ label: "VARLYN5E.DamVuln", definitions: [summary.vulnerabilities] }) : null,
+        summary.resistances ? lowerCase({ label: "VARLYN5E.DamRes", definitions: [summary.resistances] }) : null,
+        summary.immunities ? lowerCase({ label: "VARLYN5E.DamImm", definitions: [summary.immunities] }) : null,
         summary.conditionImmunities
-          ? lowerCase({ label: "DND5E.TraitCIPlural.other", definitions: [summary.conditionImmunities] }) : null,
-        { label: "DND5E.Senses", definitions: [summary.senses] },
-        { label: "DND5E.Languages", definitions: [summary.languages] },
-        { label: "DND5E.Challenge", classes: "half-width", definitions: [summary.cr] },
-        { label: "DND5E.ProficiencyBonus", classes: "half-width", definitions: [
+          ? lowerCase({ label: "VARLYN5E.TraitCIPlural.other", definitions: [summary.conditionImmunities] }) : null,
+        { label: "VARLYN5E.Senses", definitions: [summary.senses] },
+        { label: "VARLYN5E.Languages", definitions: [summary.languages] },
+        { label: "VARLYN5E.Challenge", classes: "half-width", definitions: [summary.cr] },
+        { label: "VARLYN5E.ProficiencyBonus", classes: "half-width", definitions: [
           o.pb ?? formatNumber(this.attributes.prof, { signDisplay: "always" })
         ] }
       ].filter(_ => _);

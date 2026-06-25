@@ -51,7 +51,7 @@ export default class AbilityScoreImprovementFlow extends AdvancementFlow {
   get points() {
     const { configuration, value } = this.advancement;
     const points = {
-      assigned: Object.keys(CONFIG.DND5E.abilities).reduce((assigned, key) => {
+      assigned: Object.keys(CONFIG.VARLYN5E.abilities).reduce((assigned, key) => {
         if ( !this.advancement.canImprove(key) || configuration.locked.has(key) ) return assigned;
         return assigned + Math.max(0, (value.assignments?.[key] ?? 0) - (configuration.fixed[key] ?? 0));
       }, 0),
@@ -87,7 +87,7 @@ export default class AbilityScoreImprovementFlow extends AdvancementFlow {
     const formatter = new Intl.NumberFormat(game.i18n.lang, { signDisplay: "always" });
 
     context.lockImprovement = value.type === "feat";
-    context.abilities = Object.entries(CONFIG.DND5E.abilities).reduce((obj, [key, data]) => {
+    context.abilities = Object.entries(CONFIG.VARLYN5E.abilities).reduce((obj, [key, data]) => {
       if ( !this.advancement.canImprove(key) ) return obj;
       const ability = actor.system.abilities[key];
       const sourceValue = actor.system._source.abilities[key]?.value ?? ability.value;
@@ -131,11 +131,11 @@ export default class AbilityScoreImprovementFlow extends AdvancementFlow {
     const modernRules = varlyn5e.settings.rulesVersion === "modern";
     const pluralRules = new Intl.PluralRules(game.i18n.lang);
     context.pointCap = _loc(
-      `DND5E.ADVANCEMENT.AbilityScoreImprovement.CapDisplay.${pluralRules.select(context.points.cap)}`,
+      `VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.CapDisplay.${pluralRules.select(context.points.cap)}`,
       { points: context.points.cap }
     );
     context.pointsRemaining = _loc(
-      `DND5E.ADVANCEMENT.AbilityScoreImprovement.PointsRemaining.${pluralRules.select(context.points.available)}`,
+      `VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.PointsRemaining.${pluralRules.select(context.points.available)}`,
       { points: context.points.available }
     );
     context.showASIFeat = modernRules && this.advancement.allowFeat;
@@ -248,7 +248,7 @@ export default class AbilityScoreImprovementFlow extends AdvancementFlow {
 
     const abilities = this.advancement.actor.system._source.abilities ?? {};
     const { available, cap } = this.points;
-    const assignments = Object.keys(CONFIG.DND5E.abilities).reduce((obj, key) => {
+    const assignments = Object.keys(CONFIG.VARLYN5E.abilities).reduce((obj, key) => {
       const value = formData.object[`abilities.${key}`];
       if ( (value === undefined) || this.advancement.configuration.locked.has(key) ) return obj;
       const abilityMax = Math.max(abilities[key]?.max ?? 20, this.advancement.configuration.max ?? -Infinity);
@@ -286,7 +286,7 @@ export default class AbilityScoreImprovementFlow extends AdvancementFlow {
     const item = await Item.implementation.fromDropData(data);
 
     if ( (item.type !== "feat") || (item.system.type.value !== "feat") ) {
-      ui.notifications.error("DND5E.ADVANCEMENT.AbilityScoreImprovement.Warning.Type");
+      ui.notifications.error("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Warning.Type");
       return null;
     }
 

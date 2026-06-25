@@ -18,28 +18,28 @@ export default class PhysicalItemTemplate extends SystemDataModel {
   static defineSchema() {
     return {
       container: new ForeignDocumentField(foundry.documents.BaseItem, {
-        idOnly: true, label: "DND5E.Container"
+        idOnly: true, label: "VARLYN5E.Container"
       }),
       quantity: new NumberField({
-        required: true, nullable: false, integer: true, initial: 1, min: 0, label: "DND5E.Quantity"
+        required: true, nullable: false, integer: true, initial: 1, min: 0, label: "VARLYN5E.Quantity"
       }),
       weight: new SchemaField({
         value: new NumberField({
-          required: true, nullable: false, initial: 0, min: 0, label: "DND5E.Weight"
+          required: true, nullable: false, initial: 0, min: 0, label: "VARLYN5E.Weight"
         }),
         units: new StringField({
-          required: true, blank: false, label: "DND5E.UNITS.WEIGHT.Label", initial: () => defaultUnits("weight")
+          required: true, blank: false, label: "VARLYN5E.UNITS.WEIGHT.Label", initial: () => defaultUnits("weight")
         })
-      }, { label: "DND5E.Weight" }),
+      }, { label: "VARLYN5E.Weight" }),
       price: new SchemaField({
         value: new NumberField({
-          required: true, nullable: false, initial: 0, min: 0, label: "DND5E.Price"
+          required: true, nullable: false, initial: 0, min: 0, label: "VARLYN5E.Price"
         }),
         denomination: new StringField({
-          required: true, blank: false, initial: () => CONFIG.DND5E.defaultCurrency, label: "DND5E.Currency"
+          required: true, blank: false, initial: () => CONFIG.VARLYN5E.defaultCurrency, label: "VARLYN5E.Currency"
         })
-      }, { label: "DND5E.Price" }),
-      rarity: new StringField({ required: true, blank: true, label: "DND5E.Rarity" })
+      }, { label: "VARLYN5E.Price" }),
+      rarity: new StringField({ required: true, blank: true, label: "VARLYN5E.Rarity" })
     };
   }
 
@@ -60,18 +60,18 @@ export default class PhysicalItemTemplate extends SystemDataModel {
   static get compendiumBrowserPhysicalItemFilters() {
     return [
       ["price", {
-        label: "DND5E.Price",
+        label: "VARLYN5E.Price",
         type: "range",
         config: {
           keyPath: "system.price.value"
         }
       }],
       ["rarity", {
-        label: "DND5E.Rarity",
+        label: "VARLYN5E.Rarity",
         type: "set",
         config: {
-          blank: _loc("DND5E.ItemRarityMundane").capitalize(),
-          choices: Object.entries(CONFIG.DND5E.itemRarity).reduce((obj, [key, label]) => {
+          blank: _loc("VARLYN5E.ItemRarityMundane").capitalize(),
+          choices: Object.entries(CONFIG.VARLYN5E.itemRarity).reduce((obj, [key, label]) => {
             obj[key] = { label: label.capitalize() };
             return obj;
           }, {}),
@@ -91,8 +91,8 @@ export default class PhysicalItemTemplate extends SystemDataModel {
    */
   get priceLabel() {
     const { value, denomination } = this.price;
-    const hasPrice = value && (denomination in CONFIG.DND5E.currencies);
-    return hasPrice ? `${value} ${CONFIG.DND5E.currencies[denomination].label}` : null;
+    const hasPrice = value && (denomination in CONFIG.VARLYN5E.currencies);
+    return hasPrice ? `${value} ${CONFIG.VARLYN5E.currencies[denomination].label}` : null;
   }
 
   /* -------------------------------------------- */
@@ -113,12 +113,12 @@ export default class PhysicalItemTemplate extends SystemDataModel {
    */
   get physicalItemSheetFields() {
     return [{
-      label: CONFIG.DND5E.itemRarity[this.rarity],
+      label: CONFIG.VARLYN5E.itemRarity[this.rarity],
       value: this._source.rarity,
       requiresIdentification: true,
       field: this.schema.getField("rarity"),
-      choices: CONFIG.DND5E.itemRarity,
-      blank: "DND5E.Rarity",
+      choices: CONFIG.VARLYN5E.itemRarity,
+      blank: "VARLYN5E.Rarity",
       classes: "item-rarity"
     }];
   }
@@ -157,9 +157,9 @@ export default class PhysicalItemTemplate extends SystemDataModel {
    * @param {object} source  The candidate source data from which the model will be constructed.
    */
   static #migrateRarity(source) {
-    if ( !("rarity" in source) || CONFIG.DND5E.itemRarity[source.rarity] ) return;
-    source.rarity = Object.keys(CONFIG.DND5E.itemRarity).find(key =>
-      CONFIG.DND5E.itemRarity[key].toLowerCase() === source.rarity.toLowerCase()
+    if ( !("rarity" in source) || CONFIG.VARLYN5E.itemRarity[source.rarity] ) return;
+    source.rarity = Object.keys(CONFIG.VARLYN5E.itemRarity).find(key =>
+      CONFIG.VARLYN5E.itemRarity[key].toLowerCase() === source.rarity.toLowerCase()
     ) ?? "";
   }
 
@@ -185,10 +185,10 @@ export default class PhysicalItemTemplate extends SystemDataModel {
    * Prepare physical item properties.
    */
   preparePhysicalData() {
-    if ( !(CONFIG.DND5E.defaultCurrency in CONFIG.DND5E.currencies) ) return;
+    if ( !(CONFIG.VARLYN5E.defaultCurrency in CONFIG.VARLYN5E.currencies) ) return;
     const { value, denomination } = this.price;
-    const { conversion } = CONFIG.DND5E.currencies[denomination] ?? {};
-    const defaultCurrency = CONFIG.DND5E.currencies[CONFIG.DND5E.defaultCurrency];
+    const { conversion } = CONFIG.VARLYN5E.currencies[denomination] ?? {};
+    const defaultCurrency = CONFIG.VARLYN5E.currencies[CONFIG.VARLYN5E.defaultCurrency];
     if ( conversion ) {
       const multiplier = defaultCurrency.conversion / conversion;
       this.price.valueInGP = Math.floor(value * multiplier);

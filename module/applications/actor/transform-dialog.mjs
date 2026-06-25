@@ -21,7 +21,7 @@ export default class TransformDialog extends Dialog5e {
     buttons: [{
       action: "submit",
       icon: "fa-solid fa-check",
-      label: "DND5E.TRANSFORM.Action.Transform",
+      label: "VARLYN5E.TRANSFORM.Action.Transform",
       type: "submit"
     }],
     classes: ["transformation"],
@@ -38,7 +38,7 @@ export default class TransformDialog extends Dialog5e {
       source: null
     },
     window: {
-      title: "DND5E.TRANSFORM.Dialog.Title",
+      title: "VARLYN5E.TRANSFORM.Dialog.Title",
       icon: "fa-solid fa-arrow-right-arrow-left",
       minimizable: true
     }
@@ -134,7 +134,7 @@ export default class TransformDialog extends Dialog5e {
    * @protected
    */
   async _preparePresetsContext(context, options) {
-    context.presets = Object.entries(CONFIG.DND5E.transformation.presets).reduce((obj, [key, config]) => {
+    context.presets = Object.entries(CONFIG.VARLYN5E.transformation.presets).reduce((obj, [key, config]) => {
       obj[key] = {
         ...config,
         selected: this.#settings.preset === key
@@ -180,13 +180,13 @@ export default class TransformDialog extends Dialog5e {
   #disableFields(changed) {
     const handleDisable = field => {
       if ( field.disabled ) return;
-      const config = foundry.utils.getProperty(CONFIG.DND5E.transformation, field.name);
+      const config = foundry.utils.getProperty(CONFIG.VARLYN5E.transformation, field.name);
       if ( !config?.disables?.length ) return;
       const names = config.disables.map(d => d.includes("*") ? `[name^="${d.replace("*", "")}"]` : `[name="${d}"]`);
       const selector = `:is(${names.join(",")}):not([name="${field.name}"])`;
       this.element.querySelectorAll(selector).forEach(element => {
         element.disabled = field.value;
-        if ( element.disabled && element.tagName === "DND5E-CHECKBOX" ) element.checked = false;
+        if ( element.disabled && element.tagName === "VARLYN5E-CHECKBOX" ) element.checked = false;
         else if ( element.disabled ) element.value = "";
       });
     };
@@ -198,7 +198,7 @@ export default class TransformDialog extends Dialog5e {
 
   /** @inheritDoc */
   _onChangeForm(formConfig, event) {
-    if ( event.target?.tagName === "DND5E-CHECKBOX" ) this.#disableFields(event.target);
+    if ( event.target?.tagName === "VARLYN5E-CHECKBOX" ) this.#disableFields(event.target);
     super._onChangeForm(formConfig, event);
   }
 
@@ -211,7 +211,7 @@ export default class TransformDialog extends Dialog5e {
    * @param {HTMLElement} target  Button that was clicked.
    */
   static async #setPreset(event, target) {
-    const preset = CONFIG.DND5E.transformation.presets[target.dataset.preset];
+    const preset = CONFIG.VARLYN5E.transformation.presets[target.dataset.preset];
     if ( preset ) this.#settings = new TransformationSetting({
       ...preset.settings,
       preset: target.dataset.preset,

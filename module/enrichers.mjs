@@ -231,23 +231,23 @@ export async function enrichAttack(config, label, options) {
   const span = document.createElement("span");
   span.className = "roll-link-group";
   _addDataset(span, config);
-  span.innerHTML = _loc(`EDITOR.DND5E.Inline.Attack${config._rules === "2014" ? "Long" : "Short"}`, {
+  span.innerHTML = _loc(`EDITOR.VARLYN5E.Inline.Attack${config._rules === "2014" ? "Long" : "Short"}`, {
     formula: createRollLink(displayFormula).outerHTML
   });
 
   if ( config.format === "extended" ) {
-    const type = _loc(`DND5E.ATTACK.Formatted.${config._rules}`, {
+    const type = _loc(`VARLYN5E.ATTACK.Formatted.${config._rules}`, {
       type: game.i18n.getListFormatter({ type: "disjunction" }).format(
-        Array.from(activity?.validAttackTypes ?? []).map(t => CONFIG.DND5E.attackTypes[t]?.label)
+        Array.from(activity?.validAttackTypes ?? []).map(t => CONFIG.VARLYN5E.attackTypes[t]?.label)
       ),
-      classification: CONFIG.DND5E.attackClassifications[activity?.attack.type.classification]?.label ?? ""
+      classification: CONFIG.VARLYN5E.attackClassifications[activity?.attack.type.classification]?.label ?? ""
     }).trim();
     const parts = [span.outerHTML, activity?.getRangeLabel(config.attackMode)];
     if ( config._rules === "2014" ) parts.push(activity?.target?.affects.labels?.statblock);
 
     const full = document.createElement("span");
     full.className = "attack-extended";
-    full.innerHTML = _loc("EDITOR.DND5E.Inline.AttackExtended", {
+    full.innerHTML = _loc("EDITOR.VARLYN5E.Inline.AttackExtended", {
       type, parts: game.i18n.getListFormatter({ type: "unit" }).format(parts.filter(_ => _))
     });
     return full;
@@ -278,7 +278,7 @@ export function parseAttackConfig(config, options={}) {
   const formulaParts = [];
   if ( config.formula ) formulaParts.push(config.formula);
   for ( const value of config.values ) {
-    if ( value in CONFIG.DND5E.attackModes ) config.attackMode = value;
+    if ( value in CONFIG.VARLYN5E.attackModes ) config.attackMode = value;
     else if ( value === "extended" ) config.format = "extended";
     else formulaParts.push(value);
   }
@@ -328,7 +328,7 @@ async function rollAttack(config, event) {
           roll: { type: "attack" }
         }
       },
-      flavor: _loc("DND5E.AttackRoll"),
+      flavor: _loc("VARLYN5E.AttackRoll"),
       speaker: ChatMessage.implementation.getSpeaker()
     }
   };
@@ -368,7 +368,7 @@ export async function enrichAward(config, label, options) {
 
   const entries = [];
   for ( let [key, amount] of Object.entries(parsed.currency) ) {
-    const label = CONFIG.DND5E.currencies[key].label;
+    const label = CONFIG.VARLYN5E.currencies[key].label;
     amount = Number.isNumeric(amount) ? formatNumber(amount) : amount;
     entries.push(`
       <span class="award-entry">
@@ -378,17 +378,17 @@ export async function enrichAward(config, label, options) {
   }
   if ( parsed.xp ) entries.push(`
     <span class="award-entry">
-      ${formatNumber(parsed.xp)} ${_loc("DND5E.ExperiencePoints.Abbreviation")}
+      ${formatNumber(parsed.xp)} ${_loc("VARLYN5E.ExperiencePoints.Abbreviation")}
     </span>
   `);
 
   let award = game.i18n.getListFormatter({ type: "unit" }).format(entries);
-  if ( parsed.each ) award = _loc("EDITOR.DND5E.Inline.AwardEach", { award });
+  if ( parsed.each ) award = _loc("EDITOR.VARLYN5E.Inline.AwardEach", { award });
 
   block.innerHTML += `
     ${award}
     <a class="award-link" data-action="awardRequest">
-      <i class="fa-solid fa-trophy"></i> ${label ?? _loc("DND5E.Award.Action")}
+      <i class="fa-solid fa-trophy"></i> ${label ?? _loc("VARLYN5E.Award.Action")}
     </a>
   `;
 
@@ -525,21 +525,21 @@ export async function enrichCheck(config, label, options) {
     config.skill = [];
     config.tool = [];
     for ( const associated of activity.check.associated ) {
-      if ( associated in CONFIG.DND5E.skills ) config.skill.push(associated);
-      else if ( associated in CONFIG.DND5E.tools ) config.tool.push(associated);
+      if ( associated in CONFIG.VARLYN5E.skills ) config.skill.push(associated);
+      else if ( associated in CONFIG.VARLYN5E.tools ) config.tool.push(associated);
     }
     delete config.activity;
   }
 
   // TODO: Support "spellcasting" ability
-  let abilityConfig = CONFIG.DND5E.abilities[config.ability];
+  let abilityConfig = CONFIG.VARLYN5E.abilities[config.ability];
   if ( config.ability && !abilityConfig ) {
     logWarning(`Ability "${config.ability}" not found while enriching ${config._input}.`, options);
     invalid = true;
   } else if ( abilityConfig?.key ) config.ability = abilityConfig.key;
 
   for ( let [index, skill] of config.skill.entries() ) {
-    const skillConfig = CONFIG.DND5E.skills[skill];
+    const skillConfig = CONFIG.VARLYN5E.skills[skill];
     if ( skillConfig ) {
       if ( skillConfig.key ) skill = config.skill[index] = skillConfig.key;
       const ability = config.ability || skillConfig.ability;
@@ -553,7 +553,7 @@ export async function enrichCheck(config, label, options) {
 
   let usingTool;
   for ( const tool of config.tool ) {
-    const toolConfig = CONFIG.DND5E.enrichmentLookup.tools[slugify(tool)];
+    const toolConfig = CONFIG.VARLYN5E.enrichmentLookup.tools[slugify(tool)];
     const toolIndex = Trait.getBaseItem(toolConfig?.id ?? "", { indexOnly: true });
     const toolLabel = toolIndex?.name ?? toolConfig?.label;
     if ( toolLabel ) {
@@ -602,8 +602,8 @@ export async function enrichCheck(config, label, options) {
 
       // Multiple associated proficiencies, link each individually
       if ( associated.length > 1 ) parts.push(
-        _loc("EDITOR.DND5E.Inline.SpecificCheck", {
-          ability: CONFIG.DND5E.abilities[ability].label,
+        _loc("EDITOR.VARLYN5E.Inline.SpecificCheck", {
+          ability: CONFIG.VARLYN5E.abilities[ability].label,
           type: formatter.format(associated.map(a => createRollLink(a.label, makeConfig(a)).outerHTML ))
         })
       );
@@ -621,10 +621,10 @@ export async function enrichCheck(config, label, options) {
     }
     label = formatter.format(parts);
     if ( config.dc && !config.hideDC ) {
-      label = _loc("EDITOR.DND5E.Inline.DC", { dc: config.dc, check: label });
+      label = _loc("EDITOR.VARLYN5E.Inline.DC", { dc: config.dc, check: label });
     }
-    label = _loc(`EDITOR.DND5E.Inline.Check${config.format === "long" ? "Long" : "Short"}`, { check: label });
-    if ( usingTool ) label = _loc("EDITOR.DND5E.Inline.CheckUsing", {
+    label = _loc(`EDITOR.VARLYN5E.Inline.Check${config.format === "long" ? "Long" : "Short"}`, { check: label });
+    if ( usingTool ) label = _loc("EDITOR.VARLYN5E.Inline.CheckUsing", {
       check: label, tool: usingTool.label
     });
 
@@ -673,8 +673,8 @@ function createCheckRequestButtons(dataset) {
   const tools = foundry.utils.getType(dataset.tool) === "string" ? dataset.tool.split("|") : dataset.tool ?? [];
   if ( ((skills.length + tools.length) <= 1) && !dataset.usingTool ) {
     if ( !dataset.ability ) {
-      if ( skills.length === 1 ) dataset.ability = CONFIG.DND5E.skills[skills[0]]?.ability;
-      else if ( tools.length === 1 ) dataset.ability = CONFIG.DND5E.tools[tools[0]]?.ability;
+      if ( skills.length === 1 ) dataset.ability = CONFIG.VARLYN5E.skills[skills[0]]?.ability;
+      else if ( tools.length === 1 ) dataset.ability = CONFIG.VARLYN5E.tools[tools[0]]?.ability;
     }
     return [createRequestButton(dataset)];
   }
@@ -683,10 +683,10 @@ function createCheckRequestButtons(dataset) {
   delete baseDataset.tool;
   return [
     ...skills.map(skill => createRequestButton({
-      ability: CONFIG.DND5E.skills[skill].ability, ...baseDataset, format: "short", skill, type: "skill"
+      ability: CONFIG.VARLYN5E.skills[skill].ability, ...baseDataset, format: "short", skill, type: "skill"
     })),
     ...dataset.usingTool ? [] : tools.map(tool => createRequestButton({
-      ability: CONFIG.DND5E.tools[tool]?.ability, ...baseDataset, format: "short", tool, type: "tool"
+      ability: CONFIG.VARLYN5E.tools[tool]?.ability, ...baseDataset, format: "short", tool, type: "tool"
     }))
   ];
 }
@@ -700,7 +700,7 @@ function createCheckRequestButtons(dataset) {
  * @returns {object}
  */
 export function parseCheckConfig(config, options={}) {
-  const lookup = CONFIG.DND5E.enrichmentLookup;
+  const lookup = CONFIG.VARLYN5E.enrichmentLookup;
   config.skill = config.skill?.replaceAll("/", "|").split("|") ?? [];
   config.tool = config.tool?.replaceAll("/", "|").split("|") ?? [];
   for ( let value of config.values ) {
@@ -818,9 +818,9 @@ export async function enrichSave(config, label, options) {
       createRollLink(createRollLabel({ type: "save", ability }), { ability }).outerHTML
     ));
     if ( config.dc && !config.hideDC ) {
-      label = _loc("EDITOR.DND5E.Inline.DC", { dc: config.dc, check: label });
+      label = _loc("EDITOR.VARLYN5E.Inline.DC", { dc: config.dc, check: label });
     }
-    label = _loc(`EDITOR.DND5E.Inline.Save${config.format === "long" ? "Long" : "Short"}`, { save: label });
+    label = _loc(`EDITOR.VARLYN5E.Inline.Save${config.format === "long" ? "Long" : "Short"}`, { save: label });
     const template = document.createElement("template");
     template.innerHTML = label;
     label = template;
@@ -865,7 +865,7 @@ function createSaveRequestButtons(dataset) {
  * @returns {object}
  */
 export function parseSaveConfig(config, options={}) {
-  const lookup = CONFIG.DND5E.enrichmentLookup;
+  const lookup = CONFIG.VARLYN5E.enrichmentLookup;
   config.ability = config.ability?.replace("/", "|").split("|") ?? [];
   for ( let value of config.values ) {
     const slug = foundry.utils.getType(value) === "string" ? slugify(value) : value;
@@ -873,7 +873,7 @@ export function parseSaveConfig(config, options={}) {
     else if ( Number.isNumeric(value) ) config.dc = Number(value);
     else config[value] = true;
   }
-  config.ability = config.ability.filter(a => a in CONFIG.DND5E.enrichmentLookup.abilities);
+  config.ability = config.ability.filter(a => a in CONFIG.VARLYN5E.enrichmentLookup.abilities);
 
   return config;
 }
@@ -889,13 +889,13 @@ export function parseSaveConfig(config, options={}) {
 async function rollCheckSave(config, event) {
   const { type, ability, skill, tool, dc } = config;
   const options = { event };
-  if ( ability in CONFIG.DND5E.abilities ) options.ability = ability;
+  if ( ability in CONFIG.VARLYN5E.abilities ) options.ability = ability;
   if ( dc ) options.target = Number(dc);
 
   const actors = getSceneTargets().map(t => t.actor);
   if ( !actors.length && game.user.character ) actors.push(game.user.character);
   if ( !actors.length ) {
-    ui.notifications.warn("EDITOR.DND5E.Inline.Warning.NoActor");
+    ui.notifications.warn("EDITOR.VARLYN5E.Inline.Warning.NoActor");
     return;
   }
 
@@ -1059,7 +1059,7 @@ export async function enrichDamage(configs, label, options) {
   for ( const [idx, formula] of config.formulas.entries() ) {
     const type = config.damageTypes[idx];
     const types = type?.split("|")
-      .map(t => CONFIG.DND5E.damageTypes[t]?.label ?? CONFIG.DND5E.healingTypes[t]?.label)
+      .map(t => CONFIG.VARLYN5E.damageTypes[t]?.label ?? CONFIG.VARLYN5E.healingTypes[t]?.label)
       .filter(_ => _);
     const localizationData = {
       formula: createRollLink(formula, {}, { tag: "span" }).outerHTML,
@@ -1082,7 +1082,7 @@ export async function enrichDamage(configs, label, options) {
       if ( String(localizationData.average) === formula ) localizationType = "Short";
     }
 
-    parts.push(_loc(`EDITOR.DND5E.Inline.Damage${localizationType}`, localizationData));
+    parts.push(_loc(`EDITOR.VARLYN5E.Inline.Damage${localizationType}`, localizationData));
   }
 
   const link = document.createElement("a");
@@ -1090,7 +1090,7 @@ export async function enrichDamage(configs, label, options) {
   link.dataset.action = "roll";
   _addDataset(link, { ...config, formulas, damageTypes });
   if ( config.average && (parts.length === 2) ) {
-    link.innerHTML = _loc("EDITOR.DND5E.Inline.DamageDouble", { first: parts[0], second: parts[1] });
+    link.innerHTML = _loc("EDITOR.VARLYN5E.Inline.DamageDouble", { first: parts[0], second: parts[1] });
   } else {
     link.innerHTML = game.i18n.getListFormatter().format(parts);
   }
@@ -1098,7 +1098,7 @@ export async function enrichDamage(configs, label, options) {
   if ( config.format === "extended" ) {
     const span = document.createElement("span");
     span.className = "damage-extended";
-    span.innerHTML = _loc("EDITOR.DND5E.Inline.DamageExtended", { damage: link.outerHTML });
+    span.innerHTML = _loc("EDITOR.VARLYN5E.Inline.DamageExtended", { damage: link.outerHTML });
     return span;
   }
 
@@ -1124,7 +1124,7 @@ function handleDamageCommand(configs) {
  */
 export function parseDamageConfig(configs, options={}) {
   const config = { type: "damage", formulas: [], damageTypes: [], rollType: configs._isHealing ? "healing" : "damage" };
-  const lookup = CONFIG.DND5E.enrichmentLookup;
+  const lookup = CONFIG.VARLYN5E.enrichmentLookup;
   for ( const c of configs ) {
     const formulaParts = [];
     if ( c.activity ) config.activity = c.activity;
@@ -1136,7 +1136,7 @@ export function parseDamageConfig(configs, options={}) {
     for ( const value of c.values ) {
       const slug = foundry.utils.getType(value) === "string" ? slugify(value) : value;
       if ( slug in lookup.damageTypes ) c.type.push(lookup.damageTypes[slug]);
-      else if ( slug in CONFIG.DND5E.attackModes ) config.attackMode = slug;
+      else if ( slug in CONFIG.VARLYN5E.attackModes ) config.attackMode = slug;
       else if ( slug === "average" ) config.average = true;
       else if ( slug === "extended" ) config.format = "extended";
       else if ( slug === "temp" ) c.type.push("temphp");
@@ -1201,7 +1201,7 @@ async function rollDamage(config, event) {
           targets: getTargetDescriptors()
         }
       },
-      flavor: _loc(`DND5E.${rollType === "healing" ? "Healing" : "Damage"}Roll`),
+      flavor: _loc(`VARLYN5E.${rollType === "healing" ? "Healing" : "Damage"}Roll`),
       speaker: ChatMessage.implementation.getSpeaker()
     }
   };
@@ -1226,17 +1226,17 @@ async function rollDamage(config, event) {
 export function enrichLanguage(config, label, options) {
   for ( const value of config.values ) {
     const slug = foundry.utils.getType(value) === "string" ? slugify(value) : value;
-    if ( slug in CONFIG.DND5E.enrichmentLookup.languages ) config.language = slug;
+    if ( slug in CONFIG.VARLYN5E.enrichmentLookup.languages ) config.language = slug;
   }
   delete config.values;
 
-  if ( !(config.language in CONFIG.DND5E.enrichmentLookup.languages) ) {
+  if ( !(config.language in CONFIG.VARLYN5E.enrichmentLookup.languages) ) {
     logWarning(`No language found while enriching ${config._input}.`, options);
     return null;
   }
 
   config.type = "language";
-  return createPassiveTag(label ?? CONFIG.DND5E.enrichmentLookup.languages[config.language], config);
+  return createPassiveTag(label ?? CONFIG.VARLYN5E.enrichmentLookup.languages[config.language], config);
 }
 
 /* -------------------------------------------- */
@@ -1334,15 +1334,15 @@ export function enrichLookup(config, fallback, options) {
 export async function enrichReference(config, label, options) {
   let key;
   let source;
-  let type = Object.keys(config).find(k => k in CONFIG.DND5E.ruleTypes);
+  let type = Object.keys(config).find(k => k in CONFIG.VARLYN5E.ruleTypes);
   if ( type ) {
     key = slugify(config[type]);
-    const { references } = CONFIG.DND5E.ruleTypes[type] ?? {};
-    source = foundry.utils.getProperty(CONFIG.DND5E, references)?.[key];
+    const { references } = CONFIG.VARLYN5E.ruleTypes[type] ?? {};
+    source = foundry.utils.getProperty(CONFIG.VARLYN5E, references)?.[key];
   } else if ( config.values.length ) {
     key = slugify(config.values.join(""));
-    for ( const [t, { references }] of Object.entries(CONFIG.DND5E.ruleTypes) ) {
-      source = foundry.utils.getProperty(CONFIG.DND5E, references)?.[key];
+    for ( const [t, { references }] of Object.entries(CONFIG.VARLYN5E.ruleTypes) ) {
+      source = foundry.utils.getProperty(CONFIG.VARLYN5E, references)?.[key];
       if ( source ) {
         type = t;
         break;
@@ -1365,7 +1365,7 @@ export async function enrichReference(config, label, options) {
     apply.dataset.action = "applyStatus";
     apply.dataset.status = key;
     apply.dataset.tooltip = "";
-    apply.setAttribute("aria-label", _loc("EDITOR.DND5E.Inline.ApplyStatus"));
+    apply.setAttribute("aria-label", _loc("EDITOR.VARLYN5E.Inline.ApplyStatus"));
     apply.innerHTML = '<i class="fas fa-fw fa-reply-all fa-flip-horizontal"></i>';
     span.append(apply);
   }
@@ -1458,7 +1458,7 @@ export async function enrichItem(config, label, options) {
     }
     if ( !label ) {
       if ( doc instanceof Item ) label = doc.name;
-      else label = _loc("EDITOR.DND5E.Inline.ItemActivity", { item: doc.item.name, activity: doc.name });
+      else label = _loc("EDITOR.VARLYN5E.Inline.ItemActivity", { item: doc.item.name, activity: doc.name });
     }
     return makeLink(label, { type: "item", rollItemActor: ownerActor, [`roll${doc.documentName}Uuid`]: doc.uuid });
   }
@@ -1486,7 +1486,7 @@ export async function enrichItem(config, label, options) {
         logWarning(`Activity ${config.activity} not found on ${foundItem.name} while enriching ${config._input}.`, options);
         return null;
       }
-      if ( !label ) label = _loc("EDITOR.DND5E.Inline.ItemActivity", {
+      if ( !label ) label = _loc("EDITOR.VARLYN5E.Inline.ItemActivity", {
         item: foundItem.name, activity: foundActivity.name
       });
       return makeLink(label, { type: "item", rollActivityUuid: foundActivity.uuid });
@@ -1497,7 +1497,7 @@ export async function enrichItem(config, label, options) {
   }
 
   // Finally, if config is an item name
-  if ( !label ) label = config.activity ? _loc("EDITOR.DND5E.Inline.ItemActivity", {
+  if ( !label ) label = config.activity ? _loc("EDITOR.VARLYN5E.Inline.ItemActivity", {
     item: foundItem?.name ?? givenItem, activity: foundActivity?.name ?? config.activity
   }) : givenItem;
   return makeLink(label, {
@@ -1551,7 +1551,7 @@ async function useItem({ rollActivityUuid, rollActivityName, rollItemUuid, rollI
       if ( activity ) return activity.use({ event });
 
       // If no activity could be found at all, display a warning
-      else ui.notifications.warn("EDITOR.DND5E.Inline.Warning.NoActivityOnItem", {
+      else ui.notifications.warn("EDITOR.VARLYN5E.Inline.Warning.NoActivityOnItem", {
         format: { activity: rollActivityName, actor: actor.name, item: rollItemName }
       });
     }
@@ -1560,7 +1560,7 @@ async function useItem({ rollActivityUuid, rollActivityName, rollItemUuid, rollI
   }
 
   // If no item could be found at all, display a warning
-  else ui.notifications.warn("EDITOR.DND5E.Inline.Warning.NoItemOnActor", {
+  else ui.notifications.warn("EDITOR.VARLYN5E.Inline.Warning.NoItemOnActor", {
     format: { actor: actor.name, item: rollItemName }
   });
 }
@@ -1596,9 +1596,9 @@ function createPassiveTag(label, dataset) {
  * @returns {string}
  */
 export function createRollLabel(config) {
-  const { label: ability, abbreviation } = CONFIG.DND5E.abilities[config.ability] ?? {};
-  const skill = CONFIG.DND5E.skills[config.skill]?.label;
-  const toolUUID = CONFIG.DND5E.enrichmentLookup.tools[config.tool];
+  const { label: ability, abbreviation } = CONFIG.VARLYN5E.abilities[config.ability] ?? {};
+  const skill = CONFIG.VARLYN5E.skills[config.skill]?.label;
+  const toolUUID = CONFIG.VARLYN5E.enrichmentLookup.tools[config.tool];
   const tool = toolUUID?.id ? Trait.getBaseItem(toolUUID.id, { indexOnly: true })?.name : toolUUID?.label ?? null;
   const longSuffix = config.format === "long" ? "Long" : "Short";
   const showDC = config.dc && !config.hideDC;
@@ -1609,25 +1609,25 @@ export function createRollLabel(config) {
     case "skill":
     case "tool":
       if ( ability && (skill || tool) ) {
-        label = _loc("EDITOR.DND5E.Inline.SpecificCheck", { ability, type: skill ?? tool });
+        label = _loc("EDITOR.VARLYN5E.Inline.SpecificCheck", { ability, type: skill ?? tool });
       } else {
         label = ability;
       }
       if ( config.passive ) {
         label = _loc(
-          `EDITOR.DND5E.Inline.${showDC ? "DC" : ""}Passive${longSuffix}`, { dc: config.dc, check: label }
+          `EDITOR.VARLYN5E.Inline.${showDC ? "DC" : ""}Passive${longSuffix}`, { dc: config.dc, check: label }
         );
       } else {
-        if ( showDC ) label = _loc("EDITOR.DND5E.Inline.DC", { dc: config.dc, check: label });
-        label = _loc(`EDITOR.DND5E.Inline.Check${longSuffix}`, { check: label });
+        if ( showDC ) label = _loc("EDITOR.VARLYN5E.Inline.DC", { dc: config.dc, check: label });
+        label = _loc(`EDITOR.VARLYN5E.Inline.Check${longSuffix}`, { check: label });
       }
       break;
     case "concentration":
     case "save":
       if ( config.type === "save" ) label = ability;
-      else label = `${_loc("DND5E.Concentration")} ${ability ? `(${abbreviation})` : ""}`;
-      if ( showDC ) label = _loc("EDITOR.DND5E.Inline.DC", { dc: config.dc, check: label });
-      label = _loc(`EDITOR.DND5E.Inline.Save${longSuffix}`, { save: label });
+      else label = `${_loc("VARLYN5E.Concentration")} ${ability ? `(${abbreviation})` : ""}`;
+      if ( showDC ) label = _loc("EDITOR.VARLYN5E.Inline.DC", { dc: config.dc, check: label });
+      label = _loc(`EDITOR.VARLYN5E.Inline.Save${longSuffix}`, { save: label });
       break;
     default:
       return "";
@@ -1672,7 +1672,7 @@ function createRequestLink(label, dataset) {
     const gmLink = document.createElement("a");
     gmLink.classList.add("enricher-action");
     gmLink.dataset.action = "postRequest";
-    gmLink.dataset.tooltip = "EDITOR.DND5E.Inline.RequestRoll";
+    gmLink.dataset.tooltip = "EDITOR.VARLYN5E.Inline.RequestRoll";
     gmLink.setAttribute("aria-label", _loc(gmLink.dataset.tooltip));
     gmLink.insertAdjacentHTML("afterbegin", '<i class="fa-solid fa-comment-dots"></i>');
     span.insertAdjacentElement("beforeend", gmLink);
@@ -1821,7 +1821,7 @@ async function handlePostRequest(dataset, target) {
     content: await foundry.applications.handlebars.renderTemplate(
       "systems/dnd5e/templates/chat/roll-request-card.hbs", { buttons }
     ),
-    flavor: _loc("EDITOR.DND5E.Inline.RollRequest"),
+    flavor: _loc("EDITOR.VARLYN5E.Inline.RollRequest"),
     speaker: MessageClass.getSpeaker({ user: game.user })
   };
   MessageClass.create(chatData);

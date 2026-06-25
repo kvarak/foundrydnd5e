@@ -8,7 +8,7 @@ export default class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
    * @returns {boolean} Whether the moving token should be blocked
    */
   isOccupiedGridSpaceBlocking(gridSpace, token, { preview=false }={}) {
-    const tokenSize = CONFIG.DND5E.actorSizes[token.actor?.system.traits.size]?.numerical ?? 2;
+    const tokenSize = CONFIG.VARLYN5E.actorSizes[token.actor?.system.traits.size]?.numerical ?? 2;
     const modernRules = varlyn5e.settings.rulesVersion === "modern";
     const halflingNimbleness = token.actor?.getFlag("dnd5e", "halflingNimbleness");
     const found = this.#getRelevantOccupyingTokens(gridSpace, token, { preview }).filter(t => {
@@ -19,10 +19,10 @@ export default class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
       if ( token.document.disposition === t.document.disposition ) return false;
 
       // If creature has any statuses that should never block movement, don't block movement
-      if ( t.actor.statuses.intersects(CONFIG.DND5E.neverBlockStatuses) ) return false;
+      if ( t.actor.statuses.intersects(CONFIG.VARLYN5E.neverBlockStatuses) ) return false;
 
       const size = t.actor.system.details?.type?.swarm || t.actor.system.traits?.size;
-      const occupiedSize = CONFIG.DND5E.actorSizes[size]?.numerical ?? 2;
+      const occupiedSize = CONFIG.VARLYN5E.actorSizes[size]?.numerical ?? 2;
       // In modern rules, Tiny creatures can be moved through
       if ( modernRules && (occupiedSize === 0) ) return false;
 
@@ -69,7 +69,7 @@ export default class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
 
       // In modern rules, friendly tokens are not difficult terrain
       if ( modernRules && friendlyToken ) return false;
-      const occupiedSize = CONFIG.DND5E.actorSizes[t.actor?.system.traits.size]?.numerical ?? 2;
+      const occupiedSize = CONFIG.VARLYN5E.actorSizes[t.actor?.system.traits.size]?.numerical ?? 2;
 
       // In modern rules, Tiny creatures are not difficult terrain
       if ( modernRules && (occupiedSize === 0) ) return false;

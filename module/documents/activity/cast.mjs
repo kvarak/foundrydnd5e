@@ -25,7 +25,7 @@ export default class CastActivity extends ActivityMixin(BaseCastActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.CAST"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.CAST"];
 
   /* -------------------------------------------- */
 
@@ -34,8 +34,8 @@ export default class CastActivity extends ActivityMixin(BaseCastActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "cast",
       img: "systems/dnd5e/icons/svg/activity/cast.svg",
-      title: "DND5E.CAST.Title",
-      hint: "DND5E.CAST.Hint",
+      title: "VARLYN5E.CAST.Title",
+      hint: "VARLYN5E.CAST.Hint",
       sheetClass: CastSheet
     }, { inplace: false })
   );
@@ -71,7 +71,7 @@ export default class CastActivity extends ActivityMixin(BaseCastActivityData) {
   async use(usage={}, dialog={}, message={}) {
     if ( !this.item.isEmbedded || this.item.pack ) return;
     if ( !this.item.isOwner ) {
-      ui.notifications.error("DND5E.DocumentUseWarn");
+      ui.notifications.error("VARLYN5E.DocumentUseWarn");
       return;
     }
 
@@ -124,7 +124,7 @@ export default class CastActivity extends ActivityMixin(BaseCastActivityData) {
         {
           _id: this.constructor.ENCHANTMENT_ID,
           type: "enchantment",
-          name: _loc("DND5E.CAST.Enchantment.Name"),
+          name: _loc("VARLYN5E.CAST.Enchantment.Name"),
           img: "systems/dnd5e/icons/svg/activity/cast.svg",
           origin: this.uuid,
           changes: this.getSpellChanges()

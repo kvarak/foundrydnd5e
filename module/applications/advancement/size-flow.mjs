@@ -25,7 +25,7 @@ export default class SizeFlow extends AdvancementFlow {
     context.size = sizes.size > 1 ? {
       field: new StringField({ required: true, blank: false }),
       options: Array.from(sizes).map(value => ({
-        value, label: CONFIG.DND5E.actorSizes[value].label
+        value, label: CONFIG.VARLYN5E.actorSizes[value].label
       })),
       value: this.advancement.value.size
     } : null;

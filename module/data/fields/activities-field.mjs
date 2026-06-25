@@ -38,7 +38,7 @@ export class ActivityField extends foundry.data.fields.ObjectField {
    * @returns {typeof Activity|null}  Activity document type.
    */
   getModel(value) {
-    return CONFIG.DND5E.activityTypes[value?.type]?.documentClass ?? null;
+    return CONFIG.VARLYN5E.activityTypes[value?.type]?.documentClass ?? null;
   }
 
   /* -------------------------------------------- */

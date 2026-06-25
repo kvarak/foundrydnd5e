@@ -33,7 +33,7 @@ export default class HitPointsFlow extends AdvancementFlow {
     const source = this.advancement.value;
     const value = source[this.level];
     const hp = this.advancement.actor.system.attributes.hp;
-    const abilityId = CONFIG.DND5E.defaultAbilities.hitPoints || "con";
+    const abilityId = CONFIG.VARLYN5E.defaultAbilities.hitPoints || "con";
     const mod = this.advancement.actor.system.abilities[abilityId]?.mod ?? 0;
     const bonus = simplifyBonus(hp.bonuses?.level ?? "", this.advancement.actor.getRollData());
 
@@ -48,7 +48,7 @@ export default class HitPointsFlow extends AdvancementFlow {
         bonus,
         max: this.advancement.hitDieValue,
         modifier: {
-          label: CONFIG.DND5E.abilities[abilityId]?.abbreviation ?? "",
+          label: CONFIG.VARLYN5E.abilities[abilityId]?.abbreviation ?? "",
           value: mod
         },
         previous: Object.keys(this.advancement.value).reduce((total, level) => {
@@ -100,7 +100,7 @@ export default class HitPointsFlow extends AdvancementFlow {
         if ( !useAverage && !Number.isInteger(value) ) {
           const errorType = value === null ? "Empty" : "Invalid";
           throw new Advancement.ERROR(
-            _loc(`DND5E.ADVANCEMENT.HitPoints.Warning.${errorType}`),
+            _loc(`VARLYN5E.ADVANCEMENT.HitPoints.Warning.${errorType}`),
             { selector: ".roll-result" }
           );
         }

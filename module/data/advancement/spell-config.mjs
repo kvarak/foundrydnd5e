@@ -92,7 +92,7 @@ export default class SpellConfigurationData extends foundry.abstract.DataModel {
       itemData.system.uses.recovery ??= [];
       itemData.system.uses.recovery.push({ period: this.uses.per, type: "recoverAll" });
 
-      const spellcasting = CONFIG.DND5E.spellcasting[itemData.system.method];
+      const spellcasting = CONFIG.VARLYN5E.spellcasting[itemData.system.method];
       const createForwardActivity = !this.uses.requireSlot && spellcasting?.slots;
 
       for ( const activity of Object.values(itemData.system.activities ?? {}) ) {
@@ -104,8 +104,8 @@ export default class SpellConfigurationData extends foundry.abstract.DataModel {
             _id: foundry.utils.randomID(),
             type: "forward",
             name: `${activity.name ?? _loc(
-              CONFIG.DND5E.activityTypes[activity.type]?.documentClass.metadata.title
-            )} (${_loc("DND5E.ADVANCEMENT.SPELLCONFIG.FreeCasting").toLowerCase()})`,
+              CONFIG.VARLYN5E.activityTypes[activity.type]?.documentClass.metadata.title
+            )} (${_loc("VARLYN5E.ADVANCEMENT.SPELLCONFIG.FreeCasting").toLowerCase()})`,
             sort: (activity.sort ?? 0) + 1,
             activity: {
               id: activity._id

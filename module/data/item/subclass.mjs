@@ -24,7 +24,7 @@ export default class SubclassData extends ItemDataModel.mixin(AdvancementTemplat
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -32,7 +32,7 @@ export default class SubclassData extends ItemDataModel.mixin(AdvancementTemplat
   static defineSchema() {
     return this.mergeSchema(super.defineSchema(), {
       classIdentifier: new IdentifierField({
-        required: true, label: "DND5E.ClassIdentifier", hint: "DND5E.ClassIdentifierHint"
+        required: true, label: "VARLYN5E.ClassIdentifier", hint: "VARLYN5E.ClassIdentifierHint"
       }),
       spellcasting: new SpellcastingField()
     });
@@ -52,7 +52,7 @@ export default class SubclassData extends ItemDataModel.mixin(AdvancementTemplat
         }
       }],
       ["hasSpellcasting", {
-        label: "DND5E.CompendiumBrowser.Filters.HasSpellcasting",
+        label: "VARLYN5E.CompendiumBrowser.Filters.HasSpellcasting",
         type: "boolean",
         createFilter: (filters, value, def) => {
           if ( value === 0 ) return;
@@ -71,7 +71,7 @@ export default class SubclassData extends ItemDataModel.mixin(AdvancementTemplat
   /** @inheritDoc */
   get tooltipSubtitle() {
     const cls = varlyn5e.registry.classes.get(this.classIdentifier)?.name;
-    if ( cls ) return [_loc("DND5E.SubclassOf", { class: cls })];
+    if ( cls ) return [_loc("VARLYN5E.SubclassOf", { class: cls })];
     return super.tooltipSubtitle;
   }
 

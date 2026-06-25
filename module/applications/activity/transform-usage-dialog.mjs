@@ -37,7 +37,7 @@ export default class TransformUsageDialog extends ActivityUsageDialog {
       context.hasCreation = true;
       context.transformFields = [{
         field: new StringField({
-          required: true, blank: false, label: _loc("DND5E.TRANSFORM.Profile.Label")
+          required: true, blank: false, label: _loc("VARLYN5E.TRANSFORM.Profile.Label")
         }),
         name: "transform.profile",
         value: this.config.transform?.profile,
@@ -63,7 +63,7 @@ export default class TransformUsageDialog extends ActivityUsageDialog {
     switch ( this.activity.transform.mode ) {
       case "cr":
         const cr = simplifyBonus(profile.cr, rollData);
-        return _loc("DND5E.TRANSFORM.Profile.ChallengeRatingLabel", { cr: formatCR(cr) });
+        return _loc("VARLYN5E.TRANSFORM.Profile.ChallengeRatingLabel", { cr: formatCR(cr) });
       default:
         const doc = fromUuidSync(profile.uuid);
         if ( doc ) return doc.name;

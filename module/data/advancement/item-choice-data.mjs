@@ -21,7 +21,7 @@ export class ItemChoiceConfigurationData extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.ADVANCEMENT.ItemChoice", "DND5E.ADVANCEMENT.SPELLCONFIG"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.ADVANCEMENT.ItemChoice", "VARLYN5E.ADVANCEMENT.SPELLCONFIG"];
 
   /* -------------------------------------------- */
 

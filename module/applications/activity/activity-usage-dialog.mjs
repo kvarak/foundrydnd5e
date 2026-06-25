@@ -195,7 +195,7 @@ export default class ActivityUsageDialog extends Dialog5e {
     context.notes = [];
 
     context.fields = [{
-      field: new BooleanField({ label: _loc("DND5E.Concentration") }),
+      field: new BooleanField({ label: _loc("VARLYN5E.Concentration") }),
       name: "concentration.begin",
       value: this.config.concentration?.begin,
       input: context.inputs.createCheckboxInput
@@ -206,25 +206,25 @@ export default class ActivityUsageDialog extends Dialog5e {
         return {
           value: effect.id,
           label: data?.data?.name ?? this.actor.items.get(data?.id)?.name
-            ?? _loc("DND5E.ConcentratingItemless")
+            ?? _loc("VARLYN5E.ConcentratingItemless")
         };
       });
       if ( existingConcentration.length ) {
         const optional = existingConcentration.length < (this.actor.system.attributes?.concentration?.limit ?? 0);
         context.fields.push({
           field: new StringField({
-            required: true, label: _loc("DND5E.ConcentratingEnd"), blank: optional
+            required: true, label: _loc("VARLYN5E.ConcentratingEnd"), blank: optional
           }),
           name: "concentration.end",
           value: this.config.concentration?.end,
           options: optional ? [{ value: "", label: "—" }, ...existingConcentration] : existingConcentration
         });
         context.notes.push({
-          type: "info", message: _loc(`DND5E.ConcentratingWarnLimit${optional ? "Optional" : ""}`)
+          type: "info", message: _loc(`VARLYN5E.ConcentratingWarnLimit${optional ? "Optional" : ""}`)
         });
       } else if ( !this.actor.system.attributes?.concentration?.limit ) {
         context.notes.push({
-          type: "warn", message: _loc("DND5E.ConcentratingWarnLimitZero")
+          type: "warn", message: _loc("VARLYN5E.ConcentratingWarnLimitZero")
         });
       }
     }
@@ -245,7 +245,7 @@ export default class ActivityUsageDialog extends Dialog5e {
     context.fields = [];
     context.notes = [];
 
-    const activationConfig = CONFIG.DND5E.activityActivationTypes[this.activity.activation.type];
+    const activationConfig = CONFIG.VARLYN5E.activityActivationTypes[this.activity.activation.type];
     if ( activationConfig?.consume && this._shouldDisplay("consume.action") ) {
       const { property } = activationConfig.consume;
       const containsConsumption = this.activity.consumption.targets.find(t => {
@@ -259,10 +259,10 @@ export default class ActivityUsageDialog extends Dialog5e {
         context.fields.push({
           value, warn,
           field: new BooleanField({
-            label: _loc("DND5E.CONSUMPTION.Type.Action.Prompt", {
+            label: _loc("VARLYN5E.CONSUMPTION.Type.Action.Prompt", {
               type: activationConfig.label
             }),
-            hint: _loc("DND5E.CONSUMPTION.Type.Action.PromptHint", {
+            hint: _loc("VARLYN5E.CONSUMPTION.Type.Action.PromptHint", {
               available: _loc(`${activationConfig.counted}.${plurals.select(current.value)}`, {
                 number: `<strong>${formatNumber(current.value)}</strong>`
               }),
@@ -279,7 +279,7 @@ export default class ActivityUsageDialog extends Dialog5e {
 
     if ( this.activity.requiresSpellSlot && this.activity.consumption.spellSlot
       && this._shouldDisplay("consume.spellSlot") && !this.config.cause ) context.fields.push({
-      field: new BooleanField({ label: _loc("DND5E.SpellCastConsume") }),
+      field: new BooleanField({ label: _loc("VARLYN5E.SpellCastConsume") }),
       input: context.inputs.createCheckboxInput,
       name: "consume.spellSlot",
       value: this.config.consume?.spellSlot
@@ -329,7 +329,7 @@ export default class ActivityUsageDialog extends Dialog5e {
     if ( this.activity.target?.template?.type && this._shouldDisplay("create.measuredTemplate") ) {
       context.hasCreation = true;
       context.template = {
-        field: new BooleanField({ label: _loc("DND5E.TARGET.Action.PlaceTemplate") }),
+        field: new BooleanField({ label: _loc("VARLYN5E.TARGET.Action.PlaceTemplate") }),
         name: "create.measuredTemplate",
         value: this.config.create?.measuredTemplate
       };
@@ -350,7 +350,7 @@ export default class ActivityUsageDialog extends Dialog5e {
     context.buttons = [{
       action: "use",
       icon: this.options.button.icon ?? `fa-solid fa-${this.activity.isSpell ? "magic" : "fist-raised"}`,
-      label: this.options.button.label ?? `DND5E.AbilityUse${this.activity.isSpell ? "Cast" : "Use"}`,
+      label: this.options.button.label ?? `VARLYN5E.AbilityUse${this.activity.isSpell ? "Cast" : "Use"}`,
       type: "button"
     }];
     return context;
@@ -380,12 +380,12 @@ export default class ActivityUsageDialog extends Dialog5e {
       const max = simplifyBonus(scale.max, rollData);
       const minimumLevel = context.linkedActivity.spell?.level ?? this.item.system.level ?? 1;
       const maximumLevel = scale.allowed ? scale.max ? minimumLevel + max - 1 : Infinity : minimumLevel;
-      const spellSlotOptions = Object.entries(CONFIG.DND5E.spellLevels).map(([level, label]) => {
+      const spellSlotOptions = Object.entries(CONFIG.VARLYN5E.spellLevels).map(([level, label]) => {
         if ( (Number(level) < minimumLevel) || (Number(level) > maximumLevel) ) return null;
         return { value: `spell${level}`, label };
       }).filter(_ => _);
       context.spellSlots = {
-        field: new StringField({ required: true, blank: false, label: _loc("DND5E.SpellCastUpcast") }),
+        field: new StringField({ required: true, blank: false, label: _loc("VARLYN5E.SpellCastUpcast") }),
         name: "spell.slot",
         value: this.config.spell?.slot,
         options: spellSlotOptions
@@ -396,7 +396,7 @@ export default class ActivityUsageDialog extends Dialog5e {
       const minimumLevel = this.item.system.level ?? 1;
       const maximumLevel = Object.values(this.actor.system.spells)
         .reduce((max, d) => d.max ? Math.max(max, d.level) : max, 0);
-      const spellMethod = CONFIG.DND5E.spellcasting[this.item.system.method];
+      const spellMethod = CONFIG.VARLYN5E.spellcasting[this.item.system.method];
 
       const consumeSlot = (this.config.consume === true) || this.config.consume?.spellSlot;
       let spellSlotValue = this.actor.system.spells[this.config.spell?.slot]?.value || !consumeSlot
@@ -404,9 +404,9 @@ export default class ActivityUsageDialog extends Dialog5e {
       const spellSlotOptions = Object.entries(this.actor.system.spells).map(([value, slot]) => {
         if ( !slot.max || (slot.level < minimumLevel) || (slot.level > maximumLevel) || !slot.type ) return null;
         if ( spellMethod?.exclusive.spells && (this.item.system.method !== slot.type) ) return null;
-        const model = CONFIG.DND5E.spellcasting[slot.type];
+        const model = CONFIG.VARLYN5E.spellcasting[slot.type];
         if ( model?.exclusive.slots && (this.item.system.method !== slot.type) ) return null;
-        const label = _loc(`DND5E.SpellLevel${slot.type.capitalize()}`, {
+        const label = _loc(`VARLYN5E.SpellLevel${slot.type.capitalize()}`, {
           level: model?.isSingleLevel ? slot.level : slot.label,
           n: slot.value
         });
@@ -417,14 +417,14 @@ export default class ActivityUsageDialog extends Dialog5e {
       }).filter(_ => _);
 
       context.spellSlots = {
-        field: new StringField({ required: true, blank: false, label: _loc("DND5E.SpellCastUpcast") }),
+        field: new StringField({ required: true, blank: false, label: _loc("VARLYN5E.SpellCastUpcast") }),
         name: "spell.slot",
         value: spellSlotValue,
         options: spellSlotOptions
       };
 
       if ( !spellSlotOptions.some(o => !o.disabled) ) context.notes.push({
-        type: "warn", message: _loc("DND5E.SpellCastNoSlotsLeft", {
+        type: "warn", message: _loc("VARLYN5E.SpellCastNoSlotsLeft", {
           name: this.item.name
         })
       });
@@ -433,7 +433,7 @@ export default class ActivityUsageDialog extends Dialog5e {
     else if ( scale.allowed && (this.config.scaling !== false) ) {
       const max = scale.max ? simplifyBonus(scale.max, rollData) : Infinity;
       if ( max > 1 ) context.scaling = {
-        field: new NumberField({ min: 1, max, label: _loc("DND5E.ScalingValue") }),
+        field: new NumberField({ min: 1, max, label: _loc("VARLYN5E.ScalingValue") }),
         name: "scalingValue",
         // Config stores the scaling increase, but scaling value (increase + 1) is easier to understand in the UI
         value: Math.clamp((this.config.scaling ?? 0) + 1, 1, max),

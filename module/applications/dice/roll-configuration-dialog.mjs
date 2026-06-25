@@ -32,7 +32,7 @@ export default class RollConfigurationDialog extends Dialog5e {
   static DEFAULT_OPTIONS = {
     classes: ["roll-configuration"],
     window: {
-      title: "DND5E.RollConfiguration.Title",
+      title: "VARLYN5E.RollConfiguration.Title",
       icon: "fa-solid fa-dice"
     },
     form: {
@@ -212,7 +212,7 @@ export default class RollConfigurationDialog extends Dialog5e {
       roll: {
         default: true,
         icon: '<i class="fa-solid fa-dice" inert></i>',
-        label: _loc("DND5E.Roll")
+        label: _loc("VARLYN5E.Roll")
       }
     };
     return context;
@@ -230,7 +230,7 @@ export default class RollConfigurationDialog extends Dialog5e {
   async _prepareConfigurationContext(context, options) {
     context.fields = [{
       field: new foundry.data.fields.StringField({
-        label: _loc("DND5E.RollMode"), blank: false, required: true
+        label: _loc("VARLYN5E.RollMode"), blank: false, required: true
       }),
       name: "rollMode",
       value: this.message.rollMode ?? this.options.default?.rollMode ?? CONFIG.Dice.BasicRoll.getMessageMode(),

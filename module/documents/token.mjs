@@ -76,7 +76,7 @@ export default class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
     let maxSightRange = 0;
     let sightVisionMode = null;
 
-    for ( const [key, config] of Object.entries(CONFIG.DND5E.senses) ) {
+    for ( const [key, config] of Object.entries(CONFIG.VARLYN5E.senses) ) {
       const range = senses.ranges?.[key];
       if ( !range ) continue;
 
@@ -147,7 +147,7 @@ export default class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
    * @returns {string[]}
    */
   static getConsumedAttributes(data) {
-    return CONFIG.DND5E.consumableResources;
+    return CONFIG.VARLYN5E.consumableResources;
   }
 
   /* -------------------------------------------- */
@@ -156,11 +156,11 @@ export default class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
   static getTrackedAttributeChoices(attributes) {
     const groups = super.getTrackedAttributeChoices(attributes);
     const i18n = {
-      abilities: _loc("DND5E.AbilityScorePl"),
-      movement: _loc("DND5E.MOVEMENT.FIELDS.speeds.label"),
-      senses: _loc("DND5E.Senses"),
-      skills: _loc("DND5E.SkillPassives"),
-      slots: _loc("JOURNALENTRYPAGE.DND5E.Class.SpellSlots")
+      abilities: _loc("VARLYN5E.AbilityScorePl"),
+      movement: _loc("VARLYN5E.MOVEMENT.FIELDS.speeds.label"),
+      senses: _loc("VARLYN5E.Senses"),
+      skills: _loc("VARLYN5E.SkillPassives"),
+      slots: _loc("JOURNALENTRYPAGE.VARLYN5E.Class.SpellSlots")
     };
     for ( const entry of groups ) {
       const { value } = entry;
@@ -185,7 +185,7 @@ export default class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
       if ( deltaSize ) size = deltaSize;
     }
     if ( !size ) return;
-    const dts = CONFIG.DND5E.actorSizes[size].dynamicTokenScale ?? 1;
+    const dts = CONFIG.VARLYN5E.actorSizes[size].dynamicTokenScale ?? 1;
     this.texture.scaleX = this._source.texture.scaleX * dts;
     this.texture.scaleY = this._source.texture.scaleY * dts;
   }
@@ -198,7 +198,7 @@ export default class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
    * Set up the system's movement action customization.
    */
   static registerMovementActions() {
-    for ( const type of Object.keys(CONFIG.DND5E.movementTypes) ) {
+    for ( const type of Object.keys(CONFIG.VARLYN5E.movementTypes) ) {
       const actionConfig = CONFIG.Token.movement.actions[type];
       if ( !actionConfig ) continue;
       actionConfig.getAnimationOptions = token => {
@@ -234,7 +234,7 @@ export default class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
     const noAutomation = game.settings.get("dnd5e", "movementAutomation") === "none";
     const { actor } = token;
     const actorMovement = actor?.system.attributes?.movement;
-    const walkFallback = CONFIG.DND5E.movementTypes[type]?.walkFallback;
+    const walkFallback = CONFIG.VARLYN5E.movementTypes[type]?.walkFallback;
     const hasMovement = actorMovement !== undefined;
     const speed = actorMovement?.[type];
     return noAutomation || !actor?.system.isCreature || !hasMovement || speed || (!speed && !walkFallback)
@@ -253,7 +253,7 @@ export default class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
   getRingColors() {
     const colors = {};
     if ( this.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED) ) {
-      colors.ring = CONFIG.DND5E.tokenRingColors.defeated;
+      colors.ring = CONFIG.VARLYN5E.tokenRingColors.defeated;
     }
     return colors;
   }
@@ -280,7 +280,7 @@ export default class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
    */
   flashRing(type) {
     if ( !this.rendered ) return;
-    const color = CONFIG.DND5E.tokenRingColors[type];
+    const color = CONFIG.VARLYN5E.tokenRingColors[type];
     if ( !color ) return;
     const options = {};
     if ( type === "damage" ) {

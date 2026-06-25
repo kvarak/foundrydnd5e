@@ -87,12 +87,12 @@ export default class NPCActorSheet extends BaseActorSheet {
 
   /** @override */
   static TABS = [
-    { tab: "features", label: "DND5E.Features", icon: "fas fa-list" },
-    { tab: "inventory", label: "DND5E.Inventory", svg: "systems/dnd5e/icons/svg/backpack.svg" },
+    { tab: "features", label: "VARLYN5E.Features", icon: "fas fa-list" },
+    { tab: "inventory", label: "VARLYN5E.Inventory", svg: "systems/dnd5e/icons/svg/backpack.svg" },
     { tab: "spells", label: "TYPES.Item.spellPl", icon: "fas fa-book" },
-    { tab: "effects", label: "DND5E.Effects", icon: "fas fa-bolt" },
-    { tab: "biography", label: "DND5E.Biography", icon: "fas fa-feather" },
-    { tab: "specialTraits", label: "DND5E.SpecialTraits", icon: "fas fa-star" }
+    { tab: "effects", label: "VARLYN5E.Effects", icon: "fas fa-bolt" },
+    { tab: "biography", label: "VARLYN5E.Biography", icon: "fas fa-feather" },
+    { tab: "specialTraits", label: "VARLYN5E.SpecialTraits", icon: "fas fa-star" }
   ];
 
   /* -------------------------------------------- */
@@ -209,7 +209,7 @@ export default class NPCActorSheet extends BaseActorSheet {
    * @protected
    */
   async _prepareFeaturesContext(context, options) {
-    const sections = Object.entries(CONFIG.DND5E.activityActivationTypes).reduce((obj, [id, config], i) => {
+    const sections = Object.entries(CONFIG.VARLYN5E.activityActivationTypes).reduce((obj, [id, config], i) => {
       const { header: label, passive } = config;
       if ( passive ) return obj;
       obj[id] ??= {
@@ -219,7 +219,7 @@ export default class NPCActorSheet extends BaseActorSheet {
       return obj;
     }, {});
     sections.passive = {
-      id: "passive", label: "DND5E.Features", order: 0, items: [], minWidth: 210,
+      id: "passive", label: "VARLYN5E.Features", order: 0, items: [], minWidth: 210,
       columns: ["recovery", "uses", "roll", "formula", "controls"]
     };
     context.itemCategories.features?.forEach(i => {
@@ -228,14 +228,14 @@ export default class NPCActorSheet extends BaseActorSheet {
     });
     context.sections = customElements.get(this.options.elements.inventory).prepareSections(Object.values(sections));
     context.listControls = {
-      label: "DND5E.FeatureSearch",
+      label: "VARLYN5E.FeatureSearch",
       list: "features",
       filters: [
-        { key: "action", label: "DND5E.ACTIVATION.Type.Action.Label" },
-        { key: "bonus", label: "DND5E.ACTIVATION.Type.BonusAction.Label" },
-        { key: "reaction", label: "DND5E.ACTIVATION.Type.Reaction.Label" },
-        { key: "legendary", label: "DND5E.ACTIVATION.Type.Legendary.Label" },
-        { key: "lair", label: "DND5E.ACTIVATION.Type.Lair.Label" }
+        { key: "action", label: "VARLYN5E.ACTIVATION.Type.Action.Label" },
+        { key: "bonus", label: "VARLYN5E.ACTIVATION.Type.BonusAction.Label" },
+        { key: "reaction", label: "VARLYN5E.ACTIVATION.Type.Reaction.Label" },
+        { key: "legendary", label: "VARLYN5E.ACTIVATION.Type.Legendary.Label" },
+        { key: "lair", label: "VARLYN5E.ACTIVATION.Type.Lair.Label" }
       ],
       sorting: [
         { key: "m", label: "SIDEBAR.SortModeManual", dataset: { icon: "fa-solid fa-arrow-down-short-wide" } },
@@ -280,8 +280,8 @@ export default class NPCActorSheet extends BaseActorSheet {
         if ( filled ) classes.push("filled");
         return {
           n: max - n, filled,
-          tooltip: `DND5E.${i18n}.Label`,
-          label: _loc(`DND5E.${i18n}.Ordinal.${plurals.select(n)}`, { n }),
+          tooltip: `VARLYN5E.${i18n}.Label`,
+          label: _loc(`VARLYN5E.${i18n}.Ordinal.${plurals.select(n)}`, { n }),
           classes: classes.join(" ")
         };
       });
@@ -344,9 +344,9 @@ export default class NPCActorSheet extends BaseActorSheet {
       const any = details.habitat.value.find(({ type }) => type === "any");
       context.habitat = [
         ...habitat.value.map(({ type, subtype }) => {
-          let { label } = CONFIG.DND5E.habitats[type] ?? {};
+          let { label } = CONFIG.VARLYN5E.habitats[type] ?? {};
           if ( label && (!any || (type === "any")) ) {
-            if ( subtype ) label = _loc("DND5E.Habitat.Subtype", { type: label, subtype });
+            if ( subtype ) label = _loc("VARLYN5E.Habitat.Subtype", { type: label, subtype });
             return { label };
           }
           return null;
@@ -359,7 +359,7 @@ export default class NPCActorSheet extends BaseActorSheet {
     context.senses = this._prepareSenses(context);
     if ( this.actor.system.skills.prc ) context.senses.push({
       key: "passivePerception",
-      label: _loc("DND5E.PassivePerception"),
+      label: _loc("VARLYN5E.PassivePerception"),
       value: this.actor.system.skills.prc.passive
     });
 
@@ -371,12 +371,12 @@ export default class NPCActorSheet extends BaseActorSheet {
 
     // Speed
     context.speed = [
-      ...Object.entries(CONFIG.DND5E.movementTypes).filter(([, m]) => !m.hidden).map(([k, { label }]) => {
+      ...Object.entries(CONFIG.VARLYN5E.movementTypes).filter(([, m]) => !m.hidden).map(([k, { label }]) => {
         const value = attributes.movement[k];
         if ( !value ) return null;
         const data = { label, value };
         if ( (k === "fly") && attributes.movement.hover ) data.icons = [{
-          icon: "fas fa-cloud", label: _loc("DND5E.MOVEMENT.Hover")
+          icon: "fas fa-cloud", label: _loc("VARLYN5E.MOVEMENT.Hover")
         }];
         return data;
       }),
@@ -391,7 +391,7 @@ export default class NPCActorSheet extends BaseActorSheet {
       const any = details.treasure.value.has("any");
       context.treasure = Array.from(details.treasure.value)
         .map(id => {
-          const { label } = CONFIG.DND5E.treasure[id] ?? {};
+          const { label } = CONFIG.VARLYN5E.treasure[id] ?? {};
           if ( label && (!any || (id === "any")) ) return { label };
           return null;
         }, [])
@@ -410,21 +410,21 @@ export default class NPCActorSheet extends BaseActorSheet {
 
     const { fields } = this.document.system.schema;
     context.flags.sections.unshift({
-      label: _loc("DND5E.NPC.Label"),
+      label: _loc("VARLYN5E.NPC.Label"),
       fields: [{
         field: fields.traits.fields.important,
         input: createCheckboxInput,
         name: "system.traits.important",
         value: context.source.traits.important
       }, {
-        label: "DND5E.NPC.FIELDS.attributes.price.label",
-        hint: "DND5E.NPC.FIELDS.attributes.price.hint",
+        label: "VARLYN5E.NPC.FIELDS.attributes.price.label",
+        hint: "VARLYN5E.NPC.FIELDS.attributes.price.hint",
         fields: [{
           field: fields.attributes.fields.price.fields.value,
           name: "system.attributes.price.value",
           value: context.source.attributes.price.value
         }, {
-          choices: CONFIG.DND5E.currencies,
+          choices: CONFIG.VARLYN5E.currencies,
           field: fields.attributes.fields.price.fields.denomination,
           name: "system.attributes.price.denomination",
           value: context.source.attributes.price.denomination
@@ -452,20 +452,20 @@ export default class NPCActorSheet extends BaseActorSheet {
     const mod = spellAbility?.mod ?? 0;
     const attackBonus = msak === rsak ? msak : 0;
     context.spellcasting.push({
-      label: _loc("DND5E.SpellcastingClass", {
-        class: spellcaster?.name ?? _loc("DND5E.NPC.Label")
+      label: _loc("VARLYN5E.SpellcastingClass", {
+        class: spellcaster?.name ?? _loc("VARLYN5E.NPC.Label")
       }),
       level: spellcaster?.system.levels ?? attributes.spell.level,
       ability: {
         ability, mod,
-        label: CONFIG.DND5E.abilities[ability]?.label
+        label: CONFIG.VARLYN5E.abilities[ability]?.label
       },
       attack: mod + attributes.prof + attackBonus,
       save: spellAbility?.dc ?? 0,
       noSpellcaster: !spellcaster,
       concentration: {
         mod: attributes.concentration.save,
-        tooltip: _loc("DND5E.AbilityConfigure", { ability: _loc("DND5E.Concentration") })
+        tooltip: _loc("VARLYN5E.AbilityConfigure", { ability: _loc("VARLYN5E.Concentration") })
       }
     });
 
@@ -500,7 +500,7 @@ export default class NPCActorSheet extends BaseActorSheet {
   async _prepareItem(item, ctx) {
     await super._prepareItem(item, ctx);
     const isPassive = item.system.properties?.has("trait")
-      || CONFIG.DND5E.activityActivationTypes[item.system.activities?.contents[0]?.activation.type]?.passive;
+      || CONFIG.VARLYN5E.activityActivationTypes[item.system.activities?.contents[0]?.activation.type]?.passive;
     ctx.group = isPassive ? "passive" : item.system.activities?.contents[0]?.activation.type || "passive";
   }
 
@@ -521,7 +521,7 @@ export default class NPCActorSheet extends BaseActorSheet {
     const elements = this.element.querySelector(".header-elements .cr-xp");
     if ( !elements || this.actor.limited ) return;
     const xp = this.actor.system.details.xp.value;
-    elements.innerText = xp === null ? "" : _loc("DND5E.ExperiencePoints.Format", {
+    elements.innerText = xp === null ? "" : _loc("VARLYN5E.ExperiencePoints.Format", {
       value: formatNumber(xp)
     });
 

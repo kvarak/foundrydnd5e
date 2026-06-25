@@ -21,8 +21,8 @@ export default class GroupTemplate extends ActorDataModel.mixin(CurrencyTemplate
   static defineSchema() {
     return this.mergeSchema(super.defineSchema(), {
       description: new SchemaField({
-        full: new HTMLField({ label: "DND5E.Description" }),
-        summary: new HTMLField({ label: "DND5E.DescriptionSummary" })
+        full: new HTMLField({ label: "VARLYN5E.Description" }),
+        summary: new HTMLField({ label: "VARLYN5E.DescriptionSummary" })
       })
     });
   }
@@ -87,7 +87,7 @@ export default class GroupTemplate extends ActorDataModel.mixin(CurrencyTemplate
       }
     } catch(err) {
       Hooks.onError("GroupTemplate#placeMembers", err, {
-        msg: _loc("DND5E.Group.Warning.PlaceMembers"),
+        msg: _loc("VARLYN5E.Group.Warning.PlaceMembers"),
         log: "error",
         notify: "error"
       });

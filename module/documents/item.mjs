@@ -80,7 +80,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
     }, {});
     const choices = makeChoices(generalTypes);
     choices.physical = {
-      label: _loc("DND5E.ITEM.Category.Physical"),
+      label: _loc("VARLYN5E.ITEM.Category.Physical"),
       children: makeChoices(physicalTypes, chosen.has("physical"))
     };
     return new SelectChoices(choices);
@@ -605,8 +605,8 @@ export default class Item5e extends SystemDocumentMixin(Item) {
         if ( (prop === "concentration") && !this.requiresConcentration ) return acc;
         acc.push({
           abbr: prop,
-          label: CONFIG.DND5E.itemProperties[prop]?.label,
-          icon: CONFIG.DND5E.itemProperties[prop]?.icon
+          label: CONFIG.VARLYN5E.itemProperties[prop]?.label,
+          icon: CONFIG.VARLYN5E.itemProperties[prop]?.icon
         });
         return acc;
       }, []);
@@ -627,7 +627,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
     this.advancement = {
       byId: {},
       byLevel: Object.fromEntries(
-        Array.fromRange(CONFIG.DND5E.maxLevel + 1).slice(minAdvancementLevel).map(l => [l, []])
+        Array.fromRange(CONFIG.VARLYN5E.maxLevel + 1).slice(minAdvancementLevel).map(l => [l, []])
       ),
       byType: {},
       needingConfiguration: []
@@ -769,7 +769,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
   async displayCard(message={}) {
     const context = {
       actor: this.actor,
-      config: CONFIG.DND5E,
+      config: CONFIG.VARLYN5E,
       tokenId: this.actor.token?.uuid || null,
       item: this,
       data: await this.system.getCardData(),
@@ -946,8 +946,8 @@ export default class Item5e extends SystemDocumentMixin(Item) {
   async createActivity(type, data={}, { renderSheet=true }={}) {
     if ( !this.system.activities ) return;
 
-    const config = CONFIG.DND5E.activityTypes[type];
-    if ( !config ) throw new Error(`${type} not found in CONFIG.DND5E.activityTypes`);
+    const config = CONFIG.VARLYN5E.activityTypes[type];
+    if ( !config ) throw new Error(`${type} not found in CONFIG.VARLYN5E.activityTypes`);
     const cls = config.documentClass;
 
     const createData = foundry.utils.deepClone(data);
@@ -1005,8 +1005,8 @@ export default class Item5e extends SystemDocumentMixin(Item) {
   createAdvancement(type, data={}, { renderSheet=true, source=false }={}) {
     if ( !this.system.advancement ) return this;
 
-    const config = CONFIG.DND5E.advancementTypes[type];
-    if ( !config ) throw new Error(`${type} not found in CONFIG.DND5E.advancementTypes`);
+    const config = CONFIG.VARLYN5E.advancementTypes[type];
+    if ( !config ) throw new Error(`${type} not found in CONFIG.VARLYN5E.advancementTypes`);
     const cls = config.documentClass;
 
     if ( !config.validItemTypes.has(this.type) || !cls.availableForItem(this) ) {
@@ -1207,7 +1207,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
     // Display custom delete dialog when deleting a container with contents
     const count = await this.system.contentsCount;
     if ( count ) {
-      const type = _loc("DND5E.Container");
+      const type = _loc("VARLYN5E.Container");
       const config = foundry.utils.mergeObject({
         window: {
           icon: "fa-solid fa-trash",
@@ -1217,10 +1217,10 @@ export default class Item5e extends SystemDocumentMixin(Item) {
         content: `
           <p>
             <strong>${_loc("COMMON.AreYouSure")}</strong>
-            ${_loc("DND5E.ContainerDeleteMessage", { count })}
+            ${_loc("VARLYN5E.ContainerDeleteMessage", { count })}
           </p>
           <label class="checkbox">
-            <span>${_loc("DND5E.ContainerDeleteContents")}</span>
+            <span>${_loc("VARLYN5E.ContainerDeleteContents")}</span>
             <input type="checkbox" name="deleteContents">
           </label>
         `,
@@ -1260,7 +1260,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
    */
   static addDirectoryContextOptions(app, entryOptions) {
     entryOptions.push({
-      label: "DND5E.Scroll.CreateScroll",
+      label: "VARLYN5E.Scroll.CreateScroll",
       icon: '<i class="fa-solid fa-scroll"></i>',
       group: "system",
       visible: li => {
@@ -1299,7 +1299,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
     if ( container ) {
       initialDepth = 1 + (await container.system.allContainers()).length;
       if ( initialDepth > PhysicalItemTemplate.MAX_DEPTH ) {
-        ui.notifications.warn("DND5E.ContainerMaxDepth", { format: { depth: PhysicalItemTemplate.MAX_DEPTH } });
+        ui.notifications.warn("VARLYN5E.ContainerMaxDepth", { format: { depth: PhysicalItemTemplate.MAX_DEPTH } });
         return;
       }
     }
@@ -1393,9 +1393,9 @@ export default class Item5e extends SystemDocumentMixin(Item) {
 
     // Get scroll data
     let scrollUuid;
-    const id = CONFIG.DND5E.spellScrollIds[level];
+    const id = CONFIG.VARLYN5E.spellScrollIds[level];
     if ( foundry.data.validators.isValidId(id) ) {
-      scrollUuid = game.packs.get(CONFIG.DND5E.sourcePacks.ITEMS).index.get(id).uuid;
+      scrollUuid = game.packs.get(CONFIG.VARLYN5E.sourcePacks.ITEMS).index.get(id).uuid;
     } else {
       scrollUuid = id;
     }
@@ -1406,7 +1406,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
     const desc = this._createScrollDescription(scrollItem, itemData, null, config);
 
     for ( const level of Array.fromRange(itemData.system.level + 1).reverse() ) {
-      const values = CONFIG.DND5E.spellScrollValues[level];
+      const values = CONFIG.VARLYN5E.spellScrollValues[level];
       if ( values ) {
         config.values.bonus ??= values.bonus;
         config.values.dc ??= values.dc;
@@ -1433,7 +1433,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
 
     // Create the spell scroll data
     const spellScrollData = foundry.utils.mergeObject(scrollData, {
-      name: `${_loc("DND5E.SpellScroll")}: ${itemData.name}`,
+      name: `${_loc("VARLYN5E.SpellScroll")}: ${itemData.name}`,
       effects: itemData.effects ?? [],
       flags,
       system: {
@@ -1500,9 +1500,9 @@ export default class Item5e extends SystemDocumentMixin(Item) {
 
     // Get scroll data
     let scrollUuid;
-    const id = CONFIG.DND5E.spellScrollIds[spell.system.level];
+    const id = CONFIG.VARLYN5E.spellScrollIds[spell.system.level];
     if ( foundry.data.validators.isValidId(id) ) {
-      scrollUuid = game.packs.get(CONFIG.DND5E.sourcePacks.ITEMS).index.get(id).uuid;
+      scrollUuid = game.packs.get(CONFIG.VARLYN5E.sourcePacks.ITEMS).index.get(id).uuid;
     } else {
       scrollUuid = id;
     }
@@ -1510,7 +1510,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
     const scrollData = game.items.fromCompendium(scrollItem);
 
     for ( const level of Array.fromRange(spell.system.level + 1).reverse() ) {
-      const values = CONFIG.DND5E.spellScrollValues[level];
+      const values = CONFIG.VARLYN5E.spellScrollValues[level];
       if ( values ) {
         config.values.bonus ??= values.bonus;
         config.values.dc ??= values.dc;
@@ -1537,7 +1537,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
 
     // Create the spell scroll data
     const spellScrollData = foundry.utils.mergeObject(scrollData, {
-      name: `${_loc("DND5E.SpellScroll")}: ${spell.name}`,
+      name: `${_loc("VARLYN5E.SpellScroll")}: ${spell.name}`,
       system: {
         activities: { ...(scrollData.system.activities ?? {}), [activity._id]: activity },
         description: {
@@ -1584,18 +1584,18 @@ export default class Item5e extends SystemDocumentMixin(Item) {
         const scrollDetails = scrollDescription.slice(scrollIntroEnd + pdel.length);
         return [
           scrollDetails ? scrollIntro : null,
-          `<h3>${spell.name} (${_loc("DND5E.LevelNumber", { level })})</h3>`,
-          isConc ? `<p><em>${_loc("DND5E.Scroll.RequiresConcentration")}</em></p>` : null,
+          `<h3>${spell.name} (${_loc("VARLYN5E.LevelNumber", { level })})</h3>`,
+          isConc ? `<p><em>${_loc("VARLYN5E.Scroll.RequiresConcentration")}</em></p>` : null,
           spellDescription,
-          `<h3>${_loc("DND5E.Scroll.Details")}</h3>`,
+          `<h3>${_loc("VARLYN5E.Scroll.Details")}</h3>`,
           scrollDetails || scrollIntro
         ].filterJoin("");
       case "reference":
         return [
           "<p><em>",
-          CONFIG.DND5E.spellLevels[level] ?? level,
+          CONFIG.VARLYN5E.spellLevels[level] ?? level,
           " &Reference[Spell Scroll]",
-          isConc ? `, ${_loc("DND5E.Scroll.RequiresConcentration")}` : null,
+          isConc ? `, ${_loc("VARLYN5E.Scroll.RequiresConcentration")}` : null,
           "</em></p>",
           spellDescription
         ].filterJoin("");
@@ -1629,6 +1629,6 @@ export default class Item5e extends SystemDocumentMixin(Item) {
   static getDefaultArtwork(itemData={}) {
     const { type } = itemData;
     const { img } = super.getDefaultArtwork(itemData);
-    return { img: CONFIG.DND5E.defaultArtwork.Item[type] ?? img };
+    return { img: CONFIG.VARLYN5E.defaultArtwork.Item[type] ?? img };
   }
 }

@@ -89,7 +89,7 @@ export default class EnchantmentApplicationElement extends MaybeAdoptable {
         this.querySelector(".enchantment-control").append(div);
         this.countArea = this.querySelector(".count-area");
       }
-      this.countArea.innerHTML = _loc("DND5E.ENCHANT.Enchanted", {
+      this.countArea.innerHTML = _loc("VARLYN5E.ENCHANT.Enchanted", {
         current: '<span class="current">0</span>',
         max: `<span class="max">${maxTargets}<span>`
       });
@@ -120,16 +120,16 @@ export default class EnchantmentApplicationElement extends MaybeAdoptable {
       div.querySelector(".name").append(item.name);
       if ( item.isOwner ) {
         const control = document.createElement("a");
-        control.ariaLabel = _loc("DND5E.ENCHANTMENT.Action.Remove");
+        control.ariaLabel = _loc("VARLYN5E.ENCHANTMENT.Action.Remove");
         control.dataset.action = "removeEnchantment";
-        control.dataset.tooltip = "DND5E.ENCHANTMENT.Action.Remove";
+        control.dataset.tooltip = "VARLYN5E.ENCHANTMENT.Action.Remove";
         control.innerHTML = '<i class="fa-solid fa-rotate-left" inert></i>';
         div.append(control);
       }
       return div;
     });
     if ( enchantedItems.length ) this.dropArea.replaceChildren(...enchantedItems);
-    else this.dropArea.innerHTML = `<p>${_loc("DND5E.ENCHANT.DropArea")}</p>`;
+    else this.dropArea.innerHTML = `<p>${_loc("VARLYN5E.ENCHANT.DropArea")}</p>`;
     if ( this.countArea ) this.countArea.querySelector(".current").innerText = enchantedItems.length;
   }
 
@@ -151,7 +151,7 @@ export default class EnchantmentApplicationElement extends MaybeAdoptable {
     const concentrationId = this.chatMessage.system.concentration;
     const concentration = this.enchantmentActivity.actor.effects.get(concentrationId);
     if ( concentrationId && !concentration ) {
-      ui.notifications.error("DND5E.ENCHANT.Warning.ConcentrationEnded", { console: false });
+      ui.notifications.error("VARLYN5E.ENCHANT.Warning.ConcentrationEnded", { console: false });
       return;
     }
 

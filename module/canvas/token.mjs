@@ -23,7 +23,7 @@ export default class Token5e extends foundry.canvas.placeables.Token {
 
     // Normal behavior if token blocking is disabled or this actor is not a creature or cannot block
     if ( (game.settings.get("dnd5e", "movementAutomation") !== "full") || !this.document.actor?.system.isCreature
-      || this.document.actor.statuses.intersects(CONFIG.DND5E.neverBlockStatuses) ) {
+      || this.document.actor.statuses.intersects(CONFIG.VARLYN5E.neverBlockStatuses) ) {
       return super.findMovementPath(waypoints, options);
     }
 
@@ -82,7 +82,7 @@ export default class Token5e extends foundry.canvas.placeables.Token {
 
     ignoreTokens ||= game.settings.get("dnd5e", "movementAutomation") !== "full";
     ignoreTokens ||= !this.actor?.system.isCreature;
-    ignoreTokens ||= this.actor?.statuses?.intersects(CONFIG.DND5E.neverBlockStatuses);
+    ignoreTokens ||= this.actor?.statuses?.intersects(CONFIG.VARLYN5E.neverBlockStatuses);
 
     // Ignore tokens if path contains resize
     ignoreTokens ||= waypoints.some(w => (w.width !== waypoints[0].width) || (w.height !== waypoints[0].height));
@@ -171,7 +171,7 @@ export default class Token5e extends foundry.canvas.placeables.Token {
 
     // Determine colors to use
     const blk = 0x000000;
-    const c = CONFIG.DND5E.tokenHPColors;
+    const c = CONFIG.VARLYN5E.tokenHPColors;
 
     // Determine the container size (logic borrowed from core)
     let s = canvas.dimensions.uiScale;

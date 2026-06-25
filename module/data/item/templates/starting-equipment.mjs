@@ -20,8 +20,8 @@ export default class StartingEquipmentTemplate extends SystemDataModel {
   static defineSchema() {
     return {
       startingEquipment: new ArrayField(new EmbeddedDataField(EquipmentEntryData), {required: true}),
-      wealth: new FormulaField({ label: "DND5E.StartingEquipment.Wealth.Label",
-        hint: "DND5E.StartingEquipment.Wealth.Hint" })
+      wealth: new FormulaField({ label: "VARLYN5E.StartingEquipment.Wealth.Label",
+        hint: "VARLYN5E.StartingEquipment.Wealth.Hint" })
     };
   }
 
@@ -62,7 +62,7 @@ export default class StartingEquipmentTemplate extends SystemDataModel {
     if ( modernStyle ) {
       const entries = topLevel[0].type === "OR" ? topLevel[0].children : topLevel;
       if ( this.wealth ) entries.push(new EquipmentEntryData({
-        type: "currency", key: CONFIG.DND5E.defaultCurrency, count: this.wealth
+        type: "currency", key: CONFIG.VARLYN5E.defaultCurrency, count: this.wealth
       }));
       if ( entries.length > 1 ) {
         const usedPrefixes = [];
@@ -70,7 +70,7 @@ export default class StartingEquipmentTemplate extends SystemDataModel {
           entries.map(e => e.generateLabel({ modernStyle, depth: 2 })), { modernStyle, usedPrefixes }
         );
         const formatter = game.i18n.getListFormatter({ type: "disjunction" });
-        return `<p>${_loc("DND5E.StartingEquipment.ChooseList", {
+        return `<p>${_loc("VARLYN5E.StartingEquipment.ChooseList", {
           prefixes: formatter.format(usedPrefixes), choices: formatter.format(choices)
         })}</p>`;
       }
@@ -101,8 +101,8 @@ export class EquipmentEntryData extends foundry.abstract.DataModel {
    * @enum {string}
    */
   static GROUPING_TYPES = {
-    OR: "DND5E.StartingEquipment.Operator.OR",
-    AND: "DND5E.StartingEquipment.Operator.AND"
+    OR: "VARLYN5E.StartingEquipment.Operator.OR",
+    AND: "VARLYN5E.StartingEquipment.Operator.AND"
   };
 
   /**
@@ -111,16 +111,16 @@ export class EquipmentEntryData extends foundry.abstract.DataModel {
    */
   static OPTION_TYPES = {
     // Category types
-    armor: "DND5E.StartingEquipment.Choice.Armor",
-    tool: "DND5E.StartingEquipment.Choice.Tool",
-    weapon: "DND5E.StartingEquipment.Choice.Weapon",
-    focus: "DND5E.StartingEquipment.Choice.Focus",
+    armor: "VARLYN5E.StartingEquipment.Choice.Armor",
+    tool: "VARLYN5E.StartingEquipment.Choice.Tool",
+    weapon: "VARLYN5E.StartingEquipment.Choice.Weapon",
+    focus: "VARLYN5E.StartingEquipment.Choice.Focus",
 
     // Currency
-    currency: "DND5E.StartingEquipment.Currency",
+    currency: "VARLYN5E.StartingEquipment.Currency",
 
     // Generic item type
-    linked: "DND5E.StartingEquipment.SpecificItem"
+    linked: "VARLYN5E.StartingEquipment.SpecificItem"
   };
 
   /**
@@ -134,19 +134,19 @@ export class EquipmentEntryData extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /**
-   * Where in `CONFIG.DND5E` to find the type category labels.
+   * Where in `CONFIG.VARLYN5E` to find the type category labels.
    * @enum {{ label: string, config: string }}
    */
   static CATEGORIES = {
     armor: {
-      label: "DND5E.Armor",
+      label: "VARLYN5E.Armor",
       config: "armorTypes"
     },
     currency: {
       config: "currencies"
     },
     focus: {
-      label: "DND5E.Focus.Label",
+      label: "VARLYN5E.Focus.Label",
       config: "focusTypes"
     },
     tool: {
@@ -218,7 +218,7 @@ export class EquipmentEntryData extends foundry.abstract.DataModel {
     let label = configEntry?.label ?? configEntry;
     if ( !label ) return this.blankLabel.toLowerCase();
 
-    if ( this.type === "weapon" ) label = _loc("DND5E.WeaponCategory", { category: label });
+    if ( this.type === "weapon" ) label = _loc("VARLYN5E.WeaponCategory", { category: label });
     return label.toLowerCase();
   }
 
@@ -229,8 +229,8 @@ export class EquipmentEntryData extends foundry.abstract.DataModel {
    * @returns {Record<string, string>}
    */
   get keyOptions() {
-    const config = foundry.utils.deepClone(CONFIG.DND5E[this.constructor.CATEGORIES[this.type]?.config]);
-    if ( this.type === "weapon" ) foundry.utils.mergeObject(config, CONFIG.DND5E.weaponTypes);
+    const config = foundry.utils.deepClone(CONFIG.VARLYN5E[this.constructor.CATEGORIES[this.type]?.config]);
+    if ( this.type === "weapon" ) foundry.utils.mergeObject(config, CONFIG.VARLYN5E.weaponTypes);
     return Object.entries(config).reduce((obj, [k, v]) => {
       obj[k] = foundry.utils.getType(v) === "Object" ? v.label : v;
       return obj;
@@ -265,7 +265,7 @@ export class EquipmentEntryData extends foundry.abstract.DataModel {
           .format(entries);
 
       case "currency":
-        const currencyConfig = CONFIG.DND5E.currencies[this.key];
+        const currencyConfig = CONFIG.VARLYN5E.currencies[this.key];
         if ( this.count && currencyConfig ) label = `${this.count} ${currencyConfig.abbreviation.toUpperCase()}`;
         break;
 
@@ -283,9 +283,9 @@ export class EquipmentEntryData extends foundry.abstract.DataModel {
     if ( !label ) return "";
     if ( this.type === "currency" ) return label;
     if ( this.count > 1 ) label = `${formatNumber(this.count)}&times; ${label}`;
-    else if ( this.type !== "linked" ) label = _loc("DND5E.TraitConfigChooseAnyUncounted", { type: label });
+    else if ( this.type !== "linked" ) label = _loc("VARLYN5E.TraitConfigChooseAnyUncounted", { type: label });
     if ( (this.type === "linked") && this.requiresProficiency ) {
-      label += ` (${_loc("DND5E.StartingEquipment.IfProficient").toLowerCase()})`;
+      label += ` (${_loc("VARLYN5E.StartingEquipment.IfProficient").toLowerCase()})`;
     }
     return label;
   }
@@ -302,7 +302,7 @@ export class EquipmentEntryData extends foundry.abstract.DataModel {
    * @returns {string[]}
    */
   static prefixOrEntries(entries, { depth=1, modernStyle=true, usedPrefixes }={}) {
-    let letters = _loc("DND5E.StartingEquipment.Prefixes");
+    let letters = _loc("VARLYN5E.StartingEquipment.Prefixes");
     if ( !letters ) return entries;
     if ( (modernStyle && (depth === 1)) || (!modernStyle && (depth === 2)) ) letters = letters.toUpperCase();
     return entries.map((e, idx) => {

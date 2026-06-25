@@ -60,7 +60,7 @@ export default class AdvancementConfig extends FormApplication {
   /** @inheritDoc */
   get title() {
     const type = this.advancement.constructor.metadata.title;
-    return `${_loc("DND5E.AdvancementConfigureTitle", { item: this.item.name })}: ${type}`;
+    return `${_loc("VARLYN5E.AdvancementConfigureTitle", { item: this.item.name })}: ${type}`;
   }
 
   /* -------------------------------------------- */
@@ -75,12 +75,12 @@ export default class AdvancementConfig extends FormApplication {
 
   /** @inheritDoc */
   getData() {
-    const levels = Object.fromEntries(Array.fromRange(CONFIG.DND5E.maxLevel + 1).map(l => [l, l]));
+    const levels = Object.fromEntries(Array.fromRange(CONFIG.VARLYN5E.maxLevel + 1).map(l => [l, l]));
     if ( ["class", "subclass"].includes(this.item.type) ) delete levels[0];
-    else levels[0] = _loc("DND5E.AdvancementLevelAnyHeader");
+    else levels[0] = _loc("VARLYN5E.AdvancementLevelAnyHeader");
     const context = {
       appId: this.id,
-      CONFIG: CONFIG.DND5E,
+      CONFIG: CONFIG.VARLYN5E,
       ...this.advancement.toObject(false),
       src: this.advancement._source,
       source: this.advancement._source,
@@ -91,9 +91,9 @@ export default class AdvancementConfig extends FormApplication {
       },
       levels,
       classRestrictionOptions: [
-        { value: "", label: _loc("DND5E.AdvancementClassRestrictionNone") },
-        { value: "primary", label: _loc("DND5E.AdvancementClassRestrictionPrimary") },
-        { value: "secondary", label: _loc("DND5E.AdvancementClassRestrictionSecondary") }
+        { value: "", label: _loc("VARLYN5E.AdvancementClassRestrictionNone") },
+        { value: "primary", label: _loc("VARLYN5E.AdvancementClassRestrictionPrimary") },
+        { value: "secondary", label: _loc("VARLYN5E.AdvancementClassRestrictionSecondary") }
       ],
       showClassRestrictions: this.item.type === "class",
       showLevelSelector: !this.advancement.constructor.metadata.multiLevel
@@ -218,13 +218,13 @@ export default class AdvancementConfig extends FormApplication {
 
     // Abort if this uuid is the parent item
     if ( item.uuid === this.item.uuid ) {
-      ui.notifications.error("DND5E.ADVANCEMENT.ItemGrant.Warning.Recursive");
+      ui.notifications.error("VARLYN5E.ADVANCEMENT.ItemGrant.Warning.Recursive");
       return null;
     }
 
     // Abort if this uuid exists already
     if ( existingItems.find(i => i.uuid === item.uuid) ) {
-      ui.notifications.warn("DND5E.ADVANCEMENT.ItemGrant.Warning.Duplicate");
+      ui.notifications.warn("VARLYN5E.ADVANCEMENT.ItemGrant.Warning.Duplicate");
       return null;
     }
 

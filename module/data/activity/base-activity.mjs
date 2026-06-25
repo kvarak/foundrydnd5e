@@ -35,8 +35,8 @@ export default class BaseActivityData extends foundry.abstract.DataModel {
 
   /** @override */
   static LOCALIZATION_PREFIXES = [
-    "DND5E.ACTIVITY", "DND5E.ACTIVATION", "DND5E.CONSUMPTION",
-    "DND5E.DURATION", "DND5E.RANGE", "DND5E.TARGET", "DND5E.USES"
+    "VARLYN5E.ACTIVITY", "VARLYN5E.ACTIVATION", "VARLYN5E.CONSUMPTION",
+    "VARLYN5E.DURATION", "VARLYN5E.RANGE", "VARLYN5E.TARGET", "VARLYN5E.USES"
   ];
 
   /* -------------------------------------------- */
@@ -379,7 +379,7 @@ export default class BaseActivityData extends foundry.abstract.DataModel {
     };
 
     const parsed = (formula ?? "").match(/^\s*(\d+)d(\d+)(?:\s*([+|-])\s*(@?[\w\d.-]+))?\s*$/i);
-    if ( parsed && CONFIG.DND5E.dieSteps.includes(Number(parsed[2])) ) {
+    if ( parsed && CONFIG.VARLYN5E.dieSteps.includes(Number(parsed[2])) ) {
       data.number = Number(parsed[1]);
       data.denomination = Number(parsed[2]);
       if ( parsed[4] ) data.bonus = parsed[3] === "-" ? `-${parsed[4]}` : parsed[4];
@@ -494,7 +494,7 @@ export default class BaseActivityData extends foundry.abstract.DataModel {
       prompt: source.system.target?.prompt ?? true
     };
 
-    if ( source.system.target?.type in CONFIG.DND5E.areaTargetTypes ) foundry.utils.mergeObject(data, {
+    if ( source.system.target?.type in CONFIG.VARLYN5E.areaTargetTypes ) foundry.utils.mergeObject(data, {
       template: {
         type: source.system.target?.type ?? "",
         size: source.system.target?.value ?? "",
@@ -621,7 +621,7 @@ export default class BaseActivityData extends foundry.abstract.DataModel {
 
       // If targeted item isn't found, display preparation warning
       if ( !actor.items.has(target.target) ) {
-        const message = _loc("DND5E.CONSUMPTION.Warning.MissingItem", {
+        const message = _loc("VARLYN5E.CONSUMPTION.Warning.MissingItem", {
           activity: this.name, item: this.item.name
         });
         actor._preparationWarnings.push({ message, link: this.uuid, type: "warning" });
@@ -663,7 +663,7 @@ export default class BaseActivityData extends foundry.abstract.DataModel {
       const types = roll.options.types ?? (roll.options.type ? [roll.options.type] : []);
       if ( types.length ) {
         label = `${formula} ${game.i18n.getListFormatter({ type: "conjunction" }).format(
-          types.map(p => CONFIG.DND5E.damageTypes[p]?.label ?? CONFIG.DND5E.healingTypes[p]?.label).filter(_ => _)
+          types.map(p => CONFIG.VARLYN5E.damageTypes[p]?.label ?? CONFIG.VARLYN5E.healingTypes[p]?.label).filter(_ => _)
         )}`;
       }
 
@@ -775,7 +775,7 @@ export default class BaseActivityData extends foundry.abstract.DataModel {
         type: (damage.types.has(lastType) ? lastType : null) ?? damage.types.first(),
         types: Array.from(damage.types),
         properties: Array.from(this.item.system.properties ?? [])
-          .filter(p => CONFIG.DND5E.itemProperties[p]?.isPhysical)
+          .filter(p => CONFIG.VARLYN5E.itemProperties[p]?.isPhysical)
       }
     };
   }

@@ -7,7 +7,7 @@ export default class VariantRulesSettingsConfig extends BaseSettingsConfig {
   /** @override */
   static DEFAULT_OPTIONS = {
     window: {
-      title: "SETTINGS.DND5E.VARIANT.Label"
+      title: "SETTINGS.VARLYN5E.VARIANT.Label"
     }
   };
 
@@ -44,21 +44,21 @@ export default class VariantRulesSettingsConfig extends BaseSettingsConfig {
           this.createSettingField("proficiencyModifier"),
           this.createSettingField("levelingMode")
         ].filter(_ => _);
-        context.legend = _loc("SETTINGS.DND5E.General");
+        context.legend = _loc("SETTINGS.VARLYN5E.General");
         break;
       case "encumbrance":
         context.fields = [
           this.createSettingField("encumbrance"),
           this.createSettingField("currencyWeight")
         ];
-        context.legend = _loc("DND5E.Encumbrance");
+        context.legend = _loc("VARLYN5E.Encumbrance");
         break;
       case "abilities":
         context.fields = [
           this.createSettingField("honorScore"),
           this.createSettingField("sanityScore")
         ];
-        context.legend = _loc("DND5E.Abilities");
+        context.legend = _loc("VARLYN5E.Abilities");
         break;
     }
     return context;

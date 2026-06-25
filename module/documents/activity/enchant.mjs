@@ -14,7 +14,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.ENCHANT"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.ENCHANT"];
 
   /* -------------------------------------------- */
 
@@ -23,8 +23,8 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
     foundry.utils.mergeObject(super.metadata, {
       type: "enchant",
       img: "systems/dnd5e/icons/svg/activity/enchant.svg",
-      title: "DND5E.ENCHANT.Title",
-      hint: "DND5E.ENCHANT.Hint",
+      title: "VARLYN5E.ENCHANT.Title",
+      hint: "VARLYN5E.ENCHANT.Hint",
       sheetClass: EnchantSheet,
       usage: {
         dialog: EnchantUsageDialog
@@ -163,7 +163,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
     // If concentration is required, ensure it is still being maintained & GM is present
     if ( !game.user.isGM && concentration && !concentration.isOwner ) {
       if ( strict ) {
-        ui.notifications.error("DND5E.EffectApplyWarningConcentration", { console: false });
+        ui.notifications.error("VARLYN5E.EffectApplyWarningConcentration", { console: false });
         return null;
       } else {
         concentration = null;
@@ -191,7 +191,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
     if ( item.inCompendium ) {
       const actor = this.actor.isOwner ? this.actor : (getSceneTargets()[0]?.actor ?? game.user.character);
       if ( !actor ) {
-        ui.notifications.warn("DND5E.ENCHANT.Warning.NoTargetActor");
+        ui.notifications.warn("VARLYN5E.ENCHANT.Warning.NoTargetActor");
         return null;
       }
       enchantmentData._id = foundry.utils.randomID();
@@ -234,11 +234,11 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
 
     if ( !this.restrictions.allowMagical && item.system.properties?.has("mgc")
       && ("quantity" in item.system) ) {
-      errors.push(new EnchantmentError(_loc("DND5E.ENCHANT.Warning.NoMagicalItems")));
+      errors.push(new EnchantmentError(_loc("VARLYN5E.ENCHANT.Warning.NoMagicalItems")));
     }
 
     if ( this.restrictions.type && (item.type !== this.restrictions.type) ) {
-      errors.push(new EnchantmentError(_loc("DND5E.ENCHANT.Warning.WrongType", {
+      errors.push(new EnchantmentError(_loc("VARLYN5E.ENCHANT.Warning.WrongType", {
         incorrectType: _loc(CONFIG.Item.typeLabels[item.type]),
         allowedType: _loc(CONFIG.Item.typeLabels[this.restrictions.type])
       })));
@@ -252,7 +252,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
         return config.label;
       };
       errors.push(new EnchantmentError(_loc(
-        `DND5E.ENCHANT.Warning.${item.system.type?.value ? "WrongType" : "NoSubtype"}`,
+        `VARLYN5E.ENCHANT.Warning.${item.system.type?.value ? "WrongType" : "NoSubtype"}`,
         {
           allowedType: game.i18n.getListFormatter({ type: "disjunction" }).format(
             Array.from(this.restrictions.categories).map(c => getLabel(c).toLowerCase())
@@ -264,9 +264,9 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
 
     if ( this.restrictions.properties.size
       && !this.restrictions.properties.intersection(item.system.properties ?? new Set()).size ) {
-      errors.push(new EnchantmentError(_loc("DND5E.ENCHANT.Warning.MissingProperty", {
+      errors.push(new EnchantmentError(_loc("VARLYN5E.ENCHANT.Warning.MissingProperty", {
         validProperties: game.i18n.getListFormatter({ type: "disjunction" }).format(
-          Array.from(this.restrictions.properties).map(p => CONFIG.DND5E.itemProperties[p]?.label ?? p)
+          Array.from(this.restrictions.properties).map(p => CONFIG.VARLYN5E.itemProperties[p]?.label ?? p)
         )
       })));
     }

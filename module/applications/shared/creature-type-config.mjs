@@ -29,7 +29,7 @@ export default class CreatureTypeConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.CreatureType");
+    return _loc("VARLYN5E.CreatureType");
   }
 
   /* -------------------------------------------- */
@@ -58,9 +58,9 @@ export default class CreatureTypeConfig extends BaseConfigSheet {
 
     context.swarmOptions = [
       { value: "", label: "" },
-      ...Object.entries(CONFIG.DND5E.actorSizes).map(([value, { label }]) => ({ value, label })).reverse()
+      ...Object.entries(CONFIG.VARLYN5E.actorSizes).map(([value, { label }]) => ({ value, label })).reverse()
     ];
-    context.typeOptions = Object.entries(CONFIG.DND5E.creatureTypes)
+    context.typeOptions = Object.entries(CONFIG.VARLYN5E.creatureTypes)
       .map(([value, { label }]) => ({ value, label, selected: context.data.value === value }));
     if ( context.fields.custom ) context.custom = {
       enabled: true,

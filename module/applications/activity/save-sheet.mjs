@@ -44,21 +44,21 @@ export default class SaveSheet extends ActivitySheet {
   async _prepareEffectContext(context, options) {
     context = await super._prepareEffectContext(context, options);
 
-    context.abilityOptions = Object.entries(CONFIG.DND5E.abilities).map(([value, config]) => ({
+    context.abilityOptions = Object.entries(CONFIG.VARLYN5E.abilities).map(([value, config]) => ({
       value, label: config.label
     }));
     context.calculationOptions = [
-      { value: "", label: _loc("DND5E.SAVE.FIELDS.save.dc.CustomFormula") },
+      { value: "", label: _loc("VARLYN5E.SAVE.FIELDS.save.dc.CustomFormula") },
       { rule: true },
-      { value: "spellcasting", label: _loc("DND5E.SpellAbility") },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, config]) => ({
-        value, label: config.label, group: _loc("DND5E.Abilities")
+      { value: "spellcasting", label: _loc("VARLYN5E.SpellAbility") },
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, config]) => ({
+        value, label: config.label, group: _loc("VARLYN5E.Abilities")
       }))
     ];
     context.onSaveOptions = [
-      { value: "none", label: _loc("DND5E.SAVE.FIELDS.damage.onSave.None") },
-      { value: "half", label: _loc("DND5E.SAVE.FIELDS.damage.onSave.Half") },
-      { value: "full", label: _loc("DND5E.SAVE.FIELDS.damage.onSave.Full") }
+      { value: "none", label: _loc("VARLYN5E.SAVE.FIELDS.damage.onSave.None") },
+      { value: "half", label: _loc("VARLYN5E.SAVE.FIELDS.damage.onSave.Half") },
+      { value: "full", label: _loc("VARLYN5E.SAVE.FIELDS.damage.onSave.Full") }
     ];
 
     return context;

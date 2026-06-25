@@ -20,17 +20,17 @@ export default class TraitsField {
    */
   static get common() {
     return {
-      size: new StringField({ required: true, initial: "med", label: "DND5E.Size" }),
-      di: new DamageTraitField({}, { label: "DND5E.DamImm" }),
-      dr: new DamageTraitField({}, { label: "DND5E.DamRes" }),
-      dv: new DamageTraitField({}, { label: "DND5E.DamVuln" }),
+      size: new StringField({ required: true, initial: "med", label: "VARLYN5E.Size" }),
+      di: new DamageTraitField({}, { label: "VARLYN5E.DamImm" }),
+      dr: new DamageTraitField({}, { label: "VARLYN5E.DamRes" }),
+      dv: new DamageTraitField({}, { label: "VARLYN5E.DamVuln" }),
       dm: new SchemaField({
-        amount: new MappingField(new FormulaField({ deterministic: true }), { label: "DND5E.DamMod" }),
+        amount: new MappingField(new FormulaField({ deterministic: true }), { label: "VARLYN5E.DamMod" }),
         bypasses: new SetField(new StringField(), {
-          label: "DND5E.DAMAGE.PhysicalBypass.Label", hint: "DND5E.DAMAGE.PhysicalBypass.Hint"
+          label: "VARLYN5E.DAMAGE.PhysicalBypass.Label", hint: "VARLYN5E.DAMAGE.PhysicalBypass.Hint"
         })
       }),
-      ci: new SimpleTraitField({}, { label: "DND5E.ConImm" })
+      ci: new SimpleTraitField({}, { label: "VARLYN5E.ConImm" })
     };
   }
 
@@ -47,7 +47,7 @@ export default class TraitsField {
           units: new StringField({ initial: () => defaultUnits("length") }),
           value: new NumberField({ required: true, min: 0 })
         }))
-      }, { label: "DND5E.Languages" })
+      }, { label: "VARLYN5E.Languages" })
     };
   }
 
@@ -63,7 +63,7 @@ export default class TraitsField {
     const languages = this.traits.languages;
     const labels = languages.labels = { languages: [], ranged: [] };
 
-    if ( languages.value.has("ALL") ) labels.languages.push(_loc("DND5E.Language.All"));
+    if ( languages.value.has("ALL") ) labels.languages.push(_loc("VARLYN5E.Language.All"));
     else {
       const processCategory = (key, data, group) => {
         // If key is within languages, don't bother with children
@@ -83,7 +83,7 @@ export default class TraitsField {
         else if ( data.children ) Object.entries(data.children).forEach(([k, d]) => processCategory(k, d));
       };
 
-      for ( const [key, data] of Object.entries(CONFIG.DND5E.languages) ) {
+      for ( const [key, data] of Object.entries(CONFIG.VARLYN5E.languages) ) {
         if ( data.children ) Object.entries(data.children).forEach(([k, d]) => processCategory(k, d));
         else processCategory(key, data);
       }
@@ -91,7 +91,7 @@ export default class TraitsField {
 
     labels.languages.push(...splitSemicolons(languages.custom));
 
-    for ( const [key, { label }] of Object.entries(CONFIG.DND5E.communicationTypes) ) {
+    for ( const [key, { label }] of Object.entries(CONFIG.VARLYN5E.communicationTypes) ) {
       const data = languages.communication?.[key];
       if ( !data?.value ) continue;
       labels.ranged.push(`${label} ${formatLength(data.value, data.units)}`);
@@ -143,7 +143,7 @@ export default class TraitsField {
     if ( this.parent._stats?.compendiumSource?.startsWith("Compendium.") ) return;
     const prototypeToken = {};
     if ( "size" in this.traits ) {
-      const size = CONFIG.DND5E.actorSizes[this.traits.size || "med"].token ?? 1;
+      const size = CONFIG.VARLYN5E.actorSizes[this.traits.size || "med"].token ?? 1;
       if ( !foundry.utils.hasProperty(data, "prototypeToken.width") ) prototypeToken.width = size;
       if ( !foundry.utils.hasProperty(data, "prototypeToken.height") ) prototypeToken.height = size;
     }
@@ -162,7 +162,7 @@ export default class TraitsField {
     const newSize = foundry.utils.getProperty(changes, "system.traits.size");
     if ( !newSize || (newSize === this.traits.size)
       || foundry.utils.hasProperty(changes, "prototypeToken.width") ) return;
-    const size = CONFIG.DND5E.actorSizes[newSize].token ?? 1;
+    const size = CONFIG.VARLYN5E.actorSizes[newSize].token ?? 1;
     changes.prototypeToken ??= {};
     changes.prototypeToken.height = size;
     changes.prototypeToken.width = size;

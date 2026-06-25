@@ -53,7 +53,7 @@ export default class ItemChoiceConfig extends AdvancementConfig {
       index: fromUuidSync(data.uuid)
     }));
 
-    context.abilityOptions = Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label }));
+    context.abilityOptions = Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label }));
     context.choices = context.levels.reduce((obj, { value, label }) => {
       obj[value] = { label, ...this.advancement.configuration.choices[value] };
       return obj;
@@ -62,46 +62,46 @@ export default class ItemChoiceConfig extends AdvancementConfig {
       { value: "", label: "" },
       {
         value: "available",
-        label: _loc("DND5E.ADVANCEMENT.ItemChoice.FIELDS.restriction.level.Available")
+        label: _loc("VARLYN5E.ADVANCEMENT.ItemChoice.FIELDS.restriction.level.Available")
       },
       {
         value: "availableNoCantrips",
-        label: _loc("DND5E.ADVANCEMENT.ItemChoice.FIELDS.restriction.level.AvailableNoCantrips")
+        label: _loc("VARLYN5E.ADVANCEMENT.ItemChoice.FIELDS.restriction.level.AvailableNoCantrips")
       },
       { rule: true },
-      ...Object.entries(CONFIG.DND5E.spellLevels).map(([value, label]) => ({ value, label }))
+      ...Object.entries(CONFIG.VARLYN5E.spellLevels).map(([value, label]) => ({ value, label }))
     ];
     context.listRestrictionOptions = varlyn5e.registry.spellLists.options;
     context.showContainerWarning = context.items.some(i => i.index?.type === "container");
     context.showSpellConfig = this.advancement.configuration.type === "spell";
 
     const { spell } = this.advancement.configuration;
-    const model = CONFIG.DND5E.spellcasting[spell?.method];
+    const model = CONFIG.VARLYN5E.spellcasting[spell?.method];
     context.showRequireSpellSlot = !spell?.method || model?.slots;
     context.canPrepare = model?.prepares;
-    context.spellcastingMethods = Object.values(CONFIG.DND5E.spellcasting).map(({ key, label }) => {
+    context.spellcastingMethods = Object.values(CONFIG.VARLYN5E.spellcasting).map(({ key, label }) => {
       return { label, value: key };
     });
-    if ( spell?.method && !(spell.method in CONFIG.DND5E.spellcasting) ) {
+    if ( spell?.method && !(spell.method in CONFIG.VARLYN5E.spellcasting) ) {
       context.spellcastingMethods.push({ label: spell.method, value: spell.method });
     }
 
     context.typeOptions = [
-      { value: "", label: _loc("DND5E.ADVANCEMENT.ItemChoice.FIELDS.type.Any") },
+      { value: "", label: _loc("VARLYN5E.ADVANCEMENT.ItemChoice.FIELDS.type.Any") },
       { rule: true },
       ...this.advancement.constructor.VALID_TYPES
         .map(value => ({ value, label: _loc(CONFIG.Item.typeLabels[value]) }))
     ];
 
     if ( this.advancement.configuration.type === "feat" ) {
-      const selectedType = CONFIG.DND5E.featureTypes[this.advancement.configuration.restriction.type];
+      const selectedType = CONFIG.VARLYN5E.featureTypes[this.advancement.configuration.restriction.type];
       context.typeRestriction = {
-        typeLabel: _loc("DND5E.ItemFeatureType"),
+        typeLabel: _loc("VARLYN5E.ItemFeatureType"),
         typeOptions: [
           { value: "", label: "" },
-          ...Object.entries(CONFIG.DND5E.featureTypes).map(([value, { label }]) => ({ value, label }))
+          ...Object.entries(CONFIG.VARLYN5E.featureTypes).map(([value, { label }]) => ({ value, label }))
         ],
-        subtypeLabel: _loc("DND5E.ItemFeatureSubtype", {category: selectedType?.label}),
+        subtypeLabel: _loc("VARLYN5E.ItemFeatureSubtype", {category: selectedType?.label}),
         subtypeOptions: selectedType?.subtypes ? [
           { value: "", label: "" },
           ...Object.entries(selectedType.subtypes).map(([value, label]) => ({ value, label }))

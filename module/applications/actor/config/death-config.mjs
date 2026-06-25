@@ -27,7 +27,7 @@ export default class DeathConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.DeathSaveConfigure");
+    return _loc("VARLYN5E.DeathSaveConfigure");
   }
 
   /* -------------------------------------------- */

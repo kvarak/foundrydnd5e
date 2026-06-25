@@ -12,7 +12,7 @@ export default class SaveActivity extends ActivityMixin(BaseSaveActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.SAVE"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.SAVE"];
 
   /* -------------------------------------------- */
 
@@ -21,8 +21,8 @@ export default class SaveActivity extends ActivityMixin(BaseSaveActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "save",
       img: "systems/dnd5e/icons/svg/activity/save.svg",
-      title: "DND5E.SAVE.Title.one",
-      hint: "DND5E.SAVE.Hint",
+      title: "VARLYN5E.SAVE.Title.one",
+      hint: "VARLYN5E.SAVE.Hint",
       sheetClass: SaveSheet,
       usage: {
         actions: {
@@ -43,11 +43,11 @@ export default class SaveActivity extends ActivityMixin(BaseSaveActivityData) {
     const dc = this.save.dc.value;
 
     for ( const abilityId of this.save.ability ) {
-      const ability = CONFIG.DND5E.abilities[abilityId]?.label ?? "";
-      const promptTitle = _loc("DND5E.SavePromptTitle", { ability });
+      const ability = CONFIG.VARLYN5E.abilities[abilityId]?.label ?? "";
+      const promptTitle = _loc("VARLYN5E.SavePromptTitle", { ability });
       buttons.push({
         label: dc ? `
-          <span class="visible-dc">${_loc("DND5E.SavingThrowDC", { dc, ability })}</span>
+          <span class="visible-dc">${_loc("VARLYN5E.SavingThrowDC", { dc, ability })}</span>
           <span class="hidden-dc">${promptTitle}</span>
         ` : promptTitle,
         icon: '<i class="fa-solid fa-shield-heart" inert></i>',
@@ -61,7 +61,7 @@ export default class SaveActivity extends ActivityMixin(BaseSaveActivityData) {
     }
 
     if ( this.damage.parts.length ) buttons.push({
-      label: _loc("DND5E.Damage"),
+      label: _loc("VARLYN5E.Damage"),
       icon: '<i class="fas fa-burst" inert></i>',
       dataset: {
         action: "rollDamage"
@@ -111,7 +111,7 @@ export default class SaveActivity extends ActivityMixin(BaseSaveActivityData) {
   static async #rollSave(event, target, message) {
     const targets = getSceneTargets();
     if ( !targets.length && game.user.character ) targets.push(game.user.character);
-    if ( !targets.length ) ui.notifications.warn("DND5E.ActionWarningNoToken");
+    if ( !targets.length ) ui.notifications.warn("VARLYN5E.ActionWarningNoToken");
     const dc = parseInt(target.dataset.dc);
     const bonusData = CONFIG.Dice.BasicRoll.constructParts({ activityBonus: this.save.bonus }, this.getRollData());
     for ( const token of targets ) {

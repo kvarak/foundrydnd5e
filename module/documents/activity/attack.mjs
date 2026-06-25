@@ -20,7 +20,7 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.ATTACK"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.ATTACK"];
 
   /* -------------------------------------------- */
 
@@ -29,8 +29,8 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
     foundry.utils.mergeObject(super.metadata, {
       type: "attack",
       img: "systems/dnd5e/icons/svg/activity/attack.svg",
-      title: "DND5E.ATTACK.Title.one",
-      hint: "DND5E.ATTACK.Hint",
+      title: "VARLYN5E.ATTACK.Title.one",
+      hint: "VARLYN5E.ATTACK.Hint",
       sheetClass: AttackSheet,
       usage: {
         actions: {
@@ -48,14 +48,14 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
   /** @override */
   _usageChatButtons(message) {
     const buttons = [{
-      label: _loc("DND5E.Attack"),
+      label: _loc("VARLYN5E.Attack"),
       icon: '<i class="dnd5e-icon" data-src="systems/dnd5e/icons/svg/trait-weapon-proficiencies.svg" inert></i>',
       dataset: {
         action: "rollAttack"
       }
     }];
     if ( this.damage.parts.length || this.item.system.properties?.has("amm") ) buttons.push({
-      label: _loc("DND5E.Damage"),
+      label: _loc("VARLYN5E.Damage"),
       icon: '<i class="fa-solid fa-burst" inert></i>',
       dataset: {
         action: "rollDamage"
@@ -86,7 +86,7 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
     const targets = getTargetDescriptors();
 
     if ( (this.item.type === "weapon") && (this.item.system.quantity === 0) ) {
-      ui.notifications.warn("DND5E.ATTACK.Warning.NoQuantity");
+      ui.notifications.warn("VARLYN5E.ATTACK.Warning.NoQuantity");
     }
 
     const buildConfig = this._buildAttackConfig.bind(this);
@@ -95,7 +95,7 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
       ammunition: this.item.getFlag("dnd5e", `last.${this.id}.ammunition`),
       attackMode: this.item.getFlag("dnd5e", `last.${this.id}.attackMode`),
       elvenAccuracy: this.actor?.getFlag("dnd5e", "elvenAccuracy")
-        && CONFIG.DND5E.characterFlags.elvenAccuracy.abilities.includes(this.ability),
+        && CONFIG.VARLYN5E.characterFlags.elvenAccuracy.abilities.includes(this.ability),
       halflingLucky: this.actor?.getFlag("dnd5e", "halflingLucky"),
       mastery: this.item.getFlag("dnd5e", `last.${this.id}.mastery`),
       target: targets.length === 1 ? targets[0].ac : undefined
@@ -139,7 +139,7 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
           left: window.innerWidth - 710
         },
         window: {
-          title: _loc("DND5E.AttackRoll"),
+          title: _loc("VARLYN5E.AttackRoll"),
           subtitle: this.item.name,
           icon: this.item.img
         }
@@ -149,7 +149,7 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
     const messageConfig = foundry.utils.mergeObject({
       create: true,
       data: {
-        flavor: `${this.item.name} - ${_loc("DND5E.AttackRoll")}`,
+        flavor: `${this.item.name} - ${_loc("VARLYN5E.AttackRoll")}`,
         flags: {
           dnd5e: {
             ...this.messageFlags,

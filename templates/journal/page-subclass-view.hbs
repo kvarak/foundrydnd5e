@@ -17,11 +17,11 @@
     {{/each}}
 
     {{#if optionalTable}}
-    <h{{ title.level2 }}>{{ localize "JOURNALENTRYPAGE.DND5E.Class.OptionalFeaturesCaption" }}</h{{ title.level2 }}>
-    <p>{{ localize "JOURNALENTRYPAGE.DND5E.Class.OptionalFeaturesDescription" class=linked.lowercaseName }}</p>
+    <h{{ title.level2 }}>{{ localize "JOURNALENTRYPAGE.VARLYN5E.Class.OptionalFeaturesCaption" }}</h{{ title.level2 }}>
+    <p>{{ localize "JOURNALENTRYPAGE.VARLYN5E.Class.OptionalFeaturesDescription" class=linked.lowercaseName }}</p>
 
     {{> "dnd5e.journal-table" table=optionalTable level=title.level3
-        caption=(localize "JOURNALENTRYPAGE.DND5E.Class.TableOptionalCaption" class=linked.name) }}
+        caption=(localize "JOURNALENTRYPAGE.VARLYN5E.Class.TableOptionalCaption" class=linked.name) }}
 
     {{#each optionalFeatures}}
     <h{{ @root.title.level4 }}>{{ this.name }}</h{{ @root.title.level4 }}>
@@ -32,6 +32,6 @@
 
 {{else}}
 <section>
-    {{ localize "JOURNALENTRYPAGE.DND5E.Subclass.NoValidSubclass" }}
+    {{ localize "JOURNALENTRYPAGE.VARLYN5E.Subclass.NoValidSubclass" }}
 </section>
 {{/if}}

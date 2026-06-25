@@ -116,13 +116,13 @@ export default class CharacterActorSheet extends BaseActorSheet {
 
   /** @override */
   static TABS = [
-    { tab: "details", label: "DND5E.Details", icon: "fas fa-cog" },
-    { tab: "inventory", label: "DND5E.Inventory", svg: "systems/dnd5e/icons/svg/backpack.svg" },
-    { tab: "features", label: "DND5E.Features", icon: "fas fa-list" },
+    { tab: "details", label: "VARLYN5E.Details", icon: "fas fa-cog" },
+    { tab: "inventory", label: "VARLYN5E.Inventory", svg: "systems/dnd5e/icons/svg/backpack.svg" },
+    { tab: "features", label: "VARLYN5E.Features", icon: "fas fa-list" },
     { tab: "spells", label: "TYPES.Item.spellPl", icon: "fas fa-book" },
-    { tab: "effects", label: "DND5E.Effects", icon: "fas fa-bolt" },
-    { tab: "biography", label: "DND5E.Biography", icon: "fas fa-feather" },
-    { tab: "specialTraits", label: "DND5E.SpecialTraits", icon: "fas fa-star" }
+    { tab: "effects", label: "VARLYN5E.Effects", icon: "fas fa-bolt" },
+    { tab: "biography", label: "VARLYN5E.Biography", icon: "fas fa-feather" },
+    { tab: "specialTraits", label: "VARLYN5E.SpecialTraits", icon: "fas fa-star" }
   ];
 
   /* -------------------------------------------- */
@@ -172,7 +172,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
     const context = {
       ...await super._prepareContext(options),
       abilityRows: {
-        bottom: [], top: [], optional: Object.keys(CONFIG.DND5E.abilities).length - 6
+        bottom: [], top: [], optional: Object.keys(CONFIG.VARLYN5E.abilities).length - 6
       },
       isCharacter: true
     };
@@ -231,7 +231,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
       secrets: this.actor.isOwner, relativeTo: this.actor, rollData: context.rollData
     };
     context.enriched = {
-      label: "DND5E.Biography",
+      label: "VARLYN5E.Biography",
       value: await TextEditor.enrichHTML(this.actor.system.details.biography.value, enrichmentOptions)
     };
 
@@ -266,15 +266,15 @@ export default class CharacterActorSheet extends BaseActorSheet {
     // Origin
     context.creatureType = {
       class: details.type.value === "custom" ? "none" : "",
-      icon: CONFIG.DND5E.creatureTypes[details.type.value]?.icon ?? "icons/svg/mystery-man.svg",
+      icon: CONFIG.VARLYN5E.creatureTypes[details.type.value]?.icon ?? "icons/svg/mystery-man.svg",
       title: details.type.value === "custom"
         ? details.type.custom
-        : CONFIG.DND5E.creatureTypes[details.type.value]?.label,
-      reference: CONFIG.DND5E.creatureTypes[details.type.value]?.reference,
+        : CONFIG.VARLYN5E.creatureTypes[details.type.value]?.label,
+      reference: CONFIG.VARLYN5E.creatureTypes[details.type.value]?.reference,
       subtitle: details.type.subtype
     };
     if ( details.race instanceof varlyn5e.documents.Item5e ) context.species = details.race;
-    context.labels.size = CONFIG.DND5E.actorSizes[traits.size]?.label ?? traits.size;
+    context.labels.size = CONFIG.VARLYN5E.actorSizes[traits.size]?.label ?? traits.size;
 
     // Saving Throws
     context.saves = {};
@@ -286,8 +286,8 @@ export default class CharacterActorSheet extends BaseActorSheet {
       context.saves.concentration = {
         isConcentration: true,
         class: "colspan concentration",
-        label: _loc("DND5E.Concentration"),
-        abbr: _loc("DND5E.Concentration"),
+        label: _loc("VARLYN5E.Concentration"),
+        abbr: _loc("VARLYN5E.Concentration"),
         save: { value: context.system.attributes.concentration.save }
       };
     }
@@ -301,8 +301,8 @@ export default class CharacterActorSheet extends BaseActorSheet {
     for ( const entry of context.skills.concat(context.tools) ) {
       const key = entry.key;
       entry.class = this.constructor.PROFICIENCY_CLASSES[context.editable ? entry.baseValue : entry.value];
-      if ( key in CONFIG.DND5E.skills ) entry.reference = CONFIG.DND5E.skills[key].reference;
-      else if ( key in CONFIG.DND5E.tools ) entry.reference = Trait.getBaseItemUUID(CONFIG.DND5E.tools[key].id ?? "");
+      if ( key in CONFIG.VARLYN5E.skills ) entry.reference = CONFIG.VARLYN5E.skills[key].reference;
+      else if ( key in CONFIG.VARLYN5E.tools ) entry.reference = Trait.getBaseItemUUID(CONFIG.VARLYN5E.tools[key].id ?? "");
     }
 
     // Traits
@@ -347,34 +347,34 @@ export default class CharacterActorSheet extends BaseActorSheet {
     const Inventory = customElements.get(this.options.elements.inventory);
     const columns = Inventory.mapColumns([{ id: "uses", order: 200 }, "recovery", "controls"]);
     const sections = [
-      { columns, id: "active", label: "DND5E.FeatureActive", order: 100, groups: { activation: "active" }, items: [] },
-      { columns, id: "passive", label: "DND5E.FeaturePassive", order: 200, groups: { activation: "passive" } },
+      { columns, id: "active", label: "VARLYN5E.FeatureActive", order: 100, groups: { activation: "active" }, items: [] },
+      { columns, id: "passive", label: "VARLYN5E.FeaturePassive", order: 200, groups: { activation: "passive" } },
       ...Object.values(this.actor.classes ?? {})
         .sort((a, b) => b.system.levels - a.system.levels)
         .map((cls, i) => {
           return {
             columns, id: cls.identifier, order: i * 100, groups: { origin: cls.identifier },
-            label: _loc("DND5E.FeaturesClass", { class: cls.name })
+            label: _loc("VARLYN5E.FeaturesClass", { class: cls.name })
           };
         }),
       this.actor.system.details.race instanceof Item5e ? {
-        columns, id: "species", label: "DND5E.Species.Features", order: 1000, groups: { origin: "species" }
+        columns, id: "species", label: "VARLYN5E.Species.Features", order: 1000, groups: { origin: "species" }
       } : null,
-      { columns, id: "other", label: "DND5E.FeaturesOther", order: 3000, groups: { origin: "other" } }
+      { columns, id: "other", label: "VARLYN5E.FeaturesOther", order: 3000, groups: { origin: "other" } }
     ].filter(_ => _);
     sections[0].items = [...(context.itemCategories.features ?? []), ...context.subclasses];
     context.sections = Inventory.prepareSections(sections);
     context.listControls = {
-      label: "DND5E.FeatureSearch",
+      label: "VARLYN5E.FeatureSearch",
       list: "features",
       filters: [
-        { key: "action", label: "DND5E.Action" },
-        { key: "bonus", label: "DND5E.BonusAction" },
-        { key: "reaction", label: "DND5E.Reaction" },
-        { key: "sr", label: "DND5E.REST.Short.Label" },
-        { key: "lr", label: "DND5E.REST.Long.Label" },
-        { key: "concentration", label: "DND5E.Concentration" },
-        { key: "mgc", label: "DND5E.ITEM.Property.Magical" }
+        { key: "action", label: "VARLYN5E.Action" },
+        { key: "bonus", label: "VARLYN5E.BonusAction" },
+        { key: "reaction", label: "VARLYN5E.Reaction" },
+        { key: "sr", label: "VARLYN5E.REST.Short.Label" },
+        { key: "lr", label: "VARLYN5E.REST.Long.Label" },
+        { key: "concentration", label: "VARLYN5E.Concentration" },
+        { key: "mgc", label: "VARLYN5E.ITEM.Property.Magical" }
       ],
       sorting: [
         { key: "m", label: "SIDEBAR.SortModeManual", dataset: { icon: "fa-solid fa-arrow-down-short-wide" } },
@@ -383,15 +383,15 @@ export default class CharacterActorSheet extends BaseActorSheet {
       grouping: [
         {
           key: "origin",
-          label: "DND5E.FilterGroupOrigin",
+          label: "VARLYN5E.FilterGroupOrigin",
           dataset: { icon: "fa-solid fa-layer-group", classes: "active" }
         },
-        { key: "activation", label: "DND5E.FilterGroupOrigin", dataset: { icon: "fa-solid fa-layer-group" } }
+        { key: "activation", label: "VARLYN5E.FilterGroupOrigin", dataset: { icon: "fa-solid fa-layer-group" } }
       ]
     };
 
     // TODO: Add this warning during data preparation instead
-    // const message = _loc("DND5E.SubclassMismatchWarn", {
+    // const message = _loc("VARLYN5E.SubclassMismatchWarn", {
     //   name: subclass.name, class: subclass.system.classIdentifier
     // });
     // context.warnings.push({ message, type: "warning" });
@@ -423,7 +423,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
     if ( context.system.details.xp.boonsEarned !== undefined ) {
       const pluralRules = new Intl.PluralRules(game.i18n.lang);
       context.epicBoonsEarned = _loc(
-        `DND5E.ExperiencePoints.Boons.${pluralRules.select(context.system.details.xp.boonsEarned ?? 0)}`,
+        `VARLYN5E.ExperiencePoints.Boons.${pluralRules.select(context.system.details.xp.boonsEarned ?? 0)}`,
         { number: formatNumber(context.system.details.xp.boonsEarned ?? 0, { signDisplay: "always" }) }
       );
     }
@@ -442,8 +442,8 @@ export default class CharacterActorSheet extends BaseActorSheet {
     context.itemCategories.inventory = context.itemCategories.inventory?.filter(i => i.type !== "container");
     context = await super._prepareInventoryContext(context, options);
     context.size = {
-      label: CONFIG.DND5E.actorSizes[this.actor.system.traits.size]?.label ?? this.actor.system.traits.size,
-      abbr: CONFIG.DND5E.actorSizes[this.actor.system.traits.size]?.abbreviation ?? "—",
+      label: CONFIG.VARLYN5E.actorSizes[this.actor.system.traits.size]?.label ?? this.actor.system.traits.size,
+      abbr: CONFIG.VARLYN5E.actorSizes[this.actor.system.traits.size]?.abbreviation ?? "—",
       mod: this.actor.system.attributes.encumbrance.mod
     };
     return context;
@@ -471,7 +471,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
       context.death[deathSave] = [];
       for ( let i = 1; i < 4; i++ ) {
         const n = deathSave === "failure" ? i : 4 - i;
-        const i18nKey = `DND5E.DeathSave${deathSave.titleCase()}Label`;
+        const i18nKey = `VARLYN5E.DeathSave${deathSave.titleCase()}Label`;
         const filled = attributes.death[deathSave] >= n;
         const classes = ["pip"];
         if ( filled ) classes.push("filled");
@@ -486,10 +486,10 @@ export default class CharacterActorSheet extends BaseActorSheet {
     }
 
     // Exhaustion
-    if ( CONFIG.DND5E.conditionTypes.exhaustion ) {
-      const max = CONFIG.DND5E.conditionTypes.exhaustion.levels;
+    if ( CONFIG.VARLYN5E.conditionTypes.exhaustion ) {
+      const max = CONFIG.VARLYN5E.conditionTypes.exhaustion.levels;
       context.exhaustion = Array.fromRange(max, 1).reduce((acc, n) => {
-        const label = _loc("DND5E.ExhaustionLevel", { n });
+        const label = _loc("VARLYN5E.ExhaustionLevel", { n });
         const classes = ["pip"];
         const filled = attributes.exhaustion >= n;
         if ( filled ) classes.push("filled");
@@ -506,15 +506,15 @@ export default class CharacterActorSheet extends BaseActorSheet {
     context.favorites = await this._prepareFavorites();
 
     // Speed
-    context.speed = Object.entries(CONFIG.DND5E.movementTypes).reduce((obj, [k, { hidden, label }]) => {
+    context.speed = Object.entries(CONFIG.VARLYN5E.movementTypes).reduce((obj, [k, { hidden, label }]) => {
       if ( hidden ) return obj;
       const value = attributes.movement[k];
       if ( (k === "fly") && attributes.movement.hover ) {
-        label = _loc("DND5E.MOVEMENT.HoverSpeed", { speed: label });
+        label = _loc("VARLYN5E.MOVEMENT.HoverSpeed", { speed: label });
       }
       if ( value > obj.value ) Object.assign(obj, { label, value });
       return obj;
-    }, { label: CONFIG.DND5E.movementTypes.walk?.label, value: 0 });
+    }, { label: CONFIG.VARLYN5E.movementTypes.walk?.label, value: 0 });
 
     return context;
   }
@@ -535,7 +535,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
       const mod = ability?.mod ?? 0;
       const name = item.system.spellcasting.progression === sc.progression ? item.name : item.subclass?.name;
       context.spellcasting.push({
-        label: _loc("DND5E.SpellcastingClass", { class: name }),
+        label: _loc("VARLYN5E.SpellcastingClass", { class: name }),
         ability: { mod, ability: sc.ability },
         attack: sc.attack,
         preparation: sc.preparation,
@@ -572,8 +572,8 @@ export default class CharacterActorSheet extends BaseActorSheet {
         css: "uses",
         title: label,
         subtitle: [
-          sr ? _loc("DND5E.AbbreviationSR") : null,
-          lr ? _loc("DND5E.AbbreviationLR") : null
+          sr ? _loc("VARLYN5E.AbbreviationSR") : null,
+          lr ? _loc("VARLYN5E.AbbreviationLR") : null
         ].filterJoin(" &bull; ")
       });
       return arr;
@@ -601,8 +601,8 @@ export default class CharacterActorSheet extends BaseActorSheet {
 
       if ( foundry.utils.getType(save?.ability) === "Set" ) save = {
         ...save, ability: save.ability.size > 2
-          ? _loc("DND5E.AbbreviationDC")
-          : Array.from(save.ability).map(k => CONFIG.DND5E.abilities[k]?.abbreviation).filterJoin(" / ")
+          ? _loc("VARLYN5E.AbbreviationDC")
+          : Array.from(save.ability).map(k => CONFIG.VARLYN5E.abilities[k]?.abbreviation).filterJoin(" / ")
       };
 
       const css = [];
@@ -626,7 +626,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
       if ( type === "skill" ) rollableClass.push("skill-name");
       else if ( type === "tool" ) rollableClass.push("tool-name");
 
-      if ( suppressed ) subtitle = _loc("DND5E.Suppressed");
+      if ( suppressed ) subtitle = _loc("VARLYN5E.Suppressed");
       const itemId = type === "item" ? favorite.id : type === "activity" ? favorite.item.id : null;
       arr.push({
         id, img, type, title, value, uses, sort, save, modifier, passive, range, reference, suppressed, level, itemId,
@@ -659,23 +659,23 @@ export default class CharacterActorSheet extends BaseActorSheet {
     // Spell slots
     if ( type === "slots" ) {
       const { value, max, level, type: method } = this.actor.system.spells?.[id] ?? {};
-      const model = CONFIG.DND5E.spellcasting[method];
+      const model = CONFIG.VARLYN5E.spellcasting[method];
       const uses = { value, max, name: `system.spells.${id}.value` };
       if ( !model || model.isSingleLevel ) return {
         uses, level, method,
-        title: _loc(`DND5E.SpellSlots${id.capitalize()}`),
+        title: _loc(`VARLYN5E.SpellSlots${id.capitalize()}`),
         subtitle: [
-          _loc(`DND5E.SpellLevel${level}`),
-          _loc(`DND5E.Abbreviation${model?.isSR ? "SR" : "LR"}`)
+          _loc(`VARLYN5E.SpellLevel${level}`),
+          _loc(`VARLYN5E.Abbreviation${model?.isSR ? "SR" : "LR"}`)
         ],
-        img: model?.img || CONFIG.DND5E.spellcasting.pact.img
+        img: model?.img || CONFIG.VARLYN5E.spellcasting.pact.img
       };
 
       const plurals = new Intl.PluralRules(game.i18n.lang, { type: "ordinal" });
       return {
         uses, level, method,
-        title: _loc(`DND5E.SpellSlotsN.${plurals.select(level)}`, { n: level }),
-        subtitle: _loc(`DND5E.Abbreviation${model.isSR ? "SR" : "LR"}`),
+        title: _loc(`VARLYN5E.SpellSlotsN.${plurals.select(level)}`, { n: level }),
+        subtitle: _loc(`VARLYN5E.Abbreviation${model.isSR ? "SR" : "LR"}`),
         img: model.img.replace("{id}", id)
       };
     }
@@ -685,17 +685,17 @@ export default class CharacterActorSheet extends BaseActorSheet {
       const data = this.actor.system[`${type}s`]?.[id];
       if ( !data ) return;
       const { total, ability, passive } = data ?? {};
-      const subtitle = _loc("DND5E.AbilityPromptTitle", {
-        ability: CONFIG.DND5E.abilities[ability].label
+      const subtitle = _loc("VARLYN5E.AbilityPromptTitle", {
+        ability: CONFIG.VARLYN5E.abilities[ability].label
       });
       let img;
       let title;
       let reference;
       if ( type === "tool" ) {
-        reference = Trait.getBaseItemUUID(CONFIG.DND5E.tools[id]?.id ?? "");
+        reference = Trait.getBaseItemUUID(CONFIG.VARLYN5E.tools[id]?.id ?? "");
         ({ img, name: title } = Trait.getBaseItem(reference, { indexOnly: true }));
       }
-      else if ( type === "skill" ) ({ icon: img, label: title, reference } = CONFIG.DND5E.skills[id]);
+      else if ( type === "skill" ) ({ icon: img, label: title, reference } = CONFIG.VARLYN5E.skills[id]);
       return { img, title, subtitle, modifier: total, passive, reference };
     }
   }
@@ -745,11 +745,11 @@ export default class CharacterActorSheet extends BaseActorSheet {
     if ( item.system.attunement ) ctx.attunement = item.system.attuned ? {
       icon: "fa-sun",
       cls: "attuned",
-      title: "DND5E.AttunementAttuned"
+      title: "VARLYN5E.AttunementAttuned"
     } : {
       icon: "fa-sun",
       cls: "not-attuned",
-      title: CONFIG.DND5E.attunementTypes[item.system.attunement]
+      title: CONFIG.VARLYN5E.attunementTypes[item.system.attunement]
     };
 
     return super._prepareItemPhysical(item, ctx);
@@ -847,7 +847,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
     const tab = tray.querySelector(".death-tab");
     tray.classList.toggle("open", open);
     this._deathTrayOpen = tray.classList.contains("open");
-    tab.dataset.tooltip = `DND5E.DeathSave${this._deathTrayOpen ? "Hide" : "Show"}`;
+    tab.dataset.tooltip = `VARLYN5E.DeathSave${this._deathTrayOpen ? "Hide" : "Show"}`;
     tab.setAttribute("aria-label", _loc(tab.dataset.tooltip));
   }
 
@@ -907,13 +907,13 @@ export default class CharacterActorSheet extends BaseActorSheet {
 
   /** @inheritDoc */
   _onDragStart(event) {
-    const methods = CONFIG.DND5E.spellcasting;
+    const methods = CONFIG.VARLYN5E.spellcasting;
     const { key } = event.target.closest("[data-key]")?.dataset ?? {};
     const { level, method } = event.target.closest("[data-level]")?.dataset ?? {};
     const isSlots = event.target.closest("[data-favorite-id]") || event.target.classList.contains("items-header");
     let type;
-    if ( key in CONFIG.DND5E.skills ) type = "skill";
-    else if ( key in CONFIG.DND5E.tools ) type = "tool";
+    if ( key in CONFIG.VARLYN5E.skills ) type = "skill";
+    else if ( key in CONFIG.VARLYN5E.tools ) type = "tool";
     else if ( methods[method]?.slots && (level !== "0") && isSlots ) type = "slots";
     if ( !type ) return super._onDragStart(event);
 
@@ -1014,9 +1014,9 @@ export default class CharacterActorSheet extends BaseActorSheet {
     // Increment the number of class levels a character instead of creating a new item
     if ( itemData.type === "class" ) {
       const charLevel = this.actor.system.details.level;
-      itemData.system.levels = Math.min(itemData.system.levels, CONFIG.DND5E.maxLevel - charLevel);
+      itemData.system.levels = Math.min(itemData.system.levels, CONFIG.VARLYN5E.maxLevel - charLevel);
       if ( itemData.system.levels <= 0 ) {
-        const err = _loc("DND5E.MaxCharacterLevelExceededWarn", { max: CONFIG.DND5E.maxLevel });
+        const err = _loc("VARLYN5E.MaxCharacterLevelExceededWarn", { max: CONFIG.VARLYN5E.maxLevel });
         ui.notifications.error(err);
         return;
       }
@@ -1040,13 +1040,13 @@ export default class CharacterActorSheet extends BaseActorSheet {
     else if ( itemData.type === "subclass" ) {
       const other = this.actor.itemTypes.subclass.find(i => i.identifier === itemData.system.identifier);
       if ( other ) {
-        const err = _loc("DND5E.SubclassDuplicateError", { identifier: other.identifier });
+        const err = _loc("VARLYN5E.SubclassDuplicateError", { identifier: other.identifier });
         ui.notifications.error(err);
         return;
       }
       const cls = this.actor.itemTypes.class.find(i => i.identifier === itemData.system.classIdentifier);
       if ( cls && cls.subclass ) {
-        const err = _loc("DND5E.SubclassAssignmentError", { class: cls.name, subclass: cls.subclass.name });
+        const err = _loc("VARLYN5E.SubclassAssignmentError", { class: cls.name, subclass: cls.subclass.name });
         ui.notifications.error(err);
         return;
       }

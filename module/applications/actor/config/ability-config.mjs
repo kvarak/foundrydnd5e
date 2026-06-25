@@ -24,7 +24,7 @@ export default class AbilityConfig extends BaseProficiencyConfig {
 
   /** @override */
   get propertyConfig() {
-    return CONFIG.DND5E.abilities[this.options.key];
+    return CONFIG.VARLYN5E.abilities[this.options.key];
   }
 
   /* -------------------------------------------- */
@@ -35,11 +35,11 @@ export default class AbilityConfig extends BaseProficiencyConfig {
   async _preparePartContext(partId, context, options) {
     context = await super._preparePartContext(partId, context, options);
     context.proficiencyOptions = [
-      { value: 0, label: CONFIG.DND5E.proficiencyLevels[0] },
-      { value: 1, label: CONFIG.DND5E.proficiencyLevels[1] }
+      { value: 0, label: CONFIG.VARLYN5E.proficiencyLevels[0] },
+      { value: 1, label: CONFIG.VARLYN5E.proficiencyLevels[1] }
     ];
-    context.checkLabel = _loc("DND5E.ABILITY.Configure.CheckLabel", { ability: context.label });
-    context.saveLabel = _loc("DND5E.ABILITY.Configure.SaveLabel", { ability: context.label });
+    context.checkLabel = _loc("VARLYN5E.ABILITY.Configure.CheckLabel", { ability: context.label });
+    context.saveLabel = _loc("VARLYN5E.ABILITY.Configure.SaveLabel", { ability: context.label });
     return context;
   }
 }

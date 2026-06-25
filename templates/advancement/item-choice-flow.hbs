@@ -1,7 +1,7 @@
 <div class="standard-form">
     {{#if (or abilities replaceable)}}
     <fieldset>
-        <legend>{{ localize "DND5E.ADVANCEMENT.ItemChoice.Options" }}</legend>
+        <legend>{{ localize "VARLYN5E.ADVANCEMENT.ItemChoice.Options" }}</legend>
 
         {{#if abilities}}
         {{ formGroup abilities.field name="ability" value=abilities.value disabled=abilities.disabled
@@ -10,7 +10,7 @@
 
         {{#if replaceable}}
         <div class="form-group">
-            <label for="{{ partId }}-replace">{{ localize "DND5E.ADVANCEMENT.ItemChoice.Replacement.None" }}</label>
+            <label for="{{ partId }}-replace">{{ localize "VARLYN5E.ADVANCEMENT.ItemChoice.Replacement.None" }}</label>
             <div class="form-fields">
                 <input type="radio" name="replace" value="" id="{{ partId }}-replace" {{ checked noReplacement }}>
             </div>
@@ -37,7 +37,7 @@
                 <div class="item-controls flexrow">
                     {{#if dropped}}
                     <button type="button" class="unbutton control-button item-control" data-action="deleteItem"
-                            data-tooltip aria-label="{{ localize 'DND5E.ItemDelete' }}">
+                            data-tooltip aria-label="{{ localize 'VARLYN5E.ItemDelete' }}">
                         <i class="fa-solid fa-trash" inert></i>
                     </button>
                     <input type="hidden" name="{{ uuid }}" value="true" data-dtype="Boolean">

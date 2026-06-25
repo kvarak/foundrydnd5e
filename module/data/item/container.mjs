@@ -39,7 +39,7 @@ export default class ContainerData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.CONTAINER", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.CONTAINER", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -236,11 +236,11 @@ export default class ContainerData extends ItemDataModel.mixin(
     if ( this.capacity.count ) {
       context.value = await this.contentsCount;
       context.max = this.capacity.count;
-      context.units = _loc("DND5E.Items");
+      context.units = _loc("VARLYN5E.Items");
     } else if ( this.capacity.weight.value ) {
       context.value = await this.contentsWeight;
       context.max = this.capacity.weight.value;
-      context.units = CONFIG.DND5E.weightUnits[this.capacity.weight.units]?.label ?? "";
+      context.units = CONFIG.VARLYN5E.weightUnits[this.capacity.weight.units]?.label ?? "";
     }
     context.value = context.value.toNearest(0.1);
     context.pct = Math.clamp(context.max ? (context.value / context.max) * 100 : 0, 0, 100);

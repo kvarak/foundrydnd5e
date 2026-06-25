@@ -11,7 +11,7 @@ export default class CalendarSettingsConfig extends BaseSettingsConfig {
   /** @override */
   static DEFAULT_OPTIONS = {
     window: {
-      title: "DND5E.CALENDAR.Configuration.Label"
+      title: "VARLYN5E.CALENDAR.Configuration.Label"
     }
   };
 
@@ -74,13 +74,13 @@ export default class CalendarSettingsConfig extends BaseSettingsConfig {
       }));
     context.fields.splice(1, 0, this.createSettingField("calendar"));
 
-    if ( !CONFIG.DND5E.calendar.application ) {
+    if ( !CONFIG.VARLYN5E.calendar.application ) {
       const enabledField = context.fields.find(f => f.name === "calendarConfig.enabled");
       enabledField.disabled = true;
       enabledField.value = false;
       context.message = {
         level: "warn",
-        text: _loc("DND5E.CALENDAR.Configuration.UnavailableMessage")
+        text: _loc("VARLYN5E.CALENDAR.Configuration.UnavailableMessage")
       };
     }
 
@@ -109,28 +109,28 @@ export default class CalendarSettingsConfig extends BaseSettingsConfig {
       {
         field: fields.formatters.fields.date,
         name: "calendarPreferences.formatters.date",
-        options: CONFIG.DND5E.calendar.formatters,
+        options: CONFIG.VARLYN5E.calendar.formatters,
         value: data.formatters.date
       },
       {
         field: fields.formatters.fields.time,
         name: "calendarPreferences.formatters.time",
-        options: CONFIG.DND5E.calendar.formatters,
+        options: CONFIG.VARLYN5E.calendar.formatters,
         value: data.formatters.time
       }
     ];
-    context.legend = _loc("DND5E.CALENDAR.Configuration.Preferences");
-    if ( !CONFIG.DND5E.calendar.application ) {
+    context.legend = _loc("VARLYN5E.CALENDAR.Configuration.Preferences");
+    if ( !CONFIG.VARLYN5E.calendar.application ) {
       context.disabled = true;
       if ( !game.user.isGM ) context.message = {
         level: "warn",
-        text: _loc("DND5E.CALENDAR.Configuration.UnavailableMessage")
+        text: _loc("VARLYN5E.CALENDAR.Configuration.UnavailableMessage")
       };
     } else if ( !game.settings.get("dnd5e", "calendarConfig")?.enabled ) {
       context.disabled = !game.user.isGM;
       context.message = {
         level: "warn",
-        text: _loc("DND5E.CALENDAR.Configuration.DisabledMessage")
+        text: _loc("VARLYN5E.CALENDAR.Configuration.DisabledMessage")
       };
     }
     return context;

@@ -90,11 +90,11 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
 
   /** @override */
   static TABS = [
-    { tab: "description", label: "DND5E.ITEM.SECTIONS.Description" },
-    { tab: "details", label: "DND5E.ITEM.SECTIONS.Details", condition: this.isItemIdentified.bind(this) },
-    { tab: "activities", label: "DND5E.ITEM.SECTIONS.Activities", condition: this.itemHasActivities.bind(this) },
-    { tab: "effects", label: "DND5E.ITEM.SECTIONS.Effects", condition: this.itemHasEffects.bind(this) },
-    { tab: "advancement", label: "DND5E.ITEM.SECTIONS.Advancement", condition: this.itemHasAdvancement.bind(this) }
+    { tab: "description", label: "VARLYN5E.ITEM.SECTIONS.Description" },
+    { tab: "details", label: "VARLYN5E.ITEM.SECTIONS.Details", condition: this.isItemIdentified.bind(this) },
+    { tab: "activities", label: "VARLYN5E.ITEM.SECTIONS.Activities", condition: this.itemHasActivities.bind(this) },
+    { tab: "effects", label: "VARLYN5E.ITEM.SECTIONS.Effects", condition: this.itemHasEffects.bind(this) },
+    { tab: "advancement", label: "VARLYN5E.ITEM.SECTIONS.Advancement", condition: this.itemHasAdvancement.bind(this) }
   ];
 
   /* -------------------------------------------- */
@@ -196,7 +196,7 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
       active: [],
       object: Object.fromEntries((context.system.properties ?? []).map(p => [p, true])),
       options: (this.item.system.validProperties ?? []).reduce((arr, k) => {
-        const { label } = CONFIG.DND5E.itemProperties[k];
+        const { label } = CONFIG.VARLYN5E.itemProperties[k];
         arr.push({
           label,
           value: k,
@@ -339,30 +339,30 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
     context.parts ??= [];
 
     context.baseItemOptions = await this._getBaseItemOptions(context);
-    context.coverOptions = Object.entries(CONFIG.DND5E.cover).map(([value, label]) => ({ value, label }));
-    context.unitsOptions = Object.entries(CONFIG.DND5E.movementUnits).map(([value, { label }]) => ({ value, label }));
+    context.coverOptions = Object.entries(CONFIG.VARLYN5E.cover).map(([value, label]) => ({ value, label }));
+    context.unitsOptions = Object.entries(CONFIG.VARLYN5E.movementUnits).map(([value, { label }]) => ({ value, label }));
 
     // If using modern rules, do not show redundant artificer progression unless it is already selected.
-    context.spellProgression = { ...CONFIG.DND5E.spellProgression };
+    context.spellProgression = { ...CONFIG.VARLYN5E.spellProgression };
     if ( (varlyn5e.settings.rulesVersion === "modern")
       && (this.item.system.spellcasting?.progression !== "artificer") ) delete context.spellProgression.artificer;
     context.spellProgression = Object.entries(context.spellProgression).map(([value, config]) => {
-      const group = CONFIG.DND5E.spellcasting[config.type]?.label ?? "";
+      const group = CONFIG.VARLYN5E.spellcasting[config.type]?.label ?? "";
       return { group, value, label: config.label };
     });
     const { progression } = this.item.system.spellcasting ?? {};
-    if ( progression && !(progression in CONFIG.DND5E.spellProgression) ) {
+    if ( progression && !(progression in CONFIG.VARLYN5E.spellProgression) ) {
       context.spellProgression.push({ value: progression, label: progression });
     }
 
     // Limited Uses
     context.data = { uses: context.source.uses };
     context.hasLimitedUses = this.item.system.hasLimitedUses;
-    context.recoveryPeriods = CONFIG.DND5E.limitedUsePeriods.recoveryOptions;
+    context.recoveryPeriods = CONFIG.VARLYN5E.limitedUsePeriods.recoveryOptions;
     context.recoveryTypes = [
-      { value: "recoverAll", label: "DND5E.USES.Recovery.Type.RecoverAll" },
-      { value: "loseAll", label: "DND5E.USES.Recovery.Type.LoseAll" },
-      { value: "formula", label: "DND5E.USES.Recovery.Type.Formula" }
+      { value: "recoverAll", label: "VARLYN5E.USES.Recovery.Type.RecoverAll" },
+      { value: "loseAll", label: "VARLYN5E.USES.Recovery.Type.LoseAll" },
+      { value: "formula", label: "VARLYN5E.USES.Recovery.Type.Formula" }
     ];
     context.usesRecovery = (context.source.uses?.recovery ?? []).map((data, index) => ({
       data,
@@ -525,12 +525,12 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
     const tags = [];
     if ( advancement.classRestriction === "primary" ) {
       tags.push({
-        label: "DND5E.AdvancementClassRestrictionPrimary",
+        label: "VARLYN5E.AdvancementClassRestrictionPrimary",
         icon: "systems/dnd5e/icons/svg/original-class.svg"
       });
     } else if ( advancement.classRestriction === "secondary" ) {
       tags.push({
-        label: "DND5E.AdvancementClassRestrictionSecondary",
+        label: "VARLYN5E.AdvancementClassRestrictionSecondary",
         icon: "systems/dnd5e/icons/svg/multiclass.svg"
       });
     }
@@ -547,9 +547,9 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
    */
   async _getBaseItemOptions(context) {
     const baseIds = this.item.type === "equipment" ? {
-      ...CONFIG.DND5E.armorIds,
-      ...CONFIG.DND5E.shieldIds
-    } : CONFIG.DND5E[`${this.item.type}Ids`];
+      ...CONFIG.VARLYN5E.armorIds,
+      ...CONFIG.VARLYN5E.shieldIds
+    } : CONFIG.VARLYN5E[`${this.item.type}Ids`];
     if ( baseIds === undefined ) return null;
 
     const options = [];
@@ -644,7 +644,7 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
 
     if ( this._headerToggles.identified ) {
       const isIdentified = this.item.system.identified;
-      const label = isIdentified ? "DND5E.Identified" : "DND5E.Unidentified.Title";
+      const label = isIdentified ? "VARLYN5E.Identified" : "VARLYN5E.Unidentified.Title";
       this._headerToggles.identified.setAttribute("aria-label", _loc(label));
       this._headerToggles.identified.dataset.tooltip = label;
       this._headerToggles.identified.classList.toggle("active", isIdentified);
@@ -652,7 +652,7 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
 
     if ( this._headerToggles.equipped ) {
       const isEquipped = this.item.system.equipped;
-      const label = isEquipped ? "DND5E.Equipped" : "DND5E.Unequipped";
+      const label = isEquipped ? "VARLYN5E.Equipped" : "VARLYN5E.Unequipped";
       this._headerToggles.equipped.setAttribute("aria-label", _loc(label));
       this._headerToggles.equipped.dataset.tooltip = label;
       this._headerToggles.equipped.classList.toggle("active", isEquipped);
@@ -975,7 +975,7 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
   _onDropActivity(event, { data }) {
     const { _id: id, type } = data;
     const source = this.item.system.activities.get(id);
-    const config = CONFIG.DND5E.activityTypes[type] ?? {};
+    const config = CONFIG.VARLYN5E.activityTypes[type] ?? {};
 
     // Reordering
     if ( source ) {
@@ -1021,7 +1021,7 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
       return false;
     }
     advancements = advancements.filter(a => {
-      const validItemTypes = CONFIG.DND5E.advancementTypes[a.constructor.typeName]?.validItemTypes
+      const validItemTypes = CONFIG.VARLYN5E.advancementTypes[a.constructor.typeName]?.validItemTypes
         ?? a.metadata.validItemTypes;
       return !this.item.advancement.byId[a.id]
         && validItemTypes.has(this.item.type)

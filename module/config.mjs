@@ -32,7 +32,7 @@ import { preLocalize } from "./utils.mjs";
  */
 
 // Namespace Configuration Values
-const DND5E = {};
+const VARLYN5E = {};
 
 /* -------------------------------------------- */
 /*  Abilities                                   */
@@ -42,52 +42,52 @@ const DND5E = {};
  * The set of Ability Scores used within the system.
  * @enum {AbilityConfiguration}
  */
-DND5E.abilities = {
+VARLYN5E.abilities = {
   str: {
-    label: "DND5E.AbilityStr",
-    abbreviation: "DND5E.AbilityStrAbbr",
+    label: "VARLYN5E.AbilityStr",
+    abbreviation: "VARLYN5E.AbilityStrAbbr",
     type: "physical",
     fullKey: "strength",
     icon: "systems/dnd5e/icons/svg/abilities/strength.svg"
   },
   dex: {
-    label: "DND5E.AbilityDex",
-    abbreviation: "DND5E.AbilityDexAbbr",
+    label: "VARLYN5E.AbilityDex",
+    abbreviation: "VARLYN5E.AbilityDexAbbr",
     type: "physical",
     fullKey: "dexterity",
     icon: "systems/dnd5e/icons/svg/abilities/dexterity.svg"
   },
   con: {
-    label: "DND5E.AbilityCon",
-    abbreviation: "DND5E.AbilityConAbbr",
+    label: "VARLYN5E.AbilityCon",
+    abbreviation: "VARLYN5E.AbilityConAbbr",
     type: "physical",
     fullKey: "constitution",
     icon: "systems/dnd5e/icons/svg/abilities/constitution.svg"
   },
   int: {
-    label: "DND5E.AbilityInt",
-    abbreviation: "DND5E.AbilityIntAbbr",
+    label: "VARLYN5E.AbilityInt",
+    abbreviation: "VARLYN5E.AbilityIntAbbr",
     type: "mental",
     fullKey: "intelligence",
     icon: "systems/dnd5e/icons/svg/abilities/intelligence.svg"
   },
   wis: {
-    label: "DND5E.AbilityWis",
-    abbreviation: "DND5E.AbilityWisAbbr",
+    label: "VARLYN5E.AbilityWis",
+    abbreviation: "VARLYN5E.AbilityWisAbbr",
     type: "mental",
     fullKey: "wisdom",
     icon: "systems/dnd5e/icons/svg/abilities/wisdom.svg"
   },
   cha: {
-    label: "DND5E.AbilityCha",
-    abbreviation: "DND5E.AbilityChaAbbr",
+    label: "VARLYN5E.AbilityCha",
+    abbreviation: "VARLYN5E.AbilityChaAbbr",
     type: "mental",
     fullKey: "charisma",
     icon: "systems/dnd5e/icons/svg/abilities/charisma.svg"
   },
   luk: {
-    label: "DND5E.AbilityLuk",
-    abbreviation: "DND5E.AbilityLukAbbr",
+    label: "VARLYN5E.AbilityLuk",
+    abbreviation: "VARLYN5E.AbilityLukAbbr",
     type: "fortune",
     fullKey: "luck",
     icon: "systems/dnd5e/icons/svg/abilities/luck.svg"
@@ -103,7 +103,7 @@ preLocalize("abilities", { keys: ["label", "abbreviation"] });
  * saving throws to maintain concentration.
  * @enum {string}
  */
-DND5E.defaultAbilities = {
+VARLYN5E.defaultAbilities = {
   meleeAttack: "str",
   rangedAttack: "dex",
   initiative: "dex",
@@ -117,7 +117,7 @@ DND5E.defaultAbilities = {
  * Maximum ability score value allowed by default.
  * @type {number}
  */
-DND5E.maxAbilityScore = 20;
+VARLYN5E.maxAbilityScore = 20;
 
 /* -------------------------------------------- */
 /*  Skills                                      */
@@ -127,75 +127,75 @@ DND5E.maxAbilityScore = 20;
  * The set of skill which can be trained with their default ability scores.
  * @enum {SkillConfiguration}
  */
-DND5E.skills = {
+VARLYN5E.skills = {
   acr: {
-    label: "DND5E.SkillAcr",
+    label: "VARLYN5E.SkillAcr",
     ability: "dex",
     fullKey: "acrobatics",
     icon: "icons/equipment/feet/shoes-simple-leaf-green.webp"
   },
   ani: {
-    label: "DND5E.SkillAni",
+    label: "VARLYN5E.SkillAni",
     ability: "wis",
     fullKey: "animalHandling",
     icon: "icons/environment/creatures/horse-brown.webp"
   },
   arc: {
-    label: "DND5E.SkillArc",
+    label: "VARLYN5E.SkillArc",
     ability: "int",
     fullKey: "arcana",
     icon: "icons/sundries/books/book-embossed-jewel-silver-green.webp"
   },
   ath: {
-    label: "DND5E.SkillAth",
+    label: "VARLYN5E.SkillAth",
     ability: "str",
     fullKey: "athletics",
     icon: "icons/magic/control/buff-strength-muscle-damage-orange.webp"
   },
   dec: {
-    label: "DND5E.SkillDec",
+    label: "VARLYN5E.SkillDec",
     ability: "cha",
     fullKey: "deception",
     icon: "icons/magic/control/mouth-smile-deception-purple.webp"
   },
   his: {
-    label: "DND5E.SkillHis",
+    label: "VARLYN5E.SkillHis",
     ability: "int",
     fullKey: "history",
     icon: "icons/sundries/books/book-embossed-bound-brown.webp"
   },
   ins: {
-    label: "DND5E.SkillIns",
+    label: "VARLYN5E.SkillIns",
     ability: "wis",
     fullKey: "insight",
     icon: "icons/magic/perception/orb-crystal-ball-scrying-blue.webp"
   },
   itm: {
-    label: "DND5E.SkillItm",
+    label: "VARLYN5E.SkillItm",
     ability: "cha",
     fullKey: "intimidation",
     icon: "icons/skills/social/intimidation-impressing.webp"
   },
   inv: {
-    label: "DND5E.SkillInv",
+    label: "VARLYN5E.SkillInv",
     ability: "int",
     fullKey: "investigation",
     icon: "icons/tools/scribal/magnifying-glass.webp"
   },
   med: {
-    label: "DND5E.SkillMed",
+    label: "VARLYN5E.SkillMed",
     ability: "wis",
     fullKey: "medicine",
     icon: "icons/tools/cooking/mortar-herbs-yellow.webp"
   },
   nat: {
-    label: "DND5E.SkillNat",
+    label: "VARLYN5E.SkillNat",
     ability: "int",
     fullKey: "nature",
     icon: "icons/magic/nature/plant-sprout-snow-green.webp"
   },
   prc: {
-    label: "DND5E.SkillPrc",
+    label: "VARLYN5E.SkillPrc",
     ability: "wis",
     fullKey: "perception",
     icon: "icons/magic/perception/eye-ringed-green.webp",
@@ -205,31 +205,31 @@ DND5E.skills = {
     }
   },
   prf: {
-    label: "DND5E.SkillPrf",
+    label: "VARLYN5E.SkillPrf",
     ability: "cha",
     fullKey: "performance",
     icon: "icons/tools/instruments/lute-gold-brown.webp"
   },
   per: {
-    label: "DND5E.SkillPer",
+    label: "VARLYN5E.SkillPer",
     ability: "cha",
     fullKey: "persuasion",
     icon: "icons/skills/social/diplomacy-handshake.webp"
   },
   rel: {
-    label: "DND5E.SkillRel",
+    label: "VARLYN5E.SkillRel",
     ability: "int",
     fullKey: "religion",
     icon: "icons/magic/holy/saint-glass-portrait-halo.webp"
   },
   slt: {
-    label: "DND5E.SkillSlt",
+    label: "VARLYN5E.SkillSlt",
     ability: "dex",
     fullKey: "sleightOfHand",
     icon: "icons/sundries/gaming/playing-cards.webp"
   },
   ste: {
-    label: "DND5E.SkillSte",
+    label: "VARLYN5E.SkillSte",
     ability: "dex",
     fullKey: "stealth",
     icon: "icons/magic/perception/shadow-stealth-eyes-purple.webp",
@@ -238,7 +238,7 @@ DND5E.skills = {
     }
   },
   sur: {
-    label: "DND5E.SkillSur",
+    label: "VARLYN5E.SkillSur",
     ability: "wis",
     fullKey: "survival",
     icon: "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
@@ -257,7 +257,7 @@ preLocalize("skills", { key: "label", sort: true });
  * advantage or disadvantage.
  * @type {{ base: number, modifier: number }}
  */
-DND5E.skillPassive = {
+VARLYN5E.skillPassive = {
   base: 10,
   modifier: 5
 };
@@ -268,16 +268,16 @@ DND5E.skillPassive = {
  * Character alignment options.
  * @enum {string}
  */
-DND5E.alignments = {
-  lg: "DND5E.AlignmentLG",
-  ng: "DND5E.AlignmentNG",
-  cg: "DND5E.AlignmentCG",
-  ln: "DND5E.AlignmentLN",
-  tn: "DND5E.AlignmentTN",
-  cn: "DND5E.AlignmentCN",
-  le: "DND5E.AlignmentLE",
-  ne: "DND5E.AlignmentNE",
-  ce: "DND5E.AlignmentCE"
+VARLYN5E.alignments = {
+  lg: "VARLYN5E.AlignmentLG",
+  ng: "VARLYN5E.AlignmentNG",
+  cg: "VARLYN5E.AlignmentCG",
+  ln: "VARLYN5E.AlignmentLN",
+  tn: "VARLYN5E.AlignmentTN",
+  cn: "VARLYN5E.AlignmentCN",
+  le: "VARLYN5E.AlignmentLE",
+  ne: "VARLYN5E.AlignmentNE",
+  ce: "VARLYN5E.AlignmentCE"
 };
 preLocalize("alignments");
 
@@ -287,9 +287,9 @@ preLocalize("alignments");
  * An enumeration of item attunement types.
  * @enum {string}
  */
-DND5E.attunementTypes = {
-  required: "DND5E.AttunementRequired",
-  optional: "DND5E.AttunementOptional"
+VARLYN5E.attunementTypes = {
+  required: "VARLYN5E.AttunementRequired",
+  optional: "VARLYN5E.AttunementOptional"
 };
 preLocalize("attunementTypes");
 
@@ -301,14 +301,14 @@ preLocalize("attunementTypes");
  * The set of types which a weapon item can take.
  * @enum {string}
  */
-DND5E.weaponTypes = {
-  simpleM: "DND5E.WeaponSimpleM",
-  simpleR: "DND5E.WeaponSimpleR",
-  martialM: "DND5E.WeaponMartialM",
-  martialR: "DND5E.WeaponMartialR",
-  natural: "DND5E.WeaponNatural",
-  improv: "DND5E.WeaponImprov",
-  siege: "DND5E.WeaponSiege"
+VARLYN5E.weaponTypes = {
+  simpleM: "VARLYN5E.WeaponSimpleM",
+  simpleR: "VARLYN5E.WeaponSimpleR",
+  martialM: "VARLYN5E.WeaponMartialM",
+  martialR: "VARLYN5E.WeaponMartialR",
+  natural: "VARLYN5E.WeaponNatural",
+  improv: "VARLYN5E.WeaponImprov",
+  siege: "VARLYN5E.WeaponSiege"
 };
 preLocalize("weaponTypes");
 
@@ -318,9 +318,9 @@ preLocalize("weaponTypes");
  * General weapon categories.
  * @enum {string}
  */
-DND5E.weaponProficiencies = {
-  sim: "DND5E.WeaponSimpleProficiency",
-  mar: "DND5E.WeaponMartialProficiency"
+VARLYN5E.weaponProficiencies = {
+  sim: "VARLYN5E.WeaponSimpleProficiency",
+  mar: "VARLYN5E.WeaponMartialProficiency"
 };
 preLocalize("weaponProficiencies");
 
@@ -330,30 +330,30 @@ preLocalize("weaponProficiencies");
  * Weapon masteries.
  * @enum {WeaponMasterConfiguration}
  */
-DND5E.weaponMasteries = {
+VARLYN5E.weaponMasteries = {
   cleave: {
-    label: "DND5E.WEAPON.Mastery.Cleave"
+    label: "VARLYN5E.WEAPON.Mastery.Cleave"
   },
   graze: {
-    label: "DND5E.WEAPON.Mastery.Graze"
+    label: "VARLYN5E.WEAPON.Mastery.Graze"
   },
   nick: {
-    label: "DND5E.WEAPON.Mastery.Nick"
+    label: "VARLYN5E.WEAPON.Mastery.Nick"
   },
   push: {
-    label: "DND5E.WEAPON.Mastery.Push"
+    label: "VARLYN5E.WEAPON.Mastery.Push"
   },
   sap: {
-    label: "DND5E.WEAPON.Mastery.Sap"
+    label: "VARLYN5E.WEAPON.Mastery.Sap"
   },
   slow: {
-    label: "DND5E.WEAPON.Mastery.Slow"
+    label: "VARLYN5E.WEAPON.Mastery.Slow"
   },
   topple: {
-    label: "DND5E.WEAPON.Mastery.Topple"
+    label: "VARLYN5E.WEAPON.Mastery.Topple"
   },
   vex: {
-    label: "DND5E.WEAPON.Mastery.Vex"
+    label: "VARLYN5E.WEAPON.Mastery.Vex"
   }
 };
 preLocalize("weaponMasteries", { key: "label", sort: true });
@@ -361,11 +361,11 @@ preLocalize("weaponMasteries", { key: "label", sort: true });
 /* -------------------------------------------- */
 
 /**
- * A mapping between `DND5E.weaponTypes` and `DND5E.weaponProficiencies` that
+ * A mapping between `VARLYN5E.weaponTypes` and `VARLYN5E.weaponProficiencies` that
  * is used to determine if character has proficiency when adding an item.
  * @enum {(boolean|string)}
  */
-DND5E.weaponProficienciesMap = {
+VARLYN5E.weaponProficienciesMap = {
   simpleM: "sim",
   simpleR: "sim",
   martialM: "mar",
@@ -375,19 +375,19 @@ DND5E.weaponProficienciesMap = {
 /* -------------------------------------------- */
 
 /**
- * A mapping between `DND5E.weaponTypes` and `DND5E.attackClassifications`. Unlisted types are assumed to be
+ * A mapping between `VARLYN5E.weaponTypes` and `VARLYN5E.attackClassifications`. Unlisted types are assumed to be
  * of the "weapon" classification.
  * @enum {string}
  */
-DND5E.weaponClassificationMap = {};
+VARLYN5E.weaponClassificationMap = {};
 
 /* -------------------------------------------- */
 
 /**
- * A mapping between `DND5E.weaponTypes` and `DND5E.attackTypes`.
+ * A mapping between `VARLYN5E.weaponTypes` and `VARLYN5E.attackTypes`.
  * @enum {string}
  */
-DND5E.weaponTypeMap = {
+VARLYN5E.weaponTypeMap = {
   simpleM: "melee",
   simpleR: "ranged",
   martialM: "melee",
@@ -402,7 +402,7 @@ DND5E.weaponTypeMap = {
  * starting equipment provided by classes and backgrounds.
  * @enum {string}
  */
-DND5E.weaponIds = {
+VARLYN5E.weaponIds = {
 };
 
 /* -------------------------------------------- */
@@ -411,7 +411,7 @@ DND5E.weaponIds = {
  * The basic ammunition types.
  * @enum {string}
  */
-DND5E.ammoIds = {
+VARLYN5E.ammoIds = {
 };
 
 /* -------------------------------------------- */
@@ -423,10 +423,10 @@ DND5E.ammoIds = {
  *
  * @enum {string}
  */
-DND5E.toolTypes = {
-  art: "DND5E.ToolArtisans",
-  game: "DND5E.ToolGamingSet",
-  music: "DND5E.ToolMusicalInstrument"
+VARLYN5E.toolTypes = {
+  art: "VARLYN5E.ToolArtisans",
+  game: "VARLYN5E.ToolGamingSet",
+  music: "VARLYN5E.ToolMusicalInstrument"
 };
 preLocalize("toolTypes", { sort: true });
 
@@ -435,9 +435,9 @@ preLocalize("toolTypes", { sort: true });
  *
  * @enum {string}
  */
-DND5E.toolProficiencies = {
-  ...DND5E.toolTypes,
-  vehicle: "DND5E.ToolVehicle"
+VARLYN5E.toolProficiencies = {
+  ...VARLYN5E.toolTypes,
+  vehicle: "VARLYN5E.ToolVehicle"
 };
 preLocalize("toolProficiencies", { sort: true });
 
@@ -445,7 +445,7 @@ preLocalize("toolProficiencies", { sort: true });
  * Configuration data for tools.
  * @enum {ToolConfiguration}
  */
-DND5E.tools = {
+VARLYN5E.tools = {
   alchemist: {
     ability: "int"
   },
@@ -561,7 +561,7 @@ DND5E.tools = {
  * starting equipment provided by classes and backgrounds.
  * @enum {string}
  */
-DND5E.toolIds = new Proxy(DND5E.tools, {
+VARLYN5E.toolIds = new Proxy(VARLYN5E.tools, {
   get(target, prop) {
     return target[prop]?.id ?? target[prop];
   }
@@ -575,51 +575,51 @@ DND5E.toolIds = new Proxy(DND5E.tools, {
  * Configuration for time units available to the system.
  * @enum {TimeUnitConfiguration}
  */
-DND5E.timeUnits = {
+VARLYN5E.timeUnits = {
   turn: {
-    label: "DND5E.UNITS.TIME.Turn.Label",
-    counted: "DND5E.UNITS.TIME.Turn.Counted",
+    label: "VARLYN5E.UNITS.TIME.Turn.Label",
+    counted: "VARLYN5E.UNITS.TIME.Turn.Counted",
     conversion: .1,
     combat: true
   },
   round: {
-    label: "DND5E.UNITS.TIME.Round.Label",
-    counted: "DND5E.UNITS.TIME.Round.Counted",
+    label: "VARLYN5E.UNITS.TIME.Round.Label",
+    counted: "VARLYN5E.UNITS.TIME.Round.Counted",
     conversion: .1,
     combat: true
   },
   second: {
-    label: "DND5E.UNITS.TIME.Second.Label",
+    label: "VARLYN5E.UNITS.TIME.Second.Label",
     conversion: 1 / 60,
     option: false,
     timeComponent: "second"
   },
   minute: {
-    label: "DND5E.UNITS.TIME.Minute.Label",
+    label: "VARLYN5E.UNITS.TIME.Minute.Label",
     conversion: 1,
     timeComponent: "minute"
   },
   hour: {
-    label: "DND5E.UNITS.TIME.Hour.Label",
+    label: "VARLYN5E.UNITS.TIME.Hour.Label",
     conversion: 60,
     timeComponent: "hour"
   },
   day: {
-    label: "DND5E.UNITS.TIME.Day.Label",
+    label: "VARLYN5E.UNITS.TIME.Day.Label",
     conversion: 1_440,
     timeComponent: "day"
   },
   week: {
-    label: "DND5E.UNITS.TIME.Week.Label",
+    label: "VARLYN5E.UNITS.TIME.Week.Label",
     conversion: 10_080,
     option: false
   },
   month: {
-    label: "DND5E.UNITS.TIME.Month.Label",
+    label: "VARLYN5E.UNITS.TIME.Month.Label",
     conversion: 43_200
   },
   year: {
-    label: "DND5E.UNITS.TIME.Year.Label",
+    label: "VARLYN5E.UNITS.TIME.Year.Label",
     conversion: 525_600,
     timeComponent: "year"
   }
@@ -632,7 +632,7 @@ preLocalize("timeUnits", { key: "label" });
  * Time periods that accept a numeric value.
  * @enum {string}
  */
-DND5E.scalarTimePeriods = new Proxy(DND5E.timeUnits, {
+VARLYN5E.scalarTimePeriods = new Proxy(VARLYN5E.timeUnits, {
   get(target, prop) {
     return target[prop]?.label;
   },
@@ -650,10 +650,10 @@ DND5E.scalarTimePeriods = new Proxy(DND5E.timeUnits, {
  * Time periods for spells that don't have a defined ending.
  * @enum {string}
  */
-DND5E.permanentTimePeriods = {
-  disp: "DND5E.TimeDisp",
-  dstr: "DND5E.TimeDispTrig",
-  perm: "DND5E.TimePerm"
+VARLYN5E.permanentTimePeriods = {
+  disp: "VARLYN5E.TimeDisp",
+  dstr: "VARLYN5E.TimeDispTrig",
+  perm: "VARLYN5E.TimePerm"
 };
 preLocalize("permanentTimePeriods");
 
@@ -663,9 +663,9 @@ preLocalize("permanentTimePeriods");
  * Time periods that don't accept a numeric value.
  * @enum {string}
  */
-DND5E.specialTimePeriods = {
-  inst: "DND5E.TimeInst",
-  spec: "DND5E.Special"
+VARLYN5E.specialTimePeriods = {
+  inst: "VARLYN5E.TimeInst",
+  spec: "VARLYN5E.Special"
 };
 preLocalize("specialTimePeriods");
 
@@ -675,10 +675,10 @@ preLocalize("specialTimePeriods");
  * The various lengths of time over which effects can occur.
  * @enum {string}
  */
-DND5E.timePeriods = {
-  ...DND5E.specialTimePeriods,
-  ...DND5E.permanentTimePeriods,
-  ...DND5E.scalarTimePeriods
+VARLYN5E.timePeriods = {
+  ...VARLYN5E.specialTimePeriods,
+  ...VARLYN5E.permanentTimePeriods,
+  ...VARLYN5E.scalarTimePeriods
 };
 preLocalize("timePeriods");
 
@@ -688,27 +688,27 @@ preLocalize("timePeriods");
  * Ways in which to activate an item that cannot be labeled with a cost.
  * @enum {string}
  */
-DND5E.staticAbilityActivationTypes = {
-  none: "DND5E.NoneActionLabel",
-  special: DND5E.timePeriods.spec
+VARLYN5E.staticAbilityActivationTypes = {
+  none: "VARLYN5E.NoneActionLabel",
+  special: VARLYN5E.timePeriods.spec
 };
 
 /**
  * Various ways in which an item or ability can be activated.
  * @enum {string}
  */
-DND5E.abilityActivationTypes = {
-  ...DND5E.staticAbilityActivationTypes,
-  action: "DND5E.Action",
-  bonus: "DND5E.BonusAction",
-  reaction: "DND5E.Reaction",
-  minute: DND5E.timePeriods.minute,
-  hour: DND5E.timePeriods.hour,
-  day: DND5E.timePeriods.day,
-  legendary: "DND5E.LegendaryAction.Label",
-  mythic: "DND5E.MythicActionLabel",
-  lair: "DND5E.LAIR.Action.Label",
-  crew: "DND5E.VEHICLE.Activation.Crew.label"
+VARLYN5E.abilityActivationTypes = {
+  ...VARLYN5E.staticAbilityActivationTypes,
+  action: "VARLYN5E.Action",
+  bonus: "VARLYN5E.BonusAction",
+  reaction: "VARLYN5E.Reaction",
+  minute: VARLYN5E.timePeriods.minute,
+  hour: VARLYN5E.timePeriods.hour,
+  day: VARLYN5E.timePeriods.day,
+  legendary: "VARLYN5E.LegendaryAction.Label",
+  mythic: "VARLYN5E.MythicActionLabel",
+  lair: "VARLYN5E.LAIR.Action.Label",
+  crew: "VARLYN5E.VEHICLE.Activation.Crew.label"
 };
 preLocalize("abilityActivationTypes");
 
@@ -718,92 +718,92 @@ preLocalize("abilityActivationTypes");
  * Configuration data for activation types on activities.
  * @enum {ActivityActivationTypeConfiguration}
  */
-DND5E.activityActivationTypes = {
+VARLYN5E.activityActivationTypes = {
   action: {
-    label: "DND5E.ACTIVATION.Type.Action.Label",
-    header: "DND5E.ACTIVATION.Type.Action.Header",
-    group: "DND5E.ACTIVATION.Category.Standard"
+    label: "VARLYN5E.ACTIVATION.Type.Action.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Action.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Standard"
   },
   bonus: {
-    label: "DND5E.ACTIVATION.Type.BonusAction.Label",
-    header: "DND5E.ACTIVATION.Type.BonusAction.Header",
-    group: "DND5E.ACTIVATION.Category.Standard"
+    label: "VARLYN5E.ACTIVATION.Type.BonusAction.Label",
+    header: "VARLYN5E.ACTIVATION.Type.BonusAction.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Standard"
   },
   reaction: {
-    label: "DND5E.ACTIVATION.Type.Reaction.Label",
-    header: "DND5E.ACTIVATION.Type.Reaction.Header",
-    group: "DND5E.ACTIVATION.Category.Standard"
+    label: "VARLYN5E.ACTIVATION.Type.Reaction.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Reaction.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Standard"
   },
   minute: {
-    label: "DND5E.ACTIVATION.Type.Minute.Label",
-    header: "DND5E.ACTIVATION.Type.Minute.Header",
-    group: "DND5E.ACTIVATION.Category.Time",
+    label: "VARLYN5E.ACTIVATION.Type.Minute.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Minute.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Time",
     scalar: true
   },
   hour: {
-    label: "DND5E.ACTIVATION.Type.Hour.Label",
-    header: "DND5E.ACTIVATION.Type.Hour.Header",
-    group: "DND5E.ACTIVATION.Category.Time",
+    label: "VARLYN5E.ACTIVATION.Type.Hour.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Hour.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Time",
     scalar: true
   },
   day: {
-    label: "DND5E.ACTIVATION.Type.Day.Label",
-    header: "DND5E.ACTIVATION.Type.Day.Header",
-    group: "DND5E.ACTIVATION.Category.Time",
+    label: "VARLYN5E.ACTIVATION.Type.Day.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Day.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Time",
     scalar: true
   },
   longRest: {
-    label: "DND5E.ACTIVATION.Type.LongRest.Label",
-    group: "DND5E.ACTIVATION.Category.Rest",
+    label: "VARLYN5E.ACTIVATION.Type.LongRest.Label",
+    group: "VARLYN5E.ACTIVATION.Category.Rest",
     passive: true
   },
   shortRest: {
-    label: "DND5E.ACTIVATION.Type.ShortRest.Label",
-    group: "DND5E.ACTIVATION.Category.Rest",
+    label: "VARLYN5E.ACTIVATION.Type.ShortRest.Label",
+    group: "VARLYN5E.ACTIVATION.Category.Rest",
     passive: true
   },
   encounter: {
-    label: "DND5E.ACTIVATION.Type.Encounter.Label",
-    group: "DND5E.ACTIVATION.Category.Combat",
+    label: "VARLYN5E.ACTIVATION.Type.Encounter.Label",
+    group: "VARLYN5E.ACTIVATION.Category.Combat",
     passive: true
   },
   turnStart: {
-    label: "DND5E.ACTIVATION.Type.TurnStart.Label",
-    group: "DND5E.ACTIVATION.Category.Combat",
+    label: "VARLYN5E.ACTIVATION.Type.TurnStart.Label",
+    group: "VARLYN5E.ACTIVATION.Category.Combat",
     passive: true
   },
   turnEnd: {
-    label: "DND5E.ACTIVATION.Type.TurnEnd.Label",
-    group: "DND5E.ACTIVATION.Category.Combat",
+    label: "VARLYN5E.ACTIVATION.Type.TurnEnd.Label",
+    group: "VARLYN5E.ACTIVATION.Category.Combat",
     passive: true
   },
   legendary: {
-    counted: "DND5E.ACTIVATION.Type.Legendary.Counted",
+    counted: "VARLYN5E.ACTIVATION.Type.Legendary.Counted",
     consume: {
       property: "resources.legact"
     },
-    label: "DND5E.ACTIVATION.Type.Legendary.Label",
-    header: "DND5E.ACTIVATION.Type.Legendary.Header",
-    group: "DND5E.ACTIVATION.Category.Monster",
+    label: "VARLYN5E.ACTIVATION.Type.Legendary.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Legendary.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Monster",
     scalar: true
   },
   mythic: {
-    counted: "DND5E.ACTIVATION.Type.Mythic.Counted",
+    counted: "VARLYN5E.ACTIVATION.Type.Mythic.Counted",
     consume: {
       property: "resources.legact"
     },
-    label: "DND5E.ACTIVATION.Type.Mythic.Label",
-    header: "DND5E.ACTIVATION.Type.Mythic.Header",
-    group: "DND5E.ACTIVATION.Category.Monster",
+    label: "VARLYN5E.ACTIVATION.Type.Mythic.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Mythic.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Monster",
     scalar: true
   },
   lair: {
-    label: "DND5E.ACTIVATION.Type.Lair.Label",
-    header: "DND5E.ACTIVATION.Type.Lair.Header",
-    group: "DND5E.ACTIVATION.Category.Monster"
+    label: "VARLYN5E.ACTIVATION.Type.Lair.Label",
+    header: "VARLYN5E.ACTIVATION.Type.Lair.Header",
+    group: "VARLYN5E.ACTIVATION.Category.Monster"
   },
   special: {
-    label: "DND5E.Special",
+    label: "VARLYN5E.Special",
     passive: true
   }
 };
@@ -815,12 +815,12 @@ preLocalize("activityActivationTypes", { key: "label" });
  * Different things that an ability can consume upon use.
  * @enum {string}
  */
-DND5E.abilityConsumptionTypes = {
-  ammo: "DND5E.ConsumeAmmunition",
-  attribute: "DND5E.ConsumeAttribute",
-  hitDice: "DND5E.ConsumeHitDice",
-  material: "DND5E.ConsumeMaterial",
-  charges: "DND5E.ConsumeCharges"
+VARLYN5E.abilityConsumptionTypes = {
+  ammo: "VARLYN5E.ConsumeAmmunition",
+  attribute: "VARLYN5E.ConsumeAttribute",
+  hitDice: "VARLYN5E.ConsumeHitDice",
+  material: "VARLYN5E.ConsumeMaterial",
+  charges: "VARLYN5E.ConsumeCharges"
 };
 preLocalize("abilityConsumptionTypes", { sort: true });
 
@@ -830,46 +830,46 @@ preLocalize("abilityConsumptionTypes", { sort: true });
  * Configuration information for different consumption targets.
  * @enum {ActivityConsumptionTargetConfiguration}
  */
-DND5E.activityConsumptionTypes = {
+VARLYN5E.activityConsumptionTypes = {
   activityUses: {
-    label: "DND5E.CONSUMPTION.Type.ActivityUses.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.ActivityUses.Label",
     consume: ConsumptionTargetData.consumeActivityUses,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsActivityUses
   },
   itemUses: {
-    label: "DND5E.CONSUMPTION.Type.ItemUses.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.ItemUses.Label",
     consume: ConsumptionTargetData.consumeItemUses,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsItemUses,
-    nonEmbeddedHint: "DND5E.CONSUMPTION.Type.ItemUses.NonEmbeddedHint",
+    nonEmbeddedHint: "VARLYN5E.CONSUMPTION.Type.ItemUses.NonEmbeddedHint",
     targetRequiresEmbedded: true,
     validTargets: ConsumptionTargetData.validItemUsesTargets
   },
   material: {
-    label: "DND5E.CONSUMPTION.Type.Material.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.Material.Label",
     consume: ConsumptionTargetData.consumeMaterial,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsMaterial,
-    nonEmbeddedHint: "DND5E.CONSUMPTION.Type.Material.NonEmbeddedHint",
+    nonEmbeddedHint: "VARLYN5E.CONSUMPTION.Type.Material.NonEmbeddedHint",
     targetRequiresEmbedded: true,
     validTargets: ConsumptionTargetData.validMaterialTargets
   },
   hitDice: {
-    label: "DND5E.CONSUMPTION.Type.HitDice.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.HitDice.Label",
     consume: ConsumptionTargetData.consumeHitDice,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsHitDice,
     validTargets: ConsumptionTargetData.validHitDiceTargets
   },
   spellSlots: {
-    label: "DND5E.CONSUMPTION.Type.SpellSlots.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.SpellSlots.Label",
     consume: ConsumptionTargetData.consumeSpellSlots,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsSpellSlots,
-    scalingModes: [{ value: "level", label: "DND5E.CONSUMPTION.Scaling.SlotLevel" }],
+    scalingModes: [{ value: "level", label: "VARLYN5E.CONSUMPTION.Scaling.SlotLevel" }],
     validTargets: ConsumptionTargetData.validSpellSlotsTargets
   },
   attribute: {
-    label: "DND5E.CONSUMPTION.Type.Attribute.Label",
+    label: "VARLYN5E.CONSUMPTION.Type.Attribute.Label",
     consume: ConsumptionTargetData.consumeAttribute,
     consumptionLabels: ConsumptionTargetData.consumptionLabelsAttribute,
-    nonEmbeddedHint: "DND5E.CONSUMPTION.Type.Attribute.NonEmbeddedHint",
+    nonEmbeddedHint: "VARLYN5E.CONSUMPTION.Type.Attribute.NonEmbeddedHint",
     targetRequiresEmbedded: true,
     validTargets: ConsumptionTargetData.validAttributeTargets
   }
@@ -882,47 +882,47 @@ preLocalize("activityConsumptionTypes", { key: "label" });
  * Creature sizes ordered from smallest to largest.
  * @enum {ActorSizeConfiguration}
  */
-DND5E.actorSizes = {
+VARLYN5E.actorSizes = {
   tiny: {
-    label: "DND5E.SizeTiny",
-    abbreviation: "DND5E.SizeTinyAbbr",
+    label: "VARLYN5E.SizeTiny",
+    abbreviation: "VARLYN5E.SizeTinyAbbr",
     hitDie: 4,
     token: 0.5,
     capacityMultiplier: 0.5,
     numerical: 0
   },
   sm: {
-    label: "DND5E.SizeSmall",
-    abbreviation: "DND5E.SizeSmallAbbr",
+    label: "VARLYN5E.SizeSmall",
+    abbreviation: "VARLYN5E.SizeSmallAbbr",
     hitDie: 6,
     dynamicTokenScale: 0.8,
     numerical: 1
   },
   med: {
-    label: "DND5E.SizeMedium",
-    abbreviation: "DND5E.SizeMediumAbbr",
+    label: "VARLYN5E.SizeMedium",
+    abbreviation: "VARLYN5E.SizeMediumAbbr",
     hitDie: 8,
     numerical: 2
   },
   lg: {
-    label: "DND5E.SizeLarge",
-    abbreviation: "DND5E.SizeLargeAbbr",
+    label: "VARLYN5E.SizeLarge",
+    abbreviation: "VARLYN5E.SizeLargeAbbr",
     hitDie: 10,
     token: 2,
     capacityMultiplier: 2,
     numerical: 3
   },
   huge: {
-    label: "DND5E.SizeHuge",
-    abbreviation: "DND5E.SizeHugeAbbr",
+    label: "VARLYN5E.SizeHuge",
+    abbreviation: "VARLYN5E.SizeHugeAbbr",
     hitDie: 12,
     token: 3,
     capacityMultiplier: 4,
     numerical: 4
   },
   grg: {
-    label: "DND5E.SizeGargantuan",
-    abbreviation: "DND5E.SizeGargantuanAbbr",
+    label: "VARLYN5E.SizeGargantuan",
+    abbreviation: "VARLYN5E.SizeGargantuanAbbr",
     hitDie: 20,
     token: 4,
     capacityMultiplier: 8,
@@ -939,7 +939,7 @@ preLocalize("actorSizes", { keys: ["label", "abbreviation"] });
  * Colors used to visualize temporary and temporary maximum HP in token health bars.
  * @enum {number}
  */
-DND5E.tokenHPColors = {
+VARLYN5E.tokenHPColors = {
   damage: 0xFF0000,
   healing: 0x00FF00,
   temp: 0x66CCFF,
@@ -953,7 +953,7 @@ DND5E.tokenHPColors = {
  * Colors used when a dynamic token ring effects.
  * @enum {number}
  */
-DND5E.tokenRingColors = {
+VARLYN5E.tokenRingColors = {
   damage: 0xFF0000,
   defeated: 0x000000,
   healing: 0x00FF00,
@@ -966,7 +966,7 @@ DND5E.tokenRingColors = {
  * Colors used to denote movement speed on ruler segments & grid highlighting
  * @enum {number}
  */
-DND5E.tokenRulerColors = {
+VARLYN5E.tokenRulerColors = {
   normal: 0x33BC4E,
   double: 0xF1D836,
   triple: 0xE72124
@@ -978,7 +978,7 @@ DND5E.tokenRulerColors = {
  * Settings used to render map location markers on the canvas.
  * @enum {MapLocationMarkerStyle}
  */
-DND5E.mapLocationMarker = {
+VARLYN5E.mapLocationMarker = {
   default: {
     icon: MapLocationControlIcon,
     backgroundColor: 0xFBF8F5,
@@ -996,80 +996,80 @@ DND5E.mapLocationMarker = {
  * Default types of creatures.
  * @enum {CreatureTypeConfiguration}
  */
-DND5E.creatureTypes = {
+VARLYN5E.creatureTypes = {
   aberration: {
-    label: "DND5E.CreatureAberration",
-    plural: "DND5E.CreatureAberrationPl",
+    label: "VARLYN5E.CreatureAberration",
+    plural: "VARLYN5E.CreatureAberrationPl",
     icon: "icons/creatures/tentacles/tentacle-eyes-yellow-pink.webp",
     detectAlignment: true
   },
   beast: {
-    label: "DND5E.CreatureBeast",
-    plural: "DND5E.CreatureBeastPl",
+    label: "VARLYN5E.CreatureBeast",
+    plural: "VARLYN5E.CreatureBeastPl",
     icon: "icons/creatures/claws/claw-bear-paw-swipe-red.webp"
   },
   celestial: {
-    label: "DND5E.CreatureCelestial",
-    plural: "DND5E.CreatureCelestialPl",
+    label: "VARLYN5E.CreatureCelestial",
+    plural: "VARLYN5E.CreatureCelestialPl",
     icon: "icons/creatures/abilities/wings-birdlike-blue.webp",
     detectAlignment: true
   },
   construct: {
-    label: "DND5E.CreatureConstruct",
-    plural: "DND5E.CreatureConstructPl",
+    label: "VARLYN5E.CreatureConstruct",
+    plural: "VARLYN5E.CreatureConstructPl",
     icon: "icons/creatures/magical/construct-stone-earth-gray.webp"
   },
   dragon: {
-    label: "DND5E.CreatureDragon",
-    plural: "DND5E.CreatureDragonPl",
+    label: "VARLYN5E.CreatureDragon",
+    plural: "VARLYN5E.CreatureDragonPl",
     icon: "icons/creatures/abilities/dragon-fire-breath-orange.webp"
   },
   elemental: {
-    label: "DND5E.CreatureElemental",
-    plural: "DND5E.CreatureElementalPl",
+    label: "VARLYN5E.CreatureElemental",
+    plural: "VARLYN5E.CreatureElementalPl",
     icon: "icons/creatures/magical/spirit-fire-orange.webp",
     detectAlignment: true
   },
   fey: {
-    label: "DND5E.CreatureFey",
-    plural: "DND5E.CreatureFeyPl",
+    label: "VARLYN5E.CreatureFey",
+    plural: "VARLYN5E.CreatureFeyPl",
     icon: "icons/creatures/magical/fae-fairy-winged-glowing-green.webp",
     detectAlignment: true
   },
   fiend: {
-    label: "DND5E.CreatureFiend",
-    plural: "DND5E.CreatureFiendPl",
+    label: "VARLYN5E.CreatureFiend",
+    plural: "VARLYN5E.CreatureFiendPl",
     icon: "icons/magic/death/skull-horned-goat-pentagram-red.webp",
     detectAlignment: true
   },
   giant: {
-    label: "DND5E.CreatureGiant",
-    plural: "DND5E.CreatureGiantPl",
+    label: "VARLYN5E.CreatureGiant",
+    plural: "VARLYN5E.CreatureGiantPl",
     icon: "icons/creatures/magical/humanoid-giant-forest-blue.webp"
   },
   humanoid: {
-    label: "DND5E.CreatureHumanoid",
-    plural: "DND5E.CreatureHumanoidPl",
+    label: "VARLYN5E.CreatureHumanoid",
+    plural: "VARLYN5E.CreatureHumanoidPl",
     icon: "icons/environment/people/group.webp"
   },
   monstrosity: {
-    label: "DND5E.CreatureMonstrosity",
-    plural: "DND5E.CreatureMonstrosityPl",
+    label: "VARLYN5E.CreatureMonstrosity",
+    plural: "VARLYN5E.CreatureMonstrosityPl",
     icon: "icons/creatures/abilities/mouth-teeth-rows-red.webp"
   },
   ooze: {
-    label: "DND5E.CreatureOoze",
-    plural: "DND5E.CreatureOozePl",
+    label: "VARLYN5E.CreatureOoze",
+    plural: "VARLYN5E.CreatureOozePl",
     icon: "icons/creatures/slimes/slime-movement-pseudopods-green.webp"
   },
   plant: {
-    label: "DND5E.CreaturePlant",
-    plural: "DND5E.CreaturePlantPl",
+    label: "VARLYN5E.CreaturePlant",
+    plural: "VARLYN5E.CreaturePlantPl",
     icon: "icons/magic/nature/tree-animated-strike.webp"
   },
   undead: {
-    label: "DND5E.CreatureUndead",
-    plural: "DND5E.CreatureUndeadPl",
+    label: "VARLYN5E.CreatureUndead",
+    plural: "VARLYN5E.CreatureUndeadPl",
     icon: "icons/magic/death/skull-horned-worn-fire-blue.webp",
     detectAlignment: true
   }
@@ -1082,18 +1082,18 @@ preLocalize("creatureTypes", { keys: ["label", "plural"], sort: true });
  * Classification types for item action types.
  * @enum {string}
  */
-DND5E.itemActionTypes = {
-  mwak: "DND5E.ActionMWAK",
-  rwak: "DND5E.ActionRWAK",
-  msak: "DND5E.ActionMSAK",
-  rsak: "DND5E.ActionRSAK",
-  abil: "DND5E.ActionAbil",
-  save: "DND5E.ActionSave",
-  ench: "DND5E.ActionEnch",
-  summ: "DND5E.ActionSumm",
-  heal: "DND5E.ActionHeal",
-  util: "DND5E.ActionUtil",
-  other: "DND5E.ActionOther"
+VARLYN5E.itemActionTypes = {
+  mwak: "VARLYN5E.ActionMWAK",
+  rwak: "VARLYN5E.ActionRWAK",
+  msak: "VARLYN5E.ActionMSAK",
+  rsak: "VARLYN5E.ActionRSAK",
+  abil: "VARLYN5E.ActionAbil",
+  save: "VARLYN5E.ActionSave",
+  ench: "VARLYN5E.ActionEnch",
+  summ: "VARLYN5E.ActionSumm",
+  heal: "VARLYN5E.ActionHeal",
+  util: "VARLYN5E.ActionUtil",
+  other: "VARLYN5E.ActionOther"
 };
 preLocalize("itemActionTypes");
 
@@ -1103,13 +1103,13 @@ preLocalize("itemActionTypes");
  * List of various item rarities.
  * @enum {string}
  */
-DND5E.itemRarity = {
-  common: "DND5E.ItemRarityCommon",
-  uncommon: "DND5E.ItemRarityUncommon",
-  rare: "DND5E.ItemRarityRare",
-  veryRare: "DND5E.ItemRarityVeryRare",
-  legendary: "DND5E.ItemRarityLegendary",
-  artifact: "DND5E.ItemRarityArtifact"
+VARLYN5E.itemRarity = {
+  common: "VARLYN5E.ItemRarityCommon",
+  uncommon: "VARLYN5E.ItemRarityUncommon",
+  rare: "VARLYN5E.ItemRarityRare",
+  veryRare: "VARLYN5E.ItemRarityVeryRare",
+  legendary: "VARLYN5E.ItemRarityLegendary",
+  artifact: "VARLYN5E.ItemRarityArtifact"
 };
 preLocalize("itemRarity");
 
@@ -1119,61 +1119,61 @@ preLocalize("itemRarity");
  * Enumerate the lengths of time over which an item can have limited use ability.
  * @enum {LimitedUsePeriodConfiguration}
  */
-DND5E.limitedUsePeriods = {
+VARLYN5E.limitedUsePeriods = {
   lr: {
-    label: "DND5E.USES.Recovery.Period.LongRest.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.LongRest.Abbreviation"
+    label: "VARLYN5E.USES.Recovery.Period.LongRest.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.LongRest.Abbreviation"
   },
   sr: {
-    label: "DND5E.USES.Recovery.Period.ShortRest.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.ShortRest.Abbreviation"
+    label: "VARLYN5E.USES.Recovery.Period.ShortRest.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.ShortRest.Abbreviation"
   },
   day: {
-    label: "DND5E.USES.Recovery.Period.Day.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.Day.Label"
+    label: "VARLYN5E.USES.Recovery.Period.Day.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.Day.Label"
   },
   dawn: {
-    label: "DND5E.USES.Recovery.Period.Dawn.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.Dawn.Label",
+    label: "VARLYN5E.USES.Recovery.Period.Dawn.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.Dawn.Label",
     formula: true
   },
   dusk: {
-    label: "DND5E.USES.Recovery.Period.Dusk.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.Dusk.Label",
+    label: "VARLYN5E.USES.Recovery.Period.Dusk.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.Dusk.Label",
     formula: true
   },
   initiative: {
-    label: "DND5E.USES.Recovery.Period.Initiative.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.Initiative.Label",
+    label: "VARLYN5E.USES.Recovery.Period.Initiative.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.Initiative.Label",
     type: "special"
   },
   turnStart: {
-    label: "DND5E.USES.Recovery.Period.TurnStart.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.TurnStart.Abbreviation",
+    label: "VARLYN5E.USES.Recovery.Period.TurnStart.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.TurnStart.Abbreviation",
     type: "combat"
   },
   turnEnd: {
-    label: "DND5E.USES.Recovery.Period.TurnEnd.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.TurnEnd.Abbreviation",
+    label: "VARLYN5E.USES.Recovery.Period.TurnEnd.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.TurnEnd.Abbreviation",
     type: "combat"
   },
   turn: {
-    label: "DND5E.USES.Recovery.Period.Turn.Label",
-    abbreviation: "DND5E.USES.Recovery.Period.Turn.Label",
+    label: "VARLYN5E.USES.Recovery.Period.Turn.Label",
+    abbreviation: "VARLYN5E.USES.Recovery.Period.Turn.Label",
     type: "combat"
   }
 };
 preLocalize("limitedUsePeriods", { keys: ["label", "abbreviation"] });
 
-Object.defineProperty(DND5E.limitedUsePeriods, "recoveryOptions", {
+Object.defineProperty(VARLYN5E.limitedUsePeriods, "recoveryOptions", {
   get() {
     return [
-      ...Object.entries(CONFIG.DND5E.limitedUsePeriods)
+      ...Object.entries(CONFIG.VARLYN5E.limitedUsePeriods)
         .filter(([, config]) => !config.deprecated)
         .map(([value, { label, type }]) => ({
-          value, label, group: _loc(`DND5E.USES.Recovery.${type?.capitalize() ?? "Time"}`)
+          value, label, group: _loc(`VARLYN5E.USES.Recovery.${type?.capitalize() ?? "Time"}`)
         })),
-      { value: "recharge", label: _loc("DND5E.USES.Recovery.Recharge.Label") }
+      { value: "recharge", label: _loc("VARLYN5E.USES.Recovery.Recharge.Label") }
     ];
   }
 });
@@ -1184,15 +1184,15 @@ Object.defineProperty(DND5E.limitedUsePeriods, "recoveryOptions", {
  * Periods at which enchantments can be re-bound to new items.
  * @enum {{ label: string }}
  */
-DND5E.enchantmentPeriods = {
+VARLYN5E.enchantmentPeriods = {
   sr: {
-    label: "DND5E.ENCHANTMENT.Period.ShortRest"
+    label: "VARLYN5E.ENCHANTMENT.Period.ShortRest"
   },
   lr: {
-    label: "DND5E.ENCHANTMENT.Period.LongRest"
+    label: "VARLYN5E.ENCHANTMENT.Period.LongRest"
   },
   atwill: {
-    label: "DND5E.ENCHANTMENT.Period.AtWill"
+    label: "VARLYN5E.ENCHANTMENT.Period.AtWill"
   }
 };
 preLocalize("enchantmentPeriods", { key: "label" });
@@ -1205,12 +1205,12 @@ preLocalize("enchantmentPeriods", { key: "label" });
  * Specific equipment types that modify base AC.
  * @enum {string}
  */
-DND5E.armorTypes = {
-  light: "DND5E.EquipmentLight",
-  medium: "DND5E.EquipmentMedium",
-  heavy: "DND5E.EquipmentHeavy",
-  natural: "DND5E.EquipmentNatural",
-  shield: "DND5E.EquipmentShield"
+VARLYN5E.armorTypes = {
+  light: "VARLYN5E.EquipmentLight",
+  medium: "VARLYN5E.EquipmentMedium",
+  heavy: "VARLYN5E.EquipmentHeavy",
+  natural: "VARLYN5E.EquipmentNatural",
+  shield: "VARLYN5E.EquipmentShield"
 };
 preLocalize("armorTypes");
 
@@ -1220,22 +1220,22 @@ preLocalize("armorTypes");
  * The set of Armor Proficiencies which a character may have.
  * @enum {string}
  */
-DND5E.armorProficiencies = {
-  lgt: "DND5E.ArmorLightProficiency",
-  med: "DND5E.ArmorMediumProficiency",
-  hvy: "DND5E.ArmorHeavyProficiency",
-  shl: "DND5E.EquipmentShieldProficiency"
+VARLYN5E.armorProficiencies = {
+  lgt: "VARLYN5E.ArmorLightProficiency",
+  med: "VARLYN5E.ArmorMediumProficiency",
+  hvy: "VARLYN5E.ArmorHeavyProficiency",
+  shl: "VARLYN5E.EquipmentShieldProficiency"
 };
 preLocalize("armorProficiencies");
 
 /* -------------------------------------------- */
 
 /**
- * A mapping between `DND5E.equipmentTypes` and `DND5E.armorProficiencies` that
+ * A mapping between `VARLYN5E.equipmentTypes` and `VARLYN5E.armorProficiencies` that
  * is used to determine if character has proficiency when adding an item.
  * @enum {(boolean|string)}
  */
-DND5E.armorProficienciesMap = {
+VARLYN5E.armorProficienciesMap = {
   natural: true,
   clothing: true,
   light: "lgt",
@@ -1251,7 +1251,7 @@ DND5E.armorProficienciesMap = {
  * Value will be converted to the appropriate value to match the actor's speed unit.
  * @type {number}
  */
-DND5E.armorSpeedReduction = 10;
+VARLYN5E.armorSpeedReduction = 10;
 
 /* -------------------------------------------- */
 
@@ -1260,7 +1260,7 @@ DND5E.armorSpeedReduction = 10;
  * automated AC calculation in NPCs, and starting equipment.
  * @enum {string}
  */
-DND5E.armorIds = {
+VARLYN5E.armorIds = {
 };
 
 /* -------------------------------------------- */
@@ -1269,7 +1269,7 @@ DND5E.armorIds = {
  * The basic shield in 5e.
  * @enum {string}
  */
-DND5E.shieldIds = {
+VARLYN5E.shieldIds = {
 };
 
 /* -------------------------------------------- */
@@ -1278,41 +1278,41 @@ DND5E.shieldIds = {
  * Common armor class calculations.
  * @enum {{ label: string, [formula]: string }}
  */
-DND5E.armorClasses = {
+VARLYN5E.armorClasses = {
   flat: {
-    label: "DND5E.ArmorClassFlat",
+    label: "VARLYN5E.ArmorClassFlat",
     formula: "@attributes.ac.flat"
   },
   natural: {
-    label: "DND5E.ArmorClassNatural",
+    label: "VARLYN5E.ArmorClassNatural",
     formula: "@attributes.ac.flat"
   },
   default: {
-    label: "DND5E.ArmorClassEquipment",
+    label: "VARLYN5E.ArmorClassEquipment",
     formula: "@attributes.ac.armor + @attributes.ac.dex"
   },
   mage: {
-    label: "DND5E.ArmorClassMage",
+    label: "VARLYN5E.ArmorClassMage",
     formula: "13 + @abilities.dex.mod"
   },
   draconic: {
-    label: "DND5E.ArmorClassDraconic",
+    label: "VARLYN5E.ArmorClassDraconic",
     formula: "13 + @abilities.dex.mod"
   },
   unarmoredMonk: {
-    label: "DND5E.ArmorClassUnarmoredMonk",
+    label: "VARLYN5E.ArmorClassUnarmoredMonk",
     formula: "10 + @abilities.dex.mod + @abilities.wis.mod"
   },
   unarmoredBarb: {
-    label: "DND5E.ArmorClassUnarmoredBarbarian",
+    label: "VARLYN5E.ArmorClassUnarmoredBarbarian",
     formula: "10 + @abilities.dex.mod + @abilities.con.mod"
   },
   unarmoredBard: {
-    label: "DND5E.ArmorClassUnarmoredBard",
+    label: "VARLYN5E.ArmorClassUnarmoredBard",
     formula: "10 + @abilities.dex.mod + @abilities.cha.mod"
   },
   custom: {
-    label: "DND5E.ArmorClassCustom"
+    label: "VARLYN5E.ArmorClassCustom"
   }
 };
 preLocalize("armorClasses", { key: "label" });
@@ -1325,13 +1325,13 @@ preLocalize("armorClasses", { key: "label" });
  * Equipment types that aren't armor.
  * @enum {string}
  */
-DND5E.miscEquipmentTypes = {
-  clothing: "DND5E.EQUIPMENT.Type.Clothing.Label",
-  ring: "DND5E.EQUIPMENT.Type.Ring.Label",
-  rod: "DND5E.EQUIPMENT.Type.Rod.Label",
-  trinket: "DND5E.EQUIPMENT.Type.Trinket.Label",
-  wand: "DND5E.EQUIPMENT.Type.Wand.Label",
-  wondrous: "DND5E.EQUIPMENT.Type.Wondrous.Label"
+VARLYN5E.miscEquipmentTypes = {
+  clothing: "VARLYN5E.EQUIPMENT.Type.Clothing.Label",
+  ring: "VARLYN5E.EQUIPMENT.Type.Ring.Label",
+  rod: "VARLYN5E.EQUIPMENT.Type.Rod.Label",
+  trinket: "VARLYN5E.EQUIPMENT.Type.Trinket.Label",
+  wand: "VARLYN5E.EQUIPMENT.Type.Wand.Label",
+  wondrous: "VARLYN5E.EQUIPMENT.Type.Wondrous.Label"
 };
 preLocalize("miscEquipmentTypes", { sort: true });
 
@@ -1341,9 +1341,9 @@ preLocalize("miscEquipmentTypes", { sort: true });
  * The set of equipment types for armor, clothing, and other objects which can be worn by the character.
  * @enum {string}
  */
-DND5E.equipmentTypes = {
-  ...DND5E.miscEquipmentTypes,
-  ...DND5E.armorTypes
+VARLYN5E.equipmentTypes = {
+  ...VARLYN5E.miscEquipmentTypes,
+  ...VARLYN5E.armorTypes
 };
 preLocalize("equipmentTypes", { sort: true });
 
@@ -1353,47 +1353,47 @@ preLocalize("equipmentTypes", { sort: true });
  * Enumerate the valid consumable types which are recognized by the system.
  * @enum {SubtypeTypeConfiguration}
  */
-DND5E.consumableTypes = {
+VARLYN5E.consumableTypes = {
   ammo: {
-    label: "DND5E.CONSUMABLE.Type.Ammunition.Label",
+    label: "VARLYN5E.CONSUMABLE.Type.Ammunition.Label",
     subtypes: {
-      arrow: "DND5E.CONSUMABLE.Type.Ammunition.Arrow",
-      crossbowBolt: "DND5E.CONSUMABLE.Type.Ammunition.Bolt",
-      energyCell: "DND5E.CONSUMABLE.Type.Ammunition.EnergyCell",
-      firearmBullet: "DND5E.CONSUMABLE.Type.Ammunition.BulletFirearm",
-      slingBullet: "DND5E.CONSUMABLE.Type.Ammunition.BulletSling",
-      blowgunNeedle: "DND5E.CONSUMABLE.Type.Ammunition.Needle"
+      arrow: "VARLYN5E.CONSUMABLE.Type.Ammunition.Arrow",
+      crossbowBolt: "VARLYN5E.CONSUMABLE.Type.Ammunition.Bolt",
+      energyCell: "VARLYN5E.CONSUMABLE.Type.Ammunition.EnergyCell",
+      firearmBullet: "VARLYN5E.CONSUMABLE.Type.Ammunition.BulletFirearm",
+      slingBullet: "VARLYN5E.CONSUMABLE.Type.Ammunition.BulletSling",
+      blowgunNeedle: "VARLYN5E.CONSUMABLE.Type.Ammunition.Needle"
     }
   },
   potion: {
-    label: "DND5E.CONSUMABLE.Type.Potion.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Potion.Label"
   },
   poison: {
-    label: "DND5E.CONSUMABLE.Type.Poison.Label",
+    label: "VARLYN5E.CONSUMABLE.Type.Poison.Label",
     subtypes: {
-      contact: "DND5E.CONSUMABLE.Type.Poison.Contact",
-      ingested: "DND5E.CONSUMABLE.Type.Poison.Ingested",
-      inhaled: "DND5E.CONSUMABLE.Type.Poison.Inhaled",
-      injury: "DND5E.CONSUMABLE.Type.Poison.Injury"
+      contact: "VARLYN5E.CONSUMABLE.Type.Poison.Contact",
+      ingested: "VARLYN5E.CONSUMABLE.Type.Poison.Ingested",
+      inhaled: "VARLYN5E.CONSUMABLE.Type.Poison.Inhaled",
+      injury: "VARLYN5E.CONSUMABLE.Type.Poison.Injury"
     }
   },
   food: {
-    label: "DND5E.CONSUMABLE.Type.Food.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Food.Label"
   },
   scroll: {
-    label: "DND5E.CONSUMABLE.Type.Scroll.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Scroll.Label"
   },
   wand: {
-    label: "DND5E.CONSUMABLE.Type.Wand.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Wand.Label"
   },
   rod: {
-    label: "DND5E.CONSUMABLE.Type.Rod.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Rod.Label"
   },
   trinket: {
-    label: "DND5E.CONSUMABLE.Type.Trinket.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Trinket.Label"
   },
   wondrous: {
-    label: "DND5E.CONSUMABLE.Type.Wondrous.Label"
+    label: "VARLYN5E.CONSUMABLE.Type.Wondrous.Label"
   }
 };
 preLocalize("consumableTypes", { key: "label", sort: true });
@@ -1406,7 +1406,7 @@ preLocalize("consumableTypes.poison.subtypes", { sort: true });
  * Types of containers.
  * @enum {string}
  */
-DND5E.containerTypes = {
+VARLYN5E.containerTypes = {
   backpack: "H8YCd689ezlD26aT",
   barrel: "7Yqbqg5EtVW16wfT",
   basket: "Wv7HzD6dv1P0q78N",
@@ -1433,19 +1433,19 @@ DND5E.containerTypes = {
  * Type of spellcasting foci.
  * @enum {SpellcastingFocusConfiguration}
  */
-DND5E.focusTypes = {
+VARLYN5E.focusTypes = {
   arcane: {
-    label: "DND5E.Focus.Arcane",
+    label: "VARLYN5E.Focus.Arcane",
     itemIds: {
     }
   },
   druidic: {
-    label: "DND5E.Focus.Druidic",
+    label: "VARLYN5E.Focus.Druidic",
     itemIds: {
     }
   },
   holy: {
-    label: "DND5E.Focus.Holy",
+    label: "VARLYN5E.Focus.Holy",
     itemIds: {
     }
   }
@@ -1458,59 +1458,59 @@ preLocalize("focusTypes", { key: "label" });
  * Types of "features" items.
  * @enum {SubtypeTypeConfiguration}
  */
-DND5E.featureTypes = {
+VARLYN5E.featureTypes = {
   background: {
-    label: "DND5E.Feature.Background"
+    label: "VARLYN5E.Feature.Background"
   },
   class: {
-    label: "DND5E.Feature.Class.Label",
+    label: "VARLYN5E.Feature.Class.Label",
     subtypes: {
-      arcaneShot: "DND5E.Feature.Class.ArcaneShot",
-      artificerInfusion: "DND5E.Feature.Class.ArtificerPlan",
-      channelDivinity: "DND5E.Feature.Class.ChannelDivinity",
-      defensiveTactic: "DND5E.Feature.Class.DefensiveTactic",
-      eldritchInvocation: "DND5E.Feature.Class.EldritchInvocation",
-      elementalDiscipline: "DND5E.Feature.Class.ElementalDiscipline",
-      fightingStyle: "DND5E.Feature.Class.FightingStyle",
-      huntersPrey: "DND5E.Feature.Class.HuntersPrey",
-      ki: "DND5E.Feature.Class.Ki",
-      maneuver: "DND5E.Feature.Class.Maneuver",
-      metamagic: "DND5E.Feature.Class.Metamagic",
-      multiattack: "DND5E.Feature.Class.Multiattack",
-      pact: "DND5E.Feature.Class.PactBoon",
-      psionicPower: "DND5E.Feature.Class.PsionicPower",
-      rune: "DND5E.Feature.Class.Rune",
-      superiorHuntersDefense: "DND5E.Feature.Class.SuperiorHuntersDefense"
+      arcaneShot: "VARLYN5E.Feature.Class.ArcaneShot",
+      artificerInfusion: "VARLYN5E.Feature.Class.ArtificerPlan",
+      channelDivinity: "VARLYN5E.Feature.Class.ChannelDivinity",
+      defensiveTactic: "VARLYN5E.Feature.Class.DefensiveTactic",
+      eldritchInvocation: "VARLYN5E.Feature.Class.EldritchInvocation",
+      elementalDiscipline: "VARLYN5E.Feature.Class.ElementalDiscipline",
+      fightingStyle: "VARLYN5E.Feature.Class.FightingStyle",
+      huntersPrey: "VARLYN5E.Feature.Class.HuntersPrey",
+      ki: "VARLYN5E.Feature.Class.Ki",
+      maneuver: "VARLYN5E.Feature.Class.Maneuver",
+      metamagic: "VARLYN5E.Feature.Class.Metamagic",
+      multiattack: "VARLYN5E.Feature.Class.Multiattack",
+      pact: "VARLYN5E.Feature.Class.PactBoon",
+      psionicPower: "VARLYN5E.Feature.Class.PsionicPower",
+      rune: "VARLYN5E.Feature.Class.Rune",
+      superiorHuntersDefense: "VARLYN5E.Feature.Class.SuperiorHuntersDefense"
     }
   },
   monster: {
-    label: "DND5E.Feature.Monster"
+    label: "VARLYN5E.Feature.Monster"
   },
   race: {
-    label: "DND5E.Feature.Species"
+    label: "VARLYN5E.Feature.Species"
   },
   enchantment: {
-    label: "DND5E.ENCHANTMENT.Label",
+    label: "VARLYN5E.ENCHANTMENT.Label",
     subtypes: {
-      artificerInfusion: "DND5E.Feature.Class.ArtificerPlan",
-      rune: "DND5E.Feature.Class.Rune"
+      artificerInfusion: "VARLYN5E.Feature.Class.ArtificerPlan",
+      rune: "VARLYN5E.Feature.Class.Rune"
     }
   },
   feat: {
-    label: "DND5E.Feature.Feat.Label",
+    label: "VARLYN5E.Feature.Feat.Label",
     subtypes: {
-      general: "DND5E.Feature.Feat.General",
-      origin: "DND5E.Feature.Feat.Origin",
-      fightingStyle: "DND5E.Feature.Feat.FightingStyle",
-      epicBoon: "DND5E.Feature.Feat.EpicBoon"
+      general: "VARLYN5E.Feature.Feat.General",
+      origin: "VARLYN5E.Feature.Feat.Origin",
+      fightingStyle: "VARLYN5E.Feature.Feat.FightingStyle",
+      epicBoon: "VARLYN5E.Feature.Feat.EpicBoon"
     }
   },
   supernaturalGift: {
-    label: "DND5E.Feature.SupernaturalGift.Label",
+    label: "VARLYN5E.Feature.SupernaturalGift.Label",
     subtypes: {
-      blessing: "DND5E.Feature.SupernaturalGift.Blessing",
-      charm: "DND5E.Feature.SupernaturalGift.Charm",
-      epicBoon: "DND5E.Feature.SupernaturalGift.EpicBoon"
+      blessing: "VARLYN5E.Feature.SupernaturalGift.Blessing",
+      charm: "VARLYN5E.Feature.SupernaturalGift.Charm",
+      epicBoon: "VARLYN5E.Feature.SupernaturalGift.EpicBoon"
     }
   }
 };
@@ -1526,100 +1526,100 @@ preLocalize("featureTypes.supernaturalGift.subtypes", { sort: true });
  * The various properties of all item types.
  * @enum {ItemPropertyConfiguration}
  */
-DND5E.itemProperties = {
+VARLYN5E.itemProperties = {
   ada: {
-    label: "DND5E.ITEM.Property.Adamantine",
+    label: "VARLYN5E.ITEM.Property.Adamantine",
     isPhysical: true
   },
   amm: {
-    label: "DND5E.ITEM.Property.Ammunition"
+    label: "VARLYN5E.ITEM.Property.Ammunition"
   },
   concentration: {
-    label: "DND5E.ITEM.Property.Concentration",
-    abbreviation: "DND5E.ConcentrationAbbr",
+    label: "VARLYN5E.ITEM.Property.Concentration",
+    abbreviation: "VARLYN5E.ConcentrationAbbr",
     icon: "systems/dnd5e/icons/svg/statuses/concentrating.svg",
     isTag: true
   },
   fin: {
-    label: "DND5E.ITEM.Property.Finesse"
+    label: "VARLYN5E.ITEM.Property.Finesse"
   },
   fir: {
-    label: "DND5E.ITEM.Property.Firearm"
+    label: "VARLYN5E.ITEM.Property.Firearm"
   },
   foc: {
-    label: "DND5E.ITEM.Property.Focus"
+    label: "VARLYN5E.ITEM.Property.Focus"
   },
   gear: {
-    label: "DND5E.ITEM.Property.Gear"
+    label: "VARLYN5E.ITEM.Property.Gear"
   },
   hvy: {
-    label: "DND5E.ITEM.Property.Heavy"
+    label: "VARLYN5E.ITEM.Property.Heavy"
   },
   lgt: {
-    label: "DND5E.ITEM.Property.Light"
+    label: "VARLYN5E.ITEM.Property.Light"
   },
   lod: {
-    label: "DND5E.ITEM.Property.Loading"
+    label: "VARLYN5E.ITEM.Property.Loading"
   },
   material: {
-    label: "DND5E.ITEM.Property.Material",
-    abbreviation: "DND5E.ComponentMaterialAbbr"
+    label: "VARLYN5E.ITEM.Property.Material",
+    abbreviation: "VARLYN5E.ComponentMaterialAbbr"
   },
   mgc: {
-    label: "DND5E.ITEM.Property.Magical",
+    label: "VARLYN5E.ITEM.Property.Magical",
     icon: "systems/dnd5e/icons/svg/properties/magical.svg",
     isPhysical: true
   },
   rch: {
-    label: "DND5E.ITEM.Property.Reach"
+    label: "VARLYN5E.ITEM.Property.Reach"
   },
   rel: {
-    label: "DND5E.ITEM.Property.Reload"
+    label: "VARLYN5E.ITEM.Property.Reload"
   },
   ret: {
-    label: "DND5E.ITEM.Property.Returning"
+    label: "VARLYN5E.ITEM.Property.Returning"
   },
   ritual: {
-    label: "DND5E.ITEM.Property.Ritual",
-    abbreviation: "DND5E.RitualAbbr",
+    label: "VARLYN5E.ITEM.Property.Ritual",
+    abbreviation: "VARLYN5E.RitualAbbr",
     icon: "systems/dnd5e/icons/svg/items/spell.svg",
     isTag: true
   },
   sidekick: {
-    label: "DND5E.ITEM.Property.Sidekick"
+    label: "VARLYN5E.ITEM.Property.Sidekick"
   },
   sil: {
-    label: "DND5E.ITEM.Property.Silvered",
+    label: "VARLYN5E.ITEM.Property.Silvered",
     isPhysical: true
   },
   somatic: {
-    label: "DND5E.ITEM.Property.Somatic",
-    abbreviation: "DND5E.ComponentSomaticAbbr"
+    label: "VARLYN5E.ITEM.Property.Somatic",
+    abbreviation: "VARLYN5E.ComponentSomaticAbbr"
   },
   spc: {
-    label: "DND5E.ITEM.Property.Special"
+    label: "VARLYN5E.ITEM.Property.Special"
   },
   stealthDisadvantage: {
-    label: "DND5E.ITEM.Property.StealthDisadvantage"
+    label: "VARLYN5E.ITEM.Property.StealthDisadvantage"
   },
   thr: {
-    label: "DND5E.ITEM.Property.Thrown"
+    label: "VARLYN5E.ITEM.Property.Thrown"
   },
   trait: {
-    label: "DND5E.ITEM.Property.Trait"
+    label: "VARLYN5E.ITEM.Property.Trait"
   },
   two: {
-    label: "DND5E.ITEM.Property.TwoHanded"
+    label: "VARLYN5E.ITEM.Property.TwoHanded"
   },
   ver: {
-    label: "DND5E.ITEM.Property.Versatile"
+    label: "VARLYN5E.ITEM.Property.Versatile"
   },
   vocal: {
-    label: "DND5E.ITEM.Property.Verbal",
-    abbreviation: "DND5E.ComponentVerbalAbbr"
+    label: "VARLYN5E.ITEM.Property.Verbal",
+    abbreviation: "VARLYN5E.ComponentVerbalAbbr"
   },
   weightlessContents: {
-    label: "DND5E.ITEM.Property.WeightlessContents"
+    label: "VARLYN5E.ITEM.Property.WeightlessContents"
   }
 };
 preLocalize("itemProperties", { keys: ["label", "abbreviation"], sort: true });
@@ -1630,7 +1630,7 @@ preLocalize("itemProperties", { keys: ["label", "abbreviation"], sort: true });
  * The various properties of an item per item type.
  * @enum {object}
  */
-DND5E.validProperties = {
+VARLYN5E.validProperties = {
   class: new Set([
     "sidekick"
   ]),
@@ -1690,34 +1690,34 @@ DND5E.validProperties = {
  * The conversion number defines how many of that currency are equal to one GP.
  * @enum {CurrencyConfiguration}
  */
-DND5E.currencies = {
+VARLYN5E.currencies = {
   pp: {
-    label: "DND5E.CurrencyPP",
-    abbreviation: "DND5E.CurrencyAbbrPP",
+    label: "VARLYN5E.CurrencyPP",
+    abbreviation: "VARLYN5E.CurrencyAbbrPP",
     conversion: 0.1,
     icon: "systems/dnd5e/icons/currency/platinum.webp"
   },
   gp: {
-    label: "DND5E.CurrencyGP",
-    abbreviation: "DND5E.CurrencyAbbrGP",
+    label: "VARLYN5E.CurrencyGP",
+    abbreviation: "VARLYN5E.CurrencyAbbrGP",
     conversion: 1,
     icon: "systems/dnd5e/icons/currency/gold.webp"
   },
   ep: {
-    label: "DND5E.CurrencyEP",
-    abbreviation: "DND5E.CurrencyAbbrEP",
+    label: "VARLYN5E.CurrencyEP",
+    abbreviation: "VARLYN5E.CurrencyAbbrEP",
     conversion: 2,
     icon: "systems/dnd5e/icons/currency/electrum.webp"
   },
   sp: {
-    label: "DND5E.CurrencySP",
-    abbreviation: "DND5E.CurrencyAbbrSP",
+    label: "VARLYN5E.CurrencySP",
+    abbreviation: "VARLYN5E.CurrencyAbbrSP",
     conversion: 10,
     icon: "systems/dnd5e/icons/currency/silver.webp"
   },
   cp: {
-    label: "DND5E.CurrencyCP",
-    abbreviation: "DND5E.CurrencyAbbrCP",
+    label: "VARLYN5E.CurrencyCP",
+    abbreviation: "VARLYN5E.CurrencyAbbrCP",
     conversion: 100,
     icon: "systems/dnd5e/icons/currency/copper.webp"
   }
@@ -1730,7 +1730,7 @@ preLocalize("currencies", { keys: ["label", "abbreviation"] });
  * Default currency used for data model defaults, starting wealth, and facility prices.
  * @enum {string}
  */
-DND5E.defaultCurrency = "gp";
+VARLYN5E.defaultCurrency = "gp";
 
 /* -------------------------------------------- */
 
@@ -1738,7 +1738,7 @@ DND5E.defaultCurrency = "gp";
  * Configuration data for crafting costs.
  * @type {CraftingConfiguration}
  */
-DND5E.crafting = {
+VARLYN5E.crafting = {
   consumable: {
     days: .5,
     gold: .5
@@ -1827,7 +1827,7 @@ DND5E.crafting = {
  * Standard dice spread available for things like damage.
  * @type {number[]}
  */
-DND5E.dieSteps = [4, 6, 8, 10, 12, 20, 100];
+VARLYN5E.dieSteps = [4, 6, 8, 10, 12, 20, 100];
 
 /* -------------------------------------------- */
 
@@ -1835,14 +1835,14 @@ DND5E.dieSteps = [4, 6, 8, 10, 12, 20, 100];
  * Methods by which damage scales relative to the overall scaling increase.
  * @enum {{ label: string, labelCantrip: string }}
  */
-DND5E.damageScalingModes = {
+VARLYN5E.damageScalingModes = {
   whole: {
-    label: "DND5E.DAMAGE.Scaling.Whole",
-    labelCantrip: "DND5E.DAMAGE.Scaling.WholeCantrip"
+    label: "VARLYN5E.DAMAGE.Scaling.Whole",
+    labelCantrip: "VARLYN5E.DAMAGE.Scaling.WholeCantrip"
   },
   half: {
-    label: "DND5E.DAMAGE.Scaling.Half",
-    labelCantrip: "DND5E.DAMAGE.Scaling.HalfCantrip"
+    label: "VARLYN5E.DAMAGE.Scaling.Half",
+    labelCantrip: "VARLYN5E.DAMAGE.Scaling.HalfCantrip"
   }
 };
 preLocalize("damageScalingModes", { keys: ["label", "labelCantrip"] });
@@ -1853,72 +1853,72 @@ preLocalize("damageScalingModes", { keys: ["label", "labelCantrip"] });
  * Types of damage the can be caused by abilities.
  * @enum {DamageTypeConfiguration}
  */
-DND5E.damageTypes = {
+VARLYN5E.damageTypes = {
   acid: {
-    label: "DND5E.DAMAGE.Type.Acid",
+    label: "VARLYN5E.DAMAGE.Type.Acid",
     icon: "systems/dnd5e/icons/svg/damage/acid.svg",
     color: new Color(0x839D50)
   },
   bludgeoning: {
-    label: "DND5E.DAMAGE.Type.Bludgeoning",
+    label: "VARLYN5E.DAMAGE.Type.Bludgeoning",
     icon: "systems/dnd5e/icons/svg/damage/bludgeoning.svg",
     isPhysical: true,
     color: new Color(0x0000A0)
   },
   cold: {
-    label: "DND5E.DAMAGE.Type.Cold",
+    label: "VARLYN5E.DAMAGE.Type.Cold",
     icon: "systems/dnd5e/icons/svg/damage/cold.svg",
     color: new Color(0xADD8E6)
   },
   fire: {
-    label: "DND5E.DAMAGE.Type.Fire",
+    label: "VARLYN5E.DAMAGE.Type.Fire",
     icon: "systems/dnd5e/icons/svg/damage/fire.svg",
     color: new Color(0xFF4500)
   },
   force: {
-    label: "DND5E.DAMAGE.Type.Force",
+    label: "VARLYN5E.DAMAGE.Type.Force",
     icon: "systems/dnd5e/icons/svg/damage/force.svg",
     color: new Color(0x800080)
   },
   lightning: {
-    label: "DND5E.DAMAGE.Type.Lightning",
+    label: "VARLYN5E.DAMAGE.Type.Lightning",
     icon: "systems/dnd5e/icons/svg/damage/lightning.svg",
     color: new Color(0x1E90FF)
   },
   necrotic: {
-    label: "DND5E.DAMAGE.Type.Necrotic",
+    label: "VARLYN5E.DAMAGE.Type.Necrotic",
     icon: "systems/dnd5e/icons/svg/damage/necrotic.svg",
     color: new Color(0x006400)
   },
   piercing: {
-    label: "DND5E.DAMAGE.Type.Piercing",
+    label: "VARLYN5E.DAMAGE.Type.Piercing",
     icon: "systems/dnd5e/icons/svg/damage/piercing.svg",
     isPhysical: true,
     color: new Color(0xC0C0C0)
   },
   poison: {
-    label: "DND5E.DAMAGE.Type.Poison",
+    label: "VARLYN5E.DAMAGE.Type.Poison",
     icon: "systems/dnd5e/icons/svg/damage/poison.svg",
     color: new Color(0x8A2BE2)
   },
   psychic: {
-    label: "DND5E.DAMAGE.Type.Psychic",
+    label: "VARLYN5E.DAMAGE.Type.Psychic",
     icon: "systems/dnd5e/icons/svg/damage/psychic.svg",
     color: new Color(0xFF1493)
   },
   radiant: {
-    label: "DND5E.DAMAGE.Type.Radiant",
+    label: "VARLYN5E.DAMAGE.Type.Radiant",
     icon: "systems/dnd5e/icons/svg/damage/radiant.svg",
     color: new Color(0xFFD700)
   },
   slashing: {
-    label: "DND5E.DAMAGE.Type.Slashing",
+    label: "VARLYN5E.DAMAGE.Type.Slashing",
     icon: "systems/dnd5e/icons/svg/damage/slashing.svg",
     isPhysical: true,
     color: new Color(0x8B0000)
   },
   thunder: {
-    label: "DND5E.DAMAGE.Type.Thunder",
+    label: "VARLYN5E.DAMAGE.Type.Thunder",
     icon: "systems/dnd5e/icons/svg/damage/thunder.svg",
     color: new Color(0x708090)
   }
@@ -1931,7 +1931,7 @@ preLocalize("damageTypes", { keys: ["label"], sort: true });
  * Display aggregated damage in chat cards.
  * @type {boolean}
  */
-DND5E.aggregateDamageDisplay = true;
+VARLYN5E.aggregateDamageDisplay = true;
 
 /* -------------------------------------------- */
 
@@ -1939,22 +1939,22 @@ DND5E.aggregateDamageDisplay = true;
  * Different types of healing that can be applied using abilities.
  * @enum {DamageTypeConfiguration}
  */
-DND5E.healingTypes = {
+VARLYN5E.healingTypes = {
   healing: {
-    label: "DND5E.HEAL.Type.Healing",
-    labelShort: "DND5E.HEAL.Type.HealingShort",
+    label: "VARLYN5E.HEAL.Type.Healing",
+    labelShort: "VARLYN5E.HEAL.Type.HealingShort",
     icon: "systems/dnd5e/icons/svg/damage/healing.svg",
     color: new Color(0x46C252)
   },
   temphp: {
-    label: "DND5E.HEAL.Type.Temporary",
-    labelShort: "DND5E.HEAL.Type.TemporaryShort",
+    label: "VARLYN5E.HEAL.Type.Temporary",
+    labelShort: "VARLYN5E.HEAL.Type.TemporaryShort",
     icon: "systems/dnd5e/icons/svg/damage/temphp.svg",
     color: new Color(0x4B66DE)
   },
   maximum: {
-    label: "DND5E.HEAL.Type.Maximum",
-    labelShort: "DND5E.HEAL.Type.MaximumShort",
+    label: "VARLYN5E.HEAL.Type.Maximum",
+    labelShort: "VARLYN5E.HEAL.Type.MaximumShort",
     icon: "systems/dnd5e/icons/svg/damage/maxhp.svg",
     color: new Color(0x4BDEDE)
   }
@@ -1969,33 +1969,33 @@ preLocalize("healingTypes", { keys: ["label", "labelShort"] });
  * Types of terrain that can cause difficult terrain.
  * @enum {{ label: string }}
  */
-DND5E.difficultTerrainTypes = {
+VARLYN5E.difficultTerrainTypes = {
   ice: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Ice"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Ice"
   },
   liquid: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Liquid"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Liquid"
   },
   plants: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Plants"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Plants"
   },
   rocks: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Rocks"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Rocks"
   },
   mud: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Mud"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Mud"
   },
   sand: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Sand"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Sand"
   },
   slope: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Slope"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Slope"
   },
   snow: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Snow"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Snow"
   },
   web: {
-    label: "DND5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Webs"
+    label: "VARLYN5E.REGIONBEHAVIORS.DIFFICULTTERRAIN.Type.Webs"
   }
 };
 preLocalize("difficultTerrainTypes", { key: "label", sort: true });
@@ -2006,27 +2006,27 @@ preLocalize("difficultTerrainTypes", { key: "label", sort: true });
  * Types of movement supported by creature actors in the system.
  * @enum {MovementTypeConfiguration}
  */
-DND5E.movementTypes = {
+VARLYN5E.movementTypes = {
   walk: {
-    label: "DND5E.MOVEMENT.Type.Speed"
+    label: "VARLYN5E.MOVEMENT.Type.Speed"
   },
   burrow: {
-    label: "DND5E.MOVEMENT.Type.Burrow"
+    label: "VARLYN5E.MOVEMENT.Type.Burrow"
   },
   climb: {
-    label: "DND5E.MOVEMENT.Type.Climb",
+    label: "VARLYN5E.MOVEMENT.Type.Climb",
     walkFallback: true
   },
   fly: {
-    label: "DND5E.MOVEMENT.Type.Fly",
+    label: "VARLYN5E.MOVEMENT.Type.Fly",
     travel: "air"
   },
   jump: {
-    label: "DND5E.MOVEMENT.Type.Jump",
+    label: "VARLYN5E.MOVEMENT.Type.Jump",
     hidden: true
   },
   swim: {
-    label: "DND5E.MOVEMENT.Type.Swim",
+    label: "VARLYN5E.MOVEMENT.Type.Swim",
     travel: "water",
     walkFallback: true
   }
@@ -2039,7 +2039,7 @@ preLocalize("movementTypes", { key: "label" });
  * Default number of hours per day traveled by specific actor types.
  * @enum {number}
  */
-DND5E.travelTimes = {
+VARLYN5E.travelTimes = {
   group: 8,
   vehicle: 24
 };
@@ -2050,15 +2050,15 @@ DND5E.travelTimes = {
  * Types of movement supported by creature actors in the system.
  * @enum {Omit<MovementTypeConfiguration, "travel">}
  */
-DND5E.travelTypes = {
+VARLYN5E.travelTypes = {
   land: {
-    label: "DND5E.TRAVEL.Type.Land"
+    label: "VARLYN5E.TRAVEL.Type.Land"
   },
   water: {
-    label: "DND5E.TRAVEL.Type.Water"
+    label: "VARLYN5E.TRAVEL.Type.Water"
   },
   air: {
-    label: "DND5E.TRAVEL.Type.Air"
+    label: "VARLYN5E.TRAVEL.Type.Air"
   }
 };
 preLocalize("travelTypes", { key: "label" });
@@ -2069,21 +2069,21 @@ preLocalize("travelTypes", { key: "label" });
  * Available travel paces.
  * @type {Readonly<Record<string, TravelPaceConfiguration>>}
  */
-DND5E.travelPace = Object.freeze({
+VARLYN5E.travelPace = Object.freeze({
   slow: {
-    label: "DND5E.TRAVEL.Pace.Slow",
+    label: "VARLYN5E.TRAVEL.Pace.Slow",
     standard: 18,
     multiplier: 2 / 3,
     round: "down"
   },
   normal: {
-    label: "DND5E.TRAVEL.Pace.Normal",
+    label: "VARLYN5E.TRAVEL.Pace.Normal",
     standard: 24,
     multiplier: 1,
     round: "down"
   },
   fast: {
-    label: "DND5E.TRAVEL.Pace.Fast",
+    label: "VARLYN5E.TRAVEL.Pace.Fast",
     standard: 30,
     multiplier: 4 / 3,
     round: "down"
@@ -2099,7 +2099,7 @@ preLocalize("travelPace", { key: "label" });
  * Default units used for imperial & metric settings.
  * @enum {{ imperial: string, metric: string }}
  */
-DND5E.defaultUnits = {
+VARLYN5E.defaultUnits = {
   length: {
     imperial: "ft",
     metric: "m"
@@ -2124,38 +2124,38 @@ DND5E.defaultUnits = {
  * The valid units of measure for movement distances in the game system.
  * @enum {MovementUnitConfiguration}
  */
-DND5E.movementUnits = {
+VARLYN5E.movementUnits = {
   ft: {
-    label: "DND5E.UNITS.DISTANCE.Foot.Label",
-    abbreviation: "DND5E.UNITS.DISTANCE.Foot.Abbreviation",
-    template: "DND5E.UNITS.DISTANCE.Foot.Template",
+    label: "VARLYN5E.UNITS.DISTANCE.Foot.Label",
+    abbreviation: "VARLYN5E.UNITS.DISTANCE.Foot.Abbreviation",
+    template: "VARLYN5E.UNITS.DISTANCE.Foot.Template",
     conversion: 1,
     formattingUnit: "foot",
     type: "imperial",
     travelResolution: "round"
   },
   mi: {
-    label: "DND5E.UNITS.DISTANCE.Mile.Label",
-    abbreviation: "DND5E.UNITS.DISTANCE.Mile.Abbreviation",
-    template: "DND5E.UNITS.DISTANCE.Mile.Template",
+    label: "VARLYN5E.UNITS.DISTANCE.Mile.Label",
+    abbreviation: "VARLYN5E.UNITS.DISTANCE.Mile.Abbreviation",
+    template: "VARLYN5E.UNITS.DISTANCE.Mile.Template",
     conversion: 5_280,
     formattingUnit: "mile",
     type: "imperial",
     travelResolution: "day"
   },
   m: {
-    label: "DND5E.UNITS.DISTANCE.Meter.Label",
-    abbreviation: "DND5E.UNITS.DISTANCE.Meter.Abbreviation",
-    template: "DND5E.UNITS.DISTANCE.Meter.Template",
+    label: "VARLYN5E.UNITS.DISTANCE.Meter.Label",
+    abbreviation: "VARLYN5E.UNITS.DISTANCE.Meter.Abbreviation",
+    template: "VARLYN5E.UNITS.DISTANCE.Meter.Template",
     conversion: 10 / 3, // D&D uses a simplified 5ft -> 1.5m conversion.
     formattingUnit: "meter",
     type: "metric",
     travelResolution: "round"
   },
   km: {
-    label: "DND5E.UNITS.DISTANCE.Kilometer.Label",
-    abbreviation: "DND5E.UNITS.DISTANCE.Kilometer.Abbreviation",
-    template: "DND5E.UNITS.DISTANCE.Kilometer.Template",
+    label: "VARLYN5E.UNITS.DISTANCE.Kilometer.Label",
+    abbreviation: "VARLYN5E.UNITS.DISTANCE.Kilometer.Abbreviation",
+    template: "VARLYN5E.UNITS.DISTANCE.Kilometer.Template",
     conversion: 10_000 / 3, // Matching simplified conversion
     formattingUnit: "kilometer",
     type: "metric",
@@ -2171,19 +2171,19 @@ preLocalize("movementUnits", { keys: ["label", "abbreviation", "template"] });
  * `-per-hour` or `-per-day` to result in the final unit passed to `Intl.NumberFormat`.
  * @enum {TravelUnitConfiguration}
  */
-DND5E.travelUnits = {
+VARLYN5E.travelUnits = {
   mph: {
-    label: "DND5E.UNITS.TRAVEL.Mile.Label",
-    abbreviationDay: "DND5E.UNITS.TRAVEL.Mile.AbbreviationDay",
-    abbreviationHour: "DND5E.UNITS.TRAVEL.Mile.AbbreviationHour",
+    label: "VARLYN5E.UNITS.TRAVEL.Mile.Label",
+    abbreviationDay: "VARLYN5E.UNITS.TRAVEL.Mile.AbbreviationDay",
+    abbreviationHour: "VARLYN5E.UNITS.TRAVEL.Mile.AbbreviationHour",
     formattingUnit: "mile",
     conversion: 1,
     type: "imperial"
   },
   kph: {
-    label: "DND5E.UNITS.TRAVEL.Kilometer.Label",
-    abbreviationDay: "DND5E.UNITS.TRAVEL.Kilometer.AbbreviationDay",
-    abbreviationHour: "DND5E.UNITS.TRAVEL.Kilometer.AbbreviationHour",
+    label: "VARLYN5E.UNITS.TRAVEL.Kilometer.Label",
+    abbreviationDay: "VARLYN5E.UNITS.TRAVEL.Kilometer.AbbreviationDay",
+    abbreviationHour: "VARLYN5E.UNITS.TRAVEL.Kilometer.AbbreviationHour",
     formattingUnit: "kilometer",
     conversion: 0.6,
     type: "metric"
@@ -2197,24 +2197,24 @@ preLocalize("travelUnits", { keys: ["label", "abbreviationDay", "abbreviationHou
  * The types of range that are used for measuring actions and effects.
  * @enum {string}
  */
-DND5E.rangeTypes = {
-  self: "DND5E.DistSelf",
-  touch: "DND5E.DistTouch",
-  spec: "DND5E.Special",
-  any: "DND5E.DistAny"
+VARLYN5E.rangeTypes = {
+  self: "VARLYN5E.DistSelf",
+  touch: "VARLYN5E.DistTouch",
+  spec: "VARLYN5E.Special",
+  any: "VARLYN5E.DistAny"
 };
 preLocalize("rangeTypes");
 
 /* -------------------------------------------- */
 
 /**
- * The valid units of measure for the range of an action or effect. A combination of `DND5E.movementUnits` and
- * `DND5E.rangeUnits`.
+ * The valid units of measure for the range of an action or effect. A combination of `VARLYN5E.movementUnits` and
+ * `VARLYN5E.rangeUnits`.
  * @enum {string}
  */
-DND5E.distanceUnits = {
-  ...Object.fromEntries(Object.entries(DND5E.movementUnits).map(([k, { label }]) => [k, label])),
-  ...DND5E.rangeTypes
+VARLYN5E.distanceUnits = {
+  ...Object.fromEntries(Object.entries(VARLYN5E.movementUnits).map(([k, { label }]) => [k, label])),
+  ...VARLYN5E.rangeTypes
 };
 preLocalize("distanceUnits");
 
@@ -2224,17 +2224,17 @@ preLocalize("distanceUnits");
  * The valid units for measurement of volume.
  * @enum {UnitConfiguration}
  */
-DND5E.volumeUnits = {
+VARLYN5E.volumeUnits = {
   cubicFoot: {
-    label: "DND5E.UNITS.VOLUME.CubicFoot.Label",
-    abbreviation: "DND5E.UNITS.VOLUME.CubicFoot.Abbreviation",
-    counted: "DND5E.UNITS.VOLUME.CubicFoot.Counted",
+    label: "VARLYN5E.UNITS.VOLUME.CubicFoot.Label",
+    abbreviation: "VARLYN5E.UNITS.VOLUME.CubicFoot.Abbreviation",
+    counted: "VARLYN5E.UNITS.VOLUME.CubicFoot.Counted",
     conversion: 1,
     type: "imperial"
   },
   liter: {
-    label: "DND5E.UNITS.VOLUME.Liter.Label",
-    abbreviation: "DND5E.UNITS.VOLUME.Liter.Abbreviation",
+    label: "VARLYN5E.UNITS.VOLUME.Liter.Label",
+    abbreviation: "VARLYN5E.UNITS.VOLUME.Liter.Abbreviation",
     conversion: 1 / 28.317,
     type: "metric"
   }
@@ -2247,32 +2247,32 @@ preLocalize("volumeUnits", { keys: ["label", "abbreviation"] });
  * The valid units for measurement of weight.
  * @enum {UnitConfiguration}
  */
-DND5E.weightUnits = {
+VARLYN5E.weightUnits = {
   lb: {
-    label: "DND5E.UNITS.WEIGHT.Pound.Label",
-    abbreviation: "DND5E.UNITS.WEIGHT.Pound.Abbreviation",
+    label: "VARLYN5E.UNITS.WEIGHT.Pound.Label",
+    abbreviation: "VARLYN5E.UNITS.WEIGHT.Pound.Abbreviation",
     conversion: 1,
     formattingUnit: "pound",
     type: "imperial"
   },
   tn: {
-    label: "DND5E.UNITS.WEIGHT.Ton.Label",
-    abbreviation: "DND5E.UNITS.WEIGHT.Ton.Abbreviation",
-    counted: "DND5E.UNITS.WEIGHT.Ton.Counted",
+    label: "VARLYN5E.UNITS.WEIGHT.Ton.Label",
+    abbreviation: "VARLYN5E.UNITS.WEIGHT.Ton.Abbreviation",
+    counted: "VARLYN5E.UNITS.WEIGHT.Ton.Counted",
     conversion: 2000,
     type: "imperial"
   },
   kg: {
-    label: "DND5E.UNITS.WEIGHT.Kilogram.Label",
-    abbreviation: "DND5E.UNITS.WEIGHT.Kilogram.Abbreviation",
+    label: "VARLYN5E.UNITS.WEIGHT.Kilogram.Label",
+    abbreviation: "VARLYN5E.UNITS.WEIGHT.Kilogram.Abbreviation",
     conversion: 2.5,
     formattingUnit: "kilogram",
     type: "metric"
   },
   Mg: {
-    label: "DND5E.UNITS.WEIGHT.Megagram.Label",
-    abbreviation: "DND5E.UNITS.WEIGHT.Megagram.Abbreviation",
-    counted: "DND5E.UNITS.WEIGHT.Megagram.Counted",
+    label: "VARLYN5E.UNITS.WEIGHT.Megagram.Label",
+    abbreviation: "VARLYN5E.UNITS.WEIGHT.Megagram.Abbreviation",
+    counted: "VARLYN5E.UNITS.WEIGHT.Megagram.Counted",
     conversion: 2500,
     type: "metric"
   }
@@ -2285,7 +2285,7 @@ preLocalize("weightUnits", { keys: ["label", "abbreviation"] });
  * Configure aspects of encumbrance calculation so that it could be configured by modules.
  * @type {EncumbranceConfiguration}
  */
-DND5E.encumbrance = {
+VARLYN5E.encumbrance = {
   currencyPerWeight: {
     imperial: 50,
     metric: 110
@@ -2293,15 +2293,15 @@ DND5E.encumbrance = {
   draftMultiplier: 5,
   effects: {
     encumbered: {
-      name: "EFFECT.DND5E.StatusEncumbered",
+      name: "EFFECT.VARLYN5E.StatusEncumbered",
       img: "systems/dnd5e/icons/svg/statuses/encumbered.svg"
     },
     heavilyEncumbered: {
-      name: "EFFECT.DND5E.StatusHeavilyEncumbered",
+      name: "EFFECT.VARLYN5E.StatusHeavilyEncumbered",
       img: "systems/dnd5e/icons/svg/statuses/heavily-encumbered.svg"
     },
     exceedingCarryingCapacity: {
-      name: "EFFECT.DND5E.StatusExceedingCarryingCapacity",
+      name: "EFFECT.VARLYN5E.StatusExceedingCarryingCapacity",
       img: "systems/dnd5e/icons/svg/statuses/exceeding-carrying-capacity.svg"
     }
   },
@@ -2350,42 +2350,42 @@ preLocalize("encumbrance.effects", { key: "name" });
  * Targeting types that apply to one or more distinct targets.
  * @enum {IndividualTargetDefinition}
  */
-DND5E.individualTargetTypes = {
+VARLYN5E.individualTargetTypes = {
   self: {
-    label: "DND5E.TARGET.Type.Self.Label",
+    label: "VARLYN5E.TARGET.Type.Self.Label",
     scalar: false
   },
   ally: {
-    label: "DND5E.TARGET.Type.Ally.Label",
-    counted: "DND5E.TARGET.Type.Ally.Counted"
+    label: "VARLYN5E.TARGET.Type.Ally.Label",
+    counted: "VARLYN5E.TARGET.Type.Ally.Counted"
   },
   enemy: {
-    label: "DND5E.TARGET.Type.Enemy.Label",
-    counted: "DND5E.TARGET.Type.Enemy.Counted"
+    label: "VARLYN5E.TARGET.Type.Enemy.Label",
+    counted: "VARLYN5E.TARGET.Type.Enemy.Counted"
   },
   creature: {
-    label: "DND5E.TARGET.Type.Creature.Label",
-    counted: "DND5E.TARGET.Type.Creature.Counted"
+    label: "VARLYN5E.TARGET.Type.Creature.Label",
+    counted: "VARLYN5E.TARGET.Type.Creature.Counted"
   },
   object: {
-    label: "DND5E.TARGET.Type.Object.Label",
-    counted: "DND5E.TARGET.Type.Object.Counted"
+    label: "VARLYN5E.TARGET.Type.Object.Label",
+    counted: "VARLYN5E.TARGET.Type.Object.Counted"
   },
   space: {
-    label: "DND5E.TARGET.Type.Space.Label",
-    counted: "DND5E.TARGET.Type.Space.Counted"
+    label: "VARLYN5E.TARGET.Type.Space.Label",
+    counted: "VARLYN5E.TARGET.Type.Space.Counted"
   },
   creatureOrObject: {
-    label: "DND5E.TARGET.Type.CreatureOrObject.Label",
-    counted: "DND5E.TARGET.Type.CreatureOrObject.Counted"
+    label: "VARLYN5E.TARGET.Type.CreatureOrObject.Label",
+    counted: "VARLYN5E.TARGET.Type.CreatureOrObject.Counted"
   },
   any: {
-    label: "DND5E.TARGET.Type.Any.Label",
-    counted: "DND5E.TARGET.Type.Target.Counted"
+    label: "VARLYN5E.TARGET.Type.Any.Label",
+    counted: "VARLYN5E.TARGET.Type.Target.Counted"
   },
   willing: {
-    label: "DND5E.TARGET.Type.WillingCreature.Label",
-    counted: "DND5E.TARGET.Type.WillingCreature.Counted"
+    label: "VARLYN5E.TARGET.Type.WillingCreature.Label",
+    counted: "VARLYN5E.TARGET.Type.WillingCreature.Counted"
   }
 };
 preLocalize("individualTargetTypes", { key: "label" });
@@ -2396,70 +2396,70 @@ preLocalize("individualTargetTypes", { key: "label" });
  * Targeting types that cover an area.
  * @enum {AreaTargetDefinition}
  */
-DND5E.areaTargetTypes = {
+VARLYN5E.areaTargetTypes = {
   circle: {
-    label: "DND5E.TARGET.Type.Circle.Label",
-    counted: "DND5E.TARGET.Type.Circle.Counted",
+    label: "VARLYN5E.TARGET.Type.Circle.Label",
+    counted: "VARLYN5E.TARGET.Type.Circle.Counted",
     template: "circle",
     sizes: ["radius"]
   },
   cone: {
-    label: "DND5E.TARGET.Type.Cone.Label",
-    counted: "DND5E.TARGET.Type.Cone.Counted",
+    label: "VARLYN5E.TARGET.Type.Cone.Label",
+    counted: "VARLYN5E.TARGET.Type.Cone.Counted",
     template: "cone",
     sizes: ["length"],
     standard: true
   },
   cube: {
-    label: "DND5E.TARGET.Type.Cube.Label",
-    counted: "DND5E.TARGET.Type.Cube.Counted",
+    label: "VARLYN5E.TARGET.Type.Cube.Label",
+    counted: "VARLYN5E.TARGET.Type.Cube.Counted",
     template: "rect",
     sizes: ["width"],
     standard: true
   },
   cylinder: {
-    label: "DND5E.TARGET.Type.Cylinder.Label",
-    counted: "DND5E.TARGET.Type.Cylinder.Counted",
+    label: "VARLYN5E.TARGET.Type.Cylinder.Label",
+    counted: "VARLYN5E.TARGET.Type.Cylinder.Counted",
     template: "circle",
     sizes: ["radius", "height"],
     standard: true
   },
   line: {
-    label: "DND5E.TARGET.Type.Line.Label",
-    counted: "DND5E.TARGET.Type.Line.Counted",
+    label: "VARLYN5E.TARGET.Type.Line.Label",
+    counted: "VARLYN5E.TARGET.Type.Line.Counted",
     template: "ray",
     sizes: ["length", "width"],
     standard: true
   },
   radius: {
-    label: "DND5E.TARGET.Type.Emanation.Label",
-    counted: "DND5E.TARGET.Type.Emanation.Counted",
+    label: "VARLYN5E.TARGET.Type.Emanation.Label",
+    counted: "VARLYN5E.TARGET.Type.Emanation.Counted",
     template: "circle",
     standard: true
   },
   sphere: {
-    label: "DND5E.TARGET.Type.Sphere.Label",
-    counted: "DND5E.TARGET.Type.Sphere.Counted",
+    label: "VARLYN5E.TARGET.Type.Sphere.Label",
+    counted: "VARLYN5E.TARGET.Type.Sphere.Counted",
     template: "circle",
     sizes: ["radius"],
     standard: true
   },
   square: {
-    label: "DND5E.TARGET.Type.Square.Label",
-    counted: "DND5E.TARGET.Type.Square.Counted",
+    label: "VARLYN5E.TARGET.Type.Square.Label",
+    counted: "VARLYN5E.TARGET.Type.Square.Counted",
     template: "rect",
     sizes: ["width"]
   },
   wall: {
-    label: "DND5E.TARGET.Type.Wall.Label",
-    counted: "DND5E.TARGET.Type.Wall.Counted",
+    label: "VARLYN5E.TARGET.Type.Wall.Label",
+    counted: "VARLYN5E.TARGET.Type.Wall.Counted",
     template: "ray",
     sizes: ["length", "thickness", "height"]
   }
 };
 preLocalize("areaTargetTypes", { key: "label", sort: true });
 
-Object.defineProperty(DND5E, "areaTargetOptions", {
+Object.defineProperty(VARLYN5E, "areaTargetOptions", {
   get() {
     const { primary, secondary } = Object.entries(this.areaTargetTypes).reduce((obj, [value, data]) => {
       const entry = { value, label: data.label };
@@ -2477,9 +2477,9 @@ Object.defineProperty(DND5E, "areaTargetOptions", {
  * The types of single or area targets which can be applied to abilities.
  * @enum {string}
  */
-DND5E.targetTypes = {
-  ...Object.fromEntries(Object.entries(DND5E.individualTargetTypes).map(([k, v]) => [k, v.label])),
-  ...Object.fromEntries(Object.entries(DND5E.areaTargetTypes).map(([k, v]) => [k, v.label]))
+VARLYN5E.targetTypes = {
+  ...Object.fromEntries(Object.entries(VARLYN5E.individualTargetTypes).map(([k, v]) => [k, v.label])),
+  ...Object.fromEntries(Object.entries(VARLYN5E.areaTargetTypes).map(([k, v]) => [k, v.label]))
 };
 preLocalize("targetTypes", { sort: true });
 
@@ -2489,7 +2489,7 @@ preLocalize("targetTypes", { sort: true });
  * Denominations of hit dice which can apply to classes.
  * @type {string[]}
  */
-DND5E.hitDieTypes = ["d4", "d6", "d8", "d10", "d12"];
+VARLYN5E.hitDieTypes = ["d4", "d6", "d8", "d10", "d12"];
 
 /* -------------------------------------------- */
 
@@ -2497,14 +2497,14 @@ DND5E.hitDieTypes = ["d4", "d6", "d8", "d10", "d12"];
  * Types of rests.
  * @enum {RestTypeConfiguration}
  */
-DND5E.restTypes = {
+VARLYN5E.restTypes = {
   short: {
     duration: {
       normal: 60,
       gritty: 480,
       epic: 1
     },
-    label: "DND5E.REST.Short.Label",
+    label: "VARLYN5E.REST.Short.Label",
     icon: "fa-solid fa-utensils",
     dialogClass: ShortRestDialog,
     activationPeriods: ["shortRest"],
@@ -2518,7 +2518,7 @@ DND5E.restTypes = {
       epic: 60
     },
     exhaustionDelta: -1,
-    label: "DND5E.REST.Long.Label",
+    label: "VARLYN5E.REST.Long.Label",
     icon: "fa-solid fa-campground",
     dialogClass: LongRestDialog,
     newDay: true,
@@ -2539,22 +2539,22 @@ preLocalize("restTypes", { key: "label" });
  * The set of possible sensory perception types which an Actor may have.
  * @enum {SenseConfiguration}
  */
-DND5E.senses = {
+VARLYN5E.senses = {
   blindsight: {
-    label: "DND5E.SenseBlindsight",
+    label: "VARLYN5E.SenseBlindsight",
     detectionMode: "blindsight"
   },
   darkvision: {
-    label: "DND5E.SenseDarkvision",
+    label: "VARLYN5E.SenseDarkvision",
     grantsSight: true,
     visionMode: "darkvision"
   },
   tremorsense: {
-    label: "DND5E.SenseTremorsense",
+    label: "VARLYN5E.SenseTremorsense",
     detectionMode: "feelTremor"
   },
   truesight: {
-    label: "DND5E.SenseTruesight",
+    label: "VARLYN5E.SenseTruesight",
     detectionMode: "seeAll",
     grantsSight: true,
     visionMode: "darkvision"
@@ -2571,15 +2571,15 @@ patchConfig("senses", "label", { since: "DnD5e 6.0", until: "DnD5e 6.2" });
  * Classifications of attacks based on what is performing them.
  * @enum {{ label: string }}
  */
-DND5E.attackClassifications = {
+VARLYN5E.attackClassifications = {
   weapon: {
-    label: "DND5E.ATTACK.Classification.Weapon"
+    label: "VARLYN5E.ATTACK.Classification.Weapon"
   },
   spell: {
-    label: "DND5E.ATTACK.Classification.Spell"
+    label: "VARLYN5E.ATTACK.Classification.Spell"
   },
   unarmed: {
-    label: "DND5E.ATTACK.Classification.Unarmed"
+    label: "VARLYN5E.ATTACK.Classification.Unarmed"
   }
 };
 preLocalize("attackClassifications", { key: "label" });
@@ -2590,24 +2590,24 @@ preLocalize("attackClassifications", { key: "label" });
  * Attack modes available for weapons.
  * @enum {string}
  */
-DND5E.attackModes = Object.seal({
+VARLYN5E.attackModes = Object.seal({
   oneHanded: {
-    label: "DND5E.ATTACK.Mode.OneHanded"
+    label: "VARLYN5E.ATTACK.Mode.OneHanded"
   },
   twoHanded: {
-    label: "DND5E.ATTACK.Mode.TwoHanded"
+    label: "VARLYN5E.ATTACK.Mode.TwoHanded"
   },
   offhand: {
-    label: "DND5E.ATTACK.Mode.Offhand"
+    label: "VARLYN5E.ATTACK.Mode.Offhand"
   },
   ranged: {
-    label: "DND5E.ATTACK.Mode.Ranged"
+    label: "VARLYN5E.ATTACK.Mode.Ranged"
   },
   thrown: {
-    label: "DND5E.ATTACK.Mode.Thrown"
+    label: "VARLYN5E.ATTACK.Mode.Thrown"
   },
   "thrown-offhand": {
-    label: "DND5E.ATTACK.Mode.ThrownOffhand"
+    label: "VARLYN5E.ATTACK.Mode.ThrownOffhand"
   }
 });
 preLocalize("attackModes", { key: "label" });
@@ -2618,12 +2618,12 @@ preLocalize("attackModes", { key: "label" });
  * Types of attacks based on range.
  * @enum {{ label: string }}
  */
-DND5E.attackTypes = Object.seal({
+VARLYN5E.attackTypes = Object.seal({
   melee: {
-    label: "DND5E.ATTACK.Type.Melee"
+    label: "VARLYN5E.ATTACK.Type.Melee"
   },
   ranged: {
-    label: "DND5E.ATTACK.Type.Ranged"
+    label: "VARLYN5E.ATTACK.Type.Ranged"
   }
 });
 preLocalize("attackTypes", { key: "label" });
@@ -2637,7 +2637,7 @@ preLocalize("attackTypes", { key: "label" });
  * The entries of this array represent the spell slot progression for a full spell-caster.
  * @type {SpellcastingTable5e}
  */
-const SPELL_SLOT_TABLE = DND5E.SPELL_SLOT_TABLE = [
+const SPELL_SLOT_TABLE = VARLYN5E.SPELL_SLOT_TABLE = [
   [2],
   [3],
   [4, 2],
@@ -2666,7 +2666,7 @@ const SPELL_SLOT_TABLE = DND5E.SPELL_SLOT_TABLE = [
  * Define the pact slot & level progression by pact caster level.
  * @type {SpellcastingTableSingle5e}
  */
-const pactCastingProgression = DND5E.pactCastingProgression = {
+const pactCastingProgression = VARLYN5E.pactCastingProgression = {
   1: { slots: 1, level: 1 },
   2: { slots: 2, level: 1 },
   3: { slots: 2, level: 2 },
@@ -2690,21 +2690,21 @@ const pactCastingProgression = DND5E.pactCastingProgression = {
  * Available spellcasting methods.
  * @type {Record<string, SpellcastingMethod5e>}
  */
-DND5E.spellcasting = {
+VARLYN5E.spellcasting = {
   atwill: {
-    label: "DND5E.SPELLCASTING.METHODS.AtWill.label",
+    label: "VARLYN5E.SPELLCASTING.METHODS.AtWill.label",
     order: -30
   },
   innate: {
-    label: "DND5E.SPELLCASTING.METHODS.Innate.label",
+    label: "VARLYN5E.SPELLCASTING.METHODS.Innate.label",
     order: -20
   },
   ritual: {
-    label: "DND5E.SPELLCASTING.METHODS.Ritual.label",
+    label: "VARLYN5E.SPELLCASTING.METHODS.Ritual.label",
     order: -10
   },
   pact: {
-    label: "DND5E.SPELLCASTING.METHODS.Pact.label",
+    label: "VARLYN5E.SPELLCASTING.METHODS.Pact.label",
     type: "single",
     cantrips: true,
     prepares: true,
@@ -2713,13 +2713,13 @@ DND5E.spellcasting = {
     table: pactCastingProgression,
     progression: {
       pact: {
-        label: "DND5E.SPELLCASTING.METHODS.Pact.Full.label",
+        label: "VARLYN5E.SPELLCASTING.METHODS.Pact.Full.label",
         divisor: 1
       }
     }
   },
   spell: {
-    label: "DND5E.SPELLCASTING.METHODS.Spell.label",
+    label: "VARLYN5E.SPELLCASTING.METHODS.Spell.label",
     type: "multi",
     cantrips: true,
     prepares: true,
@@ -2728,16 +2728,16 @@ DND5E.spellcasting = {
     table: SPELL_SLOT_TABLE,
     progression: {
       full: {
-        label: "DND5E.SPELLCASTING.METHODS.Spell.Full.label",
+        label: "VARLYN5E.SPELLCASTING.METHODS.Spell.Full.label",
         divisor: 1
       },
       half: {
-        label: "DND5E.SPELLCASTING.METHODS.Spell.Half.label",
+        label: "VARLYN5E.SPELLCASTING.METHODS.Spell.Half.label",
         divisor: 2,
         roundUp: true
       },
       third: {
-        label: "DND5E.SPELLCASTING.METHODS.Spell.Third.label",
+        label: "VARLYN5E.SPELLCASTING.METHODS.Spell.Third.label",
         divisor: 3
       }
     }
@@ -2753,17 +2753,17 @@ preLocalize("spellcasting.pact.progression", { key: "label" });
  * Spell preparation states.
  * @type {Record<string, SpellcastingPreparationState5e>}
  */
-DND5E.spellPreparationStates = {
+VARLYN5E.spellPreparationStates = {
   unprepared: {
-    label: "DND5E.SPELLCASTING.STATES.Unprepared",
+    label: "VARLYN5E.SPELLCASTING.STATES.Unprepared",
     value: 0
   },
   prepared: {
-    label: "DND5E.SPELLCASTING.STATES.Prepared",
+    label: "VARLYN5E.SPELLCASTING.STATES.Prepared",
     value: 1
   },
   always: {
-    label: "DND5E.SPELLCASTING.STATES.AlwaysPrepared",
+    label: "VARLYN5E.SPELLCASTING.STATES.AlwaysPrepared",
     value: 2
   }
 };
@@ -2776,7 +2776,7 @@ preLocalize("spellPreparationStates", { key: "label" });
  * Varlyn spell lists will be added here once the varlyn-spells compendium pack is created (Phase 3.8).
  * @type {string[]}
  */
-DND5E.SPELL_LISTS = Object.freeze([]);
+VARLYN5E.SPELL_LISTS = Object.freeze([]);
 
 /* -------------------------------------------- */
 
@@ -2784,17 +2784,17 @@ DND5E.SPELL_LISTS = Object.freeze([]);
  * Valid spell levels.
  * @enum {string}
  */
-DND5E.spellLevels = {
-  0: "DND5E.SpellLevel0",
-  1: "DND5E.SpellLevel1",
-  2: "DND5E.SpellLevel2",
-  3: "DND5E.SpellLevel3",
-  4: "DND5E.SpellLevel4",
-  5: "DND5E.SpellLevel5",
-  6: "DND5E.SpellLevel6",
-  7: "DND5E.SpellLevel7",
-  8: "DND5E.SpellLevel8",
-  9: "DND5E.SpellLevel9"
+VARLYN5E.spellLevels = {
+  0: "VARLYN5E.SpellLevel0",
+  1: "VARLYN5E.SpellLevel1",
+  2: "VARLYN5E.SpellLevel2",
+  3: "VARLYN5E.SpellLevel3",
+  4: "VARLYN5E.SpellLevel4",
+  5: "VARLYN5E.SpellLevel5",
+  6: "VARLYN5E.SpellLevel6",
+  7: "VARLYN5E.SpellLevel7",
+  8: "VARLYN5E.SpellLevel8",
+  9: "VARLYN5E.SpellLevel9"
 };
 preLocalize("spellLevels");
 
@@ -2804,10 +2804,10 @@ preLocalize("spellLevels");
  * The available choices for how spell damage scaling may be computed.
  * @enum {string}
  */
-DND5E.spellScalingModes = {
-  none: "DND5E.SpellNone",
-  cantrip: "DND5E.SpellCantrip",
-  level: "DND5E.SpellLevel"
+VARLYN5E.spellScalingModes = {
+  none: "VARLYN5E.SpellNone",
+  cantrip: "VARLYN5E.SpellCantrip",
+  level: "VARLYN5E.SpellLevel"
 };
 preLocalize("spellScalingModes", { sort: true });
 
@@ -2817,44 +2817,44 @@ preLocalize("spellScalingModes", { sort: true });
  * Schools to which a spell can belong.
  * @enum {SpellSchoolConfiguration}
  */
-DND5E.spellSchools = {
+VARLYN5E.spellSchools = {
   abj: {
-    label: "DND5E.SchoolAbj",
+    label: "VARLYN5E.SchoolAbj",
     icon: "systems/dnd5e/icons/svg/schools/abjuration.svg",
     fullKey: "abjuration"
   },
   con: {
-    label: "DND5E.SchoolCon",
+    label: "VARLYN5E.SchoolCon",
     icon: "systems/dnd5e/icons/svg/schools/conjuration.svg",
     fullKey: "conjuration"
   },
   div: {
-    label: "DND5E.SchoolDiv",
+    label: "VARLYN5E.SchoolDiv",
     icon: "systems/dnd5e/icons/svg/schools/divination.svg",
     fullKey: "divination"
   },
   enc: {
-    label: "DND5E.SchoolEnc",
+    label: "VARLYN5E.SchoolEnc",
     icon: "systems/dnd5e/icons/svg/schools/enchantment.svg",
     fullKey: "enchantment"
   },
   evo: {
-    label: "DND5E.SchoolEvo",
+    label: "VARLYN5E.SchoolEvo",
     icon: "systems/dnd5e/icons/svg/schools/evocation.svg",
     fullKey: "evocation"
   },
   ill: {
-    label: "DND5E.SchoolIll",
+    label: "VARLYN5E.SchoolIll",
     icon: "systems/dnd5e/icons/svg/schools/illusion.svg",
     fullKey: "illusion"
   },
   nec: {
-    label: "DND5E.SchoolNec",
+    label: "VARLYN5E.SchoolNec",
     icon: "systems/dnd5e/icons/svg/schools/necromancy.svg",
     fullKey: "necromancy"
   },
   trs: {
-    label: "DND5E.SchoolTrs",
+    label: "VARLYN5E.SchoolTrs",
     icon: "systems/dnd5e/icons/svg/schools/transmutation.svg",
     fullKey: "transmutation"
   }
@@ -2867,21 +2867,21 @@ preLocalize("spellSchools", { key: "label", sort: true });
  * Types of spell lists.
  * @enum {string}
  */
-DND5E.spellListTypes = {
+VARLYN5E.spellListTypes = {
   class: "TYPES.Item.class",
   subclass: "TYPES.Item.subclass",
   race: "TYPES.Item.race",
-  other: "JOURNALENTRYPAGE.DND5E.SpellList.Type.Other"
+  other: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Type.Other"
 };
 preLocalize("spellListTypes");
 
 /* -------------------------------------------- */
 
 /**
- * Spell scroll item ID within the `DND5E.sourcePacks` compendium or a full UUID for each spell level.
+ * Spell scroll item ID within the `VARLYN5E.sourcePacks` compendium or a full UUID for each spell level.
  * @enum {string}
  */
-DND5E.spellScrollIds = {
+VARLYN5E.spellScrollIds = {
 };
 
 /* -------------------------------------------- */
@@ -2891,7 +2891,7 @@ DND5E.spellScrollIds = {
  * then the nearest level lower than it will be selected.
  * @enum {SpellScrollValues}
  */
-DND5E.spellScrollValues = {
+VARLYN5E.spellScrollValues = {
   0: { dc: 13, bonus: 5 },
   3: { dc: 15, bonus: 7 },
   5: { dc: 17, bonus: 9 },
@@ -2905,7 +2905,7 @@ DND5E.spellScrollValues = {
  * Compendium packs used for localized items.
  * @enum {string}
  */
-DND5E.sourcePacks = {};
+VARLYN5E.sourcePacks = {};
 
 /* -------------------------------------------- */
 
@@ -2913,111 +2913,111 @@ DND5E.sourcePacks = {};
  * Settings that configuration how actors are changed when transformation is applied.
  * @typedef {TransformationConfiguration}
  */
-DND5E.transformation = {
+VARLYN5E.transformation = {
   effects: {
     all: {
-      label: "DND5E.TRANSFORM.Setting.Effects.All.Label",
-      hint: "DND5E.TRANSFORM.Setting.Effects.All.Hint",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.All.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Effects.All.Hint",
       disables: ["effects.*"]
     },
     origin: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Origin.Label",
-      hint: "DND5E.TRANSFORM.Setting.Effects.Origin.Hint",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Origin.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Effects.Origin.Hint",
       default: true
     },
     otherOrigin: {
-      label: "DND5E.TRANSFORM.Setting.Effects.OtherOrigin.Label",
-      hint: "DND5E.TRANSFORM.Setting.Effects.OtherOrigin.Hint",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.OtherOrigin.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Effects.OtherOrigin.Hint",
       default: true
     },
     background: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Background.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Background.Label",
       default: true
     },
     class: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Class.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Class.Label",
       default: true
     },
     feat: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Feature.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Feature.Label",
       default: true
     },
     equipment: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Equipment.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Equipment.Label",
       default: true
     },
     spell: {
-      label: "DND5E.TRANSFORM.Setting.Effects.Spell.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Effects.Spell.Label",
       default: true
     }
   },
   keep: {
     physical: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Physical.Label",
-      hint: "DND5E.TRANSFORM.Setting.Keep.Physical.Hint"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Physical.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Keep.Physical.Hint"
     },
     mental: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Mental.Label",
-      hint: "DND5E.TRANSFORM.Setting.Keep.Mental.Hint"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Mental.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Keep.Mental.Hint"
     },
     saves: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Saves.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Saves.Label",
       disables: ["merge.saves"]
     },
     skills: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Skills.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Skills.Label",
       disables: ["merge.skills"]
     },
     gearProf: {
-      label: "DND5E.TRANSFORM.Setting.Keep.GearProficiency.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.GearProficiency.Label"
     },
     languages: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Languages.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Languages.Label"
     },
     class: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Proficiency.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Proficiency.Label"
     },
     feats: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Features.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Features.Label"
     },
     items: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Equipment.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Equipment.Label"
     },
     spells: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Spells.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Spells.Label"
     },
     bio: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Biography.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Biography.Label"
     },
     type: {
-      label: "DND5E.TRANSFORM.Setting.Keep.CreatureType.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.CreatureType.Label"
     },
     hp: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Health.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Health.Label"
     },
     tempHP: {
-      label: "DND5E.TRANSFORM.Setting.Keep.TempHP.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.TempHP.Label"
     },
     resistances: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Resistances.Label"
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Resistances.Label"
     },
     vision: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Vision.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Vision.Label",
       default: true
     },
     self: {
-      label: "DND5E.TRANSFORM.Setting.Keep.Self.Label",
-      hint: "DND5E.TRANSFORM.Setting.Keep.Self.Hint",
+      label: "VARLYN5E.TRANSFORM.Setting.Keep.Self.Label",
+      hint: "VARLYN5E.TRANSFORM.Setting.Keep.Self.Hint",
       disables: ["keep.*", "merge.*", "minimumAC", "tempFormula"]
     }
   },
   merge: {
     saves: {
-      label: "DND5E.TRANSFORM.Setting.Merge.Saves.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Merge.Saves.Label",
       disables: ["keep.saves"]
     },
     skills: {
-      label: "DND5E.TRANSFORM.Setting.Merge.Skills.Label",
+      label: "VARLYN5E.TRANSFORM.Setting.Merge.Skills.Label",
       disables: ["keep.skills"]
     }
   },
@@ -3025,7 +3025,7 @@ DND5E.transformation = {
   presets: {
     wildshape: {
       icon: '<i class="fas fa-paw" inert></i>',
-      label: "DND5E.TRANSFORM.Preset.WildShape.Label",
+      label: "VARLYN5E.TRANSFORM.Preset.WildShape.Label",
       settings: {
         effects: new Set(["otherOrigin", "origin", "feat", "spell", "class"]),
         keep: new Set(["bio", "class", "feats", "hp", "languages", "mental", "tempHP", "type"]),
@@ -3037,7 +3037,7 @@ DND5E.transformation = {
     },
     polymorph: {
       icon: '<i class="fas fa-pastafarianism" inert></i>',
-      label: "DND5E.TRANSFORM.Preset.Polymorph.Label",
+      label: "VARLYN5E.TRANSFORM.Preset.Polymorph.Label",
       settings: {
         effects: new Set(["otherOrigin", "origin", "spell"]),
         keep: new Set(["hp", "type"]),
@@ -3046,7 +3046,7 @@ DND5E.transformation = {
     },
     polymorphSelf: {
       icon: '<i class="fas fa-eye" inert></i>',
-      label: "DND5E.TRANSFORM.Preset.Appearance.Label",
+      label: "VARLYN5E.TRANSFORM.Preset.Appearance.Label",
       settings: {
         effects: new Set(["all"]),
         keep: new Set(["self"])
@@ -3067,11 +3067,11 @@ preLocalize("transformation.presets", { key: "label", sort: true });
  * The key for each level represents its proficiency multiplier.
  * @enum {string}
  */
-DND5E.proficiencyLevels = {
-  0: "DND5E.NotProficient",
-  1: "DND5E.Proficient",
-  0.5: "DND5E.HalfProficient",
-  2: "DND5E.Expertise"
+VARLYN5E.proficiencyLevels = {
+  0: "VARLYN5E.NotProficient",
+  1: "VARLYN5E.Proficient",
+  0.5: "VARLYN5E.HalfProficient",
+  2: "VARLYN5E.Expertise"
 };
 preLocalize("proficiencyLevels");
 
@@ -3081,9 +3081,9 @@ preLocalize("proficiencyLevels");
  * Weapon and armor item proficiency levels.
  * @enum {string}
  */
-DND5E.weaponAndArmorProficiencyLevels = {
-  0: "DND5E.NotProficient",
-  1: "DND5E.Proficient"
+VARLYN5E.weaponAndArmorProficiencyLevels = {
+  0: "VARLYN5E.NotProficient",
+  1: "VARLYN5E.Proficient"
 };
 preLocalize("weaponAndArmorProficiencyLevels");
 
@@ -3094,11 +3094,11 @@ preLocalize("weaponAndArmorProficiencyLevels");
  * of cover are in play, we take the highest value.
  * @enum {string}
  */
-DND5E.cover = {
-  0: "DND5E.None",
-  .5: "DND5E.CoverHalf",
-  .75: "DND5E.CoverThreeQuarters",
-  1: "DND5E.CoverTotal"
+VARLYN5E.cover = {
+  0: "VARLYN5E.None",
+  .5: "VARLYN5E.CoverHalf",
+  .75: "VARLYN5E.CoverThreeQuarters",
+  1: "VARLYN5E.CoverTotal"
 };
 preLocalize("cover");
 
@@ -3109,7 +3109,7 @@ preLocalize("cover");
  * @type {string[]}
  * @deprecated since v10
  */
-DND5E.trackableAttributes = [
+VARLYN5E.trackableAttributes = [
   "attributes.ac.value", "attributes.init.bonus", "attributes.movement", "attributes.senses",
   "attributes.spell.attack", "attributes.spell.dc", "attributes.spell.level", "details.cr",
   "details.xp.value", "skills.*.passive", "abilities.*.value"
@@ -3121,7 +3121,7 @@ DND5E.trackableAttributes = [
  * A selection of actor and item attributes that are valid targets for item resource consumption.
  * @type {string[]}
  */
-DND5E.consumableResources = [
+VARLYN5E.consumableResources = [
   // Configured during init.
 ];
 
@@ -3131,127 +3131,127 @@ DND5E.consumableResources = [
  * Conditions that can affect an actor.
  * @enum {ConditionConfiguration}
  */
-DND5E.conditionTypes = {
+VARLYN5E.conditionTypes = {
   bleeding: {
-    name: "EFFECT.DND5E.StatusBleeding",
+    name: "EFFECT.VARLYN5E.StatusBleeding",
     img: "systems/dnd5e/icons/svg/statuses/bleeding.svg",
     pseudo: true
   },
   blinded: {
-    name: "DND5E.ConBlinded",
+    name: "VARLYN5E.ConBlinded",
     img: "systems/dnd5e/icons/svg/statuses/blinded.svg",
     special: "BLIND"
   },
   burning: {
-    name: "EFFECT.DND5E.StatusBurning",
+    name: "EFFECT.VARLYN5E.StatusBurning",
     img: "systems/dnd5e/icons/svg/statuses/burning.svg",
     pseudo: true
   },
   charmed: {
-    name: "DND5E.ConCharmed",
+    name: "VARLYN5E.ConCharmed",
     img: "systems/dnd5e/icons/svg/statuses/charmed.svg"
   },
   cursed: {
-    name: "EFFECT.DND5E.StatusCursed",
+    name: "EFFECT.VARLYN5E.StatusCursed",
     img: "systems/dnd5e/icons/svg/statuses/cursed.svg",
     pseudo: true
   },
   dehydration: {
-    name: "EFFECT.DND5E.StatusDehydration",
+    name: "EFFECT.VARLYN5E.StatusDehydration",
     img: "systems/dnd5e/icons/svg/statuses/dehydration.svg",
     pseudo: true
   },
   deafened: {
-    name: "DND5E.ConDeafened",
+    name: "VARLYN5E.ConDeafened",
     img: "systems/dnd5e/icons/svg/statuses/deafened.svg"
   },
   diseased: {
-    name: "DND5E.ConDiseased",
+    name: "VARLYN5E.ConDiseased",
     img: "systems/dnd5e/icons/svg/statuses/diseased.svg",
     pseudo: true
   },
   exhaustion: {
-    name: "DND5E.ConExhaustion",
+    name: "VARLYN5E.ConExhaustion",
     img: "systems/dnd5e/icons/svg/statuses/exhaustion.svg",
     levels: 6,
     reduction: { rolls: 2, speed: 5 }
   },
   falling: {
-    name: "EFFECT.DND5E.StatusFalling",
+    name: "EFFECT.VARLYN5E.StatusFalling",
     img: "systems/dnd5e/icons/svg/statuses/falling.svg",
     pseudo: true
   },
   frightened: {
-    name: "DND5E.ConFrightened",
+    name: "VARLYN5E.ConFrightened",
     img: "systems/dnd5e/icons/svg/statuses/frightened.svg"
   },
   grappled: {
-    name: "DND5E.ConGrappled",
+    name: "VARLYN5E.ConGrappled",
     img: "systems/dnd5e/icons/svg/statuses/grappled.svg"
   },
   incapacitated: {
-    name: "DND5E.ConIncapacitated",
+    name: "VARLYN5E.ConIncapacitated",
     img: "systems/dnd5e/icons/svg/statuses/incapacitated.svg",
     neverBlockMovement: true
   },
   invisible: {
-    name: "DND5E.ConInvisible",
+    name: "VARLYN5E.ConInvisible",
     img: "systems/dnd5e/icons/svg/statuses/invisible.svg"
   },
   malnutrition: {
-    name: "EFFECT.DND5E.StatusMalnutrition",
+    name: "EFFECT.VARLYN5E.StatusMalnutrition",
     img: "systems/dnd5e/icons/svg/statuses/malnutrition.svg",
     pseudo: true
   },
   paralyzed: {
-    name: "DND5E.ConParalyzed",
+    name: "VARLYN5E.ConParalyzed",
     img: "systems/dnd5e/icons/svg/statuses/paralyzed.svg",
     statuses: ["incapacitated"]
   },
   petrified: {
-    name: "DND5E.ConPetrified",
+    name: "VARLYN5E.ConPetrified",
     img: "systems/dnd5e/icons/svg/statuses/petrified.svg",
     statuses: ["incapacitated"]
   },
   poisoned: {
-    name: "DND5E.ConPoisoned",
+    name: "VARLYN5E.ConPoisoned",
     img: "systems/dnd5e/icons/svg/statuses/poisoned.svg"
   },
   prone: {
-    name: "DND5E.ConProne",
+    name: "VARLYN5E.ConProne",
     img: "systems/dnd5e/icons/svg/statuses/prone.svg"
   },
   restrained: {
-    name: "DND5E.ConRestrained",
+    name: "VARLYN5E.ConRestrained",
     img: "systems/dnd5e/icons/svg/statuses/restrained.svg"
   },
   silenced: {
-    name: "EFFECT.DND5E.StatusSilenced",
+    name: "EFFECT.VARLYN5E.StatusSilenced",
     img: "systems/dnd5e/icons/svg/statuses/silenced.svg",
     pseudo: true
   },
   stunned: {
-    name: "DND5E.ConStunned",
+    name: "VARLYN5E.ConStunned",
     img: "systems/dnd5e/icons/svg/statuses/stunned.svg",
     statuses: ["incapacitated"]
   },
   suffocation: {
-    name: "EFFECT.DND5E.StatusSuffocation",
+    name: "EFFECT.VARLYN5E.StatusSuffocation",
     img: "systems/dnd5e/icons/svg/statuses/suffocation.svg",
     pseudo: true
   },
   surprised: {
-    name: "EFFECT.DND5E.StatusSurprised",
+    name: "EFFECT.VARLYN5E.StatusSurprised",
     img: "systems/dnd5e/icons/svg/statuses/surprised.svg",
     pseudo: true
   },
   transformed: {
-    name: "EFFECT.DND5E.StatusTransformed",
+    name: "EFFECT.VARLYN5E.StatusTransformed",
     img: "systems/dnd5e/icons/svg/statuses/transformed.svg",
     pseudo: true
   },
   unconscious: {
-    name: "DND5E.ConUnconscious",
+    name: "VARLYN5E.ConUnconscious",
     img: "systems/dnd5e/icons/svg/statuses/unconscious.svg",
     statuses: ["incapacitated"],
     riders: ["prone"]
@@ -3266,7 +3266,7 @@ preLocalize("conditionTypes", { key: "name", sort: true });
  * and with a number appended for a level of exhaustion.
  * @enum {Set<string>}
  */
-DND5E.conditionEffects = {
+VARLYN5E.conditionEffects = {
   noMovement: new Set(["exhaustion-5", "grappled", "paralyzed", "petrified", "restrained", "unconscious"]),
   halfMovement: new Set(["exhaustion-2"]),
   crawl: new Set(["prone", "exceedingCarryingCapacity"]),
@@ -3293,78 +3293,78 @@ DND5E.conditionEffects = {
  * data will be merged into the core data.
  * @enum {StatusEffectConfig5e}
  */
-DND5E.statusEffects = {
+VARLYN5E.statusEffects = {
   burrowing: {
-    name: "EFFECT.DND5E.StatusBurrowing",
+    name: "EFFECT.VARLYN5E.StatusBurrowing",
     img: "systems/dnd5e/icons/svg/statuses/burrowing.svg",
     special: "BURROW"
   },
   concentrating: {
-    name: "EFFECT.DND5E.StatusConcentrating",
+    name: "EFFECT.VARLYN5E.StatusConcentrating",
     img: "systems/dnd5e/icons/svg/statuses/concentrating.svg",
     special: "CONCENTRATING"
   },
   coverHalf: {
-    name: "EFFECT.DND5E.StatusHalfCover",
+    name: "EFFECT.VARLYN5E.StatusHalfCover",
     img: "systems/dnd5e/icons/svg/statuses/cover-half.svg",
     order: 2,
     exclusiveGroup: "cover",
     coverBonus: 2
   },
   coverThreeQuarters: {
-    name: "EFFECT.DND5E.StatusThreeQuartersCover",
+    name: "EFFECT.VARLYN5E.StatusThreeQuartersCover",
     img: "systems/dnd5e/icons/svg/statuses/cover-three-quarters.svg",
     order: 3,
     exclusiveGroup: "cover",
     coverBonus: 5
   },
   coverTotal: {
-    name: "EFFECT.DND5E.StatusTotalCover",
+    name: "EFFECT.VARLYN5E.StatusTotalCover",
     img: "systems/dnd5e/icons/svg/statuses/cover-total.svg",
     order: 4,
     exclusiveGroup: "cover"
   },
   dead: {
-    name: "EFFECT.DND5E.StatusDead",
+    name: "EFFECT.VARLYN5E.StatusDead",
     img: "systems/dnd5e/icons/svg/statuses/dead.svg",
     special: "DEFEATED",
     order: 1,
     neverBlockMovement: true
   },
   dodging: {
-    name: "EFFECT.DND5E.StatusDodging",
+    name: "EFFECT.VARLYN5E.StatusDodging",
     img: "systems/dnd5e/icons/svg/statuses/dodging.svg"
   },
   ethereal: {
-    name: "EFFECT.DND5E.StatusEthereal",
+    name: "EFFECT.VARLYN5E.StatusEthereal",
     img: "systems/dnd5e/icons/svg/statuses/ethereal.svg",
     neverBlockMovement: true
   },
   flying: {
-    name: "EFFECT.DND5E.StatusFlying",
+    name: "EFFECT.VARLYN5E.StatusFlying",
     img: "systems/dnd5e/icons/svg/statuses/flying.svg",
     special: "FLY"
   },
   hiding: {
-    name: "EFFECT.DND5E.StatusHiding",
+    name: "EFFECT.VARLYN5E.StatusHiding",
     img: "systems/dnd5e/icons/svg/statuses/hiding.svg"
   },
   hovering: {
-    name: "EFFECT.DND5E.StatusHovering",
+    name: "EFFECT.VARLYN5E.StatusHovering",
     img: "systems/dnd5e/icons/svg/statuses/hovering.svg",
     special: "HOVER"
   },
   marked: {
-    name: "EFFECT.DND5E.StatusMarked",
+    name: "EFFECT.VARLYN5E.StatusMarked",
     img: "systems/dnd5e/icons/svg/statuses/marked.svg"
   },
   sleeping: {
-    name: "EFFECT.DND5E.StatusSleeping",
+    name: "EFFECT.VARLYN5E.StatusSleeping",
     img: "systems/dnd5e/icons/svg/statuses/sleeping.svg",
     statuses: ["incapacitated", "unconscious"]
   },
   stable: {
-    name: "EFFECT.DND5E.StatusStable",
+    name: "EFFECT.VARLYN5E.StatusStable",
     img: "systems/dnd5e/icons/svg/statuses/stable.svg"
   }
 };
@@ -3375,7 +3375,7 @@ DND5E.statusEffects = {
  * Status effects that never block token movement. Populated during the setup process.
  * @type {Set<string>}
  */
-DND5E.neverBlockStatuses = new Set();
+VARLYN5E.neverBlockStatuses = new Set();
 
 /* -------------------------------------------- */
 
@@ -3383,8 +3383,8 @@ DND5E.neverBlockStatuses = new Set();
  * Configuration for the special bloodied status effect.
  * @type {{ name: string, icon: string, threshold: number }}
  */
-DND5E.bloodied = {
-  name: "EFFECT.DND5E.StatusBloodied",
+VARLYN5E.bloodied = {
+  name: "EFFECT.VARLYN5E.StatusBloodied",
   img: "systems/dnd5e/icons/svg/statuses/bloodied.svg",
   threshold: .5
 };
@@ -3397,47 +3397,47 @@ DND5E.bloodied = {
  * Languages a character can learn.
  * @enum {object}
  */
-DND5E.languages = {
+VARLYN5E.languages = {
   standard: {
-    label: "DND5E.Language.Category.Standard",
+    label: "VARLYN5E.Language.Category.Standard",
     selectable: false,
     children: {
-      common: "DND5E.Language.Language.Common",
-      draconic: "DND5E.Language.Language.Draconic",
-      dwarvish: "DND5E.Language.Language.Dwarvish",
-      elvish: "DND5E.Language.Language.Elvish",
-      giant: "DND5E.Language.Language.Giant",
-      gnomish: "DND5E.Language.Language.Gnomish",
-      goblin: "DND5E.Language.Language.Goblin",
-      halfling: "DND5E.Language.Language.Halfling",
-      orc: "DND5E.Language.Language.Orc",
-      sign: "DND5E.Language.Language.CommonSign"
+      common: "VARLYN5E.Language.Language.Common",
+      draconic: "VARLYN5E.Language.Language.Draconic",
+      dwarvish: "VARLYN5E.Language.Language.Dwarvish",
+      elvish: "VARLYN5E.Language.Language.Elvish",
+      giant: "VARLYN5E.Language.Language.Giant",
+      gnomish: "VARLYN5E.Language.Language.Gnomish",
+      goblin: "VARLYN5E.Language.Language.Goblin",
+      halfling: "VARLYN5E.Language.Language.Halfling",
+      orc: "VARLYN5E.Language.Language.Orc",
+      sign: "VARLYN5E.Language.Language.CommonSign"
     }
   },
   exotic: {
-    label: "DND5E.Language.Category.Rare",
+    label: "VARLYN5E.Language.Category.Rare",
     selectable: false,
     children: {
-      aarakocra: "DND5E.Language.Language.Aarakocra",
-      abyssal: "DND5E.Language.Language.Abyssal",
-      cant: "DND5E.Language.Language.ThievesCant",
-      celestial: "DND5E.Language.Language.Celestial",
-      deep: "DND5E.Language.Language.DeepSpeech",
-      druidic: "DND5E.Language.Language.Druidic",
-      gith: "DND5E.Language.Language.Gith",
-      gnoll: "DND5E.Language.Language.Gnoll",
-      infernal: "DND5E.Language.Language.Infernal",
+      aarakocra: "VARLYN5E.Language.Language.Aarakocra",
+      abyssal: "VARLYN5E.Language.Language.Abyssal",
+      cant: "VARLYN5E.Language.Language.ThievesCant",
+      celestial: "VARLYN5E.Language.Language.Celestial",
+      deep: "VARLYN5E.Language.Language.DeepSpeech",
+      druidic: "VARLYN5E.Language.Language.Druidic",
+      gith: "VARLYN5E.Language.Language.Gith",
+      gnoll: "VARLYN5E.Language.Language.Gnoll",
+      infernal: "VARLYN5E.Language.Language.Infernal",
       primordial: {
-        label: "DND5E.Language.Language.Primordial",
+        label: "VARLYN5E.Language.Language.Primordial",
         children: {
-          aquan: "DND5E.Language.Language.Aquan",
-          auran: "DND5E.Language.Language.Auran",
-          ignan: "DND5E.Language.Language.Ignan",
-          terran: "DND5E.Language.Language.Terran"
+          aquan: "VARLYN5E.Language.Language.Aquan",
+          auran: "VARLYN5E.Language.Language.Auran",
+          ignan: "VARLYN5E.Language.Language.Ignan",
+          terran: "VARLYN5E.Language.Language.Terran"
         }
       },
-      sylvan: "DND5E.Language.Language.Sylvan",
-      undercommon: "DND5E.Language.Language.Undercommon"
+      sylvan: "VARLYN5E.Language.Language.Sylvan",
+      undercommon: "VARLYN5E.Language.Language.Undercommon"
     }
   }
 };
@@ -3452,9 +3452,9 @@ preLocalize("languages.exotic.children.primordial.children", { sort: true });
  * Communication types that take ranges such as telepathy.
  * @enum {{ label: string }}
  */
-DND5E.communicationTypes = {
+VARLYN5E.communicationTypes = {
   telepathy: {
-    label: "DND5E.Language.Communication.Telepathy"
+    label: "VARLYN5E.Language.Communication.Telepathy"
   }
 };
 preLocalize("communicationTypes", { key: "label" });
@@ -3467,46 +3467,46 @@ preLocalize("communicationTypes", { key: "label" });
  * NPC habitats.
  * @enum {HabitatConfiguration5e}
  */
-DND5E.habitats = {
+VARLYN5E.habitats = {
   any: {
-    label: "DND5E.Habitat.Categories.Any"
+    label: "VARLYN5E.Habitat.Categories.Any"
   },
   arctic: {
-    label: "DND5E.Habitat.Categories.Arctic"
+    label: "VARLYN5E.Habitat.Categories.Arctic"
   },
   coastal: {
-    label: "DND5E.Habitat.Categories.Coastal"
+    label: "VARLYN5E.Habitat.Categories.Coastal"
   },
   desert: {
-    label: "DND5E.Habitat.Categories.Desert"
+    label: "VARLYN5E.Habitat.Categories.Desert"
   },
   forest: {
-    label: "DND5E.Habitat.Categories.Forest"
+    label: "VARLYN5E.Habitat.Categories.Forest"
   },
   grassland: {
-    label: "DND5E.Habitat.Categories.Grassland"
+    label: "VARLYN5E.Habitat.Categories.Grassland"
   },
   hill: {
-    label: "DND5E.Habitat.Categories.Hill"
+    label: "VARLYN5E.Habitat.Categories.Hill"
   },
   mountain: {
-    label: "DND5E.Habitat.Categories.Mountain"
+    label: "VARLYN5E.Habitat.Categories.Mountain"
   },
   planar: {
-    label: "DND5E.Habitat.Categories.Planar",
+    label: "VARLYN5E.Habitat.Categories.Planar",
     subtypes: true
   },
   swamp: {
-    label: "DND5E.Habitat.Categories.Swamp"
+    label: "VARLYN5E.Habitat.Categories.Swamp"
   },
   underdark: {
-    label: "DND5E.Habitat.Categories.Underdark"
+    label: "VARLYN5E.Habitat.Categories.Underdark"
   },
   underwater: {
-    label: "DND5E.Habitat.Categories.Underwater"
+    label: "VARLYN5E.Habitat.Categories.Underwater"
   },
   urban: {
-    label: "DND5E.Habitat.Categories.Urban"
+    label: "VARLYN5E.Habitat.Categories.Urban"
   }
 };
 preLocalize("habitats", { key: "label" });
@@ -3517,24 +3517,24 @@ preLocalize("habitats", { key: "label" });
  * NPC Treasure
  * @enum {TreasureConfiguration5e}
  */
-DND5E.treasure = {
+VARLYN5E.treasure = {
   any: {
-    label: "DND5E.Treasure.Categories.Any"
+    label: "VARLYN5E.Treasure.Categories.Any"
   },
   arcana: {
-    label: "DND5E.Treasure.Categories.Arcana"
+    label: "VARLYN5E.Treasure.Categories.Arcana"
   },
   armaments: {
-    label: "DND5E.Treasure.Categories.Armaments"
+    label: "VARLYN5E.Treasure.Categories.Armaments"
   },
   implements: {
-    label: "DND5E.Treasure.Categories.Implements"
+    label: "VARLYN5E.Treasure.Categories.Implements"
   },
   individual: {
-    label: "DND5E.Treasure.Categories.Individual"
+    label: "VARLYN5E.Treasure.Categories.Individual"
   },
   relics: {
-    label: "DND5E.Treasure.Categories.Relics"
+    label: "VARLYN5E.Treasure.Categories.Relics"
   }
 };
 preLocalize("treasure", { key: "label" });
@@ -3547,7 +3547,7 @@ preLocalize("treasure", { key: "label" });
  * Maximum allowed character level.
  * @type {number}
  */
-DND5E.maxLevel = 20;
+VARLYN5E.maxLevel = 20;
 
 /* -------------------------------------------- */
 
@@ -3555,7 +3555,7 @@ DND5E.maxLevel = 20;
  * XP required to achieve each character level.
  * @type {number[]}
  */
-DND5E.CHARACTER_EXP_LEVELS = [
+VARLYN5E.CHARACTER_EXP_LEVELS = [
   0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000,
   120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000
 ];
@@ -3566,7 +3566,7 @@ DND5E.CHARACTER_EXP_LEVELS = [
  * Intervals above the maximum XP that result in an epic boon.
  * @type {number}
  */
-DND5E.epicBoonInterval = 30000;
+VARLYN5E.epicBoonInterval = 30000;
 
 /* -------------------------------------------- */
 /*  Traits                                      */
@@ -3576,11 +3576,11 @@ DND5E.epicBoonInterval = 30000;
  * Configurable traits on actors.
  * @enum {TraitConfiguration}
  */
-DND5E.traits = {
+VARLYN5E.traits = {
   saves: {
     labels: {
-      title: "DND5E.ClassSaves",
-      localization: "DND5E.TraitSavesPlural"
+      title: "VARLYN5E.ClassSaves",
+      localization: "VARLYN5E.TraitSavesPlural"
     },
     icon: "icons/magic/life/ankh-gold-blue.webp",
     actorKeyPath: "system.abilities",
@@ -3589,8 +3589,8 @@ DND5E.traits = {
   },
   skills: {
     labels: {
-      title: "DND5E.Skills",
-      localization: "DND5E.TraitSkillsPlural"
+      title: "VARLYN5E.Skills",
+      localization: "VARLYN5E.TraitSkillsPlural"
     },
     icon: "icons/tools/instruments/harp-yellow-teal.webp",
     actorKeyPath: "system.skills",
@@ -3600,16 +3600,16 @@ DND5E.traits = {
   },
   languages: {
     labels: {
-      title: "DND5E.Languages",
-      localization: "DND5E.TraitLanguagesPlural",
-      all: "DND5E.Language.All"
+      title: "VARLYN5E.Languages",
+      localization: "VARLYN5E.TraitLanguagesPlural",
+      all: "VARLYN5E.Language.All"
     },
     icon: "icons/skills/social/diplomacy-peace-alliance.webp"
   },
   armor: {
     labels: {
-      title: "DND5E.TraitArmorProf",
-      localization: "DND5E.TraitArmorPlural"
+      title: "VARLYN5E.TraitArmorProf",
+      localization: "VARLYN5E.TraitArmorPlural"
     },
     icon: "icons/equipment/chest/breastplate-helmet-metal.webp",
     actorKeyPath: "system.traits.armorProf",
@@ -3618,8 +3618,8 @@ DND5E.traits = {
   },
   weapon: {
     labels: {
-      title: "DND5E.TraitWeaponProf",
-      localization: "DND5E.TraitWeaponPlural"
+      title: "VARLYN5E.TraitWeaponProf",
+      localization: "VARLYN5E.TraitWeaponPlural"
     },
     icon: "icons/skills/melee/weapons-crossed-swords-purple.webp",
     actorKeyPath: "system.traits.weaponProf",
@@ -3629,8 +3629,8 @@ DND5E.traits = {
   },
   tool: {
     labels: {
-      title: "DND5E.TraitToolProf",
-      localization: "DND5E.TraitToolPlural"
+      title: "VARLYN5E.TraitToolProf",
+      localization: "VARLYN5E.TraitToolPlural"
     },
     icon: "icons/skills/trades/smithing-anvil-silver-red.webp",
     actorKeyPath: "system.tools",
@@ -3642,44 +3642,44 @@ DND5E.traits = {
   },
   di: {
     labels: {
-      title: "DND5E.DamImm",
-      localization: "DND5E.TraitDIPlural",
-      all: "DND5E.DAMAGE.All"
+      title: "VARLYN5E.DamImm",
+      localization: "VARLYN5E.TraitDIPlural",
+      all: "VARLYN5E.DAMAGE.All"
     },
     icon: "systems/dnd5e/icons/svg/trait-damage-immunities.svg",
     configKey: "damageTypes"
   },
   dr: {
     labels: {
-      title: "DND5E.DamRes",
-      localization: "DND5E.TraitDRPlural",
-      all: "DND5E.DAMAGE.All"
+      title: "VARLYN5E.DamRes",
+      localization: "VARLYN5E.TraitDRPlural",
+      all: "VARLYN5E.DAMAGE.All"
     },
     icon: "systems/dnd5e/icons/svg/trait-damage-resistances.svg",
     configKey: "damageTypes"
   },
   dv: {
     labels: {
-      title: "DND5E.DamVuln",
-      localization: "DND5E.TraitDVPlural",
-      all: "DND5E.DAMAGE.All"
+      title: "VARLYN5E.DamVuln",
+      localization: "VARLYN5E.TraitDVPlural",
+      all: "VARLYN5E.DAMAGE.All"
     },
     icon: "systems/dnd5e/icons/svg/trait-damage-vulnerabilities.svg",
     configKey: "damageTypes"
   },
   dm: {
     labels: {
-      title: "DND5E.DamMod",
-      localization: "DND5E.TraitDMPlural",
-      all: "DND5E.DAMAGE.All"
+      title: "VARLYN5E.DamMod",
+      localization: "VARLYN5E.TraitDMPlural",
+      all: "VARLYN5E.DAMAGE.All"
     },
     configKey: "damageTypes",
     dataType: Number
   },
   ci: {
     labels: {
-      title: "DND5E.ConImm",
-      localization: "DND5E.TraitCIPlural"
+      title: "VARLYN5E.ConImm",
+      localization: "VARLYN5E.TraitCIPlural"
     },
     icon: "systems/dnd5e/icons/svg/trait-condition-immunities.svg",
     configKey: "conditionTypes",
@@ -3694,26 +3694,26 @@ preLocalize("traits", { keys: ["labels.title", "labels.all"] });
  * Modes used within a trait advancement.
  * @enum {{ label: string, hint: string }}
  */
-DND5E.traitModes = {
+VARLYN5E.traitModes = {
   default: {
-    label: "DND5E.ADVANCEMENT.Trait.Mode.Default.Label",
-    hint: "DND5E.ADVANCEMENT.Trait.Mode.Default.Hint"
+    label: "VARLYN5E.ADVANCEMENT.Trait.Mode.Default.Label",
+    hint: "VARLYN5E.ADVANCEMENT.Trait.Mode.Default.Hint"
   },
   expertise: {
-    label: "DND5E.ADVANCEMENT.Trait.Mode.Expertise.Label",
-    hint: "DND5E.ADVANCEMENT.Trait.Mode.Expertise.Hint"
+    label: "VARLYN5E.ADVANCEMENT.Trait.Mode.Expertise.Label",
+    hint: "VARLYN5E.ADVANCEMENT.Trait.Mode.Expertise.Hint"
   },
   forcedExpertise: {
-    label: "DND5E.ADVANCEMENT.Trait.Mode.Force.Label",
-    hint: "DND5E.ADVANCEMENT.Trait.Mode.Force.Hint"
+    label: "VARLYN5E.ADVANCEMENT.Trait.Mode.Force.Label",
+    hint: "VARLYN5E.ADVANCEMENT.Trait.Mode.Force.Hint"
   },
   upgrade: {
-    label: "DND5E.ADVANCEMENT.Trait.Mode.Upgrade.Label",
-    hint: "DND5E.ADVANCEMENT.Trait.Mode.Upgrade.Hint"
+    label: "VARLYN5E.ADVANCEMENT.Trait.Mode.Upgrade.Label",
+    hint: "VARLYN5E.ADVANCEMENT.Trait.Mode.Upgrade.Hint"
   },
   mastery: {
-    label: "DND5E.ADVANCEMENT.Trait.Mode.Mastery.Label",
-    hint: "DND5E.ADVANCEMENT.Trait.Mode.Mastery.Hint"
+    label: "VARLYN5E.ADVANCEMENT.Trait.Mode.Mastery.Label",
+    hint: "VARLYN5E.ADVANCEMENT.Trait.Mode.Mastery.Hint"
   }
 };
 preLocalize("traitModes", { keys: ["label", "hint"] });
@@ -3724,113 +3724,113 @@ preLocalize("traitModes", { keys: ["label", "hint"] });
  * Special character flags.
  * @enum {CharacterFlagConfiguration}
  */
-DND5E.characterFlags = {
+VARLYN5E.characterFlags = {
   diamondSoul: {
-    name: "DND5E.FlagsDiamondSoul",
-    hint: "DND5E.FlagsDiamondSoulHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsDiamondSoul",
+    hint: "VARLYN5E.FlagsDiamondSoulHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   enhancedDualWielding: {
-    name: "DND5E.FLAGS.EnhancedDualWielding.Name",
-    hint: "DND5E.FLAGS.EnhancedDualWielding.Hint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FLAGS.EnhancedDualWielding.Name",
+    hint: "VARLYN5E.FLAGS.EnhancedDualWielding.Hint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   elvenAccuracy: {
-    name: "DND5E.FlagsElvenAccuracy",
-    hint: "DND5E.FlagsElvenAccuracyHint",
-    section: "DND5E.RacialTraits",
+    name: "VARLYN5E.FlagsElvenAccuracy",
+    hint: "VARLYN5E.FlagsElvenAccuracyHint",
+    section: "VARLYN5E.RacialTraits",
     abilities: ["dex", "int", "wis", "cha"],
     type: Boolean
   },
   halflingLucky: {
-    name: "DND5E.FlagsHalflingLucky",
-    hint: "DND5E.FlagsHalflingLuckyHint",
-    section: "DND5E.RacialTraits",
+    name: "VARLYN5E.FlagsHalflingLucky",
+    hint: "VARLYN5E.FlagsHalflingLuckyHint",
+    section: "VARLYN5E.RacialTraits",
     type: Boolean
   },
   halflingNimbleness: {
-    name: "DND5E.FlagsHalflingNimbleness",
-    hint: "DND5E.FlagsHalflingNimblenessHint",
-    section: "DND5E.RacialTraits",
+    name: "VARLYN5E.FlagsHalflingNimbleness",
+    hint: "VARLYN5E.FlagsHalflingNimblenessHint",
+    section: "VARLYN5E.RacialTraits",
     type: Boolean
   },
   ignoreArmorSpeedReduction: {
-    name: "DND5E.FLAGS.IgnoreArmorSpeedReduction.Name",
-    hint: "DND5E.FLAGS.IgnoreArmorSpeedReduction.Hint",
-    section: "DND5E.RacialTraits",
+    name: "VARLYN5E.FLAGS.IgnoreArmorSpeedReduction.Name",
+    hint: "VARLYN5E.FLAGS.IgnoreArmorSpeedReduction.Hint",
+    section: "VARLYN5E.RacialTraits",
     type: Boolean
   },
   initiativeAlert: {
-    name: "DND5E.FlagsAlert",
-    hint: "DND5E.FlagsAlertHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsAlert",
+    hint: "VARLYN5E.FlagsAlertHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   jackOfAllTrades: {
-    name: "DND5E.FlagsJOAT",
-    hint: "DND5E.FlagsJOATHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsJOAT",
+    hint: "VARLYN5E.FlagsJOATHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   observantFeat: {
-    name: "DND5E.FlagsObservant",
-    hint: "DND5E.FlagsObservantHint",
+    name: "VARLYN5E.FlagsObservant",
+    hint: "VARLYN5E.FlagsObservantHint",
     skills: ["prc", "inv"],
-    section: "DND5E.Feats",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   tavernBrawlerFeat: {
-    name: "DND5E.FlagsTavernBrawler",
-    hint: "DND5E.FlagsTavernBrawlerHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsTavernBrawler",
+    hint: "VARLYN5E.FlagsTavernBrawlerHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   powerfulBuild: {
-    name: "DND5E.FlagsPowerfulBuild",
-    hint: "DND5E.FlagsPowerfulBuildHint",
-    section: "DND5E.RacialTraits",
+    name: "VARLYN5E.FlagsPowerfulBuild",
+    hint: "VARLYN5E.FlagsPowerfulBuildHint",
+    section: "VARLYN5E.RacialTraits",
     type: Boolean
   },
   reliableTalent: {
-    name: "DND5E.FlagsReliableTalent",
-    hint: "DND5E.FlagsReliableTalentHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsReliableTalent",
+    hint: "VARLYN5E.FlagsReliableTalentHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   remarkableAthlete: {
-    name: "DND5E.FlagsRemarkableAthlete",
-    hint: "DND5E.FlagsRemarkableAthleteHint",
+    name: "VARLYN5E.FlagsRemarkableAthlete",
+    hint: "VARLYN5E.FlagsRemarkableAthleteHint",
     abilities: ["str", "dex", "con"],
     skills: ["ath"],
-    section: "DND5E.Feats",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   toolExpertise: {
-    name: "DND5E.FlagsToolExpertise",
-    hint: "DND5E.FlagsToolExpertiseHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsToolExpertise",
+    hint: "VARLYN5E.FlagsToolExpertiseHint",
+    section: "VARLYN5E.Feats",
     type: Boolean
   },
   weaponCriticalThreshold: {
-    name: "DND5E.FlagsWeaponCritThreshold",
-    hint: "DND5E.FlagsWeaponCritThresholdHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsWeaponCritThreshold",
+    hint: "VARLYN5E.FlagsWeaponCritThresholdHint",
+    section: "VARLYN5E.Feats",
     type: Number,
     placeholder: 20
   },
   spellCriticalThreshold: {
-    name: "DND5E.FlagsSpellCritThreshold",
-    hint: "DND5E.FlagsSpellCritThresholdHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsSpellCritThreshold",
+    hint: "VARLYN5E.FlagsSpellCritThresholdHint",
+    section: "VARLYN5E.Feats",
     type: Number,
     placeholder: 20
   },
   meleeCriticalDamageDice: {
-    name: "DND5E.FlagsMeleeCriticalDice",
-    hint: "DND5E.FlagsMeleeCriticalDiceHint",
-    section: "DND5E.Feats",
+    name: "VARLYN5E.FlagsMeleeCriticalDice",
+    hint: "VARLYN5E.FlagsMeleeCriticalDiceHint",
+    section: "VARLYN5E.Feats",
     type: Number,
     placeholder: 0
   }
@@ -3843,7 +3843,7 @@ preLocalize("characterFlags", { keys: ["name", "hint", "section"] });
  * Configuration information for activity types.
  * @enum {ActivityTypeConfiguration}
  */
-DND5E.activityTypes = {
+VARLYN5E.activityTypes = {
   attack: {
     documentClass: activities.AttackActivity
   },
@@ -3887,7 +3887,7 @@ const _ALL_ITEM_TYPES = ["class", "feat", "race", "subclass"];
  * Advancement types that can be added to items.
  * @enum {AdvancementTypeConfiguration}
  */
-DND5E.advancementTypes = {
+VARLYN5E.advancementTypes = {
   AbilityScoreImprovement: {
     documentClass: advancement.AbilityScoreImprovementAdvancement,
     validItemTypes: new Set(["class", "race", "feat"])
@@ -3932,7 +3932,7 @@ DND5E.advancementTypes = {
  * Default artwork configuration for each Document type and sub-type.
  * @enum {Record<string, string>}
  */
-DND5E.defaultArtwork = {
+VARLYN5E.defaultArtwork = {
   ActiveEffect: {
     base: "systems/dnd5e/icons/svg/active-effects/base.svg",
     enchantment: "systems/dnd5e/icons/svg/active-effects/enchantment.svg"
@@ -3966,51 +3966,51 @@ DND5E.defaultArtwork = {
  * Configuration information for the calendar UI.
  * @type {CalendarHUDConfiguration}
  */
-DND5E.calendar = {
+VARLYN5E.calendar = {
   application: CalenderHUD,
   calendars: [
     {
       value: "gregorian",
-      label: "DND5E.CALENDAR.Gregorian",
+      label: "VARLYN5E.CALENDAR.Gregorian",
       config: foundry.data.SIMPLIFIED_GREGORIAN_CALENDAR_CONFIG
     }
   ],
   formatters: [
     {
       value: "monthDay",
-      label: "DND5E.CALENDAR.Formatters.MonthDay.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.MonthDay.Label",
       formatter: "formatMonthDay",
-      group: "DND5E.CALENDAR.Formatters.Date"
+      group: "VARLYN5E.CALENDAR.Formatters.Date"
     },
     {
       value: "monthDayYear",
-      label: "DND5E.CALENDAR.Formatters.MonthDayYear.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.MonthDayYear.Label",
       formatter: "formatMonthDayYear",
-      group: "DND5E.CALENDAR.Formatters.Date"
+      group: "VARLYN5E.CALENDAR.Formatters.Date"
     },
     {
       value: "approximateDate",
-      label: "DND5E.CALENDAR.Formatters.ApproximateDate.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.ApproximateDate.Label",
       formatter: "formatApproximateDate",
-      group: "DND5E.CALENDAR.Formatters.Date"
+      group: "VARLYN5E.CALENDAR.Formatters.Date"
     },
     {
       value: "hoursMinutes",
-      label: "DND5E.CALENDAR.Formatters.HoursMinutes.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.HoursMinutes.Label",
       formatter: "formatHoursMinutes",
-      group: "DND5E.CALENDAR.Formatters.Time"
+      group: "VARLYN5E.CALENDAR.Formatters.Time"
     },
     {
       value: "hoursMinutesSeconds",
-      label: "DND5E.CALENDAR.Formatters.HoursMinutesSeconds.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.HoursMinutesSeconds.Label",
       formatter: "formatHoursMinutesSeconds",
-      group: "DND5E.CALENDAR.Formatters.Time"
+      group: "VARLYN5E.CALENDAR.Formatters.Time"
     },
     {
       value: "approximateTime",
-      label: "DND5E.CALENDAR.Formatters.ApproximateTime.Label",
+      label: "VARLYN5E.CALENDAR.Formatters.ApproximateTime.Label",
       formatter: "formatApproximateTime",
-      group: "DND5E.CALENDAR.Formatters.Time"
+      group: "VARLYN5E.CALENDAR.Formatters.Time"
     }
   ]
 };
@@ -4025,7 +4025,7 @@ preLocalize("calendar.formatters", { keys: ["label", "group"] });
  * Handler functions for named request/response operations
  * @type {Record<string, RequestCallback5e>}
  */
-DND5E.requests = {
+VARLYN5E.requests = {
   rest: Actor5e.handleRestRequest,
   skill: Actor5e.handleSkillCheckRequest
 };
@@ -4038,45 +4038,45 @@ DND5E.requests = {
  * Types of rules that can be used in rule pages and the &Reference enricher.
  * @enum {RuleTypeConfiguration}
  */
-DND5E.ruleTypes = {
+VARLYN5E.ruleTypes = {
   ability: {
-    label: "DND5E.Ability",
+    label: "VARLYN5E.Ability",
     references: "enrichmentLookup.abilities"
   },
   areaOfEffect: {
-    label: "DND5E.AreaOfEffect.Label",
+    label: "VARLYN5E.AreaOfEffect.Label",
     references: "areaTargetTypes"
   },
   condition: {
-    label: "DND5E.Rule.Type.Condition",
+    label: "VARLYN5E.Rule.Type.Condition",
     references: "conditionTypes"
   },
   creatureType: {
-    label: "DND5E.CreatureType",
+    label: "VARLYN5E.CreatureType",
     references: "creatureTypes"
   },
   damage: {
-    label: "DND5E.DamageType",
+    label: "VARLYN5E.DamageType",
     references: "damageTypes"
   },
   skill: {
-    label: "DND5E.Skill",
+    label: "VARLYN5E.Skill",
     references: "enrichmentLookup.skills"
   },
   spellComponent: {
-    label: "DND5E.SpellComponent",
+    label: "VARLYN5E.SpellComponent",
     references: "itemProperties"
   },
   spellSchool: {
-    label: "DND5E.SpellSchool",
+    label: "VARLYN5E.SpellSchool",
     references: "enrichmentLookup.spellSchools"
   },
   spellTag: {
-    label: "DND5E.SpellTag",
+    label: "VARLYN5E.SpellTag",
     references: "itemProperties"
   },
   weaponMastery: {
-    label: "DND5E.WEAPON.Mastery.Label",
+    label: "VARLYN5E.WEAPON.Mastery.Label",
     references: "weaponMasteries"
   }
 };
@@ -4088,7 +4088,7 @@ preLocalize("ruleTypes", { key: "label" });
  * List of rules that can be referenced from enrichers.
  * @enum {string}
  */
-DND5E.rules = {
+VARLYN5E.rules = {
 };
 
 /* -------------------------------------------- */
@@ -4099,9 +4099,9 @@ DND5E.rules = {
  * Themes that can be set for the system or on sheets.
  * @enum {string}
  */
-DND5E.themes = {
-  light: "SHEETS.DND5E.THEME.Light",
-  dark: "SHEETS.DND5E.THEME.Dark"
+VARLYN5E.themes = {
+  light: "SHEETS.VARLYN5E.THEME.Light",
+  dark: "SHEETS.VARLYN5E.THEME.Dark"
 };
 preLocalize("themes");
 
@@ -4110,21 +4110,21 @@ preLocalize("themes");
 /* -------------------------------------------- */
 
 let _enrichmentLookup;
-Object.defineProperty(DND5E, "enrichmentLookup", {
+Object.defineProperty(VARLYN5E, "enrichmentLookup", {
   get() {
     const slugify = value => value?.slugify().replaceAll("-", "");
     if ( !_enrichmentLookup ) {
       _enrichmentLookup = {
-        abilities: foundry.utils.deepClone(DND5E.abilities),
+        abilities: foundry.utils.deepClone(VARLYN5E.abilities),
         damageTypes: Object.fromEntries(
-          Object.keys({ ...DND5E.damageTypes, ...DND5E.healingTypes }).map(k => [slugify(k), k])
+          Object.keys({ ...VARLYN5E.damageTypes, ...VARLYN5E.healingTypes }).map(k => [slugify(k), k])
         ),
-        languages: _flattenConfig(DND5E.languages, { labelKey: "label", skipEntry: (k, d) => d.selectable === false }),
-        skills: foundry.utils.deepClone(DND5E.skills),
-        spellSchools: foundry.utils.deepClone(DND5E.spellSchools),
-        tools: foundry.utils.deepClone(DND5E.tools)
+        languages: _flattenConfig(VARLYN5E.languages, { labelKey: "label", skipEntry: (k, d) => d.selectable === false }),
+        skills: foundry.utils.deepClone(VARLYN5E.skills),
+        spellSchools: foundry.utils.deepClone(VARLYN5E.spellSchools),
+        tools: foundry.utils.deepClone(VARLYN5E.tools)
       };
-      const addFullKeys = key => Object.entries(DND5E[key]).forEach(([k, v]) => {
+      const addFullKeys = key => Object.entries(VARLYN5E[key]).forEach(([k, v]) => {
         _enrichmentLookup[key][k].key = k;
         if ( v.fullKey ) _enrichmentLookup[key][slugify(v.fullKey)] = { ...v, key: k };
       });
@@ -4141,7 +4141,7 @@ Object.defineProperty(DND5E, "enrichmentLookup", {
 /* -------------------------------------------- */
 
 /**
- * Create a flattened version of a nested config (such as CONFIG.DND5E.languages) so all leaf entries are at
+ * Create a flattened version of a nested config (such as CONFIG.VARLYN5E.languages) so all leaf entries are at
  * a single level.
  * @param {object} config
  * @param {object} [options={}]
@@ -4167,20 +4167,20 @@ function _flattenConfig(config, { labelKey, skipEntry }={}) {
 /**
  * Patch an existing config enum to allow conversion from string values to object values without
  * breaking existing modules that are expecting strings.
- * @param {string} key          Key within DND5E that has been replaced with an enum of objects.
+ * @param {string} key          Key within VARLYN5E that has been replaced with an enum of objects.
  * @param {string} fallbackKey  Key within the new config object from which to get the fallback value.
  * @param {object} [options]    Additional options passed through to logCompatibilityWarning.
  */
 function patchConfig(key, fallbackKey, options) {
   /** @override */
   function toString() {
-    const message = `The value of CONFIG.DND5E.${key} has been changed to an object.`
+    const message = `The value of CONFIG.VARLYN5E.${key} has been changed to an object.`
       +` The former value can be accessed from .${fallbackKey}.`;
     foundry.utils.logCompatibilityWarning(message, options);
     return this[fallbackKey];
   }
 
-  Object.values(DND5E[key]).forEach(o => {
+  Object.values(VARLYN5E[key]).forEach(o => {
     if ( foundry.utils.getType(o) !== "Object" ) return;
     Object.defineProperty(o, "toString", {value: toString});
   });
@@ -4188,4 +4188,4 @@ function patchConfig(key, fallbackKey, options) {
 
 /* -------------------------------------------- */
 
-export default DND5E;
+export default VARLYN5E;

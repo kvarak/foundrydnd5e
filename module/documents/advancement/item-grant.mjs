@@ -24,8 +24,8 @@ export default class ItemGrantAdvancement extends Advancement {
       order: 40,
       icon: "icons/sundries/books/book-open-purple.webp",
       typeIcon: "systems/dnd5e/icons/svg/item-grant.svg",
-      title: _loc("DND5E.ADVANCEMENT.ItemGrant.Title"),
-      hint: _loc("DND5E.ADVANCEMENT.ItemGrant.Hint"),
+      title: _loc("VARLYN5E.ADVANCEMENT.ItemGrant.Title"),
+      hint: _loc("VARLYN5E.ADVANCEMENT.ItemGrant.Hint"),
       apps: {
         config: ItemGrantConfig,
         flow: ItemGrantFlow
@@ -199,7 +199,7 @@ export default class ItemGrantAdvancement extends Advancement {
     if ( !item ) return false;
     if ( this.constructor.VALID_TYPES.has(item.type) ) return true;
     const type = _loc(CONFIG.Item.typeLabels[item.type]);
-    if ( strict ) throw new Error(_loc("DND5E.AdvancementItemTypeInvalidWarning", {type}));
+    if ( strict ) throw new Error(_loc("VARLYN5E.AdvancementItemTypeInvalidWarning", {type}));
     return false;
   }
 }

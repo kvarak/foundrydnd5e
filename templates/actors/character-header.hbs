@@ -18,13 +18,13 @@
     <div class="right">
 
         {{!-- Level --}}
-        <div class="level-badge badge" aria-label="{{ localize 'DND5E.LevelNumber' level=system.details.level }}">
+        <div class="level-badge badge" aria-label="{{ localize 'VARLYN5E.LevelNumber' level=system.details.level }}">
             {{ system.details.level }}
         </div>
 
         {{!-- Inspiration --}}
         <button type="button" class="inspiration unbutton" data-action="toggleInspiration"
-                aria-label="{{ localize 'DND5E.Inspiration' }}" data-tooltip="DND5E.Inspiration"
+                aria-label="{{ localize 'VARLYN5E.Inspiration' }}" data-tooltip="VARLYN5E.Inspiration"
                 aria-pressed="{{ system.attributes.inspiration }}"></button>
 
         {{!-- Epic Boons --}}
@@ -62,7 +62,7 @@
                 <span class="max">{{ dnd5e-numberFormat max }}</span>
                 {{/unless}}
             </div>
-            <div class="xp-bar" role="meter" aria-label="{{ localize 'DND5E.ExperiencePoints.Progress' }}"
+            <div class="xp-bar" role="meter" aria-label="{{ localize 'VARLYN5E.ExperiencePoints.Progress' }}"
                  aria-valuemin="{{ min }}" aria-valuenow="{{ value }}" aria-valuemax="{{ max }}"
                  aria-valuetext="{{ pct }}%" style="--bar-percentage: {{ pct }}%;"></div>
             {{/with}}

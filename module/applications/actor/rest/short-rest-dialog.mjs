@@ -13,7 +13,7 @@ export default class ShortRestDialog extends BaseRestDialog {
       rollHitDie: ShortRestDialog.#rollHitDie
     },
     window: {
-      title: "DND5E.REST.Short.Label"
+      title: "VARLYN5E.REST.Short.Label"
     }
   };
 
@@ -45,8 +45,8 @@ export default class ShortRestDialog extends BaseRestDialog {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.autoRoll = new BooleanField({
-      label: _loc("DND5E.REST.HitDice.AutoSpend.Label"),
-      hint: _loc("DND5E.REST.HitDice.AutoSpend.Hint")
+      label: _loc("VARLYN5E.REST.HitDice.AutoSpend.Label"),
+      hint: _loc("VARLYN5E.REST.HitDice.AutoSpend.Hint")
     });
 
     if ( this.actor.system.isNPC ) {
@@ -56,7 +56,7 @@ export default class ShortRestDialog extends BaseRestDialog {
         denomination: `d${hd.denomination}`,
         options: [{
           value: `d${hd.denomination}`,
-          label: `d${hd.denomination} (${_loc("DND5E.HITDICE.Available", { number: hd.value })})`
+          label: `d${hd.denomination} (${_loc("VARLYN5E.HITDICE.Available", { number: hd.value })})`
         }]
       };
     }
@@ -65,7 +65,7 @@ export default class ShortRestDialog extends BaseRestDialog {
       context.hitDice = {
         canRoll: this.actor.system.attributes.hd.value > 0,
         options: Object.entries(this.actor.system.attributes.hd.bySize).map(([value, number]) => ({
-          value, label: `${value} (${_loc("DND5E.HITDICE.Available", { number })})`, number
+          value, label: `${value} (${_loc("VARLYN5E.HITDICE.Available", { number })})`, number
         }))
       };
       context.denomination = (this.actor.system.attributes.hd.bySize[this.#denom] > 0)
@@ -74,7 +74,7 @@ export default class ShortRestDialog extends BaseRestDialog {
 
     else {
       if ( !context.fields.length ) {
-        context.formSections.unshift({ legend: "DND5E.REST.Configuration", fields: context.fields });
+        context.formSections.unshift({ legend: "VARLYN5E.REST.Configuration", fields: context.fields });
       }
       context.fields.unshift({
         field: context.autoRoll,

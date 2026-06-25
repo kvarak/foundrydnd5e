@@ -42,7 +42,7 @@ export function getCollectionDocumentOptions(collection, { disabled }={}) {
  * @returns {number}
  */
 export function roundCurrency(value, denomination) {
-  const fractionalDigits = CONFIG.DND5E.currencies[denomination]?.fractionalDigits;
+  const fractionalDigits = CONFIG.VARLYN5E.currencies[denomination]?.fractionalDigits;
   if ( !fractionalDigits ) return Math.floor(value);
   if ( !Number.isFinite(fractionalDigits) ) return value;
   const pow = Math.pow(10, fractionalDigits);
@@ -83,12 +83,12 @@ export function formatIdentifier(input) {
 /**
  * Form a number using the provided length unit.
  * @param {number} value         The length to format.
- * @param {string} unit          Length unit as defined in `CONFIG.DND5E.movementUnits`.
+ * @param {string} unit          Length unit as defined in `CONFIG.VARLYN5E.movementUnits`.
  * @param {object} [options={}]  Formatting options passed to `formatNumber`.
  * @returns {string}
  */
 export function formatLength(value, unit, options={}) {
-  return _formatSystemUnits(value, unit, CONFIG.DND5E.movementUnits[unit], options);
+  return _formatSystemUnits(value, unit, CONFIG.VARLYN5E.movementUnits[unit], options);
 }
 
 /* -------------------------------------------- */
@@ -116,7 +116,7 @@ export function formatModifier(mod) {
  * @returns {string}
  */
 export function formatNumber(value, { blank, numerals, ordinal, words, ...options }={}) {
-  if ( words && game.i18n.has(`DND5E.NUMBER.${value}`, false) ) return _loc(`DND5E.NUMBER.${value}`);
+  if ( words && game.i18n.has(`VARLYN5E.NUMBER.${value}`, false) ) return _loc(`VARLYN5E.NUMBER.${value}`);
   if ( !value && (typeof blank === "string") ) return blank;
   if ( numerals ) return _formatNumberAsNumerals(value);
   if ( ordinal ) return _formatNumberAsOrdinal(value, options);
@@ -159,7 +159,7 @@ function _formatNumberAsNumerals(n) {
 function _formatNumberAsOrdinal(n, options={}) {
   const pr = getPluralRules({ type: "ordinal" }).select(n);
   const number = formatNumber(n, options);
-  return game.i18n.has(`DND5E.ORDINAL.${pr}`) ? _loc(`DND5E.ORDINAL.${pr}`, { number }) : number;
+  return game.i18n.has(`VARLYN5E.ORDINAL.${pr}`) ? _loc(`VARLYN5E.ORDINAL.${pr}`, { number }) : number;
 }
 
 /* -------------------------------------------- */
@@ -181,13 +181,13 @@ export function formatNumberParts(value, options) {
 /**
  * Form a number using the provided travel speed unit.
  * @param {number} value                    Travel speed to display.
- * @param {string} unit                     Unit as defined in `CONFIG.DND5E.travelUnits`.
+ * @param {string} unit                     Unit as defined in `CONFIG.VARLYN5E.travelUnits`.
  * @param {object} [options={}]             Formatting options passed to `formatNumber`.
  * @param {string} [options.period="hour"]  Time period formatting unit (e.g. hour or day).
  * @returns {string}
  */
 export function formatTravelSpeed(value, unit, { period="hour", ...options }={}) {
-  const unitConfig = CONFIG.DND5E.travelUnits[unit];
+  const unitConfig = CONFIG.VARLYN5E.travelUnits[unit];
   options.unit ??= `${unitConfig?.formattingUnit ?? unit}-per-${period}`;
   return _formatSystemUnits(value, unit, unitConfig, options);
 }
@@ -222,14 +222,14 @@ export function formatText(value) {
 /**
  * A helper function that formats a time in a human-readable format.
  * @param {number} value         Time to display.
- * @param {string} unit          Units as defined in `CONFIG.DND5E.timeUnits`.
+ * @param {string} unit          Units as defined in `CONFIG.VARLYN5E.timeUnits`.
  * @param {object} [options={}]  Formatting options passed to `formatNumber`.
  * @returns {string}
  */
 export function formatTime(value, unit, options={}) {
   options.maximumFractionDigits ??= 0;
   options.unitDisplay ??= "long";
-  const config = CONFIG.DND5E.timeUnits[unit];
+  const config = CONFIG.VARLYN5E.timeUnits[unit];
   if ( config?.counted ) {
     if ( (options.unitDisplay === "narrow") && game.i18n.has(`${config.counted}.narrow`) ) {
       return _loc(`${config.counted}.narrow`, { number: formatNumber(value, options) });
@@ -250,12 +250,12 @@ export function formatTime(value, unit, options={}) {
 /**
  * Form a number using the provided volume unit.
  * @param {number} value         The volume to format.
- * @param {string} unit          Volume unit as defined in `CONFIG.DND5E.volumeUnits`.
+ * @param {string} unit          Volume unit as defined in `CONFIG.VARLYN5E.volumeUnits`.
  * @param {object} [options={}]  Formatting options passed to `formatNumber`.
  * @returns {string}
  */
 export function formatVolume(value, unit, options={}) {
-  return _formatSystemUnits(value, unit, CONFIG.DND5E.volumeUnits[unit], options);
+  return _formatSystemUnits(value, unit, CONFIG.VARLYN5E.volumeUnits[unit], options);
 }
 
 /* -------------------------------------------- */
@@ -263,12 +263,12 @@ export function formatVolume(value, unit, options={}) {
 /**
  * Form a number using the provided weight unit.
  * @param {number} value         The weight to format.
- * @param {string} unit          Weight unit as defined in `CONFIG.DND5E.weightUnits`.
+ * @param {string} unit          Weight unit as defined in `CONFIG.VARLYN5E.weightUnits`.
  * @param {object} [options={}]  Formatting options passed to `formatNumber`.
  * @returns {string}
  */
 export function formatWeight(value, unit, options={}) {
-  return _formatSystemUnits(value, unit, CONFIG.DND5E.weightUnits[unit], options);
+  return _formatSystemUnits(value, unit, CONFIG.VARLYN5E.weightUnits[unit], options);
 }
 
 /* -------------------------------------------- */
@@ -397,7 +397,7 @@ export function prepareFormulaValue(model, keyPath, label, rollData) {
     foundry.utils.setProperty(model, keyPath, roll.evaluateSync().total);
   } catch(err) {
     if ( item.isEmbedded ) {
-      const message = _loc("DND5E.FormulaMalformedError", { property, name: model.name ?? item.name });
+      const message = _loc("VARLYN5E.FormulaMalformedError", { property, name: model.name ?? item.name });
       item.actor._preparationWarnings.push({ message, link: item.uuid, type: "error" });
       console.error(message, err);
     }
@@ -432,7 +432,7 @@ export function replaceFormulaData(formula, data, { actor, item, missing="0", pr
   actor ??= item?.parent;
   if ( (missingReferences.size > 0) && actor && property ) {
     const listFormatter = new Intl.ListFormat(game.i18n.lang, { style: "long", type: "conjunction" });
-    const message = _loc("DND5E.FormulaMissingReferenceWarn", {
+    const message = _loc("VARLYN5E.FormulaMissingReferenceWarn", {
       property, name: item?.name ?? actor.name, references: listFormatter.format(missingReferences)
     });
     actor._preparationWarnings.push({ message, link: item?.uuid ?? actor.uuid, type: "warning" });
@@ -695,8 +695,8 @@ export function getSceneTargets(actor) {
  * @returns {number}
  */
 export function convertLength(value, from, to, { strict=true }={}) {
-  const message = unit => `Length unit ${unit} not defined in CONFIG.DND5E.movementUnits`;
-  return _convertSystemUnits(value, from, to, CONFIG.DND5E.movementUnits, { message, strict });
+  const message = unit => `Length unit ${unit} not defined in CONFIG.VARLYN5E.movementUnits`;
+  return _convertSystemUnits(value, from, to, CONFIG.VARLYN5E.movementUnits, { message, strict });
 }
 
 /* -------------------------------------------- */
@@ -705,7 +705,7 @@ export function convertLength(value, from, to, { strict=true }={}) {
  * Convert the provided time value to another unit. If no final unit is provided, then will convert it to the largest
  * unit that can still represent the value as a whole number.
  * @param {number} value                    The time being converted.
- * @param {string} from                     The initial unit as defined in `CONFIG.DND5E.timeUnits`.
+ * @param {string} from                     The initial unit as defined in `CONFIG.VARLYN5E.timeUnits`.
  * @param {object} [options={}]
  * @param {boolean} [options.combat=false]  Use combat units when auto-selecting units, rather than normal units.
  * @param {boolean} [options.strict=true]   Throw an error if from unit isn't found.
@@ -713,10 +713,10 @@ export function convertLength(value, from, to, { strict=true }={}) {
  * @returns {{ value: number, unit: string }}
  */
 export function convertTime(value, from, { combat=false, strict=true, to }={}) {
-  const base = value * (CONFIG.DND5E.timeUnits[from]?.conversion ?? 1);
+  const base = value * (CONFIG.VARLYN5E.timeUnits[from]?.conversion ?? 1);
   if ( !to ) {
     // Find unit with largest conversion value that can still display the value
-    const unitOptions = Object.entries(CONFIG.DND5E.timeUnits)
+    const unitOptions = Object.entries(CONFIG.VARLYN5E.timeUnits)
       .reduce((arr, [key, v]) => {
         if ( ((v.combat ?? false) === combat) && ((base % v.conversion === 0) || (base >= v.conversion * 2)) ) {
           arr.push({ key, conversion: v.conversion });
@@ -727,8 +727,8 @@ export function convertTime(value, from, { combat=false, strict=true, to }={}) {
     to = unitOptions[0]?.key ?? from;
   }
 
-  const message = unit => `Time unit ${unit} not defined in CONFIG.DND5E.timeUnits`;
-  return { value: _convertSystemUnits(value, from, to, CONFIG.DND5E.timeUnits, { message, strict }), unit: to };
+  const message = unit => `Time unit ${unit} not defined in CONFIG.VARLYN5E.timeUnits`;
+  return { value: _convertSystemUnits(value, from, to, CONFIG.VARLYN5E.timeUnits, { message, strict }), unit: to };
 }
 
 /* -------------------------------------------- */
@@ -743,8 +743,8 @@ export function convertTime(value, from, { combat=false, strict=true, to }={}) {
  * @returns {{ value: number, unit: string }}
  */
 export function convertTravelSpeed(value, from, { strict=false, to }) {
-  const message = unit => `Travel speed unit ${unit} not defined in CONFIG.DND5E.travelUnits`;
-  return { value: _convertSystemUnits(value, from, to, CONFIG.DND5E.travelUnits, { message, strict }), unit: to };
+  const message = unit => `Travel speed unit ${unit} not defined in CONFIG.VARLYN5E.travelUnits`;
+  return { value: _convertSystemUnits(value, from, to, CONFIG.VARLYN5E.travelUnits, { message, strict }), unit: to };
 }
 
 /* -------------------------------------------- */
@@ -752,15 +752,15 @@ export function convertTravelSpeed(value, from, { strict=false, to }) {
 /**
  * Convert the provided weight to another unit.
  * @param {number} value                   The weight being converted.
- * @param {string} from                    The initial unit as defined in `CONFIG.DND5E.weightUnits`.
+ * @param {string} from                    The initial unit as defined in `CONFIG.VARLYN5E.weightUnits`.
  * @param {string} to                      The final units.
  * @param {object} [options={}]
  * @param {boolean} [options.strict=true]  Throw an error if either unit isn't found.
  * @returns {number}      Weight in the specified units.
  */
 export function convertWeight(value, from, to, { strict=true }={}) {
-  const message = unit => `Weight unit ${unit} not defined in CONFIG.DND5E.weightUnits`;
-  return _convertSystemUnits(value, from, to, CONFIG.DND5E.weightUnits, { message, strict });
+  const message = unit => `Weight unit ${unit} not defined in CONFIG.VARLYN5E.weightUnits`;
+  return _convertSystemUnits(value, from, to, CONFIG.VARLYN5E.weightUnits, { message, strict });
 }
 
 /* -------------------------------------------- */
@@ -792,7 +792,7 @@ function _convertSystemUnits(value, from, to, config, { message, strict }) {
  */
 export function defaultUnits(type) {
   const settingKey = type === "travel" ? "metricLengthUnits" : `metric${type.capitalize()}Units`;
-  return CONFIG.DND5E.defaultUnits[type]?.[game.settings.get("dnd5e", settingKey) ? "metric" : "imperial"];
+  return CONFIG.VARLYN5E.defaultUnits[type]?.[game.settings.get("dnd5e", settingKey) ? "metric" : "imperial"];
 }
 
 /* -------------------------------------------- */
@@ -1064,8 +1064,8 @@ function concealSection(conceal, options) {
   </div>
   <div class="unidentified-notice">
       <div>
-          <strong>${_loc("DND5E.Unidentified.Title")}</strong>
-          <p>${_loc("DND5E.Unidentified.Notice")}</p>
+          <strong>${_loc("VARLYN5E.Unidentified.Title")}</strong>
+          <p>${_loc("VARLYN5E.Unidentified.Notice")}</p>
       </div>
   </div>`;
   return content;
@@ -1132,7 +1132,7 @@ const _preLocalizationRegistrations = {};
 
 /**
  * Mark the provided config key to be pre-localized during the init stage.
- * @param {string} configKeyPath          Key path within `CONFIG.DND5E` to localize.
+ * @param {string} configKeyPath          Key path within `CONFIG.VARLYN5E` to localize.
  * @param {object} [options={}]
  * @param {string} [options.key]          If each entry in the config enum is an object,
  *                                        localize and sort using this property.
@@ -1149,7 +1149,7 @@ export function preLocalize(configKeyPath, { key, keys=[], sort=false }={}) {
 
 /**
  * Execute previously defined pre-localization tasks on the provided config object.
- * @param {object} config  The `CONFIG.DND5E` object to localize and sort. *Will be mutated.*
+ * @param {object} config  The `CONFIG.VARLYN5E` object to localize and sort. *Will be mutated.*
  */
 export function performPreLocalization(config) {
   for ( const [keyPath, settings] of Object.entries(_preLocalizationRegistrations) ) {
@@ -1234,7 +1234,7 @@ export function getHumanReadableAttributeLabel(attr, { actor, item }={}) {
   }
 
   if ( (attr === "details.xp.value") && actor?.system.isNPC ) {
-    return _loc("DND5E.ExperiencePoints.Value");
+    return _loc("VARLYN5E.ExperiencePoints.Value");
   }
 
   const getUnknownLabel = (attr, options) => {
@@ -1282,7 +1282,7 @@ export function getHumanReadableAttributeLabel(attr, { actor, item }={}) {
     name = `${item.name}: ${activity.name}`;
     type = "activity";
     if ( _attributeLabelCache.activity.has(attr) ) label = _attributeLabelCache.activity.get(attr);
-    else if ( attr === "uses.spent" ) label = "DND5E.Uses";
+    else if ( attr === "uses.spent" ) label = "VARLYN5E.Uses";
   }
 
   // Item labels
@@ -1290,57 +1290,57 @@ export function getHumanReadableAttributeLabel(attr, { actor, item }={}) {
     name = item.name;
     type = "item";
     if ( _attributeLabelCache.item.has(attr) ) label = _attributeLabelCache.item.get(attr);
-    else if ( attr === "hd.spent" ) label = "DND5E.HitDice";
-    else if ( attr === "uses.spent" ) label = "DND5E.Uses";
+    else if ( attr === "hd.spent" ) label = "VARLYN5E.HitDice";
+    else if ( attr === "uses.spent" ) label = "VARLYN5E.Uses";
     else label = getSchemaLabel(attr, "Item", item);
   }
 
   // Derived fields.
-  else if ( attr === "attributes.init.total" ) label = "DND5E.InitiativeBonus";
-  else if ( (attr === "attributes.ac.value") || (attr === "attributes.ac.flat") ) label = "DND5E.ArmorClass";
-  else if ( attr === "attributes.spell.attack" ) label = "DND5E.SpellAttackBonus";
-  else if ( attr === "attributes.spell.dc" ) label = "DND5E.SpellDC";
+  else if ( attr === "attributes.init.total" ) label = "VARLYN5E.InitiativeBonus";
+  else if ( (attr === "attributes.ac.value") || (attr === "attributes.ac.flat") ) label = "VARLYN5E.ArmorClass";
+  else if ( attr === "attributes.spell.attack" ) label = "VARLYN5E.SpellAttackBonus";
+  else if ( attr === "attributes.spell.dc" ) label = "VARLYN5E.SpellDC";
 
   // Abilities.
   else if ( attr.startsWith("abilities.") ) {
     const [, key] = attr.split(".");
-    label = _loc("DND5E.AbilityScoreL", { ability: CONFIG.DND5E.abilities[key].label });
+    label = _loc("VARLYN5E.AbilityScoreL", { ability: CONFIG.VARLYN5E.abilities[key].label });
   }
 
   // Senses
   else if ( attr.startsWith("attributes.senses.ranges.") ) {
     const key = attr.split(".")[3];
-    label = CONFIG.DND5E.senses[key]?.label;
+    label = CONFIG.VARLYN5E.senses[key]?.label;
   }
 
   // Resources
-  else if ( attr === "resources.legact.spent" ) label = "DND5E.LegendaryAction.LabelPl";
-  else if ( attr === "resources.legact.value" ) label = "DND5E.LegendaryAction.Remaining";
-  else if ( attr === "resources.legres.spent" ) label = "DND5E.LegendaryResistance.LabelPl";
-  else if ( attr === "resources.legres.value" ) label = "DND5E.LegendaryResistance.Remaining";
-  else if ( attr === "attributes.actions.value" ) label = "DND5E.VEHICLE.FIELDS.attributes.actions.label";
+  else if ( attr === "resources.legact.spent" ) label = "VARLYN5E.LegendaryAction.LabelPl";
+  else if ( attr === "resources.legact.value" ) label = "VARLYN5E.LegendaryAction.Remaining";
+  else if ( attr === "resources.legres.spent" ) label = "VARLYN5E.LegendaryResistance.LabelPl";
+  else if ( attr === "resources.legres.value" ) label = "VARLYN5E.LegendaryResistance.Remaining";
+  else if ( attr === "attributes.actions.value" ) label = "VARLYN5E.VEHICLE.FIELDS.attributes.actions.label";
 
   // Skills.
   else if ( attr.startsWith("skills.") ) {
     const [, key] = attr.split(".");
-    label = _loc("DND5E.SkillPassiveScore", { skill: CONFIG.DND5E.skills[key].label });
+    label = _loc("VARLYN5E.SkillPassiveScore", { skill: CONFIG.VARLYN5E.skills[key].label });
   }
 
   // Spell slots.
   else if ( attr.startsWith("spells.") ) {
     const [, key] = attr.split(".");
-    if ( !/spell\d+/.test(key) ) label = `DND5E.SpellSlots${key.capitalize()}`;
+    if ( !/spell\d+/.test(key) ) label = `VARLYN5E.SpellSlots${key.capitalize()}`;
     else {
       const plurals = new Intl.PluralRules(game.i18n.lang, { type: "ordinal" });
       const level = Number(key.slice(5));
-      label = _loc(`DND5E.SpellSlotsN.${plurals.select(level)}`, { n: level });
+      label = _loc(`VARLYN5E.SpellSlotsN.${plurals.select(level)}`, { n: level });
     }
   }
 
   // Currency
   else if ( attr.startsWith("currency.") ) {
     const [, key] = attr.split(".");
-    label = CONFIG.DND5E.currencies[key]?.label;
+    label = CONFIG.VARLYN5E.currencies[key]?.label;
   }
 
   // Attempt to find the attribute in a data model.

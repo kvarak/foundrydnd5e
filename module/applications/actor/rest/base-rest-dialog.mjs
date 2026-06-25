@@ -15,7 +15,7 @@ export default class BaseRestDialog extends Dialog5e {
     super(options);
     this.actor = options.document;
     this.#config = options.config;
-    this.options.window.title = CONFIG.DND5E.restTypes[options.config.type]?.label;
+    this.options.window.title = CONFIG.VARLYN5E.restTypes[options.config.type]?.label;
   }
 
   /* -------------------------------------------- */
@@ -80,7 +80,7 @@ export default class BaseRestDialog extends Dialog5e {
    * @type {number}
    */
   get duration() {
-    return this.config.duration ?? CONFIG.DND5E.restTypes[this.config.type]
+    return this.config.duration ?? CONFIG.VARLYN5E.restTypes[this.config.type]
       ?.duration?.[varlyn5e.settings.restVariant] ?? 0;
   }
 
@@ -139,8 +139,8 @@ export default class BaseRestDialog extends Dialog5e {
     if ( this.promptNewDay ) context.fields.push({
       disabled: !!this.config.request,
       field: new BooleanField({
-        label: _loc("DND5E.REST.NewDay.Label"),
-        hint: _loc("DND5E.REST.NewDay.Hint")
+        label: _loc("VARLYN5E.REST.NewDay.Label"),
+        hint: _loc("VARLYN5E.REST.NewDay.Hint")
       }),
       input: context.inputs.createCheckboxInput,
       name: "newDay",
@@ -159,7 +159,7 @@ export default class BaseRestDialog extends Dialog5e {
           {
             field: new StringField({ required: true, blank: false }),
             name: "duration.unit",
-            options: Object.entries(CONFIG.DND5E.timeUnits)
+            options: Object.entries(CONFIG.VARLYN5E.timeUnits)
               .filter(([, c]) => !c.combat)
               .map(([value, { label }]) => ({ value, label })),
             value: duration.unit
@@ -170,11 +170,11 @@ export default class BaseRestDialog extends Dialog5e {
       context.fields.push({ template: "systems/dnd5e/templates/actors/rest/parts/duration.hbs" });
     }
 
-    const rest = CONFIG.DND5E.restTypes[this.config.type];
+    const rest = CONFIG.VARLYN5E.restTypes[this.config.type];
     if ( "recoverTemp" in rest ) context.hitPoints.push({
       disabled: !!this.config.request,
       field: new BooleanField({
-        label: _loc("DND5E.REST.RecoverTempHP.Label")
+        label: _loc("VARLYN5E.REST.RecoverTempHP.Label")
       }),
       input: context.inputs.createCheckboxInput,
       name: "recoverTemp",
@@ -183,8 +183,8 @@ export default class BaseRestDialog extends Dialog5e {
     if ( "recoverTempMax" in rest ) context.hitPoints.push({
       disabled: !!this.config.request,
       field: new BooleanField({
-        label: _loc("DND5E.REST.RecoverTempMaxHP.Label"),
-        hint: _loc("DND5E.REST.RecoverTempMaxHP.Hint")
+        label: _loc("VARLYN5E.REST.RecoverTempMaxHP.Label"),
+        hint: _loc("VARLYN5E.REST.RecoverTempMaxHP.Hint")
       }),
       input: context.inputs.createCheckboxInput,
       name: "recoverTempMax",
@@ -192,10 +192,10 @@ export default class BaseRestDialog extends Dialog5e {
     });
 
     if ( context.fields.length ) {
-      context.formSections.push({ legend: "DND5E.REST.Configuration", fields: context.fields });
+      context.formSections.push({ legend: "VARLYN5E.REST.Configuration", fields: context.fields });
     }
     if ( context.hitPoints.length ) {
-      context.formSections.push({ legend: "DND5E.HitPoints", fields: context.hitPoints });
+      context.formSections.push({ legend: "VARLYN5E.HitPoints", fields: context.hitPoints });
     }
 
     if ( this.isPartyGroup ) {
@@ -203,8 +203,8 @@ export default class BaseRestDialog extends Dialog5e {
       context.request = [
         {
           field: new BooleanField({
-            label: _loc("DND5E.REST.Request.AutoRest.Label"),
-            hint: _loc("DND5E.REST.Request.AutoRest.Hint")
+            label: _loc("VARLYN5E.REST.Request.AutoRest.Label"),
+            hint: _loc("VARLYN5E.REST.Request.AutoRest.Hint")
           }),
           name: "autoRest",
           input: context.inputs.createCheckboxInput,
@@ -285,7 +285,7 @@ export default class BaseRestDialog extends Dialog5e {
           {
             default: true,
             icon: "fa-solid fa-bed",
-            label: _loc("DND5E.REST.Label"),
+            label: _loc("VARLYN5E.REST.Label"),
             name: "rest",
             type: "submit"
           }

@@ -1,5 +1,5 @@
 <fieldset>
-    <legend>{{ localize "DND5E.SpellDetails" }}</legend>
+    <legend>{{ localize "VARLYN5E.SpellDetails" }}</legend>
 
     {{!-- Spell Level --}}
     {{ formField fields.level value=source.level choices=CONFIG.spellLevels localize=true rootId=partId }}
@@ -9,23 +9,23 @@
                  localize=true rootId=partId }}
 
     {{!-- Spell Components --}}
-    {{ formField fields.properties options=properties.options label="DND5E.SpellComponents" localize=true
+    {{ formField fields.properties options=properties.options label="VARLYN5E.SpellComponents" localize=true
                  input=inputs.createMultiCheckboxInput stacked=true classes="checkbox-grid checkbox-grid-3" }}
 
     {{!-- Material Components --}}
     {{#if properties.object.material}}
     <div class="form-group split-group">
-        <label>{{ localize "DND5E.SpellMaterials" }}</label>
+        <label>{{ localize "VARLYN5E.SpellMaterials" }}</label>
         <div class="form-fields">
 
             {{!-- Material Supply --}}
-            {{ formField fields.materials.fields.supply value=source.materials.supply label="DND5E.Supply" localize=true
+            {{ formField fields.materials.fields.supply value=source.materials.supply label="VARLYN5E.Supply" localize=true
                          classes="label-top" placeholder="0" rootId=partId }}
 
             {{!-- Material Cost --}}
             <div class="form-group label-top">
-                <label class="label-icon currency gp" aria-label="{{ localize "DND5E.CostGP" }}">
-                    {{ localize "DND5E.Cost" }}
+                <label class="label-icon currency gp" aria-label="{{ localize "VARLYN5E.CostGP" }}">
+                    {{ localize "VARLYN5E.Cost" }}
                 </label>
                 <div class="form-fields">
                     {{ formInput fields.materials.fields.cost value=source.materials.cost placeholder="—"
@@ -34,7 +34,7 @@
             </div>
 
             {{!-- Material Consumption --}}
-            {{ formField fields.materials.fields.consumed value=source.materials.consumed label="DND5E.Consumed"
+            {{ formField fields.materials.fields.consumed value=source.materials.consumed label="VARLYN5E.Consumed"
                          localize=true input=inputs.createCheckboxInput classes="checkbox" rootId=partId }}
         </div>
 
@@ -46,17 +46,17 @@
 
     {{!-- Spellcasting --}}
     <div class="form-group">
-        <label>{{ localize "DND5E.SpellPreparation.Method" }}</label>
+        <label>{{ localize "VARLYN5E.SpellPreparation.Method" }}</label>
         <div class="form-fields">
 
             {{!-- Method --}}
-            {{ formField fields.method value=source.method options=spellcastingMethods label="DND5E.Method"
+            {{ formField fields.method value=source.method options=spellcastingMethods label="VARLYN5E.Method"
                          classes="label-top" localize=true rootId=partId }}
 
             {{!-- Prepared --}}
             {{#if canPrepare}}
             {{ formField fields.prepared value=source.prepared choices=CONFIG.spellPreparationStates labelAttr="label"
-                         valueAttr="value" label="DND5E.Preparation" classes="label-top" localize=true rootId=partId }}
+                         valueAttr="value" label="VARLYN5E.Preparation" classes="label-top" localize=true rootId=partId }}
             {{/if}}
         </div>
     </div>
@@ -64,7 +64,7 @@
     {{!-- Spell Source --}}
     {{#if isEmbedded}}
     {{ formField fields.sourceItem value=source.sourceItem localize=true
-                 options=spellcastingClasses blank="" label="DND5E.SourceItem.Label" rootId=partId
+                 options=spellcastingClasses blank="" label="VARLYN5E.SourceItem.Label" rootId=partId
                  disabled=sourceItemLocked hint=sourceItemHint }}
 
     {{ formField fields.ability value=source.ability localize=true choices=CONFIG.abilities
@@ -73,11 +73,11 @@
 </fieldset>
 
 <fieldset>
-    <legend>{{ localize "DND5E.Casting" }}</legend>
+    <legend>{{ localize "VARLYN5E.Casting" }}</legend>
 
     {{!-- Activation --}}
     {{> "dnd5e.field-activation" activation=system.activation fields=fields.activation.fields data=source.activation
-        activationTypes=activationTypes inputs=inputs label="DND5E.SpellCastTime" }}
+        activationTypes=activationTypes inputs=inputs label="VARLYN5E.SpellCastTime" }}
 
     {{!-- Range --}}
     {{> "dnd5e.field-range" range=system.range fields=fields.range.fields data=source.range rangeTypes=rangeTypes

@@ -31,14 +31,14 @@ export default class ActivationField extends SchemaField {
    * @param {object} [labels]                         Object in which to insert generated labels.
    */
   static prepareData(rollData, labels) {
-    const config = CONFIG.DND5E.activityActivationTypes[this.activation.type];
+    const config = CONFIG.VARLYN5E.activityActivationTypes[this.activation.type];
     this.activation.scalar = config?.scalar ?? false;
     if ( !this.activation.scalar ) this.activation.value = null;
 
     this.activation.labels ??= {};
     if ( this.activation.type ) {
       let scalar;
-      if ( this.activation.type in CONFIG.DND5E.timeUnits ) {
+      if ( this.activation.type in CONFIG.VARLYN5E.timeUnits ) {
         scalar = formatTime(this.activation.value ?? 1, this.activation.type);
       }
       else if ( config?.counted ) scalar = _loc(
@@ -51,7 +51,7 @@ export default class ActivationField extends SchemaField {
       this.activation.labels.legacy = scalar.toLowerCase();
       const formatter = game.i18n.getListFormatter({ type: "disjunction" });
       this.activation.labels.ritual = this.properties?.has?.("ritual")
-        ? formatter.format([this.activation.labels.simple, _loc("DND5E.Ritual")])
+        ? formatter.format([this.activation.labels.simple, _loc("VARLYN5E.Ritual")])
         : this.activation.labels.simple;
     }
 

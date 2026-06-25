@@ -34,7 +34,7 @@ export default class SourceConfig extends DocumentSheet5e {
 
   /** @override */
   get title() {
-    return _loc("DND5E.SOURCE.Action.Configure");
+    return _loc("VARLYN5E.SOURCE.Action.Configure");
   }
 
   /* -------------------------------------------- */
@@ -54,8 +54,8 @@ export default class SourceConfig extends DocumentSheet5e {
     context.sourceAnchor = (await fromUuid(context.sourceUuid))?.toAnchor().outerHTML;
     context.rulesVersions = [
       { value: "", label: "" },
-      { value: "2024", label: _loc("SETTINGS.DND5E.RULESVERSION.Modern") },
-      { value: "2014", label: _loc("SETTINGS.DND5E.RULESVERSION.Legacy") }
+      { value: "2024", label: _loc("SETTINGS.VARLYN5E.RULESVERSION.Modern") },
+      { value: "2014", label: _loc("SETTINGS.VARLYN5E.RULESVERSION.Legacy") }
     ];
     if ( this.document.system.hasOwnProperty("identifier") ) context.identifier = {
       field: this.document.system.schema.getField("identifier"),

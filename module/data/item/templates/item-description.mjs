@@ -19,10 +19,10 @@ export default class ItemDescriptionTemplate extends SystemDataModel {
   static defineSchema() {
     return {
       description: new SchemaField({
-        value: new HTMLField({ required: true, nullable: true, label: "DND5E.Description" }),
-        chat: new HTMLField({ required: true, nullable: true, label: "DND5E.DescriptionChat" })
+        value: new HTMLField({ required: true, nullable: true, label: "VARLYN5E.Description" }),
+        chat: new HTMLField({ required: true, nullable: true, label: "VARLYN5E.DescriptionChat" })
       }),
-      identifier: new IdentifierField({ required: true, label: "DND5E.Identifier" }),
+      identifier: new IdentifierField({ required: true, label: "VARLYN5E.Identifier" }),
       source: new SourceField()
     };
   }
@@ -36,7 +36,7 @@ export default class ItemDescriptionTemplate extends SystemDataModel {
    * @returns {Set<string>}
    */
   get validProperties() {
-    const valid = new Set(CONFIG.DND5E.validProperties[this.parent.type] ?? []);
+    const valid = new Set(CONFIG.VARLYN5E.validProperties[this.parent.type] ?? []);
     if ( this.parent.actor?.system.isNPC && this.schema.has("quantity") ) valid.add("gear");
     return valid;
   }
@@ -87,11 +87,11 @@ export default class ItemDescriptionTemplate extends SystemDataModel {
    */
   static compendiumBrowserPropertiesFilter(type) {
     return {
-      label: "DND5E.Properties",
+      label: "VARLYN5E.Properties",
       type: "set",
       config: {
-        choices: Object.entries(CONFIG.DND5E.itemProperties).reduce((obj, [k, v]) => {
-          if ( CONFIG.DND5E.validProperties[type]?.has(k) ) obj[k] = v;
+        choices: Object.entries(CONFIG.VARLYN5E.itemProperties).reduce((obj, [k, v]) => {
+          if ( CONFIG.VARLYN5E.validProperties[type]?.has(k) ) obj[k] = v;
           return obj;
         }, {}),
         keyPath: "system.properties",

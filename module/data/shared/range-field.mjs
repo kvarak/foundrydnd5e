@@ -32,9 +32,9 @@ export default class RangeField extends SchemaField {
    * @param {object} [labels]                         Object in which to insert generated labels.
    */
   static prepareData(rollData, labels) {
-    this.range.scalar = this.range.units in CONFIG.DND5E.movementUnits;
+    this.range.scalar = this.range.units in CONFIG.VARLYN5E.movementUnits;
     if ( this.range.scalar ) {
-      prepareFormulaValue(this, "range.value", "DND5E.RANGE.FIELDS.range.value.label", rollData);
+      prepareFormulaValue(this, "range.value", "VARLYN5E.RANGE.FIELDS.range.value.label", rollData);
     } else this.range.value = null;
 
     this.range.labels ??= {};
@@ -44,9 +44,9 @@ export default class RangeField extends SchemaField {
         this.range.labels.rangeParts = formatLength(this.range.value, this.range.units, { parts: true });
         this.range.labels.description = formatLength(this.range.value, this.range.units, { unitDisplay: "long" });
       } else if ( !this.range.scalar ) {
-        this.range.labels.range = CONFIG.DND5E.distanceUnits[this.range.units];
+        this.range.labels.range = CONFIG.VARLYN5E.distanceUnits[this.range.units];
       }
-    } else this.range.labels.range = _loc("DND5E.DistSelf");
+    } else this.range.labels.range = _loc("VARLYN5E.DistSelf");
 
     if ( labels ) {
       labels.description ??= {};

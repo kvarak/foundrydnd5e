@@ -11,7 +11,7 @@ export default class HealActivity extends ActivityMixin(BaseHealActivityData) {
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.HEAL"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.HEAL"];
 
   /* -------------------------------------------- */
 
@@ -20,8 +20,8 @@ export default class HealActivity extends ActivityMixin(BaseHealActivityData) {
     foundry.utils.mergeObject(super.metadata, {
       type: "heal",
       img: "systems/dnd5e/icons/svg/activity/heal.svg",
-      title: "DND5E.HEAL.Title",
-      hint: "DND5E.HEAL.Hint",
+      title: "VARLYN5E.HEAL.Title",
+      hint: "VARLYN5E.HEAL.Hint",
       sheetClass: HealSheet,
       usage: {
         actions: {
@@ -37,7 +37,7 @@ export default class HealActivity extends ActivityMixin(BaseHealActivityData) {
 
   /** @override */
   get damageFlavor() {
-    return _loc("DND5E.HEAL.HealingRoll");
+    return _loc("VARLYN5E.HEAL.HealingRoll");
   }
 
   /* -------------------------------------------- */
@@ -48,7 +48,7 @@ export default class HealActivity extends ActivityMixin(BaseHealActivityData) {
   _usageChatButtons(message) {
     if ( !this.healing.formula ) return super._usageChatButtons(message);
     return [{
-      label: _loc("DND5E.HEAL.HealingButton"),
+      label: _loc("VARLYN5E.HEAL.HealingButton"),
       icon: '<i class="dnd5e-icon" data-src="systems/dnd5e/icons/svg/damage/healing.svg"></i>',
       dataset: {
         action: "rollHealing"

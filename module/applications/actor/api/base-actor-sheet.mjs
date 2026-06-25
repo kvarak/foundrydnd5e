@@ -84,7 +84,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
         {
           action: "restoreTransformation",
           icon: "fa-solid fa-backward",
-          label: "DND5E.TRANSFORM.Action.Restore",
+          label: "VARLYN5E.TRANSFORM.Action.Restore",
           ownership: "OWNER",
           visible: BaseActorSheet.#canRestoreTransformation
         }
@@ -197,7 +197,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
       elements: this.options.elements,
       fields: this.actor.system.schema.fields,
       labels: {
-        damageAndHealing: { ...CONFIG.DND5E.damageTypes, ...CONFIG.DND5E.healingTypes },
+        damageAndHealing: { ...CONFIG.VARLYN5E.damageTypes, ...CONFIG.VARLYN5E.healingTypes },
         ...this.actor.labels
       },
       limited: this.actor.limited,
@@ -233,7 +233,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     context.effects = EffectsElement.prepareCategories(this.actor.allApplicableEffects());
 
     const conditionIds = new Set();
-    context.conditions = Object.entries(CONFIG.DND5E.conditionTypes).reduce((arr, [k, c]) => {
+    context.conditions = Object.entries(CONFIG.VARLYN5E.conditionTypes).reduce((arr, [k, c]) => {
       if ( c.pseudo ) return arr; // Filter out pseudo-conditions.
       let { name, img, reference } = c;
       const id = staticID(`dnd5e${k}`);
@@ -292,7 +292,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
 
     // Currency
     context.currency = Object.fromEntries(
-      Object.keys(CONFIG.DND5E.currencies).map(k => [k, this.inventorySource.system.currency[k] ?? 0])
+      Object.keys(CONFIG.VARLYN5E.currencies).map(k => [k, this.inventorySource.system.currency[k] ?? 0])
     );
 
     // Containers
@@ -344,7 +344,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     };
 
     // Character Flags
-    for ( const [key, config] of Object.entries(CONFIG.DND5E.characterFlags) ) {
+    for ( const [key, config] of Object.entries(CONFIG.VARLYN5E.characterFlags) ) {
       const flag = { ...config, name: `flags.dnd5e.${key}`, value: foundry.utils.getProperty(flags.data, key) };
       const fieldOptions = { label: config.name, hint: config.hint };
       if ( config.type === Boolean ) {
@@ -367,7 +367,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
       else globals.push({ field, name: field.fieldPath, value: foundry.utils.getProperty(source, field.fieldPath) });
     };
     addBonus(this.document.system.schema.fields.bonuses);
-    if ( globals.length ) sections[_loc("DND5E.BONUSES.FIELDS.bonuses.label")] = globals;
+    if ( globals.length ) sections[_loc("VARLYN5E.BONUSES.FIELDS.bonuses.label")] = globals;
 
     flags.sections = Object.entries(sections).map(([label, fields]) => ({ label, fields }));
 
@@ -387,16 +387,16 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     const Inventory = customElements.get(this.options.elements.inventory);
     context.sections = Inventory.prepareSections(Object.values(context.spellbook));
     context.listControls = {
-      label: "DND5E.SpellsSearch",
+      label: "VARLYN5E.SpellsSearch",
       list: "spells",
       filters: [
-        { key: "action", label: "DND5E.Action" },
-        { key: "bonus", label: "DND5E.BonusAction" },
-        { key: "reaction", label: "DND5E.Reaction" },
-        { key: "concentration", label: "DND5E.Concentration" },
-        { key: "ritual", label: "DND5E.Ritual" },
-        { key: "prepared", label: "DND5E.Prepared" },
-        ...Object.entries(CONFIG.DND5E.spellSchools).map(([key, { label }]) => ({ key, label }))
+        { key: "action", label: "VARLYN5E.Action" },
+        { key: "bonus", label: "VARLYN5E.BonusAction" },
+        { key: "reaction", label: "VARLYN5E.Reaction" },
+        { key: "concentration", label: "VARLYN5E.Concentration" },
+        { key: "ritual", label: "VARLYN5E.Ritual" },
+        { key: "prepared", label: "VARLYN5E.Prepared" },
+        ...Object.entries(CONFIG.VARLYN5E.spellSchools).map(([key, { label }]) => ({ key, label }))
       ],
       sorting: [
         { key: "a", label: "SIDEBAR.SortModeAlpha", dataset: { icon: "fa-solid fa-arrow-down-a-z" } },
@@ -420,10 +420,10 @@ export default class BaseActorSheet extends PrimarySheetMixin(
   _prepareAbilities(context) {
     return Object.entries(context.system.abilities).map(([key, ability]) => ({
       ...ability, key,
-      abbr: CONFIG.DND5E.abilities[key]?.abbreviation ?? "",
-      hover: CONFIG.DND5E.proficiencyLevels[ability.proficient],
-      icon: CONFIG.DND5E.abilities[key]?.icon,
-      label: CONFIG.DND5E.abilities[key]?.label,
+      abbr: CONFIG.VARLYN5E.abilities[key]?.abbreviation ?? "",
+      hover: CONFIG.VARLYN5E.proficiencyLevels[ability.proficient],
+      icon: CONFIG.VARLYN5E.abilities[key]?.icon,
+      label: CONFIG.VARLYN5E.abilities[key]?.label,
       source: context.source.abilities[key]
     }));
   }
@@ -495,7 +495,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
    */
   _prepareSenses(context) {
     return [
-      ...Object.entries(CONFIG.DND5E.senses).map(([k, { label }]) => {
+      ...Object.entries(CONFIG.VARLYN5E.senses).map(([k, { label }]) => {
         const value = context.system.attributes.senses.ranges[k];
         return value ? { label, value } : null;
       }, {}).filter(_ => _),
@@ -517,17 +517,17 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     const baseAbility = key => {
       let src = context.source[property]?.[key]?.ability;
       if ( src ) return src;
-      if ( property === "skills" ) src = CONFIG.DND5E.skills[key]?.ability;
+      if ( property === "skills" ) src = CONFIG.VARLYN5E.skills[key]?.ability;
       return src ?? "int";
     };
     return Object.entries(context.system[property] ?? {})
-      .filter(([key]) => key in CONFIG.DND5E[property])
+      .filter(([key]) => key in CONFIG.VARLYN5E[property])
       .map(([key, entry]) => ({
         ...entry, key,
-        abbreviation: CONFIG.DND5E.abilities[entry.ability]?.abbreviation,
+        abbreviation: CONFIG.VARLYN5E.abilities[entry.ability]?.abbreviation,
         baseAbility: baseAbility(key),
-        hover: CONFIG.DND5E.proficiencyLevels[entry.value],
-        label: (property === "skills") ? CONFIG.DND5E.skills[key]?.label : Trait.keyLabel(key, { trait: "tool" }),
+        hover: CONFIG.VARLYN5E.proficiencyLevels[entry.value],
+        label: (property === "skills") ? CONFIG.VARLYN5E.skills[key]?.label : Trait.keyLabel(key, { trait: "tool" }),
         link: { action: "roll", key, type: property === "skills" ? "skill" : "tool" },
         source: context.source[property]?.[key],
         value: entry.total
@@ -560,7 +560,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     const registerSection = (key, level, config) => {
       level = config?.slots ? level : 1;
       if ( key in spellbook ) return;
-      const label = config?.getLabel({ level }) ?? _loc("DND5E.CAST.SECTIONS.Spellbook");
+      const label = config?.getLabel({ level }) ?? _loc("VARLYN5E.CAST.SECTIONS.Spellbook");
       const method = config?.key ?? key;
       const order = level === 0 ? 0 : (config?.order ?? 1000);
       const usesSlots = config?.slots && (level !== 0);
@@ -580,10 +580,10 @@ export default class BaseActorSheet extends PrimarySheetMixin(
         const filled = spells.value >= n;
         const temp = n > maxSlots;
         const label = temp
-          ? _loc("DND5E.SpellSlotTemporary")
+          ? _loc("VARLYN5E.SpellSlotTemporary")
           : filled
-            ? _loc(`DND5E.SpellSlotN.${getPluralRules({ type: "ordinal" }).select(n)}`, { n })
-            : _loc("DND5E.SpellSlotExpended");
+            ? _loc(`VARLYN5E.SpellSlotN.${getPluralRules({ type: "ordinal" }).select(n)}`, { n })
+            : _loc("VARLYN5E.SpellSlotExpended");
         const classes = ["pip"];
         if ( filled ) classes.push("filled");
         if ( temp ) classes.push("tmp");
@@ -592,18 +592,18 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     };
 
     // Register sections for the available spellcasting methods this character has.
-    for ( const spellcasting of Object.values(CONFIG.DND5E.spellcasting) ) {
+    for ( const spellcasting of Object.values(CONFIG.VARLYN5E.spellcasting) ) {
       const levels = spellcasting.getAvailableLevels?.(this.actor) ?? [];
       if ( !levels.length ) continue;
-      if ( spellcasting.cantrips ) registerSection("spell0", 0, CONFIG.DND5E.spellcasting.spell);
+      if ( spellcasting.cantrips ) registerSection("spell0", 0, CONFIG.VARLYN5E.spellcasting.spell);
       levels.forEach(l => registerSection(spellcasting.getSpellSlotKey(l), l, spellcasting));
     }
 
     // Iterate over every spell item, adding spells to the spellbook by section
     (context.itemCategories.spells ?? []).forEach(spell => {
       let method = spell.system.method;
-      if ( !(method in CONFIG.DND5E.spellcasting) ) method = "innate";
-      const spellcasting = CONFIG.DND5E.spellcasting[method];
+      if ( !(method in CONFIG.VARLYN5E.spellcasting) ) method = "innate";
+      const spellcasting = CONFIG.VARLYN5E.spellcasting[method];
       const level = spellcasting instanceof SingleLevelSpellcasting && spell.system.level !== 0
         ? null : (spell.system.level || 0);
       method = spellcasting?.getSpellSlotKey?.(level) ?? method;
@@ -636,7 +636,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
    */
   _prepareTraits(context) {
     const traits = {};
-    for ( const [trait, config] of Object.entries(CONFIG.DND5E.traits) ) {
+    for ( const [trait, config] of Object.entries(CONFIG.VARLYN5E.traits) ) {
       const key = config.actorKeyPath ?? `system.traits.${trait}`;
       const data = foundry.utils.deepClone(foundry.utils.getProperty(this.actor, key));
       if ( ["dm", "languages"].includes(trait) || !data ) continue;
@@ -648,9 +648,9 @@ export default class BaseActorSheet extends PrimarySheetMixin(
       values = values.map(key => {
         const value = { key, label: Trait.keyLabel(key, { trait }) ?? key };
         const icons = value.icons = [];
-        if ( data.bypasses?.size && CONFIG.DND5E.damageTypes[key]?.isPhysical ) icons.push(...data.bypasses.map(p => {
-          const type = CONFIG.DND5E.itemProperties[p]?.label;
-          return { icon: p, label: _loc("DND5E.DAMAGE.PhysicalBypass.DescriptionShort", { type }) };
+        if ( data.bypasses?.size && CONFIG.VARLYN5E.damageTypes[key]?.isPhysical ) icons.push(...data.bypasses.map(p => {
+          const type = CONFIG.VARLYN5E.itemProperties[p]?.label;
+          return { icon: p, label: _loc("VARLYN5E.DAMAGE.PhysicalBypass.DescriptionShort", { type }) };
         }));
         return value;
       });
@@ -660,7 +660,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
 
     // If petrified, display "All Damage" instead of all damage types separately
     if ( this.document.hasConditionEffect("petrification") ) {
-      traits.dr = [{ label: _loc("DND5E.DAMAGE.All") }];
+      traits.dr = [{ label: _loc("VARLYN5E.DAMAGE.All") }];
     }
 
     // Combine damage & condition immunities in play mode.
@@ -678,13 +678,13 @@ export default class BaseActorSheet extends PrimarySheetMixin(
         const total = simplifyBonus(v, rollData);
         if ( !total ) return null;
         const value = {
-          label: `${CONFIG.DND5E.damageTypes[k]?.label ?? k} ${formatNumber(total, { signDisplay: "always" })}`,
+          label: `${CONFIG.VARLYN5E.damageTypes[k]?.label ?? k} ${formatNumber(total, { signDisplay: "always" })}`,
           color: total > 0 ? "maroon" : "green"
         };
         const icons = value.icons = [];
-        if ( dm.bypasses.size && CONFIG.DND5E.damageTypes[k]?.isPhysical ) icons.push(...dm.bypasses.map(p => {
-          const type = CONFIG.DND5E.itemProperties[p]?.label;
-          return { icon: p, label: _loc("DND5E.DAMAGE.PhysicalBypass.DescriptionShort", { type }) };
+        if ( dm.bypasses.size && CONFIG.VARLYN5E.damageTypes[k]?.isPhysical ) icons.push(...dm.bypasses.map(p => {
+          const type = CONFIG.VARLYN5E.itemProperties[p]?.label;
+          return { icon: p, label: _loc("VARLYN5E.DAMAGE.PhysicalBypass.DescriptionShort", { type }) };
         }));
         return value;
       }).filter(f => f);
@@ -694,7 +694,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     // Prepare languages
     const languages = this.actor.system.traits?.languages?.labels;
     if ( languages?.languages?.length ) traits.languages = languages.languages.map(label => ({ label }));
-    for ( const [key, { label }] of Object.entries(CONFIG.DND5E.communicationTypes) ) {
+    for ( const [key, { label }] of Object.entries(CONFIG.VARLYN5E.communicationTypes) ) {
       const data = this.actor.system.traits?.languages?.communication?.[key];
       if ( !data?.value ) continue;
       traits.languages ??= [];
@@ -709,7 +709,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
         traits.weapon ??= [];
         traits.weapon.push(value);
       }
-      value.icons.push({ icon: "mastery", label: _loc("DND5E.WEAPON.Mastery.Label") });
+      value.icons.push({ icon: "mastery", label: _loc("VARLYN5E.WEAPON.Mastery.Label") });
     }
 
     return traits;
@@ -779,12 +779,12 @@ export default class BaseActorSheet extends PrimarySheetMixin(
 
     // Activation
     const activationAbbr = {
-      action: "DND5E.ActionAbbr",
-      bonus: "DND5E.BonusActionAbbr",
-      reaction: "DND5E.ReactionAbbr",
-      minute: "DND5E.TimeMinuteAbbr",
-      hour: "DND5E.TimeHourAbbr",
-      day: "DND5E.TimeDayAbbr"
+      action: "VARLYN5E.ActionAbbr",
+      bonus: "VARLYN5E.BonusActionAbbr",
+      reaction: "VARLYN5E.ReactionAbbr",
+      minute: "VARLYN5E.TimeMinuteAbbr",
+      hour: "VARLYN5E.TimeHourAbbr",
+      day: "VARLYN5E.TimeDayAbbr"
     }[activation?.type || ""];
 
     // To Hit
@@ -807,8 +807,8 @@ export default class BaseActorSheet extends PrimarySheetMixin(
         ...save,
         ability: save.ability?.size
           ? save.ability.size === 1
-            ? CONFIG.DND5E.abilities[save.ability.first()]?.abbreviation
-            : _loc("DND5E.AbbreviationDC")
+            ? CONFIG.VARLYN5E.abilities[save.ability.first()]?.abbreviation
+            : _loc("VARLYN5E.AbbreviationDC")
           : null
       } : null,
       toHit: Number.isNaN(toHit) ? null : toHit
@@ -841,8 +841,8 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     // Save
     ctx.save = { ...item.system.activities?.getByType("save")[0]?.save };
     ctx.save.ability = ctx.save.ability?.size ? ctx.save.ability.size === 1
-      ? CONFIG.DND5E.abilities[ctx.save.ability.first()]?.abbreviation
-      : _loc("DND5E.AbbreviationDC") : null;
+      ? CONFIG.VARLYN5E.abilities[ctx.save.ability.first()]?.abbreviation
+      : _loc("VARLYN5E.AbbreviationDC") : null;
 
     // Linked Uses
     const cachedFor = fromUuidSync(item.flags.dnd5e?.cachedFor, { relative: item.parent, strict: false });
@@ -872,10 +872,10 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     // Classes & Subclasses
     if ( ["class", "subclass"].includes(item.type) ) {
       ctx.prefixedImage = item.img ? foundry.utils.getRoute(item.img) : null;
-      if ( item.type === "class" ) ctx.availableLevels = Array.fromRange(CONFIG.DND5E.maxLevel, 1).map(level => {
+      if ( item.type === "class" ) ctx.availableLevels = Array.fromRange(CONFIG.VARLYN5E.maxLevel, 1).map(level => {
         const value = level - item.system.levels;
         const label = value ? `${level} (${formatNumber(value, { signDisplay: "always" })})` : `${level}`;
-        return { label, value, disabled: value > (CONFIG.DND5E.maxLevel - (item.parent.system.details?.level ?? 0)) };
+        return { label, value, disabled: value > (CONFIG.VARLYN5E.maxLevel - (item.parent.system.details?.level ?? 0)) };
       });
     }
 
@@ -903,7 +903,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     if ( "equipped" in item.system ) ctx.equip = {
       applicable: true,
       cls: item.system.equipped ? "active" : "",
-      title: `DND5E.${item.system.equipped ? "Equipped" : "Unequipped"}`,
+      title: `VARLYN5E.${item.system.equipped ? "Equipped" : "Unequipped"}`,
       disabled: !item.isOwner
     };
     else ctx.equip = { applicable: false };
@@ -932,22 +932,22 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     // Activation
     const cost = item.system.activation?.value ?? "";
     const abbr = {
-      action: "DND5E.ActionAbbr",
-      bonus: "DND5E.BonusActionAbbr",
-      reaction: "DND5E.ReactionAbbr",
-      minute: "DND5E.TimeMinuteAbbr",
-      hour: "DND5E.TimeHourAbbr",
-      day: "DND5E.TimeDayAbbr"
+      action: "VARLYN5E.ActionAbbr",
+      bonus: "VARLYN5E.BonusActionAbbr",
+      reaction: "VARLYN5E.ReactionAbbr",
+      minute: "VARLYN5E.TimeMinuteAbbr",
+      hour: "VARLYN5E.TimeHourAbbr",
+      day: "VARLYN5E.TimeDayAbbr"
     }[item.system.activation.type];
     ctx.activation = abbr ? `${cost}${_loc(abbr)}` : item.labels.activation;
 
     // Range
     const units = item.system.range?.units;
     if ( units && (units !== "none") ) {
-      if ( units in CONFIG.DND5E.movementUnits ) ctx.range = {
+      if ( units in CONFIG.VARLYN5E.movementUnits ) ctx.range = {
         distance: true,
         value: item.system.range.value,
-        unit: CONFIG.DND5E.movementUnits[units].abbreviation,
+        unit: CONFIG.VARLYN5E.movementUnits[units].abbreviation,
         parts: formatLength(item.system.range.value, units, { parts: true })
       };
       else ctx.range = { distance: false };
@@ -955,15 +955,15 @@ export default class BaseActorSheet extends PrimarySheetMixin(
 
     // Prepared
     const { method, prepared } = item.system;
-    const config = CONFIG.DND5E.spellcasting[method];
+    const config = CONFIG.VARLYN5E.spellcasting[method];
     if ( config?.prepares && !linked ) {
-      const isAlways = prepared === CONFIG.DND5E.spellPreparationStates.always.value;
+      const isAlways = prepared === CONFIG.VARLYN5E.spellPreparationStates.always.value;
       ctx.preparation = {
         applicable: true,
         disabled: !item.isOwner || isAlways,
         cls: prepared ? "active" : "",
         icon: `<i class="fa-${prepared ? "solid" : "regular"} fa-${isAlways ? "certificate" : "sun"}" inert></i>`,
-        title: CONFIG.DND5E.spellPreparationStates[isAlways ? "always" : prepared ? "prepared" : "unprepared"].label
+        title: CONFIG.VARLYN5E.spellPreparationStates[isAlways ? "always" : prepared ? "prepared" : "unprepared"].label
       };
     }
     else ctx.preparation = { applicable: false };
@@ -999,8 +999,8 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     const element = document.createElement("div");
     element.classList.add("attunement");
     element.innerHTML = `
-      <i class="fa-solid fa-sun" data-tooltip="DND5E.Attunement"
-         aria-label="${_loc("DND5E.Attunement")}"></i>
+      <i class="fa-solid fa-sun" data-tooltip="VARLYN5E.Attunement"
+         aria-label="${_loc("VARLYN5E.Attunement")}"></i>
       <span class="value"></span>
       <span class="separator">&sol;</span>
     `;
@@ -1056,10 +1056,10 @@ export default class BaseActorSheet extends PrimarySheetMixin(
       if ( context.editable ) {
         const config = document.createElement("button");
         Object.assign(config, {
-          type: "button", className: "unbutton config-button", ariaLabel: _loc("DND5E.SpellSlotsConfig")
+          type: "button", className: "unbutton config-button", ariaLabel: _loc("VARLYN5E.SpellSlotsConfig")
         });
         Object.assign(config.dataset, {
-          action: "showConfiguration", config: "spellSlots", tooltip: "DND5E.SpellSlotsConfig"
+          action: "showConfiguration", config: "spellSlots", tooltip: "VARLYN5E.SpellSlotsConfig"
         });
         config.insertAdjacentHTML("afterbegin", '<i class="fa-solid fa-cog" inert></i>');
         header.append(config);
@@ -1189,7 +1189,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
   /** @override */
   _addDocument(event, target) {
     if ( this.tabGroups.primary === "effects" ) return ActiveEffect.implementation.create({
-      name: _loc("DND5E.EffectNew"),
+      name: _loc("VARLYN5E.EffectNew"),
       icon: "icons/svg/aura.svg"
     }, { parent: this.actor, renderSheet: true });
 
@@ -1779,7 +1779,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     if ( item.type === "container" ) {
       const parentContainers = await container.system.allContainers();
       if ( (container.id === item.id) || parentContainers.includes(item) ) {
-        ui.notifications.error("DND5E.ContainerRecursiveError");
+        ui.notifications.error("VARLYN5E.ContainerRecursiveError");
         return;
       }
     }
@@ -1836,7 +1836,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
     const itemsWithoutAdvancement = items.filter(i => !i.system.advancement?.size);
     const multipleAdvancements = (items.length - itemsWithoutAdvancement.length) > 1;
     if ( multipleAdvancements && !game.settings.get("dnd5e", "disableAdvancements") ) {
-      ui.notifications.warn("DND5E.WarnCantAddMultipleAdvancements");
+      ui.notifications.warn("VARLYN5E.WarnCantAddMultipleAdvancements");
       items = itemsWithoutAdvancement;
     }
 
@@ -1878,7 +1878,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
 
     // Check to make sure items of this type are allowed on this actor
     if ( this.constructor.unsupportedItemTypes.has(itemData.type) ) {
-      ui.notifications.warn("DND5E.ACTOR.Warning.InvalidItem", {
+      ui.notifications.warn("VARLYN5E.ACTOR.Warning.InvalidItem", {
         format: {
           itemType: _loc(CONFIG.Item.typeLabels[itemData.type]),
           actorType: _loc(CONFIG.Actor.typeLabels[actor.type])
@@ -1907,7 +1907,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
       const dataModel = CONFIG.Item.dataModels[itemData.type];
       const singleton = dataModel?.metadata.singleton ?? false;
       if ( singleton && actor.itemTypes[itemData.type].length ) {
-        ui.notifications.error("DND5E.ACTOR.Warning.Singleton", {
+        ui.notifications.error("VARLYN5E.ACTOR.Warning.Singleton", {
           format: {
             itemType: _loc(CONFIG.Item.typeLabels[itemData.type]),
             actorType: _loc(CONFIG.Actor.typeLabels[actor.type])
@@ -2038,7 +2038,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
   _filterItems(items, filters) {
     const actions = ["action", "bonus", "reaction", "lair", "legendary"];
     const recoveries = ["lr", "sr"];
-    const spellSchools = new Set(Object.keys(CONFIG.DND5E.spellSchools));
+    const spellSchools = new Set(Object.keys(CONFIG.VARLYN5E.spellSchools));
     const schoolFilter = spellSchools.intersection(filters);
     const spellcastingClasses = new Set(Object.keys(this.actor.spellcastingClasses));
     const classFilter = spellcastingClasses.intersection(filters);

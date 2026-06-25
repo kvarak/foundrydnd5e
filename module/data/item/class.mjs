@@ -34,7 +34,7 @@ export default class ClassData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.CLASS", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.CLASS", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -65,7 +65,7 @@ export default class ClassData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["hasSpellcasting", {
-        label: "DND5E.CompendiumBrowser.Filters.HasSpellcasting",
+        label: "VARLYN5E.CompendiumBrowser.Filters.HasSpellcasting",
         type: "boolean",
         createFilter: (filters, value, def) => {
           if ( value === 0 ) return;
@@ -242,8 +242,8 @@ export default class ClassData extends ItemDataModel.mixin(
     context.singleDescription = true;
 
     context.parts = ["dnd5e.details-class", "dnd5e.details-spellcasting", "dnd5e.details-starting-equipment"];
-    context.hitDieOptions = CONFIG.DND5E.hitDieTypes.map(d => ({ value: d, label: d }));
-    context.primaryAbilities = Object.entries(CONFIG.DND5E.abilities).map(([value, data]) => ({
+    context.hitDieOptions = CONFIG.VARLYN5E.hitDieTypes.map(d => ({ value: d, label: d }));
+    context.primaryAbilities = Object.entries(CONFIG.VARLYN5E.abilities).map(([value, data]) => ({
       value, label: data.label, selected: this.primaryAbility.value.has(value)
     }));
   }
@@ -300,23 +300,23 @@ export default class ClassData extends ItemDataModel.mixin(
 
     // Check to make sure the updated class level isn't below zero
     if ( changed.system.levels <= 0 ) {
-      ui.notifications.warn("DND5E.MaxClassLevelMinimumWarn");
+      ui.notifications.warn("VARLYN5E.MaxClassLevelMinimumWarn");
       changed.system.levels = 1;
     }
 
     // Check to make sure the updated class level doesn't exceed level cap
-    if ( changed.system.levels > CONFIG.DND5E.maxLevel ) {
-      ui.notifications.warn("DND5E.MaxClassLevelExceededWarn", { format: { max: CONFIG.DND5E.maxLevel } });
-      changed.system.levels = CONFIG.DND5E.maxLevel;
+    if ( changed.system.levels > CONFIG.VARLYN5E.maxLevel ) {
+      ui.notifications.warn("VARLYN5E.MaxClassLevelExceededWarn", { format: { max: CONFIG.VARLYN5E.maxLevel } });
+      changed.system.levels = CONFIG.VARLYN5E.maxLevel;
     }
 
     if ( !this.parent.actor?.system.isCharacter ) return;
 
     // Check to ensure the updated character doesn't exceed level cap
     const newCharacterLevel = this.parent.actor.system.details.level + (changed.system.levels - this.levels);
-    if ( newCharacterLevel > CONFIG.DND5E.maxLevel ) {
-      ui.notifications.warn("DND5E.MaxCharacterLevelExceededWarn", { format: { max: CONFIG.DND5E.maxLevel } });
-      changed.system.levels -= newCharacterLevel - CONFIG.DND5E.maxLevel;
+    if ( newCharacterLevel > CONFIG.VARLYN5E.maxLevel ) {
+      ui.notifications.warn("VARLYN5E.MaxCharacterLevelExceededWarn", { format: { max: CONFIG.VARLYN5E.maxLevel } });
+      changed.system.levels -= newCharacterLevel - CONFIG.VARLYN5E.maxLevel;
     }
   }
 

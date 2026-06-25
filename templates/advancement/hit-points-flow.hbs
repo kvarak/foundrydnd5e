@@ -4,7 +4,7 @@
             {{!-- Previous Max HP --}}
             {{#if hp.previous}}
             <div class="form-group label-top">
-                <label>{{ localize "DND5E.ADVANCEMENT.HitPoints.Breakdown.Previous" }}</label>
+                <label>{{ localize "VARLYN5E.ADVANCEMENT.HitPoints.Breakdown.Previous" }}</label>
                 <span>{{ hp.previous }}</span>
             </div>
             <span class="separator">+</span>
@@ -13,19 +13,19 @@
             {{!-- Selected HP Increase --}}
             {{#if isFirstClassLevel}}
             <div class="form-group label-top">
-                <label>{{ localize "DND5E.ADVANCEMENT.HitPoints.Breakdown.Max" }}</label>
+                <label>{{ localize "VARLYN5E.ADVANCEMENT.HitPoints.Breakdown.Max" }}</label>
                 <span>{{ hp.max }}</span>
             </div>
             {{else if manual}}
             <div class="form-group label-top">
-                <label>{{ localize "DND5E.ADVANCEMENT.HitPoints.Breakdown.Roll" }}</label>
+                <label>{{ localize "VARLYN5E.ADVANCEMENT.HitPoints.Breakdown.Roll" }}</label>
                 <div class="form-fields">
                     <input class="roll-result" type="number" name="value" value="{{ data.value }}">
                 </div>
             </div>
             {{else}}
             <div class="form-group label-top">
-                <label>{{ localize "DND5E.ADVANCEMENT.HitPoints.Breakdown.Average" }}</label>
+                <label>{{ localize "VARLYN5E.ADVANCEMENT.HitPoints.Breakdown.Average" }}</label>
                 <span>{{ hp.average }}</span>
             </div>
             {{/if}}
@@ -43,7 +43,7 @@
             {{#if hp.bonus}}
             <span class="separator">+</span>
             <div class="form-group label-top">
-                <label>{{ localize "DND5E.ADVANCEMENT.HitPoints.Breakdown.Bonus" }}</label>
+                <label>{{ localize "VARLYN5E.ADVANCEMENT.HitPoints.Breakdown.Bonus" }}</label>
                 <span>{{ hp.bonus }}</span>
             </div>
             {{/if}}
@@ -52,14 +52,14 @@
 
             {{!-- Final Max HP --}}
             <div class="form-group label-top">
-                <label>{{ localize "DND5E.ADVANCEMENT.HitPoints.Breakdown.Final" }}</label>
+                <label>{{ localize "VARLYN5E.ADVANCEMENT.HitPoints.Breakdown.Final" }}</label>
                 <span>{{ hp.total }}</span>
             </div>
         </div>
 
         {{#if manual}}
         <button class="roll-button dice-button" type="button" data-action="rollHitPoints" data-tooltip
-                aria-label="{{ localize 'DND5E.ADVANCEMENT.HitPoints.Action.RollDie' die=hitDie }}">
+                aria-label="{{ localize 'VARLYN5E.ADVANCEMENT.HitPoints.Action.RollDie' die=hitDie }}">
             <dnd5e-icon src="systems/dnd5e/icons/svg/dice/{{ hitDie }}.svg" inert></dnd5e-icon>
         </button>
         {{/if}}
@@ -67,9 +67,9 @@
 
     {{#unless isFirstClassLevel}}
     <fieldset>
-        <legend>{{ localize "DND5E.ADVANCEMENT.HitPoints.Options" }}</legend>
+        <legend>{{ localize "VARLYN5E.ADVANCEMENT.HitPoints.Options" }}</legend>
         <div class="form-group">
-            <label for="{{ partId }}-useAverage">{{ localize "DND5E.ADVANCEMENT.HitPoints.TakeAverage" }}</label>
+            <label for="{{ partId }}-useAverage">{{ localize "VARLYN5E.ADVANCEMENT.HitPoints.TakeAverage" }}</label>
             <div class="form-fields">
                 <dnd5e-checkbox name="useAverage" id="{{ partId }}-useAverage"
                                 {{ checked data.useAverage }}></dnd5e-checkbox>

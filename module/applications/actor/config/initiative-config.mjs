@@ -29,7 +29,7 @@ export default class InitiativeConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.Initiative");
+    return _loc("VARLYN5E.Initiative");
   }
 
   /* -------------------------------------------- */
@@ -41,19 +41,19 @@ export default class InitiativeConfig extends BaseConfigSheet {
     context = await super._preparePartContext(partId, context, options);
     const source = this.document._source;
 
-    const defaultAbility = CONFIG.DND5E.abilities[CONFIG.DND5E.defaultAbilities.initiative];
+    const defaultAbility = CONFIG.VARLYN5E.abilities[CONFIG.VARLYN5E.defaultAbilities.initiative];
     context.abilityOptions = [
-      { value: "", label: _loc("DND5E.DefaultSpecific", { default: defaultAbility.label.toLowerCase() }) },
+      { value: "", label: _loc("VARLYN5E.DefaultSpecific", { default: defaultAbility.label.toLowerCase() }) },
       { rule: true },
-      ...Object.entries(CONFIG.DND5E.abilities).map(([value, { label }]) => ({ value, label }))
+      ...Object.entries(CONFIG.VARLYN5E.abilities).map(([value, { label }]) => ({ value, label }))
     ];
     context.data = source.system.attributes.init;
     context.fields = this.document.system.schema.fields.attributes.fields.init.fields;
 
-    const ability = this.document.system.attributes.init.ability || CONFIG.DND5E.defaultAbilities.initiative;
-    const abilityConfig = CONFIG.DND5E.abilities[ability];
+    const ability = this.document.system.attributes.init.ability || CONFIG.VARLYN5E.defaultAbilities.initiative;
+    const abilityConfig = CONFIG.VARLYN5E.abilities[ability];
     context.ability = {
-      label: _loc("DND5E.AbilityCheckConfigure", { ability: abilityConfig.label }),
+      label: _loc("VARLYN5E.AbilityCheckConfigure", { ability: abilityConfig.label }),
       global: {
         field: this.document.system.schema.fields.bonuses?.fields.abilities.fields.check,
         name: "system.bonuses.abilities.check",
@@ -68,7 +68,7 @@ export default class InitiativeConfig extends BaseConfigSheet {
 
     context.flags = {
       alert: {
-        field: new BooleanField({ label: _loc("DND5E.FlagsAlert") }),
+        field: new BooleanField({ label: _loc("VARLYN5E.FlagsAlert") }),
         name: "flags.dnd5e.initiativeAlert",
         value: source.flags.dnd5e?.initiativeAlert
       }

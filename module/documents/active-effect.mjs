@@ -69,7 +69,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   /* -------------------------------------------- */
 
   /** @inheritdoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.ACTIVEEFFECT"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.ACTIVEEFFECT"];
 
   /* -------------------------------------------- */
   /*  Properties                                  */
@@ -363,7 +363,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    */
   _prepareFlagChange(actor, change) {
     const { key, value } = change;
-    const data = CONFIG.DND5E.characterFlags[key.replace("flags.dnd5e.", "")];
+    const data = CONFIG.VARLYN5E.characterFlags[key.replace("flags.dnd5e.", "")];
     if ( !data ) return change;
 
     // Set flag to initial value if it isn't present
@@ -410,14 +410,14 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    * @protected
    */
   _prepareExhaustionLevel() {
-    const config = CONFIG.DND5E.conditionTypes.exhaustion;
+    const config = CONFIG.VARLYN5E.conditionTypes.exhaustion;
     let level = this.getFlag("dnd5e", "exhaustionLevel");
     if ( !Number.isFinite(level) ) level = 1;
     this.img = this.constructor._getExhaustionImage(level);
-    this.name = `${_loc("DND5E.Exhaustion")} ${level}`;
+    this.name = `${_loc("VARLYN5E.Exhaustion")} ${level}`;
     if ( level >= config.levels ) {
       this.statuses.add("dead");
-      CONFIG.DND5E.statusEffects.dead.statuses?.forEach(s => this.statuses.add(s));
+      CONFIG.VARLYN5E.statusEffects.dead.statuses?.forEach(s => this.statuses.add(s));
     }
   }
 
@@ -572,7 +572,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
 
     // Enchantments cannot be added directly to actors
     if ( (this.type === "enchantment") && (this.parent instanceof Actor) ) {
-      ui.notifications.error("DND5E.ENCHANTMENT.Warning.NotOnActor");
+      ui.notifications.error("VARLYN5E.ENCHANTMENT.Warning.NotOnActor");
       return false;
     }
 
@@ -646,7 +646,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
       if ( newEncumbrance === originalEncumbrance ) return;
       const increase = !originalEncumbrance || ((originalEncumbrance === "encumbered") && newEncumbrance)
         || (newEncumbrance === "exceedingCarryingCapacity");
-      if ( !increase ) this.name = CONFIG.DND5E.encumbrance.effects[originalEncumbrance].name;
+      if ( !increase ) this.name = CONFIG.VARLYN5E.encumbrance.effects[originalEncumbrance].name;
       this._displayScrollingStatus(increase);
       this.name = name;
     }
@@ -658,7 +658,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   async _preDelete(options, user) {
     const dependents = this.getDependents();
     if ( dependents.length && !game.users.activeGM ) {
-      ui.notifications.warn("DND5E.ConcentrationBreakWarning");
+      ui.notifications.warn("VARLYN5E.ConcentrationBreakWarning");
       return false;
     }
     return super._preDelete(options, user);
@@ -702,8 +702,8 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
     const statusEffect = CONFIG.statusEffects.find(e => e.id === CONFIG.specialStatusEffects.CONCENTRATING);
     const effectData = foundry.utils.mergeObject({
       ...statusEffect,
-      name: `${_loc("EFFECT.DND5E.StatusConcentrating")}: ${item.name}`,
-      description: `<p>${_loc("DND5E.ConcentratingOn", {
+      name: `${_loc("EFFECT.VARLYN5E.StatusConcentrating")}: ${item.name}`,
+      description: `<p>${_loc("VARLYN5E.ConcentratingOn", {
         name: item.name,
         type: _loc(`TYPES.Item.${item.type}`)
       })}</p><hr><p>@Embed[${item.uuid} inline]</p>`,
@@ -761,8 +761,8 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    */
   static onRenderActiveEffectConfig(app, html, context) {
     const element = new foundry.data.fields.SetField(new foundry.data.fields.StringField(), {}).toFormGroup({
-      label: _loc("DND5E.CONDITIONS.RiderConditions.label"),
-      hint: _loc("DND5E.CONDITIONS.RiderConditions.hint")
+      label: _loc("VARLYN5E.CONDITIONS.RiderConditions.label"),
+      hint: _loc("VARLYN5E.CONDITIONS.RiderConditions.hint")
     }, {
       name: "flags.dnd5e.riders.statuses",
       value: app.document.getFlag("dnd5e", "riders.statuses") ?? [],
@@ -774,7 +774,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
     // Add tooltip with link to wiki for effects/enchantments
     const helpIconElement = document.createElement("i");
     helpIconElement.classList.add("fa-solid", "fa-circle-question");
-    const tooltipText = _loc("DND5E.ACTIVEEFFECT.AttributeKeyTooltip", {
+    const tooltipText = _loc("VARLYN5E.ACTIVEEFFECT.AttributeKeyTooltip", {
       url: app.document.type === "enchantment"
         ? "https://github.com/foundryvtt/dnd5e/wiki/Enchantment"
         : "https://github.com/foundryvtt/dnd5e/wiki/Active-Effect-Guide"
@@ -812,7 +812,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    * @returns {string}
    */
   static _getExhaustionImage(level) {
-    const { img } = CONFIG.DND5E.conditionTypes.exhaustion;
+    const { img } = CONFIG.VARLYN5E.conditionTypes.exhaustion;
     const split = img.split(".");
     const ext = split.pop();
     const path = split.join(".");
@@ -851,7 +851,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
     event.stopPropagation();
     if ( event.button === 0 ) level++;
     else level--;
-    const max = CONFIG.DND5E.conditionTypes.exhaustion.levels;
+    const max = CONFIG.VARLYN5E.conditionTypes.exhaustion.levels;
     actor.update({ "system.attributes.exhaustion": Math.clamp(level, 0, max) });
   }
 
@@ -872,23 +872,23 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
     }
     const choices = effects.reduce((acc, effect) => {
       const data = effect.getFlag("dnd5e", "item");
-      acc[effect.id] = data?.name ?? actor.items.get(data?.id)?.name ?? _loc("DND5E.ConcentratingItemless");
+      acc[effect.id] = data?.name ?? actor.items.get(data?.id)?.name ?? _loc("VARLYN5E.ConcentratingItemless");
       return acc;
     }, {});
     const options = HandlebarsHelpers.selectOptions(choices, { hash: { sort: true } });
     const content = `
-    <p>${_loc("DND5E.ConcentratingEndChoice")}</p>
+    <p>${_loc("VARLYN5E.ConcentratingEndChoice")}</p>
     <div class="form-group">
-      <label>${_loc("DND5E.SOURCE.FIELDS.source.label")}</label>
+      <label>${_loc("VARLYN5E.SOURCE.FIELDS.source.label")}</label>
       <div class="form-fields">
         <select name="source">${options}</select>
       </div>
     </div>`;
     foundry.applications.api.Dialog.prompt({
       content,
-      window: { title: _loc("DND5E.Concentration") },
+      window: { title: _loc("VARLYN5E.Concentration") },
       ok: {
-        label: _loc("DND5E.Confirm"),
+        label: _loc("VARLYN5E.Confirm"),
         callback: (event, button, dialog) => {
           const source = new foundry.applications.ux.FormDataExtended(button.form).object.source;
           if ( source ) actor.endConcentration(source);
@@ -952,7 +952,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    */
   static getDefaultArtwork(effectData={}) {
     const type = effectData.type !== "base" ? effectData.type : "standard";
-    return { img: CONFIG.DND5E.defaultArtwork.ActiveEffect[type] ?? this.DEFAULT_ICON };
+    return { img: CONFIG.VARLYN5E.defaultArtwork.ActiveEffect[type] ?? this.DEFAULT_ICON };
   }
 
   /* -------------------------------------------- */
@@ -984,11 +984,11 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    */
   async richTooltip(enrichmentOptions={}) {
     let properties = [];
-    if ( this.isSuppressed ) properties.push("DND5E.EffectType.Unavailable");
-    else if ( this.disabled ) properties.push("DND5E.EffectType.Inactive");
-    else if ( this.isTemporary ) properties.push("DND5E.EffectType.Temporary");
-    else properties.push("DND5E.EffectType.Passive");
-    if ( this.type === "enchantment" ) properties.push("DND5E.ENCHANTMENT.Label");
+    if ( this.isSuppressed ) properties.push("VARLYN5E.EffectType.Unavailable");
+    else if ( this.disabled ) properties.push("VARLYN5E.EffectType.Inactive");
+    else if ( this.isTemporary ) properties.push("VARLYN5E.EffectType.Temporary");
+    else properties.push("VARLYN5E.EffectType.Passive");
+    if ( this.type === "enchantment" ) properties.push("VARLYN5E.ENCHANTMENT.Label");
     properties = properties.map(p => _loc(p));
     properties.unshift(...this.statuses.map(id => CONFIG.statusEffects[id]?.name).filter(_ => _));
 

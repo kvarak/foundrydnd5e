@@ -46,7 +46,7 @@ export default class EquipmentData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.VEHICLE.MOUNTABLE", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.VEHICLE.MOUNTABLE", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -54,16 +54,16 @@ export default class EquipmentData extends ItemDataModel.mixin(
   static defineSchema() {
     return this.mergeSchema(super.defineSchema(), {
       armor: new SchemaField({
-        value: new NumberField({ required: true, integer: true, min: 0, label: "DND5E.ArmorClass" }),
-        magicalBonus: new FormulaField({ deterministic: true, label: "DND5E.MagicalBonus" }),
-        dex: new NumberField({ required: true, integer: true, label: "DND5E.ItemEquipmentDexMod" })
+        value: new NumberField({ required: true, integer: true, min: 0, label: "VARLYN5E.ArmorClass" }),
+        magicalBonus: new FormulaField({ deterministic: true, label: "VARLYN5E.MagicalBonus" }),
+        dex: new NumberField({ required: true, integer: true, label: "VARLYN5E.ItemEquipmentDexMod" })
       }),
       proficient: new NumberField({
-        required: true, min: 0, max: 1, integer: true, initial: null, label: "DND5E.ProficiencyLevel"
+        required: true, min: 0, max: 1, integer: true, initial: null, label: "VARLYN5E.ProficiencyLevel"
       }),
-      properties: new SetField(new StringField(), { label: "DND5E.ItemEquipmentProperties" }),
-      strength: new NumberField({ required: true, integer: true, min: 0, label: "DND5E.ItemRequiredStr" }),
-      type: new ItemTypeField({ subtype: false }, { label: "DND5E.ItemEquipmentType" })
+      properties: new SetField(new StringField(), { label: "VARLYN5E.ItemEquipmentProperties" }),
+      strength: new NumberField({ required: true, integer: true, min: 0, label: "VARLYN5E.ItemRequiredStr" }),
+      type: new ItemTypeField({ subtype: false }, { label: "VARLYN5E.ItemEquipmentType" })
     });
   }
 
@@ -82,10 +82,10 @@ export default class EquipmentData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["type", {
-        label: "DND5E.ItemEquipmentType",
+        label: "VARLYN5E.ItemEquipmentType",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.equipmentTypes,
+          choices: CONFIG.VARLYN5E.equipmentTypes,
           keyPath: "system.type.value"
         }
       }],
@@ -123,7 +123,7 @@ export default class EquipmentData extends ItemDataModel.mixin(
     return [
       this.type.label,
       (this.isArmor || this.isMountable) ? (this.parent.labels?.armor ?? null) : null,
-      this.properties.has("stealthDisadvantage") ? _loc("DND5E.ITEM.Property.StealthDisadvantage") : null
+      this.properties.has("stealthDisadvantage") ? _loc("VARLYN5E.ITEM.Property.StealthDisadvantage") : null
     ];
   }
 
@@ -136,7 +136,7 @@ export default class EquipmentData extends ItemDataModel.mixin(
   get cardProperties() {
     return [
       (this.isArmor || this.isMountable) ? (this.parent.labels?.armor ?? null) : null,
-      this.properties.has("stealthDisadvantage") ? _loc("DND5E.ITEM.Property.StealthDisadvantage") : null
+      this.properties.has("stealthDisadvantage") ? _loc("VARLYN5E.ITEM.Property.StealthDisadvantage") : null
     ];
   }
 
@@ -147,7 +147,7 @@ export default class EquipmentData extends ItemDataModel.mixin(
    * @type {boolean}
    */
   get isArmor() {
-    return this.type.value in CONFIG.DND5E.armorTypes;
+    return this.type.value in CONFIG.VARLYN5E.armorTypes;
   }
 
   /* -------------------------------------------- */
@@ -165,7 +165,7 @@ export default class EquipmentData extends ItemDataModel.mixin(
 
   /** @override */
   static get itemCategories() {
-    return CONFIG.DND5E.equipmentTypes;
+    return CONFIG.VARLYN5E.equipmentTypes;
   }
 
   /* -------------------------------------------- */
@@ -179,7 +179,7 @@ export default class EquipmentData extends ItemDataModel.mixin(
     const actor = this.parent.actor;
     if ( !actor ) return 0;
     if ( actor.system.isNPC ) return 1; // NPCs are always considered proficient with any armor in their stat block.
-    const config = CONFIG.DND5E.armorProficienciesMap;
+    const config = CONFIG.VARLYN5E.armorProficienciesMap;
     const itemProf = config[this.type.value];
     const actorProfs = actor.system.traits?.armorProf?.value ?? new Set();
     const isProficient = (itemProf === true) || actorProfs.has(itemProf) || actorProfs.has(this.type.baseItem);
@@ -283,14 +283,14 @@ export default class EquipmentData extends ItemDataModel.mixin(
     this.prepareMountableData();
     const magicalBonus = simplifyBonus(this.armor.magicalBonus, this.parent.getRollData());
     if ( this.magicAvailable && magicalBonus ) this.armor.value += magicalBonus;
-    this.type.label = CONFIG.DND5E.equipmentTypes[this.type.value]
+    this.type.label = CONFIG.VARLYN5E.equipmentTypes[this.type.value]
       ?? _loc(CONFIG.Item.typeLabels.equipment);
     this.type.identifier = this.type.value === "shield"
-      ? CONFIG.DND5E.shieldIds[this.type.baseItem]
-      : CONFIG.DND5E.armorIds[this.type.baseItem];
+      ? CONFIG.VARLYN5E.shieldIds[this.type.baseItem]
+      : CONFIG.VARLYN5E.armorIds[this.type.baseItem];
 
     const labels = this.parent.labels ??= {};
-    labels.armor = this.armor.value ? `${this.armor.value} ${_loc("DND5E.AC")}` : "";
+    labels.armor = this.armor.value ? `${this.armor.value} ${_loc("VARLYN5E.AC")}` : "";
   }
 
   /* -------------------------------------------- */
@@ -322,14 +322,14 @@ export default class EquipmentData extends ItemDataModel.mixin(
 
     context.parts = ["dnd5e.details-equipment", "dnd5e.field-uses"];
     context.equipmentTypeOptions = [
-      ...Object.entries(CONFIG.DND5E.miscEquipmentTypes).map(([value, label]) => ({ value, label })),
-      ...Object.entries(CONFIG.DND5E.armorTypes).map(([value, label]) => ({ value, label, group: "DND5E.Armor" }))
+      ...Object.entries(CONFIG.VARLYN5E.miscEquipmentTypes).map(([value, label]) => ({ value, label })),
+      ...Object.entries(CONFIG.VARLYN5E.armorTypes).map(([value, label]) => ({ value, label, group: "VARLYN5E.Armor" }))
     ];
     context.hasDexModifier = this.isArmor && (this.type.value !== "shield");
     if ( this.armor.value && (this.isArmor || (this.type.value === "shield")) ) {
       context.properties.active.shift();
       context.info = [{
-        label: "DND5E.ArmorClass",
+        label: "VARLYN5E.ArmorClass",
         classes: "info-lg",
         value: this.type.value === "shield" ? varlyn5e.utils.formatModifier(this.armor.value) : this.armor.value
       }];

@@ -46,9 +46,9 @@ export default class TargetField extends SchemaField {
    */
   static prepareData(rollData, labels) {
     this.target.affects.scalar = this.target.affects.type
-      && (CONFIG.DND5E.individualTargetTypes[this.target.affects.type]?.scalar !== false);
+      && (CONFIG.VARLYN5E.individualTargetTypes[this.target.affects.type]?.scalar !== false);
     if ( this.target.affects.scalar ) {
-      prepareFormulaValue(this, "target.affects.count", "DND5E.TARGET.FIELDS.target.affects.count.label", rollData);
+      prepareFormulaValue(this, "target.affects.count", "VARLYN5E.TARGET.FIELDS.target.affects.count.label", rollData);
     } else this.target.affects.count = null;
 
     const dimensions = this.target.template.dimensions = TargetField.templateDimensions(this.target.template.type);
@@ -57,10 +57,10 @@ export default class TargetField extends SchemaField {
       this.target.template.count ||= "1";
       if ( dimensions.width ) this.target.template.width ||= "5";
       if ( dimensions.height ) this.target.template.height ||= "5";
-      prepareFormulaValue(this, "target.template.count", "DND5E.TARGET.FIELDS.target.template.count.label", rollData);
-      prepareFormulaValue(this, "target.template.size", "DND5E.TARGET.FIELDS.target.template.size.label", rollData);
-      prepareFormulaValue(this, "target.template.width", "DND5E.TARGET.FIELDS.target.template.width.label", rollData);
-      prepareFormulaValue(this, "target.template.height", "DND5E.TARGET.FIELDS.target.template.height.label", rollData);
+      prepareFormulaValue(this, "target.template.count", "VARLYN5E.TARGET.FIELDS.target.template.count.label", rollData);
+      prepareFormulaValue(this, "target.template.size", "VARLYN5E.TARGET.FIELDS.target.template.size.label", rollData);
+      prepareFormulaValue(this, "target.template.width", "VARLYN5E.TARGET.FIELDS.target.template.width.label", rollData);
+      prepareFormulaValue(this, "target.template.height", "VARLYN5E.TARGET.FIELDS.target.template.height.label", rollData);
     } else {
       this.target.template.count = null;
       this.target.template.size = null;
@@ -71,28 +71,28 @@ export default class TargetField extends SchemaField {
     const pr = getPluralRules();
 
     // Generate the template labels
-    const templateConfig = CONFIG.DND5E.areaTargetTypes[this.target.template.type];
+    const templateConfig = CONFIG.VARLYN5E.areaTargetTypes[this.target.template.type];
     this.target.template.labels = {};
     if ( templateConfig ) {
       const parts = [];
       if ( this.target.template.count > 1 ) parts.push(`${this.target.template.count} ×`);
-      if ( this.target.template.units in CONFIG.DND5E.movementUnits ) {
+      if ( this.target.template.units in CONFIG.VARLYN5E.movementUnits ) {
         parts.push(formatLength(this.target.template.size, this.target.template.units));
       }
       this.target.template.labels.statblock = this.target.template.label = _loc(
         `${templateConfig.counted}.${pr.select(this.target.template.count || 1)}`, { number: parts.filterJoin(" ") }
       ).trim().capitalize();
 
-      const sizeUnit = CONFIG.DND5E.movementUnits[this.target.template.units]?.template ?? "";
+      const sizeUnit = CONFIG.VARLYN5E.movementUnits[this.target.template.units]?.template ?? "";
       if ( Object.keys(dimensions).length === 1 ) this.target.template.labels.size = _loc(
-        "DND5E.AreaOfEffect.Description.SizeSimple",
+        "VARLYN5E.AreaOfEffect.Description.SizeSimple",
         { number: formatNumber(this.target.template.size), unit: sizeUnit }
       );
       else this.target.template.labels.size = game.i18n.getListFormatter({ type: "unit" })
         .format(Object.entries(dimensions).map(([k, l]) =>
-          _loc("DND5E.AreaOfEffect.Description.SizeType", {
+          _loc("VARLYN5E.AreaOfEffect.Description.SizeType", {
             number: formatNumber(this.target.template[k]), unit: sizeUnit,
-            type: _loc(l.replace("DND5E.AreaOfEffect.Size.", "DND5E.AreaOfEffect.Description."))
+            type: _loc(l.replace("VARLYN5E.AreaOfEffect.Size.", "VARLYN5E.AreaOfEffect.Description."))
           })
         ));
 
@@ -108,11 +108,11 @@ export default class TargetField extends SchemaField {
     } else this.target.template.label = "";
 
     // Generate the affects labels
-    const affectsConfig = CONFIG.DND5E.individualTargetTypes[this.target.affects.type];
+    const affectsConfig = CONFIG.VARLYN5E.individualTargetTypes[this.target.affects.type];
     this.target.affects.labels = {
       description: _loc(
-        `${this.target.affects.special ? "DND5E.TARGET.Type.Special.Counted"
-          : affectsConfig?.counted ?? "DND5E.TARGET.Type.Target.Counted"}.${this.target.affects.count
+        `${this.target.affects.special ? "VARLYN5E.TARGET.Type.Special.Counted"
+          : affectsConfig?.counted ?? "VARLYN5E.TARGET.Type.Target.Counted"}.${this.target.affects.count
           ? pr.select(this.target.affects.count) : this.target.template.type ? "each" : "any"}`,
         {
           number: formatNumber(this.target.affects.count, { words: true }),
@@ -122,11 +122,11 @@ export default class TargetField extends SchemaField {
       sheet: affectsConfig?.counted ? _loc(
         `${affectsConfig.counted}.${this.target.affects.count ? pr.select(this.target.affects.count) : "other"}`, {
           number: this.target.affects.count ? formatNumber(this.target.affects.count)
-            : _loc(`DND5E.TARGET.Count.${this.target.template.type ? "Every" : "Any"}`)
+            : _loc(`VARLYN5E.TARGET.Count.${this.target.template.type ? "Every" : "Any"}`)
         }
       ).trim().capitalize() : (affectsConfig?.label ?? ""),
       statblock: _loc(
-        `${affectsConfig?.counted ?? "DND5E.TARGET.Type.Target.Counted"}.${pr.select(this.target.affects.count || 1)}`,
+        `${affectsConfig?.counted ?? "VARLYN5E.TARGET.Type.Target.Counted"}.${pr.select(this.target.affects.count || 1)}`,
         { number: formatNumber(this.target.affects.count || 1, { words: true }) }
       )
     };
@@ -149,16 +149,16 @@ export default class TargetField extends SchemaField {
    * @returns {{ size: string, [width]: string, [height]: string }}
    */
   static templateDimensions(type) {
-    const sizes = CONFIG.DND5E.areaTargetTypes[type]?.sizes;
-    const dimensions = { size: "DND5E.AreaOfEffect.Size.Label" };
+    const sizes = CONFIG.VARLYN5E.areaTargetTypes[type]?.sizes;
+    const dimensions = { size: "VARLYN5E.AreaOfEffect.Size.Label" };
     if ( sizes ) {
-      if ( sizes.includes("radius") ) dimensions.size = "DND5E.AreaOfEffect.Size.Radius";
-      else if ( sizes.includes("length") ) dimensions.size = "DND5E.AreaOfEffect.Size.Length";
-      else if ( sizes.includes("width") ) dimensions.size = "DND5E.AreaOfEffect.Size.Width";
+      if ( sizes.includes("radius") ) dimensions.size = "VARLYN5E.AreaOfEffect.Size.Radius";
+      else if ( sizes.includes("length") ) dimensions.size = "VARLYN5E.AreaOfEffect.Size.Length";
+      else if ( sizes.includes("width") ) dimensions.size = "VARLYN5E.AreaOfEffect.Size.Width";
       const hasWidth = sizes.includes("width") && (sizes.includes("length") || sizes.includes("radius"));
-      if ( sizes.includes("thickness") ) dimensions.width = "DND5E.AreaOfEffect.Size.Thickness";
-      else if ( hasWidth ) dimensions.width = "DND5E.AreaOfEffect.Size.Width";
-      if ( sizes.includes("height") ) dimensions.height = "DND5E.AreaOfEffect.Size.Height";
+      if ( sizes.includes("thickness") ) dimensions.width = "VARLYN5E.AreaOfEffect.Size.Thickness";
+      else if ( hasWidth ) dimensions.width = "VARLYN5E.AreaOfEffect.Size.Width";
+      if ( sizes.includes("height") ) dimensions.height = "VARLYN5E.AreaOfEffect.Size.Height";
     }
     return dimensions;
   }

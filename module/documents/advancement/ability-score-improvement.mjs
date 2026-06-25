@@ -25,8 +25,8 @@ export default class AbilityScoreImprovementAdvancement extends Advancement {
       order: 20,
       icon: "icons/magic/symbols/star-solid-gold.webp",
       typeIcon: "systems/dnd5e/icons/svg/ability-score-improvement.svg",
-      title: _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.Title"),
-      hint: _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.Hint"),
+      title: _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Title"),
+      hint: _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.Hint"),
       apps: {
         config: AbilityScoreImprovementConfig,
         flow: AbilityScoreImprovementFlow
@@ -48,7 +48,7 @@ export default class AbilityScoreImprovementAdvancement extends Advancement {
 
   /** @inheritDoc */
   get _defaultTitle() {
-    if ( this.isEpicBoon ) return _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.TitleEpic");
+    if ( this.isEpicBoon ) return _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.TitleEpic");
     return super._defaultTitle;
   }
 
@@ -116,7 +116,7 @@ export default class AbilityScoreImprovementAdvancement extends Advancement {
    * @returns {boolean}
    */
   canImprove(ability) {
-    return CONFIG.DND5E.abilities[ability]?.improvement !== false;
+    return CONFIG.VARLYN5E.abilities[ability]?.improvement !== false;
   }
 
   /* -------------------------------------------- */
@@ -126,7 +126,7 @@ export default class AbilityScoreImprovementAdvancement extends Advancement {
   /** @inheritDoc */
   titleForLevel(level, { configMode=false }={}) {
     if ( this.value.selected !== "feat" ) return this.title;
-    return _loc("DND5E.Feature.Feat");
+    return _loc("VARLYN5E.Feature.Feat");
   }
 
   /* -------------------------------------------- */
@@ -141,11 +141,11 @@ export default class AbilityScoreImprovementAdvancement extends Advancement {
     else if ( configMode ) {
       const entries = Object.entries(this.configuration.fixed).map(([key, value]) => {
         if ( !value ) return null;
-        const name = CONFIG.DND5E.abilities[key]?.label ?? key;
+        const name = CONFIG.VARLYN5E.abilities[key]?.label ?? key;
         return `<span class="tag">${name} <strong>${formatter.format(value)}</strong></span>`;
       });
       if ( this.configuration.points ) entries.push(`<span class="tag">${
-        _loc("DND5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.label")}: <strong>${
+        _loc("VARLYN5E.ADVANCEMENT.AbilityScoreImprovement.FIELDS.points.label")}: <strong>${
         this.configuration.points}</strong></span>`
       );
       return entries.filterJoin("\n");
@@ -159,7 +159,7 @@ export default class AbilityScoreImprovementAdvancement extends Advancement {
 
     else if ( (this.value.type === "asi") && this.value.assignments ) {
       return Object.entries(this.value.assignments).reduce((html, [key, value]) => {
-        const name = CONFIG.DND5E.abilities[key]?.label ?? key;
+        const name = CONFIG.VARLYN5E.abilities[key]?.label ?? key;
         html += `<span class="tag">${name} <strong>${formatter.format(value)}</strong></span>\n`;
         return html;
       }, "");

@@ -14,7 +14,7 @@ export default class IdentifierField extends foundry.data.fields.StringField {
   /** @override */
   _validateType(value) {
     if ( !varlyn5e.utils.validators.isValidIdentifier(value, { allowType: this.allowType }) ) {
-      throw new Error(_loc("DND5E.IdentifierError"));
+      throw new Error(_loc("VARLYN5E.IdentifierError"));
     }
   }
 }

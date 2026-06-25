@@ -47,7 +47,7 @@ export default class ConsumableData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.CONSUMABLE", "DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.CONSUMABLE", "VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
@@ -61,7 +61,7 @@ export default class ConsumableData extends ItemDataModel.mixin(
       }),
       magicalBonus: new FormulaField({ deterministic: true }),
       properties: new SetField(new StringField()),
-      type: new ItemTypeField({ baseItem: false }, { label: "DND5E.ItemConsumableType" }),
+      type: new ItemTypeField({ baseItem: false }, { label: "VARLYN5E.ItemConsumableType" }),
       uses: new UsesField({
         autoDestroy: new BooleanField({ required: true })
       })
@@ -82,10 +82,10 @@ export default class ConsumableData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["type", {
-        label: "DND5E.ItemConsumableType",
+        label: "VARLYN5E.ItemConsumableType",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.consumableTypes,
+          choices: CONFIG.VARLYN5E.consumableTypes,
           keyPath: "system.type.value"
         }
       }],
@@ -122,7 +122,7 @@ export default class ConsumableData extends ItemDataModel.mixin(
   get chatProperties() {
     return [
       this.type.label,
-      this.hasLimitedUses ? `${this.uses.value}/${this.uses.max} ${_loc("DND5E.Charges")}` : null,
+      this.hasLimitedUses ? `${this.uses.value}/${this.uses.max} ${_loc("VARLYN5E.Charges")}` : null,
       this.priceLabel
     ];
   }
@@ -139,7 +139,7 @@ export default class ConsumableData extends ItemDataModel.mixin(
 
   /** @override */
   static get itemCategories() {
-    return CONFIG.DND5E.consumableTypes;
+    return CONFIG.VARLYN5E.consumableTypes;
   }
 
   /* -------------------------------------------- */
@@ -168,11 +168,11 @@ export default class ConsumableData extends ItemDataModel.mixin(
   /** @inheritDoc */
   get validProperties() {
     const valid = super.validProperties;
-    if ( this.type.value === "ammo" ) Object.entries(CONFIG.DND5E.itemProperties).forEach(([k, v]) => {
+    if ( this.type.value === "ammo" ) Object.entries(CONFIG.VARLYN5E.itemProperties).forEach(([k, v]) => {
       if ( v.isPhysical ) valid.add(k);
       valid.add("ret");
     });
-    else if ( this.type.value === "scroll" ) CONFIG.DND5E.validProperties.spell
+    else if ( this.type.value === "scroll" ) CONFIG.VARLYN5E.validProperties.spell
       .filter(p => p !== "material").forEach(p => valid.add(p));
     return valid;
   }
@@ -226,7 +226,7 @@ export default class ConsumableData extends ItemDataModel.mixin(
     this.prepareIdentifiable();
     this.preparePhysicalData();
     if ( !this.type.value ) return;
-    const config = CONFIG.DND5E.consumableTypes[this.type.value];
+    const config = CONFIG.VARLYN5E.consumableTypes[this.type.value];
     if ( config ) {
       this.type.label = config.subtypes?.[this.type.subtype] ?? config.label;
     } else {
@@ -263,7 +263,7 @@ export default class ConsumableData extends ItemDataModel.mixin(
     ];
 
     context.parts = ["dnd5e.details-consumable", "dnd5e.field-uses"];
-    context.damageTypes = Object.entries(CONFIG.DND5E.damageTypes).map(([value, { label }]) => {
+    context.damageTypes = Object.entries(CONFIG.VARLYN5E.damageTypes).map(([value, { label }]) => {
       return {
         value, label,
         selected: context.source.damage.base.types.includes?.(value) ?? context.source.damage.base.types.has(value)
@@ -272,9 +272,9 @@ export default class ConsumableData extends ItemDataModel.mixin(
     context.denominationOptions = [
       { value: "", label: "" },
       { rule: true },
-      ...CONFIG.DND5E.dieSteps.map(value => ({ value, label: `d${value}` }))
+      ...CONFIG.VARLYN5E.dieSteps.map(value => ({ value, label: `d${value}` }))
     ];
-    const itemTypes = CONFIG.DND5E.consumableTypes[this._source.type.value];
+    const itemTypes = CONFIG.VARLYN5E.consumableTypes[this._source.type.value];
     if ( itemTypes ) {
       context.itemType = itemTypes.label;
       context.itemSubtypes = itemTypes.subtypes;
@@ -306,7 +306,7 @@ export default class ConsumableData extends ItemDataModel.mixin(
   /** @inheritDoc */
   async getCraftCost(options={}) {
     const { days, gold } = await super.getCraftCost(options);
-    const { consumable, magic } = CONFIG.DND5E.crafting;
+    const { consumable, magic } = CONFIG.VARLYN5E.crafting;
     const { rarity } = this;
     if ( !this.properties.has("mgc") || !(rarity in magic) ) return { days, gold };
     const costs = magic[rarity];

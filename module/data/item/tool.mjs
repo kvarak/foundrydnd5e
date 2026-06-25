@@ -43,21 +43,21 @@ export default class ToolData extends ItemDataModel.mixin(
   /* -------------------------------------------- */
 
   /** @override */
-  static LOCALIZATION_PREFIXES = ["DND5E.SOURCE"];
+  static LOCALIZATION_PREFIXES = ["VARLYN5E.SOURCE"];
 
   /* -------------------------------------------- */
 
   /** @inheritDoc */
   static defineSchema() {
     return this.mergeSchema(super.defineSchema(), {
-      ability: new StringField({ required: true, blank: true, label: "DND5E.DefaultAbilityCheck" }),
-      bonus: new FormulaField({ required: true, label: "DND5E.ItemToolBonus" }),
-      chatFlavor: new StringField({ required: true, label: "DND5E.ChatFlavor" }),
+      ability: new StringField({ required: true, blank: true, label: "VARLYN5E.DefaultAbilityCheck" }),
+      bonus: new FormulaField({ required: true, label: "VARLYN5E.ItemToolBonus" }),
+      chatFlavor: new StringField({ required: true, label: "VARLYN5E.ChatFlavor" }),
       proficient: new NumberField({
-        required: true, initial: null, min: 0, max: 2, step: 0.5, label: "DND5E.ItemToolProficiency"
+        required: true, initial: null, min: 0, max: 2, step: 0.5, label: "VARLYN5E.ItemToolProficiency"
       }),
-      properties: new SetField(new StringField(), { label: "DND5E.ItemToolProperties" }),
-      type: new ItemTypeField({ subtype: false }, { label: "DND5E.ItemToolType" })
+      properties: new SetField(new StringField(), { label: "VARLYN5E.ItemToolProperties" }),
+      type: new ItemTypeField({ subtype: false }, { label: "VARLYN5E.ItemToolType" })
     });
   }
 
@@ -75,10 +75,10 @@ export default class ToolData extends ItemDataModel.mixin(
   static get compendiumBrowserFilters() {
     return new Map([
       ["type", {
-        label: "DND5E.ItemToolType",
+        label: "VARLYN5E.ItemToolType",
         type: "set",
         config: {
-          choices: CONFIG.DND5E.toolTypes,
+          choices: CONFIG.VARLYN5E.toolTypes,
           keyPath: "system.type.value"
         }
       }],
@@ -113,7 +113,7 @@ export default class ToolData extends ItemDataModel.mixin(
    * @type {string[]}
    */
   get chatProperties() {
-    return [CONFIG.DND5E.abilities[this.ability]?.label];
+    return [CONFIG.VARLYN5E.abilities[this.ability]?.label];
   }
 
   /* -------------------------------------------- */
@@ -123,7 +123,7 @@ export default class ToolData extends ItemDataModel.mixin(
    * @type {string[]}
    */
   get cardProperties() {
-    return [CONFIG.DND5E.abilities[this.ability]?.label];
+    return [CONFIG.VARLYN5E.abilities[this.ability]?.label];
   }
 
   /* -------------------------------------------- */
@@ -140,7 +140,7 @@ export default class ToolData extends ItemDataModel.mixin(
 
   /** @override */
   static get itemCategories() {
-    return CONFIG.DND5E.toolTypes;
+    return CONFIG.VARLYN5E.toolTypes;
   }
 
   /* -------------------------------------------- */
@@ -191,8 +191,8 @@ export default class ToolData extends ItemDataModel.mixin(
     this.prepareDescriptionData();
     this.prepareIdentifiable();
     this.preparePhysicalData();
-    this.type.label = CONFIG.DND5E.toolTypes[this.type.value] ?? _loc(CONFIG.Item.typeLabels.tool);
-    this.type.identifier = CONFIG.DND5E.tools[this.type.baseItem]?.id;
+    this.type.label = CONFIG.VARLYN5E.toolTypes[this.type.value] ?? _loc(CONFIG.Item.typeLabels.tool);
+    this.type.identifier = CONFIG.VARLYN5E.tools[this.type.baseItem]?.id;
   }
 
   /* -------------------------------------------- */
@@ -234,7 +234,7 @@ export default class ToolData extends ItemDataModel.mixin(
     this.preCreateGear(data, options, user);
     if ( this.activities.size ) return;
 
-    const activityData = new CONFIG.DND5E.activityTypes.check.documentClass({}, { parent: this.parent }).toObject();
+    const activityData = new CONFIG.VARLYN5E.activityTypes.check.documentClass({}, { parent: this.parent }).toObject();
     this.parent.updateSource({ [`system.activities.${activityData._id}`]: activityData });
   }
 

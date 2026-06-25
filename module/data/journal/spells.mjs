@@ -19,28 +19,28 @@ export default class SpellListJournalPageData extends foundry.abstract.TypeDataM
   static defineSchema() {
     return {
       type: new StringField({
-        initial: "class", label: "JOURNALENTRYPAGE.DND5E.SpellList.Type.Label"
+        initial: "class", label: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Type.Label"
       }),
-      identifier: new IdentifierField({ label: "DND5E.Identifier" }),
+      identifier: new IdentifierField({ label: "VARLYN5E.Identifier" }),
       grouping: new StringField({
         initial: "level", choices: this.GROUPING_MODES,
-        label: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.Label",
-        hint: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.Hint"
+        label: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.Label",
+        hint: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.Hint"
       }),
       description: new SchemaField({
-        value: new HTMLField({ textSearch: true, label: "DND5E.Description" })
+        value: new HTMLField({ textSearch: true, label: "VARLYN5E.Description" })
       }),
-      spells: new SetField(new StringField(), { label: "DND5E.ItemTypeSpellPl" }),
+      spells: new SetField(new StringField(), { label: "VARLYN5E.ItemTypeSpellPl" }),
       unlinkedSpells: new ArrayField(new SchemaField({
         _id: new DocumentIdField({ initial: () => foundry.utils.randomID() }),
-        identifier: new IdentifierField({ label: "DND5E.Identifier" }),
+        identifier: new IdentifierField({ label: "VARLYN5E.Identifier" }),
         name: new StringField({ required: true, label: "DOCUMENT.FIELDS.name.label" }),
         system: new SchemaField({
-          level: new NumberField({ min: 0, integer: true, label: "DND5E.Level" }),
-          school: new StringField({ label: "DND5E.School" })
+          level: new NumberField({ min: 0, integer: true, label: "VARLYN5E.Level" }),
+          school: new StringField({ label: "VARLYN5E.School" })
         }),
         source: new SourceField({license: false, revision: false, rules: false, uuid: new StringField()})
-      }), { label: "JOURNALENTRYPAGE.DND5E.SpellList.UnlinkedSpells.Label" })
+      }), { label: "JOURNALENTRYPAGE.VARLYN5E.SpellList.UnlinkedSpells.Label" })
     };
   }
 
@@ -51,10 +51,10 @@ export default class SpellListJournalPageData extends foundry.abstract.TypeDataM
    * @enum {string}
    */
   static GROUPING_MODES = {
-    none: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.None",
-    alphabetical: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.Alphabetical",
-    level: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.Level",
-    school: "JOURNALENTRYPAGE.DND5E.SpellList.Grouping.School"
+    none: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.None",
+    alphabetical: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.Alphabetical",
+    level: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.Level",
+    school: "JOURNALENTRYPAGE.VARLYN5E.SpellList.Grouping.School"
   };
 
   /* -------------------------------------------- */

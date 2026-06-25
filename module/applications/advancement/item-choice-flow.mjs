@@ -104,7 +104,7 @@ export default class ItemChoiceFlow extends ItemGrantFlow {
     for ( const level of Array.fromRange(this.level) ) {
       const added = value.added[level];
       if ( added ) context.sections.set(level, {
-        header: _loc(`DND5E.AdvancementLevel${level === "0" ? "AnyHeader" : "Header"}`, { level }),
+        header: _loc(`VARLYN5E.AdvancementLevel${level === "0" ? "AnyHeader" : "Header"}`, { level }),
         items: Object.entries(added).map(([id, uuid]) => {
           const { name, img } = actor.items.get(id) ?? fromUuidSync(uuid);
           previouslySelected.add(uuid);
@@ -145,7 +145,7 @@ export default class ItemChoiceFlow extends ItemGrantFlow {
     const removed = counts.replaced ? actor.items.get(value.replaced[this.level]?.original) : [];
 
     if ( counts.max ) context.sections.set(this.level, {
-      header: _loc("DND5E.ADVANCEMENT.ItemChoice.Chosen", counts),
+      header: _loc("VARLYN5E.ADVANCEMENT.ItemChoice.Chosen", counts),
       isCurrentLevel: true,
       items: [...this.pool, ...dropped].reduce((arr, item) => {
         const { id, name, img } = item;
@@ -179,14 +179,14 @@ export default class ItemChoiceFlow extends ItemGrantFlow {
     if ( config.type ) {
       let type = _loc(CONFIG.Item.typeLabels[config.type]);
       if ( (config.type === "feat") && config.restriction.type ) {
-        const typeConfig = CONFIG.DND5E.featureTypes[config.restriction.type];
+        const typeConfig = CONFIG.VARLYN5E.featureTypes[config.restriction.type];
         const subtype = typeConfig.subtypes?.[config.restriction.subtype];
         if ( subtype ) type = subtype;
         else type = typeConfig.label;
       }
-      context.selectLabel = _loc("DND5E.ADVANCEMENT.ItemChoice.Action.SelectSpecific", { type });
+      context.selectLabel = _loc("VARLYN5E.ADVANCEMENT.ItemChoice.Action.SelectSpecific", { type });
     } else {
-      context.selectLabel = _loc("DND5E.ADVANCEMENT.ItemChoice.Action.SelectGeneric");
+      context.selectLabel = _loc("VARLYN5E.ADVANCEMENT.ItemChoice.Action.SelectGeneric");
     }
 
     context.showBrowseButton = config.allowDrops && !counts.full;
@@ -225,7 +225,7 @@ export default class ItemChoiceFlow extends ItemGrantFlow {
     const config = this.advancement.configuration;
     const { current, max } = this.counts;
     if ( current >= max ) {
-      ui.notifications.warn("DND5E.ADVANCEMENT.ItemChoice.Warning.MaxSelected");
+      ui.notifications.warn("VARLYN5E.ADVANCEMENT.ItemChoice.Warning.MaxSelected");
       return;
     }
 
@@ -235,7 +235,7 @@ export default class ItemChoiceFlow extends ItemGrantFlow {
     if ( config.type ) {
       filters.locked.types = new Set([config.type]);
       if ( (config.type === "feat") && config.restriction.type ) {
-        const typeConfig = CONFIG.DND5E.featureTypes[config.restriction.type];
+        const typeConfig = CONFIG.VARLYN5E.featureTypes[config.restriction.type];
         const subtype = typeConfig.subtypes?.[config.restriction.subtype];
         filters.locked.additional.category = { [config.restriction.type]: 1 };
         if ( subtype ) filters.locked.additional.subtype = { [config.restriction.subtype]: 1 };
@@ -301,7 +301,7 @@ export default class ItemChoiceFlow extends ItemGrantFlow {
   async _handleForm(event, form, formData) {
     if ( event.target?.name === "ability" ) {
       await this.advancement.apply(this.level, { ability: event.target.value });
-    } else if ( event.target?.tagName === "DND5E-CHECKBOX" ) {
+    } else if ( event.target?.tagName === "VARLYN5E-CHECKBOX" ) {
       if ( event.target.checked ) await this.advancement.apply(this.level, { selected: [event.target.name] });
       else await this.advancement.reverse(this.level, { uuid: event.target.name });
     } else if ( event.target?.type === "radio" ) {
@@ -349,8 +349,8 @@ export default class ItemChoiceFlow extends ItemGrantFlow {
       const maxSlot = this._maxSpellSlotLevel();
       const minSlot = spellLevel === "availableNoCantrips" ? 1 : 0;
       if ( (item.system.level < minSlot) || (item.system.level > maxSlot) ) {
-        ui.notifications.error("DND5E.ADVANCEMENT.ItemChoice.Warning.SpellLevelAvailable", {
-          format: { level: CONFIG.DND5E.spellLevels[maxSlot] }
+        ui.notifications.error("VARLYN5E.ADVANCEMENT.ItemChoice.Warning.SpellLevelAvailable", {
+          format: { level: CONFIG.VARLYN5E.spellLevels[maxSlot] }
         });
         return null;
       }
@@ -374,8 +374,8 @@ export default class ItemChoiceFlow extends ItemGrantFlow {
 
     // For advancements on classes or subclasses, use the largest slot available for that class
     if ( spellcasting?.type ) {
-      const progression = Object.fromEntries(Object.keys(CONFIG.DND5E.spellcasting).map(k => [k, 0]));
-      const maxSpellLevel = Object.keys(CONFIG.DND5E.spellLevels).length - 1;
+      const progression = Object.fromEntries(Object.keys(CONFIG.VARLYN5E.spellcasting).map(k => [k, 0]));
+      const maxSpellLevel = Object.keys(CONFIG.VARLYN5E.spellLevels).length - 1;
       spells = Object.fromEntries(Array.fromRange(maxSpellLevel, 1).map(l => [`spell${l}`, {}]));
       Actor5e.computeClassProgression(progression, this.advancement.item, { spellcasting });
       Actor5e.prepareSpellcastingSlots(spells, spellcasting.type, progression);

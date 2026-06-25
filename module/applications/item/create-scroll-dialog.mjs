@@ -20,7 +20,7 @@ export default class CreateScrollDialog extends Dialog5e {
   static DEFAULT_OPTIONS = {
     classes: ["create-scroll"],
     window: {
-      title: "DND5E.Scroll.CreateScroll",
+      title: "VARLYN5E.Scroll.CreateScroll",
       icon: "fa-solid fa-scroll"
     },
     form: {
@@ -31,7 +31,7 @@ export default class CreateScrollDialog extends Dialog5e {
     },
     buttons: [{
       action: "create",
-      label: "DND5E.Scroll.CreateScroll",
+      label: "VARLYN5E.Scroll.CreateScroll",
       icon: "fa-solid fa-check",
       default: true
     }],
@@ -90,31 +90,31 @@ export default class CreateScrollDialog extends Dialog5e {
     context.fields = [{
       field: new StringField({
         required: true, blank: false,
-        label: _loc("DND5E.Scroll.Explanation.Label"),
-        hint: _loc("DND5E.Scroll.Explanation.Hint")
+        label: _loc("VARLYN5E.Scroll.Explanation.Label"),
+        hint: _loc("VARLYN5E.Scroll.Explanation.Hint")
       }),
       name: "explanation",
       options: [
-        { value: "full", label: _loc("DND5E.Scroll.Explanation.Complete") },
-        { value: "reference", label: _loc("DND5E.Scroll.Explanation.Reference") },
-        { value: "none", label: _loc("DND5E.None") }
+        { value: "full", label: _loc("VARLYN5E.Scroll.Explanation.Complete") },
+        { value: "reference", label: _loc("VARLYN5E.Scroll.Explanation.Reference") },
+        { value: "none", label: _loc("VARLYN5E.None") }
       ],
       value: this.config.explanation ?? "reference"
     }, {
-      field: new NumberField({ label: _loc("DND5E.SpellLevel") }),
+      field: new NumberField({ label: _loc("VARLYN5E.SpellLevel") }),
       name: "level",
-      options: Object.entries(CONFIG.DND5E.spellLevels)
+      options: Object.entries(CONFIG.VARLYN5E.spellLevels)
         .map(([value, label]) => ({ value, label }))
         .filter(l => Number(l.value) >= this.spell.system.level),
       value: this.config.level ?? this.spell.system.level
     }];
     context.values = {
-      bonus: new NumberField({ label: _loc("DND5E.BonusAttack") }),
-      dc: new NumberField({ label: _loc("DND5E.Scroll.SaveDC") })
+      bonus: new NumberField({ label: _loc("VARLYN5E.BonusAttack") }),
+      dc: new NumberField({ label: _loc("VARLYN5E.Scroll.SaveDC") })
     };
     context.valuePlaceholders = {};
     for ( const level of Array.fromRange(this.config.level + 1).reverse() ) {
-      context.valuePlaceholders = CONFIG.DND5E.spellScrollValues[level];
+      context.valuePlaceholders = CONFIG.VARLYN5E.spellScrollValues[level];
       if ( context.valuePlaceholders ) break;
     }
     return context;

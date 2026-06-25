@@ -72,7 +72,7 @@ export default class RollTableSheet5e extends ApplicationV2Mixin(RollTableSheet,
       : this.isEditMode ? "view" : "edit";
     const button = this.element?.querySelector('[data-action="changeMode"]');
     if ( button ) {
-      const label = _loc(`DND5E.SheetMode${this.isEditMode ? "Edit" : "Play"}`);
+      const label = _loc(`VARLYN5E.SheetMode${this.isEditMode ? "Edit" : "Play"}`);
       button.checked = this.isEditMode;
       button.dataset.tooltip = label;
       button.setAttribute("aria-label", label);

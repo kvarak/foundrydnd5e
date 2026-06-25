@@ -41,7 +41,7 @@ export default class UsesField extends SchemaField {
    * @param {object} [labels]                         Object in which to insert generated labels.
    */
   static prepareData(rollData, labels) {
-    prepareFormulaValue(this, "uses.max", "DND5E.USES.FIELDS.uses.max.label", rollData);
+    prepareFormulaValue(this, "uses.max", "VARLYN5E.USES.FIELDS.uses.max.label", rollData);
     this.uses.value = this.uses.max ? Math.clamp(this.uses.max - this.uses.spent, 0, this.uses.max) : 0;
 
     const periods = [];
@@ -50,10 +50,10 @@ export default class UsesField extends SchemaField {
         recovery.formula ??= "6";
         recovery.type = "recoverAll";
         recovery.recharge = { options: UsesField.rechargeOptions };
-        if ( labels ) labels.recharge ??= `${_loc("DND5E.Recharge")} [${
+        if ( labels ) labels.recharge ??= `${_loc("VARLYN5E.Recharge")} [${
           recovery.formula}${parseInt(recovery.formula) < 6 ? "+" : ""}]`;
-      } else if ( recovery.period in CONFIG.DND5E.limitedUsePeriods ) {
-        const config = CONFIG.DND5E.limitedUsePeriods[recovery.period];
+      } else if ( recovery.period in CONFIG.VARLYN5E.limitedUsePeriods ) {
+        const config = CONFIG.VARLYN5E.limitedUsePeriods[recovery.period];
         periods.push(config.abbreviation ?? config.label);
       }
     }
@@ -76,7 +76,7 @@ export default class UsesField extends SchemaField {
   static get rechargeOptions() {
     return Array.fromRange(5, 2).reverse().map(min => ({
       value: min,
-      label: _loc("DND5E.USES.Recovery.Recharge.Range", {
+      label: _loc("VARLYN5E.USES.Recovery.Recharge.Range", {
         range: min === 6 ? formatNumber(6) : formatRange(min, 6)
       })
     }));
@@ -95,7 +95,7 @@ export default class UsesField extends SchemaField {
     if ( (this.activation?.type === "legendary") || (this.activation?.type === "mythic") ) {
       if ( this.activation.value < 2 ) return "";
       const pr = getPluralRules();
-      return _loc(`DND5E.NPC.ActionCostCounted.${pr.select(this.activation.value)}`, {
+      return _loc(`VARLYN5E.NPC.ActionCostCounted.${pr.select(this.activation.value)}`, {
         number: formatNumber(this.activation.value)
       });
     }
@@ -104,22 +104,22 @@ export default class UsesField extends SchemaField {
     const recovery = this.uses.recovery[0];
 
     // Ignore combat & special recovery periods
-    const type = CONFIG.DND5E.limitedUsePeriods[recovery.period]?.type;
+    const type = CONFIG.VARLYN5E.limitedUsePeriods[recovery.period]?.type;
     if ( (type === "combat") || (type === "special") ) return "";
 
     // Recharge X–Y
     if ( recovery.period === "recharge" ) {
       const value = parseInt(recovery.formula);
-      return `${_loc("DND5E.Recharge")} ${value === 6 ? "6" : `${value}–6`}`;
+      return `${_loc("VARLYN5E.Recharge")} ${value === 6 ? "6" : `${value}–6`}`;
     }
 
     // Recharge after a Short or Long Rest
     if ( ["lr", "sr"].includes(recovery.period) && (this.uses.max === 1) ) {
-      return _loc(`DND5E.Recharge${recovery.period === "sr" ? "Short" : "Long"}`);
+      return _loc(`VARLYN5E.Recharge${recovery.period === "sr" ? "Short" : "Long"}`);
     }
 
     // X/Day
-    const period = CONFIG.DND5E.limitedUsePeriods[recovery.period === "sr" ? "sr" : "day"]?.label ?? "";
+    const period = CONFIG.VARLYN5E.limitedUsePeriods[recovery.period === "sr" ? "sr" : "day"]?.label ?? "";
     if ( !period ) return "";
     return `${this.uses.max}/${period}`;
   }
@@ -173,7 +173,7 @@ export default class UsesField extends SchemaField {
         total = (await roll.evaluate()).total;
       } catch(err) {
         Hooks.onError("UsesField#recoverUses", err, {
-          msg: _loc("DND5E.ItemRecoveryFormulaWarning", {
+          msg: _loc("VARLYN5E.ItemRecoveryFormulaWarning", {
             name: item.name, formula: profile.formula, uuid: this.uuid ?? item.uuid
           }),
           log: "error",
@@ -235,9 +235,9 @@ export default class UsesField extends SchemaField {
     const rolls = await CONFIG.Dice.BasicRoll.buildConfigure(rollConfig, dialogConfig, messageConfig);
     await CONFIG.Dice.BasicRoll.buildEvaluate(rolls, rollConfig, messageConfig);
     if ( !rolls.length ) return;
-    messageConfig.data.flavor = _loc("DND5E.ItemRechargeCheck", {
+    messageConfig.data.flavor = _loc("VARLYN5E.ItemRechargeCheck", {
       name: this.name,
-      result: _loc(`DND5E.ItemRecharge${rolls[0].isSuccess ? "Success" : "Failure"}`)
+      result: _loc(`VARLYN5E.ItemRecharge${rolls[0].isSuccess ? "Success" : "Failure"}`)
     });
     await CONFIG.Dice.BasicRoll.buildPost(rolls, rollConfig, messageConfig);
 

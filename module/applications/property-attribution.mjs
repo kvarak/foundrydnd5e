@@ -101,11 +101,11 @@ export default class PropertyAttribution extends Application5e {
   getPropertyLabel(property) {
     const parts = property.split(".");
     if ( parts[0] === "abilities" && parts[1] ) {
-      return CONFIG.DND5E.abilities[parts[1]]?.label ?? property;
-    } else if ( (property === "attributes.ac.dex") && CONFIG.DND5E.abilities.dex ) {
-      return CONFIG.DND5E.abilities.dex.label;
+      return CONFIG.VARLYN5E.abilities[parts[1]]?.label ?? property;
+    } else if ( (property === "attributes.ac.dex") && CONFIG.VARLYN5E.abilities.dex ) {
+      return CONFIG.VARLYN5E.abilities.dex.label;
     } else if ( (parts[0] === "prof") || (property === "attributes.prof") ) {
-      return _loc("DND5E.Proficiency");
+      return _loc("VARLYN5E.Proficiency");
     }
     return property;
   }

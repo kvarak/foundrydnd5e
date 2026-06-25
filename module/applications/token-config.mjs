@@ -46,7 +46,7 @@ export class TokenConfig5e extends foundry.applications.sheets.TokenConfig {
       return arr;
     }, []) ?? [];
     if ( items.length ) {
-      const group = _loc("DND5E.ConsumeCharges");
+      const group = _loc("VARLYN5E.ConsumeCharges");
       items.sort(([, a], [, b]) => a.localeCompare(b, game.i18n.lang));
       attributes.push(...items.map(([value, label]) => ({ group, value, label })));
     }
@@ -113,11 +113,11 @@ export class TokenConfig5e extends foundry.applications.sheets.TokenConfig {
     // Surface a notice atop the Vision tab linking to the senses config.
     const tab = html.querySelector('[data-application-part="vision"]');
     if ( !tab || tab.querySelector(".sense-sync-notice") ) return;
-    const link = `<a data-action="editSenses">${_loc("SETTINGS.DND5E.AUTOMATION.SenseVision.Senses")}</a>`;
+    const link = `<a data-action="editSenses">${_loc("SETTINGS.VARLYN5E.AUTOMATION.SenseVision.Senses")}</a>`;
     const notice = document.createElement("p");
     notice.className = "hint sense-sync-notice";
     notice.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${
-      _loc("SETTINGS.DND5E.AUTOMATION.SenseVision.Notice", { senses: link })}`;
+      _loc("SETTINGS.VARLYN5E.AUTOMATION.SenseVision.Notice", { senses: link })}`;
     notice.querySelector("[data-action=editSenses]")?.addEventListener("click", () => {
       new MovementSensesConfig({ document: actor, type: "senses" }).render({ force: true });
     });

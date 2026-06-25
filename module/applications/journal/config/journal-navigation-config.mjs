@@ -16,7 +16,7 @@ export default class JournalNavigationConfig extends DocumentSheet5e {
       width: 400
     },
     window: {
-      title: "DND5E.JOURNALENTRY.Navigation.Title"
+      title: "VARLYN5E.JOURNALENTRY.Navigation.Title"
     }
   };
 
@@ -58,7 +58,7 @@ export default class JournalNavigationConfig extends DocumentSheet5e {
     });
     context.fields = ["previous", "up", "next"].map(name => ({
       field: new StringField(),
-      label: _loc(`DND5E.JOURNALENTRY.Navigation.${name.capitalize()}`),
+      label: _loc(`VARLYN5E.JOURNALENTRY.Navigation.${name.capitalize()}`),
       name: `flags.dnd5e.navigation.${name}`,
       options: entryOptions,
       value: data[name]

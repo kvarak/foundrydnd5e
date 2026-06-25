@@ -133,7 +133,7 @@ export default function ApplicationV2Mixin(Base, { handlebars=true }={}) {
     /** @inheritDoc */
     async _prepareContext(options) {
       const context = await super._prepareContext(options);
-      context.CONFIG = CONFIG.DND5E;
+      context.CONFIG = CONFIG.VARLYN5E;
       context.inputs = { ...foundry.applications.fields, ...varlyn5e.applications.fields };
       return context;
     }
@@ -208,8 +208,8 @@ export default function ApplicationV2Mixin(Base, { handlebars=true }={}) {
         toggle.checked = this.isEditMode;
         toggle.classList.add("mode-slider");
         toggle.dataset.action = "changeMode";
-        toggle.dataset.tooltip = "DND5E.SheetModeEdit";
-        toggle.setAttribute("aria-label", _loc("DND5E.SheetModeEdit"));
+        toggle.dataset.tooltip = "VARLYN5E.SheetModeEdit";
+        toggle.setAttribute("aria-label", _loc("VARLYN5E.SheetModeEdit"));
         toggle.addEventListener("dblclick", event => event.stopPropagation());
         toggle.addEventListener("pointerdown", event => event.stopPropagation());
         header.prepend(toggle);
@@ -300,7 +300,7 @@ export default function ApplicationV2Mixin(Base, { handlebars=true }={}) {
      */
     _disableFields() {
       const selector = `.window-content :is(${[
-        "INPUT", "SELECT", "TEXTAREA", "BUTTON", "DND5E-CHECKBOX", "COLOR-PICKER", "DOCUMENT-TAGS",
+        "INPUT", "SELECT", "TEXTAREA", "BUTTON", "VARLYN5E-CHECKBOX", "COLOR-PICKER", "DOCUMENT-TAGS",
         "FILE-PICKER", "HUE-SLIDER", "MULTI-SELECT", "PROSE-MIRROR", "RANGE-PICKER", "STRING-TAGS",
         "FORMULA-INPUT"
       ].join(", ")}):not(.always-interactive)`;

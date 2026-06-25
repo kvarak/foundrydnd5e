@@ -28,7 +28,7 @@ export default class CurrencyManager extends Application5e {
     },
     tag: "form",
     window: {
-      title: "DND5E.CurrencyManager.Title"
+      title: "VARLYN5E.CurrencyManager.Title"
     }
   };
 
@@ -122,13 +122,13 @@ export default class CurrencyManager extends Application5e {
     return {
       convert: {
         id: "convert", group: "primary", icon: "fa-solid fa-arrow-up-short-wide",
-        label: "DND5E.CurrencyManager.Convert.Label",
+        label: "VARLYN5E.CurrencyManager.Convert.Label",
         active: this.tabGroups.primary === "convert",
         cssClass: this.tabGroups.primary === "convert" ? "active" : ""
       },
       transfer: {
         id: "transfer", group: "primary", icon: "fa-solid fa-reply-all fa-flip-horizontal",
-        label: "DND5E.CurrencyManager.Transfer.Label",
+        label: "VARLYN5E.CurrencyManager.Transfer.Label",
         active: this.tabGroups.primary === "transfer",
         cssClass: this.tabGroups.primary === "transfer" ? "active" : ""
       }
@@ -208,14 +208,14 @@ export default class CurrencyManager extends Application5e {
 
   /**
    * Convert all carried currency to the highest possible denomination using configured conversion rates.
-   * See CONFIG.DND5E.currencies for configuration.
+   * See CONFIG.VARLYN5E.currencies for configuration.
    * @param {Actor5e|Item5e} doc  Actor or container item to convert.
    * @returns {Promise<Actor5e|Item5e>}
    */
   static convertCurrency(doc) {
     const currency = foundry.utils.deepClone(doc.system.currency);
 
-    const currencies = Object.entries(CONFIG.DND5E.currencies)
+    const currencies = Object.entries(CONFIG.VARLYN5E.currencies)
       .filter(([, c]) => c.conversion)
       .sort((a, b) => a[1].conversion - b[1].conversion);
 
@@ -251,7 +251,7 @@ export default class CurrencyManager extends Application5e {
     if ( amount <= 0 ) return;
     // eslint-disable-next-line no-unused-vars
     const { item, remainder, ...updates } = this.getActorCurrencyUpdates(actor, amount, denomination, options);
-    if ( remainder ) throw new Error(_loc("DND5E.CurrencyManager.Error.InsufficientFunds", {
+    if ( remainder ) throw new Error(_loc("VARLYN5E.CurrencyManager.Error.InsufficientFunds", {
       denomination,
       amount: new Intl.NumberFormat(game.i18n.lang).format(amount),
       name: actor.name
@@ -275,11 +275,11 @@ export default class CurrencyManager extends Application5e {
     const { currency } = actor.system;
     if ( amount <= 0 ) return { system: { currency: { ...currency } }, remainder: amount, item: [] };
 
-    const currencies = Object.entries(CONFIG.DND5E.currencies)
+    const currencies = Object.entries(CONFIG.VARLYN5E.currencies)
       .filter(([denom]) => !exact || (denom !== denomination))
       .map(([denom, { conversion }]) => [denom, conversion])
       .sort(([, a], [, b]) => priority === "high" ? a - b : b - a);
-    const baseConversion = CONFIG.DND5E.currencies[denomination].conversion;
+    const baseConversion = CONFIG.VARLYN5E.currencies[denomination].conversion;
     if ( exact ) currencies.unshift([denomination, baseConversion]);
 
     let passes = currencies.length;

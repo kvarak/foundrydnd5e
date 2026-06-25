@@ -15,7 +15,7 @@ export default class JournalEntrySheet5e extends foundry.applications.sheets.jou
         {
           action: "configureNavigation",
           icon: "fa-solid fa-compass",
-          label: "DND5E.JOURNALENTRY.Action.ConfigureNavigation",
+          label: "VARLYN5E.JOURNALENTRY.Action.ConfigureNavigation",
           visible: JournalEntrySheet5e.#canConfigureNavigation
         }
       ]
@@ -195,7 +195,7 @@ export default class JournalEntrySheet5e extends foundry.applications.sheets.jou
       anchor.dataset.tooltipDirection = dir === "prev" ? "LEFT" : "RIGHT";
     }
     const i18n = { prev: "Previous", next: "Next", up: "Up" };
-    Object.assign(anchor.dataset, { link: "", tooltip: `DND5E.JOURNALENTRY.Navigation.${i18n[dir]}`, uuid: doc.uuid });
+    Object.assign(anchor.dataset, { link: "", tooltip: `VARLYN5E.JOURNALENTRY.Navigation.${i18n[dir]}`, uuid: doc.uuid });
     anchor.append(doc.name);
     li.append(anchor);
     return li;

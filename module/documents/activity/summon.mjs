@@ -21,7 +21,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.SUMMON"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.SUMMON"];
 
   /* -------------------------------------------- */
 
@@ -30,8 +30,8 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
     foundry.utils.mergeObject(super.metadata, {
       type: "summon",
       img: "systems/dnd5e/icons/svg/activity/summon.svg",
-      title: "DND5E.SUMMON.Title",
-      hint: "DND5E.SUMMON.Hint",
+      title: "VARLYN5E.SUMMON.Title",
+      hint: "VARLYN5E.SUMMON.Hint",
       sheetClass: SummonSheet,
       usage: {
         actions: {
@@ -87,7 +87,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
   _usageChatButtons(message) {
     if ( !this.availableProfiles.length ) return super._usageChatButtons(message);
     return [{
-      label: _loc("DND5E.SUMMON.Action.Summon"),
+      label: _loc("VARLYN5E.SUMMON.Action.Summon"),
       icon: '<i class="fa-solid fa-spaghetti-monster-flying" inert></i>',
       dataset: {
         action: "placeSummons"
@@ -132,7 +132,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
 
     const profile = this.profiles.find(p => p._id === options?.profile);
     if ( !profile ) throw new Error(
-      _loc("DND5E.SUMMON.Warning.NoProfile", { profileId: options.profile, item: this.item.name })
+      _loc("VARLYN5E.SUMMON.Warning.NoProfile", { profileId: options.profile, item: this.item.name })
     );
 
     /**
@@ -157,7 +157,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
 
     // Verify ownership of actor
     if ( !actor.isOwner ) {
-      throw new Error(_loc("DND5E.SUMMON.Warning.NoOwnership", { actor: actor.name }));
+      throw new Error(_loc("VARLYN5E.SUMMON.Warning.NoOwnership", { actor: actor.name }));
     }
 
     const tokensData = [];
@@ -286,7 +286,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
         }],
         disabled: false,
         icon: "icons/skills/targeting/crosshair-bars-yellow.webp",
-        name: _loc("DND5E.SUMMON.FIELDS.match.proficiency.label")
+        name: _loc("VARLYN5E.SUMMON.FIELDS.match.proficiency.label")
       });
       actorUpdates.effects.push(proficiencyEffect.toObject());
     }
@@ -314,7 +314,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
             }],
             disabled: false,
             icon: "icons/magic/defensive/shield-barrier-blue.webp",
-            name: _loc("DND5E.SUMMON.FIELDS.bonuses.ac.label")
+            name: _loc("VARLYN5E.SUMMON.FIELDS.bonuses.ac.label")
           })).toObject());
         }
       }
@@ -334,7 +334,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
           }],
           disabled: false,
           icon: "icons/sundries/gaming/dice-runed-brown.webp",
-          name: _loc("DND5E.SUMMON.FIELDS.bonuses.hd.label")
+          name: _loc("VARLYN5E.SUMMON.FIELDS.bonuses.hd.label")
         })).toObject());
       }
     }
@@ -359,7 +359,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
             }],
             disabled: false,
             icon: "icons/magic/life/heart-glowing-red.webp",
-            name: _loc("DND5E.SUMMON.FIELDS.bonuses.hp.label")
+            name: _loc("VARLYN5E.SUMMON.FIELDS.bonuses.hp.label")
           })).toObject();
         };
 
@@ -388,7 +388,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
     // Change creature size
     if ( this.creatureSizes.size ) {
       const size = this.creatureSizes.has(options.creatureSize) ? options.creatureSize : this.creatureSizes.first();
-      const config = CONFIG.DND5E.actorSizes[size];
+      const config = CONFIG.VARLYN5E.actorSizes[size];
       if ( config ) {
         actorUpdates["system.traits.size"] = size;
         tokenUpdates.width = config.token ?? 1;
@@ -471,7 +471,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
           changes,
           disabled: false,
           icon: "icons/skills/melee/strike-slashes-orange.webp",
-          name: _loc("DND5E.SUMMON.ItemChanges.Label"),
+          name: _loc("VARLYN5E.SUMMON.ItemChanges.Label"),
           origin: this.uuid,
           type: "enchantment"
         })).toObject();
@@ -498,7 +498,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
     // Ensure the token matches the final size
     if ( this.creatureSizes.size ) {
       const size = this.creatureSizes.has(options.creatureSize) ? options.creatureSize : this.creatureSizes.first();
-      const config = CONFIG.DND5E.actorSizes[size];
+      const config = CONFIG.VARLYN5E.actorSizes[size];
       if ( config ) token = token.clone({ width: config.token ?? 1, height: config.token ?? 1 });
     }
 
@@ -521,7 +521,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
     if ( actor.prototypeToken.randomImg && !game.user.can("FILES_BROWSE") ) {
       tokenUpdates.texture ??= {};
       tokenUpdates.texture.src ??= actor.img;
-      ui.notifications.warn("DND5E.SUMMON.Warning.Wildcard");
+      ui.notifications.warn("VARLYN5E.SUMMON.Warning.Wildcard");
     }
 
     delete placement.prototypeToken;
@@ -581,7 +581,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
         await SummonUsageDialog.create(this, config, {
           button: {
             icon: "fa-solid fa-spaghetti-monster-flying",
-            label: "DND5E.SUMMON.Action.Summon"
+            label: "VARLYN5E.SUMMON.Action.Summon"
           },
           display: {
             all: false,

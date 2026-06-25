@@ -149,30 +149,30 @@ export default class ActivitySheet extends PseudoDocumentSheet {
     }
 
     context.activationTypes = [
-      ...Object.entries(CONFIG.DND5E.activityActivationTypes).map(([value, config]) => ({
+      ...Object.entries(CONFIG.VARLYN5E.activityActivationTypes).map(([value, config]) => ({
         value,
         label: _loc(config.label),
         group: _loc(config.group)
       })),
-      { value: "", label: _loc("DND5E.NoneActionLabel") }
+      { value: "", label: _loc("VARLYN5E.NoneActionLabel") }
     ];
     context.affectsPlaceholder = _loc(
-      `DND5E.TARGET.Count.${context.data.target?.template?.type ? "Every" : "Any"}`
+      `VARLYN5E.TARGET.Count.${context.data.target?.template?.type ? "Every" : "Any"}`
     );
     context.durationUnits = [
-      { value: "inst", label: _loc("DND5E.TimeInst") },
-      ...Object.entries(CONFIG.DND5E.scalarTimePeriods).map(([value, label]) => ({
-        value, label, group: _loc("DND5E.DurationTime")
+      { value: "inst", label: _loc("VARLYN5E.TimeInst") },
+      ...Object.entries(CONFIG.VARLYN5E.scalarTimePeriods).map(([value, label]) => ({
+        value, label, group: _loc("VARLYN5E.DurationTime")
       })),
-      ...Object.entries(CONFIG.DND5E.permanentTimePeriods).map(([value, label]) => ({
-        value, label, group: _loc("DND5E.DurationPermanent")
+      ...Object.entries(CONFIG.VARLYN5E.permanentTimePeriods).map(([value, label]) => ({
+        value, label, group: _loc("VARLYN5E.DurationPermanent")
       })),
-      { value: "spec", label: _loc("DND5E.Special") }
+      { value: "spec", label: _loc("VARLYN5E.Special") }
     ];
     context.rangeUnits = [
-      ...Object.entries(CONFIG.DND5E.rangeTypes).map(([value, label]) => ({ value, label })),
-      ...Object.entries(CONFIG.DND5E.movementUnits).map(([value, { label }]) => ({
-        value, label, group: _loc("DND5E.RangeDistance")
+      ...Object.entries(CONFIG.VARLYN5E.rangeTypes).map(([value, label]) => ({ value, label })),
+      ...Object.entries(CONFIG.VARLYN5E.movementUnits).map(([value, { label }]) => ({
+        value, label, group: _loc("VARLYN5E.RangeDistance")
       }))
     ];
 
@@ -180,10 +180,10 @@ export default class ActivitySheet extends PseudoDocumentSheet {
     const canScale = this.activity.canConfigureScaling;
     const consumptionTypeOptions = Array.from(this.activity.validConsumptionTypes).map(value => ({
       value,
-      label: CONFIG.DND5E.activityConsumptionTypes[value].label
+      label: CONFIG.VARLYN5E.activityConsumptionTypes[value].label
     }));
     context.consumptionTargets = context.source.consumption.targets.map((data, index) => {
-      const typeConfig = CONFIG.DND5E.activityConsumptionTypes[data.type] ?? {};
+      const typeConfig = CONFIG.VARLYN5E.activityConsumptionTypes[data.type] ?? {};
       const showTextTarget = typeConfig.targetRequiresEmbedded && !this.item.isEmbedded;
       const target = new ConsumptionTargetData(data, { parent: this.activity });
       return {
@@ -194,15 +194,15 @@ export default class ActivitySheet extends PseudoDocumentSheet {
         targetHint: this.item.isEmbedded ? undefined : typeConfig.nonEmbeddedHint,
         typeOptions: consumptionTypeOptions,
         scalingModes: canScale ? [
-          { value: "", label: _loc("DND5E.CONSUMPTION.Scaling.None") },
-          { value: "amount", label: _loc("DND5E.CONSUMPTION.Scaling.Amount") },
+          { value: "", label: _loc("VARLYN5E.CONSUMPTION.Scaling.None") },
+          { value: "amount", label: _loc("VARLYN5E.CONSUMPTION.Scaling.Amount") },
           ...(typeConfig.scalingModes ?? []).map(({ value, label }) => ({ value, label: _loc(label) }))
         ] : null,
         showTargets: "validTargets" in typeConfig,
         selectedTarget: ("validTargets" in typeConfig) && ["itemUses", "material"].includes(data.type)
           ? this.activity._remapConsumptionTarget(data.target)
           : data.target,
-        targetPlaceholder: data.type === "itemUses" ? _loc("DND5E.CONSUMPTION.Target.ThisItem") : "",
+        targetPlaceholder: data.type === "itemUses" ? _loc("VARLYN5E.CONSUMPTION.Target.ThisItem") : "",
         validTargets: showTextTarget ? null : target.validTargets
       };
     });
@@ -210,11 +210,11 @@ export default class ActivitySheet extends PseudoDocumentSheet {
     context.showScaling = !this.activity.isSpell || this.activity.isRider;
 
     // Uses recovery
-    context.recoveryPeriods = CONFIG.DND5E.limitedUsePeriods.recoveryOptions;
+    context.recoveryPeriods = CONFIG.VARLYN5E.limitedUsePeriods.recoveryOptions;
     context.recoveryTypes = [
-      { value: "recoverAll", label: _loc("DND5E.USES.Recovery.Type.RecoverAll") },
-      { value: "loseAll", label: _loc("DND5E.USES.Recovery.Type.LoseAll") },
-      { value: "formula", label: _loc("DND5E.USES.Recovery.Type.Formula") }
+      { value: "recoverAll", label: _loc("VARLYN5E.USES.Recovery.Type.RecoverAll") },
+      { value: "loseAll", label: _loc("VARLYN5E.USES.Recovery.Type.LoseAll") },
+      { value: "formula", label: _loc("VARLYN5E.USES.Recovery.Type.Formula") }
     ];
     context.usesRecovery = context.source.uses.recovery.map((data, index) => ({
       data,
@@ -294,19 +294,19 @@ export default class ActivitySheet extends PseudoDocumentSheet {
 
     context.denominationOptions = [
       { value: "", label: "" },
-      ...CONFIG.DND5E.dieSteps.map(value => ({ value, label: `d${value}` }))
+      ...CONFIG.VARLYN5E.dieSteps.map(value => ({ value, label: `d${value}` }))
     ];
     if ( context.activity.damage?.parts ) {
       const scaleKey = (this.item.type === "spell") && (this.item.system.level === 0) ? "labelCantrip" : "label";
       const scalingOptions = [
-        { value: "", label: _loc("DND5E.DAMAGE.Scaling.None") },
-        ...Object.entries(CONFIG.DND5E.damageScalingModes).map(([value, { [scaleKey]: label }]) => ({ value, label }))
+        { value: "", label: _loc("VARLYN5E.DAMAGE.Scaling.None") },
+        ...Object.entries(CONFIG.VARLYN5E.damageScalingModes).map(([value, { [scaleKey]: label }]) => ({ value, label }))
       ];
-      let typeOptions = Object.entries(CONFIG.DND5E.damageTypes).map(([value, config]) => ({ ...config, value }));
+      let typeOptions = Object.entries(CONFIG.VARLYN5E.damageTypes).map(([value, config]) => ({ ...config, value }));
       const [other, physical] = typeOptions.partition(config => !!config.isPhysical);
       typeOptions = [
         ...physical, { rule: true }, ...other, { rule: true },
-        { value: "maximum", label: "DND5E.HEAL.Type.Maximum" }
+        { value: "maximum", label: "VARLYN5E.HEAL.Type.Maximum" }
       ];
       const makePart = (data, index) => this._prepareDamagePartContext(context, {
         data, index, scalingOptions, typeOptions,
@@ -388,29 +388,29 @@ export default class ActivitySheet extends PseudoDocumentSheet {
     return this._markTabs({
       identity: {
         id: "identity", group: "sheet", icon: "fa-solid fa-tag",
-        label: "DND5E.ACTIVITY.SECTIONS.Identity"
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Identity"
       },
       activation: {
         id: "activation", group: "sheet", icon: "fa-solid fa-clapperboard",
-        label: "DND5E.ACTIVITY.SECTIONS.Activation",
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Activation",
         tabs: {
           time: {
             id: "time", group: "activation", icon: "fa-solid fa-clock",
-            label: "DND5E.ACTIVITY.SECTIONS.Time"
+            label: "VARLYN5E.ACTIVITY.SECTIONS.Time"
           },
           consumption: {
             id: "consumption", group: "activation", icon: "fa-solid fa-boxes-stacked",
-            label: "DND5E.CONSUMPTION.FIELDS.consumption.label"
+            label: "VARLYN5E.CONSUMPTION.FIELDS.consumption.label"
           },
           targeting: {
             id: "activation-targeting", group: "activation", icon: "fa-solid fa-bullseye",
-            label: "DND5E.TARGET.FIELDS.target.label"
+            label: "VARLYN5E.TARGET.FIELDS.target.label"
           }
         }
       },
       effect: {
         id: "effect", group: "sheet", icon: "fa-solid fa-sun",
-        label: "DND5E.ACTIVITY.SECTIONS.Effect"
+        label: "VARLYN5E.ACTIVITY.SECTIONS.Effect"
       }
     });
   }
@@ -543,7 +543,7 @@ export default class ActivitySheet extends PseudoDocumentSheet {
    */
   static #addRecovery(event, target) {
     const periods = new Set(
-      Object.entries(CONFIG.DND5E.limitedUsePeriods).filter(([, config]) => !config.deprecated).map(([k]) => k)
+      Object.entries(CONFIG.VARLYN5E.limitedUsePeriods).filter(([, config]) => !config.deprecated).map(([k]) => k)
     );
     const existingPeriods = new Set(this.activity.uses.recovery.map(t => t.period));
     const filteredPeriods = periods.difference(existingPeriods);

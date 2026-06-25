@@ -37,7 +37,7 @@ export default class BaseCheckActivityData extends BaseActivityData {
 
   /** @override */
   get ability() {
-    if ( this.check.dc.calculation in CONFIG.DND5E.abilities ) return this.check.dc.calculation;
+    if ( this.check.dc.calculation in CONFIG.VARLYN5E.abilities ) return this.check.dc.calculation;
     if ( this.check.dc.calculation === "spellcasting" ) return this.spellcastingAbility;
     return this.check.ability;
   }
@@ -50,7 +50,7 @@ export default class BaseCheckActivityData extends BaseActivityData {
   static transformTypeData(source, activityData, options) {
     return foundry.utils.mergeObject(activityData, {
       check: {
-        ability: source.system.ability ?? Object.keys(CONFIG.DND5E.abilities)[0]
+        ability: source.system.ability ?? Object.keys(CONFIG.VARLYN5E.abilities)[0]
       }
     });
   }
@@ -86,10 +86,10 @@ export default class BaseCheckActivityData extends BaseActivityData {
    */
   getAbility(associated) {
     if ( this.check.ability ) return this.check.ability;
-    if ( associated in CONFIG.DND5E.skills ) return CONFIG.DND5E.skills[associated]?.ability ?? null;
-    else if ( associated in CONFIG.DND5E.tools ) {
+    if ( associated in CONFIG.VARLYN5E.skills ) return CONFIG.VARLYN5E.skills[associated]?.ability ?? null;
+    else if ( associated in CONFIG.VARLYN5E.tools ) {
       if ( (this.item.type === "tool") && this.item.system.ability ) return this.item.system.ability;
-      return CONFIG.DND5E.tools[associated]?.ability ?? null;
+      return CONFIG.VARLYN5E.tools[associated]?.ability ?? null;
     }
     return null;
   }

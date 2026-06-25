@@ -31,7 +31,7 @@ export default class HitPointsConfig extends BaseConfigSheet {
 
   /** @override */
   get title() {
-    return _loc("DND5E.HitPoints");
+    return _loc("VARLYN5E.HitPoints");
   }
 
   /* -------------------------------------------- */
@@ -46,8 +46,8 @@ export default class HitPointsConfig extends BaseConfigSheet {
     context.source = this.document.system._source.attributes.hp;
 
     // Display positive ability modifier as its own row, but if negative merge into classes totals
-    const ability = CONFIG.DND5E.abilities[CONFIG.DND5E.defaultAbilities.hitPoints];
-    const mod = this.document.system.abilities?.[CONFIG.DND5E.defaultAbilities.hitPoints]?.mod ?? 0;
+    const ability = CONFIG.VARLYN5E.abilities[CONFIG.VARLYN5E.defaultAbilities.hitPoints];
+    const mod = this.document.system.abilities?.[CONFIG.VARLYN5E.defaultAbilities.hitPoints]?.mod ?? 0;
     if ( ability && (mod > 0) ) context.ability = { mod, name: ability.label };
 
     // Summarize HP from classes
@@ -101,7 +101,7 @@ export default class HitPointsConfig extends BaseConfigSheet {
       const roll = await this.document.rollNPCHitPoints();
       this.submit({ updateData: { "system.attributes.hp.max": roll.total } });
     } catch(error) {
-      ui.notifications.error("DND5E.HPFormulaError");
+      ui.notifications.error("VARLYN5E.HPFormulaError");
       throw error;
     }
   }

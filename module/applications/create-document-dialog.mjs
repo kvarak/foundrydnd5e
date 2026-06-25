@@ -161,8 +161,8 @@ export default class CreateDocumentDialog extends Dialog5e {
    * @param {FormDataExtended} formData  Data from the dialog.
    */
   static async #handleFormSubmission(event, form, formData) {
-    if ( !form.checkValidity() ) throw new Error(_loc("DOCUMENT.DND5E.Warning.SelectType", {
-      name: _loc(this.documentType.metadata.label ?? `DOCUMENT.DND5E.${this.documentType.documentName}`)
+    if ( !form.checkValidity() ) throw new Error(_loc("DOCUMENT.VARLYN5E.Warning.SelectType", {
+      name: _loc(this.documentType.metadata.label ?? `DOCUMENT.VARLYN5E.${this.documentType.documentName}`)
     }));
     foundry.utils.mergeObject(this.options.createData, formData.object);
     this.#submitted = true;
@@ -187,7 +187,7 @@ export default class CreateDocumentDialog extends Dialog5e {
    * @returns {Promise<Document>}
    */
   static async prompt(documentType, data={}, { folders, types, ...createOptions }={}, { ok={}, sheet, ...config }={}) {
-    const label = _loc(documentType.metadata.label ?? `DOCUMENT.DND5E.${documentType.documentName}`);
+    const label = _loc(documentType.metadata.label ?? `DOCUMENT.VARLYN5E.${documentType.documentName}`);
     const title = _loc("DOCUMENT.Create", { type: label });
 
     foundry.utils.mergeObject(config, {

@@ -23,7 +23,7 @@ export default class SourceField extends SchemaField {
       ...fields
     };
     Object.entries(fields).forEach(([k, v]) => !v ? delete fields[k] : null);
-    super(fields, { label: "DND5E.SOURCE.FIELDS.source.label", ...options });
+    super(fields, { label: "VARLYN5E.SOURCE.FIELDS.source.label", ...options });
   }
 
   /* -------------------------------------------- */
@@ -44,8 +44,8 @@ export default class SourceField extends SchemaField {
     if ( this.custom ) this.label = this.custom;
     else {
       const page = Number.isNumeric(this.page)
-        ? _loc("DND5E.SOURCE.Display.Page", { page: this.page }) : (this.page ?? "");
-      this.label = _loc("DND5E.SOURCE.Display.Full", { book: this.book, page }).trim();
+        ? _loc("VARLYN5E.SOURCE.Display.Page", { page: this.page }) : (this.page ?? "");
+      this.label = _loc("VARLYN5E.SOURCE.Display.Full", { book: this.book, page }).trim();
     }
 
     this.value = this.book || (pkg?.title ?? "");

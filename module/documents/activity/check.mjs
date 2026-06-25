@@ -13,7 +13,7 @@ export default class CheckActivity extends ActivityMixin(BaseCheckActivityData) 
   /* -------------------------------------------- */
 
   /** @inheritDoc */
-  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "DND5E.CHECK"];
+  static LOCALIZATION_PREFIXES = [...super.LOCALIZATION_PREFIXES, "VARLYN5E.CHECK"];
 
   /* -------------------------------------------- */
 
@@ -22,8 +22,8 @@ export default class CheckActivity extends ActivityMixin(BaseCheckActivityData) 
     foundry.utils.mergeObject(super.metadata, {
       type: "check",
       img: "systems/dnd5e/icons/svg/activity/check.svg",
-      title: "DND5E.CHECK.Title",
-      hint: "DND5E.CHECK.Hint",
+      title: "VARLYN5E.CHECK.Title",
+      hint: "VARLYN5E.CHECK.Hint",
       sheetClass: CheckSheet,
       usage: {
         actions: {
@@ -43,23 +43,23 @@ export default class CheckActivity extends ActivityMixin(BaseCheckActivityData) 
     const dc = this.check.dc.value;
 
     const createButton = (abilityKey, associated) => {
-      const ability = CONFIG.DND5E.abilities[abilityKey]?.label;
-      const checkType = (associated in CONFIG.DND5E.skills) ? "skill"
-        : (associated in CONFIG.DND5E.tools) ? "tool": "ability";
+      const ability = CONFIG.VARLYN5E.abilities[abilityKey]?.label;
+      const checkType = (associated in CONFIG.VARLYN5E.skills) ? "skill"
+        : (associated in CONFIG.VARLYN5E.tools) ? "tool": "ability";
       const dataset = { ability: abilityKey, action: "rollCheck", visibility: this.check.visible ? "all" : undefined };
       if ( dc ) dataset.dc = dc;
       if ( checkType !== "ability" ) dataset[checkType] = associated;
 
       let label = ability;
       let type;
-      if ( checkType === "skill" ) type = CONFIG.DND5E.skills[associated]?.label;
+      if ( checkType === "skill" ) type = CONFIG.VARLYN5E.skills[associated]?.label;
       else if ( checkType === "tool" ) type = Trait.keyLabel(associated, { trait: "tool" });
-      if ( type ) label = _loc("EDITOR.DND5E.Inline.SpecificCheck", { ability, type });
+      if ( type ) label = _loc("EDITOR.VARLYN5E.Inline.SpecificCheck", { ability, type });
       else label = ability;
 
       buttons.push({
         label: dc ? `
-          <span class="visible-dc">${_loc("EDITOR.DND5E.Inline.DC", { dc, check: wrap(label) })}</span>
+          <span class="visible-dc">${_loc("EDITOR.VARLYN5E.Inline.DC", { dc, check: wrap(label) })}</span>
           <span class="hidden-dc">${wrap(label)}</span>
         ` : wrap(label),
         icon: checkType === "tool" ? '<i class="fa-solid fa-hammer" inert></i>'
@@ -67,7 +67,7 @@ export default class CheckActivity extends ActivityMixin(BaseCheckActivityData) 
         dataset
       });
     };
-    const wrap = check => _loc("EDITOR.DND5E.Inline.CheckShort", { check });
+    const wrap = check => _loc("EDITOR.VARLYN5E.Inline.CheckShort", { check });
 
     const associated = Array.from(this.check.associated);
     if ( !associated.length && (this.item.type === "tool") ) associated.push(this.item.system.type.baseItem);
@@ -94,12 +94,12 @@ export default class CheckActivity extends ActivityMixin(BaseCheckActivityData) 
   static async #rollCheck(event, target, message) {
     const targets = getSceneTargets();
     if ( !targets.length && game.user.character ) targets.push(game.user.character);
-    if ( !targets.length ) ui.notifications.warn("DND5E.ActionWarningNoToken");
+    if ( !targets.length ) ui.notifications.warn("VARLYN5E.ActionWarningNoToken");
     let { ability, dc, skill, tool } = target.dataset;
     dc = parseInt(dc);
     const rollData = { event, target: Number.isFinite(dc) ? dc : this.check.dc.value };
     const bonusData = CONFIG.Dice.BasicRoll.constructParts({ activityBonus: this.check.bonus }, this.getRollData());
-    if ( ability in CONFIG.DND5E.abilities ) rollData.ability = ability;
+    if ( ability in CONFIG.VARLYN5E.abilities ) rollData.ability = ability;
 
     for ( const token of targets ) {
       const actor = token instanceof Actor ? token : token.actor;
