@@ -1240,7 +1240,7 @@ function getHumanReadableAttributeLabel(attr, { actor, item }={}) {
   const getUnknownLabel = (attr, options) => {
     /**
      * A hook event that fires when a human readable attribute label couldn't be found.
-     * @function dnd5e.getUnknownAttributeLabel
+     * @function varlyn5e.getUnknownAttributeLabel
      * @memberof hookEvents
      * @param {string} attribute  Attribute for which to generate a label.
      * @param {object} options
@@ -1248,7 +1248,7 @@ function getHumanReadableAttributeLabel(attr, { actor, item }={}) {
      * @param {Item5e} [options.item]    An optional reference item.
      * @param {string} [options.label]   Label that can be set to define the label to use.
      */
-    Hooks.callAll("dnd5e.getUnknownAttributeLabel", attr, options);
+    Hooks.callAll("varlyn5e.getUnknownAttributeLabel", attr, options);
     return options.label;
   };
 
@@ -1594,7 +1594,7 @@ function ApplicationV2Mixin(Base, { handlebars=true }={}) {
     async _prepareContext(options) {
       const context = await super._prepareContext(options);
       context.CONFIG = CONFIG.DND5E;
-      context.inputs = { ...foundry.applications.fields, ...dnd5e.applications.fields };
+      context.inputs = { ...foundry.applications.fields, ...varlyn5e.applications.fields };
       return context;
     }
 
@@ -1730,7 +1730,7 @@ function ApplicationV2Mixin(Base, { handlebars=true }={}) {
       await super._onRender(context, options);
 
       this.element.querySelectorAll("[data-context-menu]").forEach(control =>
-        control.addEventListener("click", dnd5e.applications.ContextMenu5e.triggerEvent)
+        control.addEventListener("click", varlyn5e.applications.ContextMenu5e.triggerEvent)
       );
 
       // Allow tags to be removed when the whole tag is clicked.
@@ -2106,7 +2106,7 @@ class BaseRestDialog extends Dialog5e {
    */
   get duration() {
     return this.config.duration ?? CONFIG.DND5E.restTypes[this.config.type]
-      ?.duration?.[dnd5e.settings.restVariant] ?? 0;
+      ?.duration?.[varlyn5e.settings.restVariant] ?? 0;
   }
 
   /* -------------------------------------------- */
@@ -2918,7 +2918,7 @@ class BaseCalendarHUD extends Application5e {
    * @param {string} userId
    */
   static onUpdateWorldTime(worldTime, deltaTime, options, userId) {
-    if ( this.shouldDisplay ) dnd5e.ui.calendar?.render();
+    if ( this.shouldDisplay ) varlyn5e.ui.calendar?.render();
   }
 }
 
@@ -3168,7 +3168,7 @@ class CalendarHUD extends BaseCalendarHUD {
     /**
      * A hook event that fires when preparing the buttons displayed around the calendar HUD. Buttons in each list
      * are sorted with those closest to the center first.
-     * @function dnd5e.prepareCalendarButtons
+     * @function varlyn5e.prepareCalendarButtons
      * @memberof hookEvents
      * @param {CalendarHUD} app              The Calendar HUD application being rendered.
      * @param {CalendarHUDButton[]} buttons  Buttons displayed around the calendar UI.
@@ -3308,7 +3308,7 @@ class CalendarHUD extends BaseCalendarHUD {
 
   /** @override */
   static onUpdateWorldTime(worldTime, deltaTime, options, userId) {
-    if ( this.shouldDisplay ) dnd5e.ui.calendar?.renderCore(options.dnd5e?.deltas);
+    if ( this.shouldDisplay ) varlyn5e.ui.calendar?.renderCore(options.dnd5e?.deltas);
   }
 }
 
@@ -4927,7 +4927,7 @@ class UsesField extends SchemaField$X {
     /**
      * A hook event that fires after an Item or Activity has rolled to recharge, but before any usage changes have
      * been made.
-     * @function dnd5e.rollRecharge
+     * @function varlyn5e.rollRecharge
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls             The resulting rolls.
      * @param {object} data
@@ -4935,20 +4935,20 @@ class UsesField extends SchemaField$X {
      * @param {object} data.updates           Updates to be applied to the subject.
      * @returns {boolean}                     Explicitly return `false` to prevent updates from being performed.
      */
-    if ( Hooks.call("dnd5e.rollRecharge", rolls, { subject: this, updates }) === false ) return rolls;
-    if ( Hooks.call("dnd5e.rollRechargeV2", rolls, { subject: this, updates }) === false ) return rolls;
+    if ( Hooks.call("varlyn5e.rollRecharge", rolls, { subject: this, updates }) === false ) return rolls;
+    if ( Hooks.call("varlyn5e.rollRechargeV2", rolls, { subject: this, updates }) === false ) return rolls;
 
     if ( (rollConfig.apply !== false) && !foundry.utils.isEmpty(updates) ) await this.update(updates);
 
     /**
      * A hook event that fires after an Item or Activity has rolled recharge and usage updates have been performed.
-     * @function dnd5e.postRollRecharge
+     * @function varlyn5e.postRollRecharge
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls     The resulting rolls.
      * @param {object} data
      * @param {Actor5e} data.subject  Item or Activity for which the roll was performed.
      */
-    Hooks.callAll("dnd5e.postRollRecharge", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.postRollRecharge", rolls, { subject: this });
 
     return { rolls, updates };
   }
@@ -6465,7 +6465,7 @@ class AbilityTemplate extends foundry.canvas.placeables.MeasuredTemplate {
    */
   static fromActivity(activity, options={}) {
     const target = activity.target?.template ?? {};
-    const templateShape = dnd5e.config.areaTargetTypes[target.type]?.template;
+    const templateShape = varlyn5e.config.areaTargetTypes[target.type]?.template;
     if ( !templateShape ) return null;
 
     // Prepare template data
@@ -6513,13 +6513,13 @@ class AbilityTemplate extends foundry.canvas.placeables.MeasuredTemplate {
 
     /**
      * A hook event that fires before a template is created for an Activity.
-     * @function dnd5e.preCreateActivityTemplate
+     * @function varlyn5e.preCreateActivityTemplate
      * @memberof hookEvents
      * @param {Activity} activity    Activity for which the template is being placed.
      * @param {object} templateData  Data used to create the new template.
      * @returns {boolean}            Explicitly return `false` to prevent the template from being placed.
      */
-    if ( Hooks.call("dnd5e.preCreateActivityTemplate", activity, templateData) === false ) return null;
+    if ( Hooks.call("varlyn5e.preCreateActivityTemplate", activity, templateData) === false ) return null;
 
     // Construct the templates from activity data
     const cls = CONFIG.MeasuredTemplate.documentClass;
@@ -6534,12 +6534,12 @@ class AbilityTemplate extends foundry.canvas.placeables.MeasuredTemplate {
 
     /**
      * A hook event that fires after a template are created for an Activity.
-     * @function dnd5e.createActivityTemplate
+     * @function varlyn5e.createActivityTemplate
      * @memberof hookEvents
      * @param {Activity} activity            Activity for which the template is being placed.
      * @param {AbilityTemplate[]} templates  The templates being placed.
      */
-    Hooks.callAll("dnd5e.createActivityTemplate", activity, created);
+    Hooks.callAll("varlyn5e.createActivityTemplate", activity, created);
 
     return created;
   }
@@ -6834,7 +6834,7 @@ function DependentDocumentMixin(Base) {
     prepareData() {
       super.prepareData();
       if ( this.flags?.dnd5e?.dependentOn && this.uuid ) {
-        dnd5e.registry.dependents.track(this.flags.dnd5e.dependentOn, this);
+        varlyn5e.registry.dependents.track(this.flags.dnd5e.dependentOn, this);
       }
     }
 
@@ -6844,7 +6844,7 @@ function DependentDocumentMixin(Base) {
     _onDelete(options, userId) {
       super._onDelete(options, userId);
       if ( this.flags?.dnd5e?.dependentOn && this.uuid ) {
-        dnd5e.registry.dependents.untrack(this.flags.dnd5e.dependentOn, this);
+        varlyn5e.registry.dependents.untrack(this.flags.dnd5e.dependentOn, this);
       }
     }
   }
@@ -7632,7 +7632,7 @@ function ActivityMixin(Base) {
 
       /**
        * A hook event that fires before an activity usage is configured.
-       * @function dnd5e.preUseActivity
+       * @function varlyn5e.preUseActivity
        * @memberof hookEvents
        * @param {Activity} activity                           Activity being used.
        * @param {ActivityUseConfiguration} usageConfig        Configuration info for the activation.
@@ -7640,7 +7640,7 @@ function ActivityMixin(Base) {
        * @param {ActivityMessageConfiguration} messageConfig  Configuration info for the created chat message.
        * @returns {boolean}  Explicitly return `false` to prevent activity from being used.
        */
-      if ( Hooks.call("dnd5e.preUseActivity", activity, usageConfig, dialogConfig, messageConfig) === false ) return;
+      if ( Hooks.call("varlyn5e.preUseActivity", activity, usageConfig, dialogConfig, messageConfig) === false ) return;
 
       // Display configuration window if necessary
       if ( dialogConfig.configure && activity._requiresConfigurationDialog(usageConfig) ) {
@@ -7683,14 +7683,14 @@ function ActivityMixin(Base) {
 
       /**
        * A hook event that fires when an activity is activated.
-       * @function dnd5e.postUseActivity
+       * @function varlyn5e.postUseActivity
        * @memberof hookEvents
        * @param {Activity} activity                     Activity being activated.
        * @param {ActivityUseConfiguration} usageConfig  Configuration data for the activation.
        * @param {ActivityUsageResults} results          Final details on the activation.
        * @returns {boolean}  Explicitly return `false` to prevent any subsequent actions from being triggered.
        */
-      if ( Hooks.call("dnd5e.postUseActivity", activity, usageConfig, results) === false ) return results;
+      if ( Hooks.call("varlyn5e.postUseActivity", activity, usageConfig, results) === false ) return results;
 
       // Trigger any primary action provided by this activity
       if ( usageConfig.subsequentActions !== false ) {
@@ -7714,14 +7714,14 @@ function ActivityMixin(Base) {
     async consume(usageConfig, messageConfig) {
       /**
        * A hook event that fires before an item's resource consumption is calculated.
-       * @function dnd5e.preActivityConsumption
+       * @function varlyn5e.preActivityConsumption
        * @memberof hookEvents
        * @param {Activity} activity                           Activity being activated.
        * @param {ActivityUseConfiguration} usageConfig        Configuration data for the activation.
        * @param {ActivityMessageConfiguration} messageConfig  Configuration info for the created chat message.
        * @returns {boolean}  Explicitly return `false` to prevent activity from being activated.
        */
-      if ( Hooks.call("dnd5e.preActivityConsumption", this, usageConfig, messageConfig) === false ) return false;
+      if ( Hooks.call("varlyn5e.preActivityConsumption", this, usageConfig, messageConfig) === false ) return false;
 
       const updates = await this._prepareUsageUpdates(usageConfig);
       if ( !updates ) return false;
@@ -7729,7 +7729,7 @@ function ActivityMixin(Base) {
       /**
        * A hook event that fires after an item's resource consumption is calculated, but before any updates are
        * performed.
-       * @function dnd5e.activityConsumption
+       * @function varlyn5e.activityConsumption
        * @memberof hookEvents
        * @param {Activity} activity                           Activity being activated.
        * @param {ActivityUseConfiguration} usageConfig        Configuration data for the activation.
@@ -7737,7 +7737,7 @@ function ActivityMixin(Base) {
        * @param {ActivityUsageUpdates} updates                Updates to apply to the actor and other documents.
        * @returns {boolean}  Explicitly return `false` to prevent activity from being activated.
        */
-      if ( Hooks.call("dnd5e.activityConsumption", this, usageConfig, messageConfig, updates) === false ) return false;
+      if ( Hooks.call("varlyn5e.activityConsumption", this, usageConfig, messageConfig, updates) === false ) return false;
 
       const consumed = await this.#applyUsageUpdates(updates);
       if ( !foundry.utils.isEmpty(consumed) ) {
@@ -7749,7 +7749,7 @@ function ActivityMixin(Base) {
 
       /**
        * A hook event that fires after an item's resource consumption is calculated and applied.
-       * @function dnd5e.postActivityConsumption
+       * @function varlyn5e.postActivityConsumption
        * @memberof hookEvents
        * @param {Activity} activity                           Activity being activated.
        * @param {ActivityUseConfiguration} usageConfig        Configuration data for the activation.
@@ -7757,7 +7757,7 @@ function ActivityMixin(Base) {
        * @param {ActivityUsageUpdates} updates                Applied updates to the actor and other documents.
        * @returns {boolean}  Explicitly return `false` to prevent activity from being activated.
        */
-      if ( Hooks.call("dnd5e.postActivityConsumption", this, usageConfig, messageConfig, updates) === false ) return false;
+      if ( Hooks.call("varlyn5e.postActivityConsumption", this, usageConfig, messageConfig, updates) === false ) return false;
 
       return updates;
     }
@@ -8221,24 +8221,24 @@ function ActivityMixin(Base) {
 
       /**
        * A hook event that fires before an activity usage card is created.
-       * @function dnd5e.preCreateUsageMessage
+       * @function varlyn5e.preCreateUsageMessage
        * @memberof hookEvents
        * @param {Activity} activity                     Activity for which the card will be created.
        * @param {ActivityMessageConfiguration} message  Configuration info for the created message.
        */
-      Hooks.callAll("dnd5e.preCreateUsageMessage", this, messageConfig);
+      Hooks.callAll("varlyn5e.preCreateUsageMessage", this, messageConfig);
 
       ChatMessage.applyMode(messageConfig.data, messageConfig.rollMode);
       const card = messageConfig.create === false ? messageConfig.data : await ChatMessage.create(messageConfig.data);
 
       /**
        * A hook event that fires after an activity usage card is created.
-       * @function dnd5e.postCreateUsageMessage
+       * @function varlyn5e.postCreateUsageMessage
        * @memberof hookEvents
        * @param {Activity} activity          Activity for which the card was created.
        * @param {ChatMessage5e|object} card  Created card or configuration data if not created.
        */
-      Hooks.callAll("dnd5e.postCreateUsageMessage", this, card);
+      Hooks.callAll("varlyn5e.postCreateUsageMessage", this, card);
 
       return card;
     }
@@ -8336,14 +8336,14 @@ function ActivityMixin(Base) {
 
       /**
        * A hook event that fires after damage has been rolled.
-       * @function dnd5e.rollDamage
+       * @function varlyn5e.rollDamage
        * @memberof hookEvents
        * @param {DamageRoll[]} rolls       The resulting rolls.
        * @param {object} [data]
        * @param {Activity} [data.subject]  The activity that performed the roll.
        */
-      Hooks.callAll("dnd5e.rollDamage", rolls, { subject: this });
-      Hooks.callAll("dnd5e.rollDamageV2", rolls, { subject: this });
+      Hooks.callAll("varlyn5e.rollDamage", rolls, { subject: this });
+      Hooks.callAll("varlyn5e.rollDamageV2", rolls, { subject: this });
 
       return rolls;
     }
@@ -8477,13 +8477,13 @@ function ActivityMixin(Base) {
 
       /**
        * A hook even that fires when the context menu for an Activity is opened.
-       * @function dnd5e.getItemActivityContext
+       * @function varlyn5e.getItemActivityContext
        * @memberof hookEvents
        * @param {Activity} activity             The Activity.
        * @param {HTMLElement} target            The element that menu was triggered on.
        * @param {ContextMenuEntry[]} menuItems  The context menu entries.
        */
-      Hooks.callAll("dnd5e.getItemActivityContext", activity, target, menuItems);
+      Hooks.callAll("varlyn5e.getItemActivityContext", activity, target, menuItems);
       ui.context.menuItems = menuItems;
     }
 
@@ -9050,7 +9050,7 @@ class RollConfigurationDialog extends Dialog5e {
      * A hook event that fires when a roll config is built using the roll prompt. Multiple hooks may be called depending
      * on the rolling method (e.g. `dnd5e.buildSkillRollConfig`, `dnd5e.buildAbilityCheckRollConfig`,
      * `dnd5e.buildRollConfig`).
-     * @function dnd5e.buildRollConfig
+     * @function varlyn5e.buildRollConfig
      * @memberof hookEvents
      * @param {RollConfigurationDialog} app    Roll configuration dialog.
      * @param {BasicRollConfiguration} config  Roll configuration data.
@@ -9068,7 +9068,7 @@ class RollConfigurationDialog extends Dialog5e {
      * A hook event that fires after a roll config has been built using the roll prompt. Multiple hooks may be called
      * depending on the rolling method (e.g. `dnd5e.postBuildSkillRollConfig`, `dnd5e.postBuildAbilityCheckRollConfig`,
      * `dnd5e.postBuildRollConfig`).
-     * @function dnd5e.postBuildRollConfig
+     * @function varlyn5e.postBuildRollConfig
      * @memberof hookEvents
      * @param {BasicRollProcessConfiguration} process  Full process configuration data.
      * @param {BasicRollConfiguration} config          Roll configuration data.
@@ -9561,7 +9561,7 @@ class IdentifierField extends foundry.data.fields.StringField {
 
   /** @override */
   _validateType(value) {
-    if ( !dnd5e.utils.validators.isValidIdentifier(value, { allowType: this.allowType }) ) {
+    if ( !varlyn5e.utils.validators.isValidIdentifier(value, { allowType: this.allowType }) ) {
       throw new Error(_loc("DND5E.IdentifierError"));
     }
   }
@@ -11003,7 +11003,7 @@ class BaseAttackActivityData extends BaseActivityData {
     }
     const actionType = this.getActionType(attackMode);
     let actionTypeLabel = _loc(`DND5E.Action${actionType.toUpperCase()}`);
-    const isLegacy = dnd5e.settings.rulesVersion === "legacy";
+    const isLegacy = varlyn5e.settings.rulesVersion === "legacy";
     const isUnarmed = this.attack.type.classification === "unarmed";
     if ( isUnarmed ) attackModeLabel = _loc("DND5E.ATTACK.Classification.Unarmed");
     const isSpell = (actionType === "rsak") || (actionType === "msak");
@@ -11380,15 +11380,15 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
 
     /**
      * A hook event that fires after an attack has been rolled but before any ammunition is consumed.
-     * @function dnd5e.rollAttack
+     * @function varlyn5e.rollAttack
      * @memberof hookEvents
      * @param {D20Roll[]} rolls                        The resulting rolls.
      * @param {object} data
      * @param {AttackActivity|null} data.subject       The Activity that performed the attack.
      * @param {AmmunitionUpdate|null} data.ammoUpdate  Any updates related to ammo consumption for this attack.
      */
-    Hooks.callAll("dnd5e.rollAttack", rolls, { subject: this, ammoUpdate });
-    Hooks.callAll("dnd5e.rollAttackV2", rolls, { subject: this, ammoUpdate });
+    Hooks.callAll("varlyn5e.rollAttack", rolls, { subject: this, ammoUpdate });
+    Hooks.callAll("varlyn5e.rollAttackV2", rolls, { subject: this, ammoUpdate });
 
     // Commit ammunition consumption on attack rolls resource consumption if the attack roll was made
     if ( canUpdate && ammoUpdate?.destroy ) {
@@ -11396,7 +11396,7 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
       const data = this.actor.items.get(ammoUpdate.id).toObject();
       const messageId = messageConfig.data?.flags?.dnd5e?.originatingMessage
         ?? rollConfig.event?.target.closest("[data-message-id]")?.dataset.messageId;
-      const attackMessage = dnd5e.registry.messages.get(messageId, "attack")?.pop();
+      const attackMessage = varlyn5e.registry.messages.get(messageId, "attack")?.pop();
       await attackMessage?.setFlag("dnd5e", "roll.ammunitionData", data);
       await this.actor.deleteEmbeddedDocuments("Item", [ammoUpdate.id]);
     }
@@ -11406,13 +11406,13 @@ class AttackActivity extends ActivityMixin(BaseAttackActivityData) {
 
     /**
      * A hook event that fires after an attack has been rolled and ammunition has been consumed.
-     * @function dnd5e.postRollAttack
+     * @function varlyn5e.postRollAttack
      * @memberof hookEvents
      * @param {D20Roll[]} rolls                   The resulting rolls.
      * @param {object} data
      * @param {AttackActivity|null} data.subject  The activity that performed the attack.
      */
-    Hooks.callAll("dnd5e.postRollAttack", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.postRollAttack", rolls, { subject: this });
 
     return rolls;
   }
@@ -11765,7 +11765,7 @@ class CastActivity extends ActivityMixin(BaseCastActivityData) {
 
     /**
      * A hook event that fires before a linked spell is used by a Cast activity.
-     * @function dnd5e.preUseLinkedSpell
+     * @function varlyn5e.preUseLinkedSpell
      * @memberof hookEvents
      * @param {CastActivity} activity                                Cast activity being used.
      * @param {Partial<ActivityUseConfiguration>} usageConfig        Configuration info for the activation.
@@ -11773,7 +11773,7 @@ class CastActivity extends ActivityMixin(BaseCastActivityData) {
      * @param {Partial<ActivityMessageConfiguration>} messageConfig  Configuration info for the created chat message.
      * @returns {boolean}  Explicitly return `false` to prevent activity from being used.
      */
-    if ( Hooks.call("dnd5e.preUseLinkedSpell", this, usage, dialog, message) === false ) return;
+    if ( Hooks.call("varlyn5e.preUseLinkedSpell", this, usage, dialog, message) === false ) return;
 
     let spell = this.cachedSpell;
     if ( !spell ) {
@@ -11784,13 +11784,13 @@ class CastActivity extends ActivityMixin(BaseCastActivityData) {
 
     /**
      * A hook event that fires after a linked spell is used by a Cast activity.
-     * @function dnd5e.postUseLinkedSpell
+     * @function varlyn5e.postUseLinkedSpell
      * @memberof hookEvents
      * @param {CastActivity} activity                          Activity being activated.
      * @param {Partial<ActivityUseConfiguration>} usageConfig  Configuration data for the activation.
      * @param {ActivityUsageResults} results                   Final details on the activation.
      */
-    if ( results ) Hooks.callAll("dnd5e.postUseLinkedSpell", this, usage, results);
+    if ( results ) Hooks.callAll("varlyn5e.postUseLinkedSpell", this, usage, results);
 
     return results;
   }
@@ -13505,7 +13505,7 @@ class BaseEnchantActivityData extends BaseActivityData {
    * @type {ActiveEffect5e[]}
    */
   get appliedEnchantments() {
-    return dnd5e.registry.enchantments.applied(this.uuid);
+    return varlyn5e.registry.enchantments.applied(this.uuid);
   }
 
   /* -------------------------------------------- */
@@ -14617,7 +14617,7 @@ class Advancement extends PseudoDocumentMixin(BaseAdvancementData) {
   async delete(options={}) {
     if ( this.item.actor?.system.metadata?.supportsAdvancement
         && !game.settings.get("dnd5e", "disableAdvancements") ) {
-      const manager = dnd5e.applications.advancement.AdvancementManager
+      const manager = varlyn5e.applications.advancement.AdvancementManager
         .forDeletedAdvancement(this.item.actor, this.item.id, this.id);
       if ( manager.steps.length ) return manager.render(true);
     }
@@ -14748,13 +14748,13 @@ class Advancement extends PseudoDocumentMixin(BaseAdvancementData) {
 
     /**
      * A hook even that fires when the context menu for an Advancement is opened.
-     * @function dnd5e.getItemAdvancementContext
+     * @function varlyn5e.getItemAdvancementContext
      * @memberof hookEvents
      * @param {Advancement} advancement       The Advancement.
      * @param {HTMLElement} target            The element that menu was triggered on.
      * @param {ContextMenuEntry[]} menuItems  The context menu entries.
      */
-    Hooks.callAll("dnd5e.getItemAdvancementContext", advancement, target, menuItems);
+    Hooks.callAll("varlyn5e.getItemAdvancementContext", advancement, target, menuItems);
     ui.context.menuItems = menuItems;
   }
 
@@ -15318,11 +15318,11 @@ class AdvancementManager extends Application5e {
 
     /**
      * A hook event that fires when an AdvancementManager is about to be processed.
-     * @function dnd5e.preAdvancementManagerRender
+     * @function varlyn5e.preAdvancementManagerRender
      * @memberof hookEvents
      * @param {AdvancementManager} advancementManager The advancement manager about to be rendered
      */
-    if ( Hooks.call("dnd5e.preAdvancementManagerRender", this) === false ) return;
+    if ( Hooks.call("varlyn5e.preAdvancementManagerRender", this) === false ) return;
 
     const automaticData = (this.options.automaticApplication && (options.direction !== "backward"))
       ? await this.step?.flow?.getAutomaticApplicationValue() : false;
@@ -15333,7 +15333,7 @@ class AdvancementManager extends Application5e {
       return this;
     }
 
-    if ( this.step?.flow instanceof dnd5e.applications.advancement.AdvancementFlowV2 ) {
+    if ( this.step?.flow instanceof varlyn5e.applications.advancement.AdvancementFlowV2 ) {
       this.#preEmbeddedItems = Array.from(this.clone.items);
       const flow = this.step.flow;
       if ( flow.retainedData && !this.step.error ) await flow.advancement.restore(flow.level, flow.retainedData);
@@ -15422,7 +15422,7 @@ class AdvancementManager extends Application5e {
           if ( this.previousStep ) await this.#restart(event);
           break;
         case "previous":
-          if ( this.step?.flow instanceof dnd5e.applications.advancement.AdvancementFlowV2 ) {
+          if ( this.step?.flow instanceof varlyn5e.applications.advancement.AdvancementFlowV2 ) {
             this.#preEmbeddedItems = Array.from(this.clone.items);
             const flow = this.step.flow;
             await flow.retainData(await flow.advancement.reverse(flow.level));
@@ -15678,7 +15678,7 @@ class AdvancementManager extends Application5e {
     /**
      * A hook event that fires at the final stage of a character's advancement process, before actor and item updates
      * are applied.
-     * @function dnd5e.preAdvancementManagerComplete
+     * @function varlyn5e.preAdvancementManagerComplete
      * @memberof hookEvents
      * @param {AdvancementManager} advancementManager  The advancement manager.
      * @param {object} actorUpdates                    Updates to the actor.
@@ -15686,7 +15686,7 @@ class AdvancementManager extends Application5e {
      * @param {object[]} toUpdate                      Items that will be updated on the actor.
      * @param {string[]} toDelete                      IDs of items that will be deleted on the actor.
      */
-    if ( Hooks.call("dnd5e.preAdvancementManagerComplete", this, updates, toCreate, toUpdate, toDelete) === false ) {
+    if ( Hooks.call("varlyn5e.preAdvancementManagerComplete", this, updates, toCreate, toUpdate, toDelete) === false ) {
       log("AdvancementManager completion was prevented by the 'preAdvancementManagerComplete' hook.");
       return this.close({ skipConfirmation: true });
     }
@@ -15701,11 +15701,11 @@ class AdvancementManager extends Application5e {
 
     /**
      * A hook event that fires when an AdvancementManager is done modifying an actor.
-     * @function dnd5e.advancementManagerComplete
+     * @function varlyn5e.advancementManagerComplete
      * @memberof hookEvents
      * @param {AdvancementManager} advancementManager The advancement manager that just completed
      */
-    Hooks.callAll("dnd5e.advancementManagerComplete", this);
+    Hooks.callAll("varlyn5e.advancementManagerComplete", this);
 
     // Close prompt
     return this.close({ skipConfirmation: true });
@@ -16563,7 +16563,7 @@ class TraitConfigurationData extends foundry.abstract.DataModel {
     super.migrateData(source);
     if ( !source ) return source;
 
-    const version = dnd5e.settings.rulesVersion;
+    const version = varlyn5e.settings.rulesVersion;
     const languageMap = LANGUAGE_MAP[version] ?? {};
     if ( source.grants?.length ) source.grants = source.grants.map(t => languageMap[t] ?? t);
     if ( source.choices?.length ) source.choices.forEach(c => {
@@ -16595,7 +16595,7 @@ class TraitValueData extends foundry.abstract.DataModel {
   static migrateData(source) {
     super.migrateData(source);
     if ( !source ) return source;
-    const version = dnd5e.settings.rulesVersion;
+    const version = varlyn5e.settings.rulesVersion;
     const languageMap = LANGUAGE_MAP[version] ?? {};
     if ( source.chosen?.length ) source.chosen = source.chosen.map(t => languageMap[t] ?? t);
     return source;
@@ -17878,7 +17878,7 @@ class SourceField extends SchemaField$H {
       license: new StringField$_(),
       revision: new NumberField$z({ initial: 1 }),
       rules: new StringField$_({
-        initial: () => dnd5e.settings.rulesVersion === "modern" ? "2024" : "2014"
+        initial: () => varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014"
       }),
       ...fields
     };
@@ -18576,7 +18576,7 @@ class StartingEquipmentTemplate extends SystemDataModel {
 
     // For modern classes, display as "Choose A or B"
     modernStyle ??= (this.source.rules === "2024")
-      || (!this.source.rules && (dnd5e.settings.rulesVersion === "modern"));
+      || (!this.source.rules && (varlyn5e.settings.rulesVersion === "modern"));
     if ( modernStyle ) {
       const entries = topLevel[0].type === "OR" ? topLevel[0].children : topLevel;
       if ( this.wealth ) entries.push(new EquipmentEntryData({
@@ -18769,7 +18769,7 @@ class EquipmentEntryData extends foundry.abstract.DataModel {
   generateLabel({ depth=1, modernStyle }={}) {
     let label;
     modernStyle ??= (this.parent.source?.rules === "2024")
-      || (!this.parent.source?.rules && (dnd5e.settings.rulesVersion === "modern"));
+      || (!this.parent.source?.rules && (varlyn5e.settings.rulesVersion === "modern"));
 
     switch ( this.type ) {
       // For AND/OR, use a simple conjunction/disjunction list (e.g. "first, second, and third")
@@ -19790,12 +19790,12 @@ class PhysicalItemTemplate extends SystemDataModel {
 
     /**
      * A hook event that fires when retrieving an item as gear.
-     * @function dnd5e.getAsGear
+     * @function varlyn5e.getAsGear
      * @memberof hookEvents
      * @param {Item5e} item  Item on NPC being prepared as gear.
      * @param {Item5e} gear  Non-saved clone of the item to be returned as gear.
      */
-    Hooks.callAll("dnd5e.getAsGear", this.parent, clone);
+    Hooks.callAll("varlyn5e.getAsGear", this.parent, clone);
 
     return clone;
   }
@@ -20301,7 +20301,7 @@ class ActivitiesTemplate extends SystemDataModel {
    * @type {ActiveEffect5e[]}
    */
   get appliedEnchantments() {
-    return dnd5e.registry.enchantments.applied(this.parent.uuid);
+    return varlyn5e.registry.enchantments.applied(this.parent.uuid);
   }
 
   /* -------------------------------------------- */
@@ -20686,8 +20686,8 @@ class ActivitiesTemplate extends SystemDataModel {
       || !foundry.utils.hasProperty(changed, "system.activities") ) return;
 
     // If any Cast activities were removed, or their spells changed, remove old cached spells
-    if ( options.dnd5e?.removedCachedItems ) {
-      await this.parent.actor.deleteEmbeddedDocuments("Item", options.dnd5e.removedCachedItems);
+    if ( options.varlyn5e?.removedCachedItems ) {
+      await this.parent.actor.deleteEmbeddedDocuments("Item", options.varlyn5e.removedCachedItems);
     }
 
     // Create any new cached spells & update existing ones as necessary
@@ -21167,7 +21167,7 @@ class EquipmentData extends ItemDataModel.mixin(
       context.info = [{
         label: "DND5E.ArmorClass",
         classes: "info-lg",
-        value: this.type.value === "shield" ? dnd5e.utils.formatModifier(this.armor.value) : this.armor.value
+        value: this.type.value === "shield" ? varlyn5e.utils.formatModifier(this.armor.value) : this.armor.value
       }];
     }
   }
@@ -21884,7 +21884,7 @@ function getRulesVersion(config={}, options={}) {
   if ( Number.isNumeric(config.rules) ) return String(config.rules);
   return options.relativeTo?.parent?.system?.source?.rules
     || options.relativeTo?.system?.source?.rules
-    || (dnd5e.settings.rulesVersion === "modern" ? "2024" : "2014");
+    || (varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014");
 }
 
 /* -------------------------------------------- */
@@ -22081,9 +22081,9 @@ async function rollAttack(config, event) {
 
   const rolls = await CONFIG.Dice.D20Roll.build(rollConfig, dialogConfig, messageConfig);
   if ( rolls?.length ) {
-    Hooks.callAll("dnd5e.rollAttack", rolls, { subject: null, ammoUpdate: null });
-    Hooks.callAll("dnd5e.rollAttackV2", rolls, { subject: null, ammoUpdate: null });
-    Hooks.callAll("dnd5e.postRollAttack", rolls, { subject: null });
+    Hooks.callAll("varlyn5e.rollAttack", rolls, { subject: null, ammoUpdate: null });
+    Hooks.callAll("varlyn5e.rollAttackV2", rolls, { subject: null, ammoUpdate: null });
+    Hooks.callAll("varlyn5e.postRollAttack", rolls, { subject: null });
   }
 }
 
@@ -22397,7 +22397,7 @@ async function enrichCheck(config, label, options) {
 function handleCheckCommand(config) {
   config = parseCheckConfig(config);
   config.type = "check";
-  if ( (config.tool.length === 1) && (config.skill.length > 0) && (dnd5e.settings.rulesVersion === "modern") ) {
+  if ( (config.tool.length === 1) && (config.skill.length > 0) && (varlyn5e.settings.rulesVersion === "modern") ) {
     config.usingTool = config.tool.pop();
   }
   if ( config.request ) return handlePostRequest(config);
@@ -22954,8 +22954,8 @@ async function rollDamage(config, event) {
 
   const rolls = await CONFIG.Dice.DamageRoll.build(rollConfig, {}, messageConfig);
   if ( !rolls?.length ) return;
-  Hooks.callAll("dnd5e.rollDamage", rolls);
-  Hooks.callAll("dnd5e.rollDamageV2", rolls);
+  Hooks.callAll("varlyn5e.rollDamage", rolls);
+  Hooks.callAll("varlyn5e.rollDamageV2", rolls);
 }
 
 /* -------------------------------------------- */
@@ -23773,7 +23773,7 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
           let include = new Set();
           let exclude = new Set();
           for ( const [k, v] of Object.entries(value ?? {}) ) {
-            const list = dnd5e.registry.spellLists.forType(k);
+            const list = varlyn5e.registry.spellLists.forType(k);
             if ( !list || (v === 0) ) continue;
             if ( v === 1 ) include = include.union(list.identifiers);
             else if ( v === -1 ) exclude = exclude.union(list.identifiers);
@@ -23782,9 +23782,9 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
           if ( exclude.size ) filters.push({ o: "NOT", v: { k: "system.identifier", o: "in", v: exclude } });
         },
         config: {
-          choices: dnd5e.registry.spellLists.options.reduce((obj, entry) => {
+          choices: varlyn5e.registry.spellLists.options.reduce((obj, entry) => {
             const [type, identifier] = entry.value.split(":");
-            const list = dnd5e.registry.spellLists.forType(type, identifier);
+            const list = varlyn5e.registry.spellLists.forType(type, identifier);
             if ( list?.identifiers.size ) obj[entry.value] = {
               label: entry.label, group: CONFIG.DND5E.spellListTypes[type]
             };
@@ -24094,7 +24094,7 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
     const uuid = this.parent._stats.compendiumSource ?? this.parent.uuid;
     Object.defineProperty(labels, "classes", {
       get() {
-        return Array.from(dnd5e.registry.spellLists.forSpell(uuid))
+        return Array.from(varlyn5e.registry.spellLists.forSpell(uuid))
           .filter(list => list.metadata.type === "class")
           .map(list => list.name)
           .sort((lhs, rhs) => lhs.localeCompare(rhs, game.i18n.lang));
@@ -24367,14 +24367,14 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
 
     /**
      * A hook event that fires after an embedded spell with details is rendered.
-     * @function dnd5e.renderEmbeddedSpell
+     * @function varlyn5e.renderEmbeddedSpell
      * @memberof hookEvents
      * @param {Item5e} item                     Spell being embedded.
      * @param {HTMLTemplateElement} template    Template whose children will be embedded.
      * @param {DocumentHTMLEmbedConfig} config  Configuration for embedding behavior.
      * @param {EnrichmentOptions} options       Original enrichment options.
      */
-    Hooks.call("dnd5e.renderEmbeddedSpell", this.parent, template, config, options);
+    Hooks.call("varlyn5e.renderEmbeddedSpell", this.parent, template, config, options);
 
     return template.children;
   }
@@ -24418,7 +24418,7 @@ class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, ItemDescriptionT
 
     // Create intersection of spellcasting classes and classes that offer the spell
     const spellClasses = new Set(
-      dnd5e.registry.spellLists.forSpell(this.parent._stats.compendiumSource).map(l => l.metadata.identifier)
+      varlyn5e.registry.spellLists.forSpell(this.parent._stats.compendiumSource).map(l => l.metadata.identifier)
     );
     const intersection = classes.intersection(spellClasses);
     if ( intersection.size === 1 ) setClass(intersection.first());
@@ -24499,7 +24499,7 @@ class Proficiency {
    * @type {string}
    */
   get term() {
-    return (dnd5e.settings.proficiencyModifier === "dice") && !this.deterministic
+    return (varlyn5e.settings.proficiencyModifier === "dice") && !this.deterministic
       ? this.dice : String(this.flat);
   }
 
@@ -24701,13 +24701,13 @@ class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires before source data is initialized for an Item in a compendium.
-     * @function dnd5e.initializeItemSource
+     * @function varlyn5e.initializeItemSource
      * @memberof hookEvents
      * @param {Item5e} item     Item for which the data is being initialized.
      * @param {object} source   Source data being initialized.
      * @param {object} options  Additional data initialization options.
      */
-    if ( options.pack || options.parent?.pack ) Hooks.callAll("dnd5e.initializeItemSource", this, data, options);
+    if ( options.pack || options.parent?.pack ) Hooks.callAll("varlyn5e.initializeItemSource", this, data, options);
 
     if ( data.type === "spell" ) {
       return super._initializeSource(new Proxy(data, {
@@ -25398,27 +25398,27 @@ class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires before an item chat card is created without using an activity.
-     * @function dnd5e.preDisplayCard
+     * @function varlyn5e.preDisplayCard
      * @memberof hookEvents
      * @param {Item5e} item                           Item for which the card will be created.
      * @param {ActivityMessageConfiguration} message  Configuration for the roll message.
      * @returns {boolean}                             Return `false` to prevent the card from being displayed.
      */
-    if ( Hooks.call("dnd5e.preDisplayCard", this, messageConfig) === false ) return;
-    if ( Hooks.call("dnd5e.preDisplayCardV2", this, messageConfig) === false ) return;
+    if ( Hooks.call("varlyn5e.preDisplayCard", this, messageConfig) === false ) return;
+    if ( Hooks.call("varlyn5e.preDisplayCardV2", this, messageConfig) === false ) return;
 
     ChatMessage.applyMode(messageConfig.data, messageConfig.rollMode);
     const card = messageConfig.create === false ? messageConfig.data : await ChatMessage.create(messageConfig.data);
 
     /**
      * A hook event that fires after an item chat card is created.
-     * @function dnd5e.displayCard
+     * @function varlyn5e.displayCard
      * @memberof hookEvents
      * @param {Item5e} item                Item for which the chat card is being displayed.
      * @param {ChatMessage5e|object} card  The created ChatMessage instance or ChatMessageData depending on whether
      *                                     options.createMessage was set to `true`.
      */
-    Hooks.callAll("dnd5e.displayCard", this, card);
+    Hooks.callAll("varlyn5e.displayCard", this, card);
 
     return card;
   }
@@ -25940,7 +25940,7 @@ class Item5e extends SystemDocumentMixin(Item) {
     if ( spell.pack ) return this.createScrollFromCompendiumSpell(spell.uuid, config);
 
     const values = {};
-    if ( (spell instanceof Item5e) && spell.isOwned && (dnd5e.settings.rulesVersion === "modern") ) {
+    if ( (spell instanceof Item5e) && spell.isOwned && (varlyn5e.settings.rulesVersion === "modern") ) {
       const spellcastingClass = spell.actor.spellcastingClasses?.[spell.system.classIdentifier];
       if ( spellcastingClass ) {
         values.bonus = spellcastingClass.spellcasting.attack;
@@ -25979,14 +25979,14 @@ class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires before the item data for a scroll is created.
-     * @function dnd5e.preCreateScrollFromSpell
+     * @function varlyn5e.preCreateScrollFromSpell
      * @memberof hookEvents
      * @param {object} itemData                  The initial item data of the spell to convert to a scroll.
      * @param {object} options                   Additional options that modify the created scroll.
      * @param {SpellScrollConfiguration} config  Configuration options for scroll creation.
      * @returns {boolean}                        Explicitly return false to prevent the scroll to be created.
      */
-    if ( Hooks.call("dnd5e.preCreateScrollFromSpell", itemData, options, config) === false ) return;
+    if ( Hooks.call("varlyn5e.preCreateScrollFromSpell", itemData, options, config) === false ) return;
 
     let { activities, level, properties, source } = itemData.system;
 
@@ -26049,13 +26049,13 @@ class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires after the item data for a scroll is created but before the item is returned.
-     * @function dnd5e.createScrollFromSpell
+     * @function varlyn5e.createScrollFromSpell
      * @memberof hookEvents
      * @param {Item5e|object} spell              The spell or item data to be made into a scroll.
      * @param {object} spellScrollData           The final item data used to make the scroll.
      * @param {SpellScrollConfiguration} config  Configuration options for scroll creation.
      */
-    Hooks.callAll("dnd5e.createScrollFromSpell", spell, spellScrollData, config);
+    Hooks.callAll("varlyn5e.createScrollFromSpell", spell, spellScrollData, config);
 
     return new this(spellScrollData);
   }
@@ -26089,13 +26089,13 @@ class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires before the item data for a scroll is created for a compendium spell.
-     * @function dnd5e.preCreateScrollFromCompendiumSpell
+     * @function varlyn5e.preCreateScrollFromCompendiumSpell
      * @memberof hookEvents
      * @param {Item5e} spell                     Spell to add to the scroll.
      * @param {SpellScrollConfiguration} config  Configuration options for scroll creation.
      * @returns {boolean}                        Explicitly return `false` to prevent the scroll to be created.
      */
-    if ( Hooks.call("dnd5e.preCreateScrollFromCompendiumSpell", spell, config) === false ) return;
+    if ( Hooks.call("varlyn5e.preCreateScrollFromCompendiumSpell", spell, config) === false ) return;
 
     // Get scroll data
     let scrollUuid;
@@ -26147,13 +26147,13 @@ class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires after the item data for a scroll is created but before the item is returned.
-     * @function dnd5e.createScrollFromSpell
+     * @function varlyn5e.createScrollFromSpell
      * @memberof hookEvents
      * @param {Item5e} spell                     The spell or item data to be made into a scroll.
      * @param {object} spellScrollData           The final item data used to make the scroll.
      * @param {SpellScrollConfiguration} config  Configuration options for scroll creation.
      */
-    Hooks.callAll("dnd5e.createScrollFromSpell", spell, spellScrollData, config);
+    Hooks.callAll("varlyn5e.createScrollFromSpell", spell, spellScrollData, config);
 
     return new this(spellScrollData);
   }
@@ -26403,7 +26403,7 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
 
     /**
      * Hook that fires before an enchantment is applied to an item.
-     * @function dnd5e.preApplyEnchantment
+     * @function varlyn5e.preApplyEnchantment
      * @memberof hookEvents
      * @param {Item5e} item                        Item to which the enchantment will be applied.
      * @param {object} enchantmentData             Data for the enchantment effect that will be created.
@@ -26412,7 +26412,7 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
      * @param {ChatMessage5e} options.chatMessage  Chat message used to make the enchantment, if applicable.
      * @returns {boolean}                          Explicitly return `false` to prevent enchantment from being applied.
      */
-    if ( Hooks.call("dnd5e.preApplyEnchantment", item, enchantmentData, { activity: this, chatMessage }) === false ) return null;
+    if ( Hooks.call("varlyn5e.preApplyEnchantment", item, enchantmentData, { activity: this, chatMessage }) === false ) return null;
 
     // For compendium items, create on actor
     if ( item.inCompendium ) {
@@ -26434,7 +26434,7 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
 
     /**
      * Hook that fires after an enchantment has been applied to an item.
-     * @function dnd5e.applyEnchantment
+     * @function varlyn5e.applyEnchantment
      * @memberof hookEvents
      * @param {Item5e} item                        Item to which the enchantment was be applied.
      * @param {ActiveEffect5e} enchantment         The enchantment effect that was be created.
@@ -26442,7 +26442,7 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
      * @param {Activity} options.activity          Enchant activity applied the enchantment.
      * @param {ChatMessage5e} options.chatMessage  Chat message used to make the enchantment, if applicable.
      */
-    Hooks.callAll("dnd5e.applyEnchantment", item, enchantment, { activity: this, chatMessage });
+    Hooks.callAll("varlyn5e.applyEnchantment", item, enchantment, { activity: this, chatMessage });
 
     return enchantment;
   }
@@ -26500,7 +26500,7 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
 
     /**
      * A hook event that fires while validating whether an enchantment can be applied to a specific item.
-     * @function dnd5e.canEnchant
+     * @function varlyn5e.canEnchant
      * @memberof hookEvents
      * @param {EnchantActivity} activity             The activity performing the enchanting.
      * @param {Item5e} item                          Item to which the enchantment will be applied.
@@ -26510,7 +26510,7 @@ class EnchantActivity extends ActivityMixin(BaseEnchantActivityData) {
      * @param {object} options
      * @param {ChatMessage5e} [options.chatMessage]  Chat message used to make the enchantment, if applicable.
      */
-    Hooks.callAll("dnd5e.canEnchant", this, item, errors, { chatMessage });
+    Hooks.callAll("varlyn5e.canEnchant", this, item, errors, { chatMessage });
 
     return errors.length ? errors : true;
   }
@@ -29230,12 +29230,12 @@ class CompendiumBrowser extends Application5e {
 
     /**
      * Hook event that fires when a compendium browser is submitted with selected items.
-     * @function dnd5e.compendiumBrowserSelection
+     * @function varlyn5e.compendiumBrowserSelection
      * @memberof hookEvents
      * @param {CompendiumBrowser} browser  Compendium Browser application being submitted.
      * @param {Set<string>} selected       Set of document UUIDs that are selected.
      */
-    Hooks.callAll("dnd5e.compendiumBrowserSelection", this, this.#selected);
+    Hooks.callAll("varlyn5e.compendiumBrowserSelection", this, this.#selected);
   }
 
   /* -------------------------------------------- */
@@ -29934,7 +29934,7 @@ class BaseSummonActivityData extends BaseActivityData {
    */
   get summonedCreatures() {
     if ( !this.actor ) return [];
-    return dnd5e.registry.summons.creatures(this.actor)
+    return varlyn5e.registry.summons.creatures(this.actor)
       .filter(i => i?.getFlag("dnd5e", "summon.origin") === this.uuid);
   }
 
@@ -30118,14 +30118,14 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
 
     /**
      * A hook event that fires before summoning is performed.
-     * @function dnd5e.preSummon
+     * @function varlyn5e.preSummon
      * @memberof hookEvents
      * @param {SummonActivity} activity         The activity that is performing the summoning.
      * @param {SummonsProfile} profile          Profile used for summoning.
      * @param {SummoningConfiguration} options  Additional summoning options.
      * @returns {boolean}                       Explicitly return `false` to prevent summoning.
      */
-    if ( Hooks.call("dnd5e.preSummon", this, profile, options) === false ) return;
+    if ( Hooks.call("varlyn5e.preSummon", this, profile, options) === false ) return;
 
     // Fetch the actor that will be summoned
     const summonUuid = this.summon.mode === "cr" ? await this.queryActor(profile) : profile.uuid;
@@ -30134,7 +30134,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
       folderId: this.actor?.folder?.id ?? null,
       origin: { key: "flags.dnd5e.summon.origin", value: this.item?.uuid }
     };
-    const actor = await dnd5e.documents.Actor5e.fetchExisting(summonUuid, fetchOptions);
+    const actor = await varlyn5e.documents.Actor5e.fetchExisting(summonUuid, fetchOptions);
 
     // Verify ownership of actor
     if ( !actor.isOwner ) {
@@ -30161,7 +30161,7 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
         /**
          * A hook event that fires before a specific token is summoned. After placement has been determined but before
          * the final token data is constructed.
-         * @function dnd5e.preSummonToken
+         * @function varlyn5e.preSummonToken
          * @memberof hookEvents
          * @param {SummonActivity} activity         The activity that is performing the summoning.
          * @param {SummonsProfile} profile          Profile used for summoning.
@@ -30169,21 +30169,21 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
          * @param {SummoningConfiguration} options  Additional summoning options.
          * @returns {boolean}                       Explicitly return `false` to prevent this token from being summoned.
          */
-        if ( Hooks.call("dnd5e.preSummonToken", this, profile, tokenUpdateData, options) === false ) continue;
+        if ( Hooks.call("varlyn5e.preSummonToken", this, profile, tokenUpdateData, options) === false ) continue;
 
         // Create a token document and apply updates
         const tokenData = await this.getTokenData(tokenUpdateData);
 
         /**
          * A hook event that fires after token creation data is prepared, but before summoning occurs.
-         * @function dnd5e.summonToken
+         * @function varlyn5e.summonToken
          * @memberof hookEvents
          * @param {SummonActivity} activity         The activity that is performing the summoning.
          * @param {SummonsProfile} profile          Profile used for summoning.
          * @param {object} tokenData                Data for creating a token.
          * @param {SummoningConfiguration} options  Additional summoning options.
          */
-        Hooks.callAll("dnd5e.summonToken", this, profile, tokenData, options);
+        Hooks.callAll("varlyn5e.summonToken", this, profile, tokenData, options);
 
         tokensData.push(tokenData);
       }
@@ -30197,14 +30197,14 @@ class SummonActivity extends ActivityMixin(BaseSummonActivityData) {
 
     /**
      * A hook event that fires when summoning is complete.
-     * @function dnd5e.postSummon
+     * @function varlyn5e.postSummon
      * @memberof hookEvents
      * @param {SummonActivity} activity         The activity that is performing the summoning.
      * @param {SummonsProfile} profile          Profile used for summoning.
      * @param {Token5e[]} tokens                Tokens that have been created.
      * @param {SummoningConfiguration} options  Additional summoning options.
      */
-    Hooks.callAll("dnd5e.postSummon", this, profile, createdTokens, options);
+    Hooks.callAll("varlyn5e.postSummon", this, profile, createdTokens, options);
 
     return createdTokens;
   }
@@ -30778,7 +30778,7 @@ class TransformationSetting extends foundry.abstract.DataModel {
       input: field instanceof BooleanField$m ? createCheckboxInput : undefined,
       value: this[name]
     };
-    if ( name === "spellLists" ) descriptor.options = dnd5e.registry.spellLists.options.filter(o => {
+    if ( name === "spellLists" ) descriptor.options = varlyn5e.registry.spellLists.options.filter(o => {
       if ( !host ) return true;
       const [type, identifier] = o.value.split(":");
       return host.identifiedItems.get(identifier, type)?.size > 0;
@@ -31514,14 +31514,14 @@ class UtilityActivity extends ActivityMixin(BaseUtilityActivityData) {
 
     /**
      * A hook event that fires after a formula has been rolled for a Utility activity.
-     * @function dnd5e.rollFormula
+     * @function varlyn5e.rollFormula
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls             The resulting rolls.
      * @param {object} data
      * @param {UtilityActivity} data.subject  The Activity that performed the roll.
      */
-    Hooks.callAll("dnd5e.rollFormula", rolls, { subject: this });
-    Hooks.callAll("dnd5e.rollFormulaV2", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.rollFormula", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.rollFormulaV2", rolls, { subject: this });
 
     return rolls;
   }
@@ -32019,7 +32019,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
   get isSuppressed() {
     if ( super.isSuppressed ) return true;
     if ( this.type === "enchantment" ) return false;
-    if ( this.parent instanceof dnd5e.documents.Item5e ) {
+    if ( this.parent instanceof varlyn5e.documents.Item5e ) {
       if ( this.parent.areEffectsSuppressed ) return true;
       if ( this.dependentOrigin?.active === false ) return true;
     }
@@ -32040,7 +32040,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
    * @returns {Promise<Actor5e|Item5e|null>}
    */
   async getSource() {
-    if ( (this.target instanceof dnd5e.documents.Actor5e) && (this.parent instanceof dnd5e.documents.Item5e) ) {
+    if ( (this.target instanceof varlyn5e.documents.Actor5e) && (this.parent instanceof varlyn5e.documents.Item5e) ) {
       return this.parent;
     }
     return fromUuid(this.origin);
@@ -32302,7 +32302,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
   prepareDerivedData() {
     super.prepareDerivedData();
     if ( this.id === this.constructor.ID.EXHAUSTION ) this._prepareExhaustionLevel();
-    if ( this.isAppliedEnchantment && this.uuid ) dnd5e.registry.enchantments.track(this.origin, this.uuid);
+    if ( this.isAppliedEnchantment && this.uuid ) varlyn5e.registry.enchantments.track(this.origin, this.uuid);
   }
 
   /* -------------------------------------------- */
@@ -32390,7 +32390,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
     } else if ( enchantmentProfile && activityId ) {
       let activity;
       const origin = await fromUuid(this.origin);
-      if ( origin instanceof dnd5e.documents.activity.EnchantActivity ) {
+      if ( origin instanceof varlyn5e.documents.activity.EnchantActivity ) {
         activity = origin;
         item = activity.item;
       } else if ( origin instanceof Item ) {
@@ -32572,7 +32572,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
   _onDelete(options, userId) {
     super._onDelete(options, userId);
     if ( game.user === game.users.activeGM ) this.getDependents().forEach(e => e.delete());
-    if ( this.isAppliedEnchantment ) dnd5e.registry.enchantments.untrack(this.origin, this.uuid);
+    if ( this.isAppliedEnchantment ) varlyn5e.registry.enchantments.untrack(this.origin, this.uuid);
     document.body.querySelectorAll(`enchantment-application:has([data-enchantment-uuid="${this.uuid}"]`)
       .forEach(element => element.buildItemList());
   }
@@ -32637,7 +32637,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
    */
   _shouldPromptConcentrationEnd() {
     if ( !this.active || !(this.parent instanceof Actor) ) return false;
-    if ( dnd5e.settings.disableConcentration || !this.parent.concentration.effects.size ) return false;
+    if ( varlyn5e.settings.disableConcentration || !this.parent.concentration.effects.size ) return false;
 
     return this.statuses.has("dead") || this.statuses.has("incapacitated");
   }
@@ -32823,7 +32823,7 @@ class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect) {
           || ((actor && (actor === otherActor)) || (item && (item === otherItem)))) arr.push(doc);
       }
       return arr;
-    }, []).concat(dnd5e.registry.dependents.get(this));
+    }, []).concat(varlyn5e.registry.dependents.get(this));
   }
 
   /* -------------------------------------------- */
@@ -33144,7 +33144,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @type {Actor5e[]}
    */
   get summonedCreatures() {
-    return dnd5e.registry.summons.creatures(this);
+    return varlyn5e.registry.summons.creatures(this);
   }
 
   /* -------------------------------------------- */
@@ -33157,13 +33157,13 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before source data is initialized for an Actor in a compendium.
-     * @function dnd5e.initializeActorSource
+     * @function varlyn5e.initializeActorSource
      * @memberof hookEvents
      * @param {Actor5e} actor   Actor for which the data is being initialized.
      * @param {object} source   Source data being initialized.
      * @param {object} options  Additional data initialization options.
      */
-    if ( options.pack ) Hooks.callAll("dnd5e.initializeActorSource", this, source, options);
+    if ( options.pack ) Hooks.callAll("varlyn5e.initializeActorSource", this, source, options);
 
     return super._initializeSource(source, options);
   }
@@ -33376,7 +33376,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const origin = this.getFlag("dnd5e", "summon.origin");
     if ( origin && this.token?.id ) {
       const { collection, primaryId } = foundry.utils.parseUuid(origin);
-      dnd5e.registry.summons.track(collection?.get?.(primaryId)?.uuid, this.uuid);
+      varlyn5e.registry.summons.track(collection?.get?.(primaryId)?.uuid, this.uuid);
     }
   }
 
@@ -33389,7 +33389,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    */
   getConcentrationDC(damage) {
     return Math.clamp(
-      Math.floor(damage / 2), 10, dnd5e.settings.rulesVersion === "modern" ? 30 : Infinity
+      Math.floor(damage / 2), 10, varlyn5e.settings.rulesVersion === "modern" ? 30 : Infinity
     );
   }
 
@@ -33452,7 +33452,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const level = this.system.attributes?.exhaustion ?? null;
     const imms = this.system.traits?.ci?.value ?? new Set();
     const applyExhaustion = (level !== null) && !imms.has("exhaustion")
-      && (dnd5e.settings.rulesVersion === "legacy");
+      && (varlyn5e.settings.rulesVersion === "legacy");
     const statuses = this.statuses;
     const isActiveSource = k => {
       const l = Number(k.split("-").pop());
@@ -33542,7 +33542,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {SpellcastingDescription} spellcasting  Spellcasting descriptive object.
      * @param {number} count                          Number of classes with this type of spellcasting.
      * @returns {boolean}  Explicitly return false to prevent default progression from being calculated.
-     * @function dnd5e.computeSpellcastingProgression
+     * @function varlyn5e.computeSpellcastingProgression
      * @memberof hookEvents
      */
     const allowed = Hooks.call(
@@ -33573,7 +33573,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {Actor5e|void} actor   Actor for whom the data is being prepared, if any.
      * @param {object} progression   Spellcasting progression data.
      * @returns {boolean}            Explicitly return false to prevent default preparation from being performed.
-     * @function dnd5e.prepareSpellcastingSlots
+     * @function varlyn5e.prepareSpellcastingSlots
      * @memberof hookEvents
      */
     const allowed = Hooks.call(`dnd5e.prepare${type.capitalize()}Slots`, spells, actor, progression);
@@ -33643,10 +33643,10 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {object} updates                    Distinct updates to be performed on the actor.
      * @param {DamageApplicationOptions} options  Additional damage application options.
      * @returns {boolean}                         Explicitly return `false` to prevent damage application.
-     * @function dnd5e.preApplyDamage
+     * @function varlyn5e.preApplyDamage
      * @memberof hookEvents
      */
-    if ( Hooks.call("dnd5e.preApplyDamage", this, amount, updates, options) === false ) return this;
+    if ( Hooks.call("varlyn5e.preApplyDamage", this, amount, updates, options) === false ) return this;
 
     // Delegate damage application to a hook
     // TODO: Replace this in the future with a better modifyTokenAttribute function in the core
@@ -33664,10 +33664,10 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {Actor5e} actor                     Actor that has been damaged.
      * @param {number} amount                     Amount of damage that has been applied.
      * @param {DamageApplicationOptions} options  Additional damage application options.
-     * @function dnd5e.applyDamage
+     * @function varlyn5e.applyDamage
      * @memberof hookEvents
      */
-    Hooks.callAll("dnd5e.applyDamage", this, amount, options);
+    Hooks.callAll("varlyn5e.applyDamage", this, amount, options);
 
     return this;
   }
@@ -33693,10 +33693,10 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {DamageDescription[]} damages       Damage descriptions.
      * @param {DamageApplicationOptions} options  Additional damage application options.
      * @returns {boolean}                         Explicitly return `false` to prevent damage application.
-     * @function dnd5e.preCalculateDamage
+     * @function varlyn5e.preCalculateDamage
      * @memberof hookEvents
      */
-    if ( Hooks.call("dnd5e.preCalculateDamage", this, damages, options) === false ) return false;
+    if ( Hooks.call("varlyn5e.preCalculateDamage", this, damages, options) === false ) return false;
 
     const multiplier = options.multiplier ?? 1;
     const treatAs = options.originatingMessage?.flags?.dnd5e?.roll?.type
@@ -33791,10 +33791,10 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {DamageSummary} damages             Damage descriptions.
      * @param {DamageApplicationOptions} options  Additional damage application options.
      * @returns {boolean}                         Explicitly return `false` to prevent damage application.
-     * @function dnd5e.calculateDamage
+     * @function varlyn5e.calculateDamage
      * @memberof hookEvents
      */
-    if ( Hooks.call("dnd5e.calculateDamage", this, damages, options) === false ) return false;
+    if ( Hooks.call("varlyn5e.calculateDamage", this, damages, options) === false ) return false;
 
     return damages;
   }
@@ -33923,7 +33923,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook that is called before a concentration effect is created.
-     * @function dnd5e.preBeginConcentrating
+     * @function varlyn5e.preBeginConcentrating
      * @memberof hookEvents
      * @param {Actor5e} actor         The actor initiating concentration.
      * @param {Item5e} item           The item that will be concentrated on.
@@ -33931,20 +33931,20 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {Activity} activity     The activity that triggered the concentration.
      * @returns {boolean}             Explicitly return false to prevent the effect from being created.
      */
-    if ( Hooks.call("dnd5e.preBeginConcentrating", this, activity.item, effectData, activity) === false ) return;
+    if ( Hooks.call("varlyn5e.preBeginConcentrating", this, activity.item, effectData, activity) === false ) return;
 
     const effect = await ActiveEffect5e.create(effectData, { parent: this });
 
     /**
      * A hook that is called after a concentration effect is created.
-     * @function dnd5e.createConcentrating
+     * @function varlyn5e.createConcentrating
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor initiating concentration.
      * @param {Item5e} item               The item that is being concentrated on.
      * @param {ActiveEffect5e} effect     The created ActiveEffect instance.
      * @param {Activity} activity         The activity that triggered the concentration.
      */
-    Hooks.callAll("dnd5e.beginConcentrating", this, activity.item, effect, activity);
+    Hooks.callAll("varlyn5e.beginConcentrating", this, activity.item, effect, activity);
 
     return effect;
   }
@@ -33980,24 +33980,24 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook that is called before a concentration effect is deleted.
-     * @function dnd5e.preEndConcentration
+     * @function varlyn5e.preEndConcentration
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor ending concentration.
      * @param {ActiveEffect5e} effect     The ActiveEffect that will be deleted.
      * @returns {boolean}                 Explicitly return false to prevent the effect from being deleted.
      */
-    if ( Hooks.call("dnd5e.preEndConcentration", this, effect) === false) return [];
+    if ( Hooks.call("varlyn5e.preEndConcentration", this, effect) === false) return [];
 
     await effect.delete();
 
     /**
      * A hook that is called after a concentration effect is deleted.
-     * @function dnd5e.endConcentration
+     * @function varlyn5e.endConcentration
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor ending concentration.
      * @param {ActiveEffect5e} effect     The ActiveEffect that was deleted.
      */
-    Hooks.callAll("dnd5e.endConcentration", this, effect);
+    Hooks.callAll("varlyn5e.endConcentration", this, effect);
 
     return [effect];
   }
@@ -34082,7 +34082,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @private
    */
   _isRemarkableAthlete(ability) {
-    return (dnd5e.settings.rulesVersion === "legacy") && this.getFlag("dnd5e", "remarkableAthlete")
+    return (varlyn5e.settings.rulesVersion === "legacy") && this.getFlag("dnd5e", "remarkableAthlete")
       && CONFIG.DND5E.characterFlags.remarkableAthlete.abilities.includes(ability);
   }
 
@@ -34096,7 +34096,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @param {object} data     Roll data.
    */
   addRollExhaustion(parts, data) {
-    if ( (dnd5e.settings.rulesVersion !== "modern") || !this.system.attributes?.exhaustion
+    if ( (varlyn5e.settings.rulesVersion !== "modern") || !this.system.attributes?.exhaustion
       || this.system.traits?.ci?.value?.has("exhaustion") ) return;
     const amount = this.system.attributes.exhaustion * (CONFIG.DND5E.conditionTypes.exhaustion?.reduction?.rolls ?? 0);
     if ( amount ) {
@@ -34258,8 +34258,8 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a skill or tool check has been rolled.
-     * @function dnd5e.rollSkill
-     * @function dnd5e.rollToolCheck
+     * @function varlyn5e.rollSkill
+     * @function varlyn5e.rollToolCheck
      * @memberof hookEvents
      * @param {D20Roll[]} rolls       The resulting rolls.
      * @param {object} data
@@ -34292,7 +34292,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const rollData = this.getRollData();
     const abilityId = formData?.get("ability") ?? process.ability;
     const ability = this.system.abilities?.[abilityId];
-    const { calculateSkillToolProficiency } = dnd5e.dataModels.actor.CommonTemplate;
+    const { calculateSkillToolProficiency } = varlyn5e.dataModels.actor.CommonTemplate;
     let prof = calculateSkillToolProficiency(this, abilityId, process);
     const originalProf = calculateSkillToolProficiency(hostActor, abilityId, process);
     if ( originalProf?.multiplier > prof.multiplier ) prof = originalProf;
@@ -34463,8 +34463,8 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after an ability check or save has been rolled.
-     * @function dnd5e.rollAbilityCheck
-     * @function dnd5e.rollSavingThrow
+     * @function varlyn5e.rollAbilityCheck
+     * @function varlyn5e.rollSavingThrow
      * @memberof hookEvents
      * @param {D20Roll[]} rolls       The resulting rolls.
      * @param {object} data
@@ -34582,7 +34582,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     /**
      * A hook event that fires after a death saving throw has been rolled for an Actor, but before
      * updates have been performed.
-     * @function dnd5e.rollDeathSave
+     * @function varlyn5e.rollDeathSave
      * @memberof hookEvents
      * @param {D20Roll[]} rolls         The resulting rolls.
      * @param {object} data
@@ -34592,8 +34592,8 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {Actor5e} data.subject    Actor for which the death saving throw has been rolled.
      * @returns {boolean}               Explicitly return `false` to prevent updates from being performed.
      */
-    if ( Hooks.call("dnd5e.rollDeathSave", rolls, details) === false ) return returnValue;
-    if ( Hooks.call("dnd5e.rollDeathSaveV2", rolls, details) === false ) return returnValue;
+    if ( Hooks.call("varlyn5e.rollDeathSave", rolls, details) === false ) return returnValue;
+    if ( Hooks.call("varlyn5e.rollDeathSaveV2", rolls, details) === false ) return returnValue;
 
     if ( !foundry.utils.isEmpty(details.updates) ) await this.update(details.updates);
 
@@ -34610,14 +34610,14 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a death saving throw has been rolled and after changes have been applied.
-     * @function dnd5e.postRollDeathSave
+     * @function varlyn5e.postRollDeathSave
      * @memberof hookEvents
      * @param {D20Roll[]} rolls                  The resulting rolls.
      * @param {object} data
      * @param {ChatMessage5e|void} data.message  The created results chat message.
      * @param {Actor5e} data.subject             Actor for which the death saving throw has been rolled.
      */
-    Hooks.callAll("dnd5e.postRollDeathSave", rolls, { message: resultsMessage, subject: this });
+    Hooks.callAll("varlyn5e.postRollDeathSave", rolls, { message: resultsMessage, subject: this });
 
     return returnValue;
   }
@@ -34675,14 +34675,14 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a saving throw to maintain concentration is rolled for an Actor.
-     * @function dnd5e.rollConcentration
+     * @function varlyn5e.rollConcentration
      * @memberof hookEvents
      * @param {D20Roll[]} rolls     The resulting rolls.
      * @param {object} data
      * @param {Actor5e} data.actor  Actor for which the saving throw has been rolled.
      */
-    Hooks.callAll("dnd5e.rollConcentration", rolls, { subject: this });
-    Hooks.callAll("dnd5e.rollConcentrationV2", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.rollConcentration", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.rollConcentrationV2", rolls, { subject: this });
 
     return oldFormat ? rolls[0] : rolls;
   }
@@ -34730,7 +34730,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       initiativeBonus: init.bonus,
       [`${abilityId}AbilityCheckBonus`]: ability?.bonuses?.check,
       abilityCheckBonus: this.system.bonuses?.abilities?.check,
-      alert: flags.initiativeAlert && (dnd5e.settings.rulesVersion === "legacy") ? 5 : null
+      alert: flags.initiativeAlert && (varlyn5e.settings.rulesVersion === "legacy") ? 5 : null
     }, rollData);
 
     const { advantage, disadvantage } = AdvantageModeField.combineFields(this.system, [
@@ -34762,12 +34762,12 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before initiative roll is prepared for an Actor.
-     * @function dnd5e.preConfigureInitiative
+     * @function varlyn5e.preConfigureInitiative
      * @memberof hookEvents
      * @param {Actor5e} subject              The Actor that is rolling initiative.
      * @param {D20RollConfiguration} config  Configuration data for the pending roll.
      */
-    Hooks.callAll("dnd5e.preConfigureInitiative", this, rollConfig);
+    Hooks.callAll("varlyn5e.preConfigureInitiative", this, rollConfig);
 
     return rollConfig;
   }
@@ -34818,12 +34818,12 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before initiative is rolled for an Actor.
-     * @function dnd5e.preRollInitiative
+     * @function varlyn5e.preRollInitiative
      * @memberof hookEvents
      * @param {Actor5e} actor  The Actor that is rolling initiative.
      * @param {D20Roll} roll   The initiative roll.
      */
-    if ( Hooks.call("dnd5e.preRollInitiative", this, this._cachedInitiativeRoll) === false ) {
+    if ( Hooks.call("varlyn5e.preRollInitiative", this, this._cachedInitiativeRoll) === false ) {
       delete this._cachedInitiativeRoll;
       return null;
     }
@@ -34835,12 +34835,12 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after an Actor has rolled for initiative.
-     * @function dnd5e.rollInitiative
+     * @function varlyn5e.rollInitiative
      * @memberof hookEvents
      * @param {Actor5e} actor           The Actor that rolled initiative.
      * @param {Combatant[]} combatants  The associated Combatants in the Combat.
      */
-    Hooks.callAll("dnd5e.rollInitiative", this, combatants);
+    Hooks.callAll("varlyn5e.rollInitiative", this, combatants);
     delete this._cachedInitiativeRoll;
     return combat;
   }
@@ -34891,7 +34891,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
         return null;
       }
     }
-    const rulesVersion = dnd5e.settings.rulesVersion;
+    const rulesVersion = varlyn5e.settings.rulesVersion;
     const minimumValue = rulesVersion === "modern" ? 1 : 0;
     formula ??= `max(${minimumValue}, 1${config.denomination} + @abilities.con.mod)`;
     const rollConfig = foundry.utils.deepClone(config);
@@ -34933,7 +34933,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a hit die has been rolled for an Actor, but before updates have been performed.
-     * @function dnd5e.rollHitDie
+     * @function varlyn5e.rollHitDie
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls          The resulting rolls.
      * @param {object} data
@@ -34943,8 +34943,8 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {object} data.updates.class  Updates that will be applied to the class.
      * @returns {boolean}                  Explicitly return `false` to prevent updates from being performed.
      */
-    if ( Hooks.call("dnd5e.rollHitDie", rolls, { subject: this, updates }) === false ) return returnValue;
-    if ( Hooks.call("dnd5e.rollHitDieV2", rolls, { subject: this, updates }) === false ) return returnValue;
+    if ( Hooks.call("varlyn5e.rollHitDie", rolls, { subject: this, updates }) === false ) return returnValue;
+    if ( Hooks.call("varlyn5e.rollHitDieV2", rolls, { subject: this, updates }) === false ) return returnValue;
 
     // Perform updates
     if ( !foundry.utils.isEmpty(updates.actor) ) await this.update(updates.actor);
@@ -34952,13 +34952,13 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a hit die has been rolled for an Actor and updates have been performed.
-     * @function dnd5e.postRollHitDie
+     * @function varlyn5e.postRollHitDie
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls     The resulting rolls.
      * @param {object} data
      * @param {Actor5e} data.subject  Actor for which the roll was performed.
      */
-    Hooks.callAll("dnd5e.postRollHitDie", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.postRollHitDie", rolls, { subject: this });
 
     return returnValue;
   }
@@ -34971,7 +34971,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @param {object} options
    * @param {boolean} [options.chatMessage=true]  Display the chat message for this roll.
    * @returns {Promise<Roll>}                     The completed roll.
-   * @see {@link dnd5e.preRollClassHitPoints}
+   * @see {@link varlyn5e.preRollClassHitPoints}
    */
   async rollClassHitPoints(item, { chatMessage=true }={}) {
     if ( item.type !== "class" ) throw new Error("Hit points can only be rolled for a class item.");
@@ -34990,7 +34990,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before hit points are rolled for a character's class.
-     * @function dnd5e.preRollClassHitPoints
+     * @function varlyn5e.preRollClassHitPoints
      * @memberof hookEvents
      * @param {Actor5e} actor            Actor for which the hit points are being rolled.
      * @param {Item5e} item              The class item whose hit dice will be rolled.
@@ -34999,19 +34999,19 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {object} config.data       The data object against which to parse attributes within the formula.
      * @param {object} messageData       The data object to use when creating the message.
      */
-    Hooks.callAll("dnd5e.preRollClassHitPoints", this, item, config, messageData);
+    Hooks.callAll("varlyn5e.preRollClassHitPoints", this, item, config, messageData);
 
     const roll = new Roll(config.formula, config.data);
     await roll.evaluate();
 
     /**
      * A hook event that fires after hit points haven been rolled for a character's class.
-     * @function dnd5e.rollClassHitPoints
+     * @function varlyn5e.rollClassHitPoints
      * @memberof hookEvents
      * @param {Actor5e} actor  Actor for which the hit points have been rolled.
      * @param {Roll} roll      The resulting roll.
      */
-    Hooks.callAll("dnd5e.rollClassHitPoints", this, roll);
+    Hooks.callAll("varlyn5e.rollClassHitPoints", this, roll);
 
     if ( config.chatMessage ) await roll.toMessage(messageData);
     return roll;
@@ -35024,7 +35024,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
    * @param {object} options
    * @param {boolean} [options.chatMessage=true]  Display the chat message for this roll.
    * @returns {Promise<Roll>}                     The completed roll.
-   * @see {@link dnd5e.preRollNPCHitPoints}
+   * @see {@link varlyn5e.preRollNPCHitPoints}
    */
   async rollNPCHitPoints({ chatMessage=true }={}) {
     if ( !this.system.isNPC ) throw new Error("NPC hit points can only be rolled for NPCs");
@@ -35043,7 +35043,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before hit points are rolled for an NPC.
-     * @function dnd5e.preRollNPCHitPoints
+     * @function varlyn5e.preRollNPCHitPoints
      * @memberof hookEvents
      * @param {Actor5e} actor            Actor for which the hit points are being rolled.
      * @param {object} config
@@ -35051,19 +35051,19 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {object} config.data       The data object against which to parse attributes within the formula.
      * @param {object} messageData       The data object to use when creating the message.
      */
-    Hooks.callAll("dnd5e.preRollNPCHitPoints", this, config, messageData);
+    Hooks.callAll("varlyn5e.preRollNPCHitPoints", this, config, messageData);
 
     const roll = new Roll(config.formula, config.data);
     await roll.evaluate();
 
     /**
      * A hook event that fires after hit points are rolled for an NPC.
-     * @function dnd5e.rollNPCHitPoints
+     * @function varlyn5e.rollNPCHitPoints
      * @memberof hookEvents
      * @param {Actor5e} actor  Actor for which the hit points have been rolled.
      * @param {Roll} roll      The resulting roll.
      */
-    Hooks.callAll("dnd5e.rollNPCHitPoints", this, roll);
+    Hooks.callAll("varlyn5e.rollNPCHitPoints", this, roll);
 
     if ( config.chatMessage ) await roll.toMessage(messageData);
     return roll;
@@ -35101,7 +35101,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     /**
      * A hook event that fires before a rest is started. The actual name of the hook will depend on the rest type
      * (e.g. `dnd5e.preShortRest` or `dnd5e.preLongRest`).
-     * @function dnd5e.preRest
+     * @function varlyn5e.preRest
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor that is being rested.
      * @param {RestConfiguration} config  Configuration options for the rest.
@@ -35122,7 +35122,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a rest has started, after the configuration is complete.
-     * @function dnd5e.rest
+     * @function varlyn5e.rest
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor that is being rested.
      * @param {RestConfiguration} config  Configuration options for the rest.
@@ -35227,14 +35227,14 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after rest result is calculated, but before any updates are performed.
-     * @function dnd5e.preRestCompleted
+     * @function varlyn5e.preRestCompleted
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor that is being rested.
      * @param {RestResult} result         Details on the rest to be completed.
      * @param {RestConfiguration} config  Configuration data for the rest occurring.
      * @returns {boolean}                 Explicitly return `false` to prevent the rest updates from being performed.
      */
-    if ( Hooks.call("dnd5e.preRestCompleted", this, result, config) === false ) return result;
+    if ( Hooks.call("varlyn5e.preRestCompleted", this, result, config) === false ) return result;
 
     // Perform updates
     await this.update(result.updateData, { isRest: true });
@@ -35249,13 +35249,13 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires when the rest process is completed for an actor.
-     * @function dnd5e.restCompleted
+     * @function varlyn5e.restCompleted
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor that just completed resting.
      * @param {RestResult} result         Details on the rest completed.
      * @param {RestConfiguration} config  Configuration data for that occurred.
      */
-    Hooks.callAll("dnd5e.restCompleted", this, result, config);
+    Hooks.callAll("varlyn5e.restCompleted", this, result, config);
 
     // Return data summarizing the rest effects
     return result;
@@ -35370,7 +35370,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
   _getRestHitDiceRecovery({ maxHitDice, fraction, ...config }={}, result={}) {
     const restConfig = CONFIG.DND5E.restTypes[config.type];
     if ( !this.system.attributes.hd || !restConfig?.recoverHitDice ) return;
-    fraction ??= dnd5e.settings.rulesVersion === "modern" ? 1 : 0.5;
+    fraction ??= varlyn5e.settings.rulesVersion === "modern" ? 1 : 0.5;
 
     // Handle simpler HD recovery for NPCs
     if ( this.system.isNPC ) {
@@ -35805,7 +35805,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
       // Keep specific items from the original data
       const spellIdentifiers = settings.spellLists.size ? new Set(
         Array.from(settings.spellLists)
-          .map(id => dnd5e.registry.spellLists.forType(id))
+          .map(id => varlyn5e.registry.spellLists.forType(id))
           .filter(list => this.identifiedItems.get(list?.metadata.identifier, list?.metadata.type)?.size)
           .flatMap(list => Array.from(list.identifiers))
       ) : null;
@@ -35850,7 +35850,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
           }];
           d.effects.push(profOverride);
         } else {
-          const cls = new dnd5e.dataModels.item.ClassData({ levels: d.system.details.cr });
+          const cls = new varlyn5e.dataModels.item.ClassData({ levels: d.system.details.cr });
           d.items.push({
             type: "class",
             name: _loc("DND5E.TRANSFORM.TemporaryClass"),
@@ -35996,7 +35996,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires just before the actor is transformed.
-     * @function dnd5e.transformActor
+     * @function varlyn5e.transformActor
      * @memberof hookEvents
      * @param {Actor5e} host                    The original actor before transformation.
      * @param {Actor5e} source                  The source actor into which to transform.
@@ -36004,8 +36004,8 @@ class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {TransformationSetting} settings  Settings that determine how the transformation is performed.
      * @param {object} options                  Rendering options passed to the actor creation.
      */
-    Hooks.callAll("dnd5e.transformActor", this, source, d, settings, options);
-    Hooks.callAll("dnd5e.transformActorV2", this, source, d, settings, options);
+    Hooks.callAll("varlyn5e.transformActor", this, source, d, settings, options);
+    Hooks.callAll("varlyn5e.transformActorV2", this, source, d, settings, options);
 
     // Create new Actor with transformed data
     const newActor = await this.constructor.create(d, options);
@@ -36066,13 +36066,13 @@ class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires just before the actor is reverted to original form.
-     * @function dnd5e.revertOriginalForm
+     * @function varlyn5e.revertOriginalForm
      * @memberof hookEvents
      * @param {Actor} actor                  The original actor before transformation.
      * @param {object} options
      * @param {boolean} options.renderSheet  Render the reverted actor sheet.
      */
-    Hooks.callAll("dnd5e.revertOriginalForm", this, options);
+    Hooks.callAll("varlyn5e.revertOriginalForm", this, options);
 
     const transformOptions = this.getFlag("dnd5e", "transformOptions");
     const previousActorIds = this.getFlag("dnd5e", "previousActorIds") ?? [];
@@ -36254,7 +36254,7 @@ class Actor5e extends SystemDocumentMixin(Actor) {
     const origin = this.getFlag("dnd5e", "summon.origin");
     if ( origin ) {
       const { collection, primaryId } = foundry.utils.parseUuid(origin);
-      dnd5e.registry.summons.untrack(collection?.get?.(primaryId)?.uuid, this.uuid);
+      varlyn5e.registry.summons.untrack(collection?.get?.(primaryId)?.uuid, this.uuid);
     }
   }
 
@@ -36792,7 +36792,7 @@ class AbilityScoreImprovementFlow extends AdvancementFlow$1 {
       };
     }
 
-    const modernRules = dnd5e.settings.rulesVersion === "modern";
+    const modernRules = varlyn5e.settings.rulesVersion === "modern";
     const pluralRules = new Intl.PluralRules(game.i18n.lang);
     context.pointCap = _loc(
       `DND5E.ADVANCEMENT.AbilityScoreImprovement.CapDisplay.${pluralRules.select(context.points.cap)}`,
@@ -37080,7 +37080,7 @@ class AbilityScoreImprovementAdvancement extends Advancement {
    */
   get allowFeat() {
     return (this.item.type === "class") && (game.settings.get("dnd5e", "allowFeats")
-      || dnd5e.settings.rulesVersion === "modern");
+      || varlyn5e.settings.rulesVersion === "modern");
   }
 
   /* -------------------------------------------- */
@@ -37093,7 +37093,7 @@ class AbilityScoreImprovementAdvancement extends Advancement {
     return (this.level >= AbilityScoreImprovementAdvancement.EPIC_BOON_LEVEL)
       && (this.item.type === "class")
       && (this.item.system.source?.rules ? (this.item.system.source.rules === "2024")
-        : (dnd5e.settings.rulesVersion === "modern"));
+        : (varlyn5e.settings.rulesVersion === "modern"));
   }
 
   /* -------------------------------------------- */
@@ -37144,7 +37144,7 @@ class AbilityScoreImprovementAdvancement extends Advancement {
   summaryForLevel(level, { configMode=false }={}) {
     const formatter = new Intl.NumberFormat(game.i18n.lang, { signDisplay: "always" });
     if ( configMode && this.isEpicBoon ) {
-      return dnd5e.utils.linkForUuid(this.configuration.recommendation);
+      return varlyn5e.utils.linkForUuid(this.configuration.recommendation);
     }
 
     else if ( configMode ) {
@@ -37687,7 +37687,7 @@ class ItemChoiceConfig extends AdvancementConfig$1 {
       { rule: true },
       ...Object.entries(CONFIG.DND5E.spellLevels).map(([value, label]) => ({ value, label }))
     ];
-    context.listRestrictionOptions = dnd5e.registry.spellLists.options;
+    context.listRestrictionOptions = varlyn5e.registry.spellLists.options;
     context.showContainerWarning = context.items.some(i => i.index?.type === "container");
     context.showSpellConfig = this.advancement.configuration.type === "spell";
 
@@ -38618,7 +38618,7 @@ class ItemGrantAdvancement extends Advancement {
   summaryForLevel(level, { configMode=false }={}) {
     // Link to compendium items
     if ( !this.value.added || configMode ) return this.configuration.items.filter(i => fromUuidSync(i.uuid))
-      .reduce((html, i) => html + dnd5e.utils.linkForUuid(i.uuid), "");
+      .reduce((html, i) => html + varlyn5e.utils.linkForUuid(i.uuid), "");
 
     // Link to items on the actor
     else {
@@ -38834,7 +38834,7 @@ class ItemChoiceAdvancement extends ItemGrantAdvancement {
   summaryForLevel(level, { configMode=false }={}) {
     const items = this.value.added?.[level];
     if ( !items || configMode ) return "";
-    return Object.values(items).reduce((html, uuid) => html + game.dnd5e.utils.linkForUuid(uuid), "");
+    return Object.values(items).reduce((html, uuid) => html + game.varlyn5e.utils.linkForUuid(uuid), "");
   }
 
   /* -------------------------------------------- */
@@ -39068,7 +39068,7 @@ class ItemChoiceAdvancement extends ItemGrantAdvancement {
     // If spell list is specified, ensure the spell is on that list
     if ( (type === "spell") && restriction.list.size ) {
       const lists = Array.from(restriction.list)
-        .map(l => dnd5e.registry.spellLists.forType(l))
+        .map(l => varlyn5e.registry.spellLists.forType(l))
         .filter(_ => _);
       if ( !lists.some(l => l.has(item)) ) return handleError("DND5E.ADVANCEMENT.ItemChoice.Warning.SpellList", {
         lists: game.i18n.getListFormatter({ type: "disjunction" }).format(lists.map(l => l.name))
@@ -39773,7 +39773,7 @@ class ScaleValueTypeDice extends ScaleValueType {
   get mods() {
     if ( !this.modifiers ) return "";
     return this.modifiers.reduce((acc, mod) => {
-      return acc + (dnd5e.utils.isValidDieModifier(mod) ? mod : "");
+      return acc + (varlyn5e.utils.isValidDieModifier(mod) ? mod : "");
     }, "");
   }
 
@@ -45308,7 +45308,7 @@ class VariantRulesSettingsConfig extends BaseSettingsConfig {
     switch ( partId ) {
       case "general":
         context.fields = [
-          dnd5e.settings.rulesVersion === "legacy" ? this.createSettingField("allowFeats") : null,
+          varlyn5e.settings.rulesVersion === "legacy" ? this.createSettingField("allowFeats") : null,
           this.createSettingField("restVariant"),
           this.createSettingField("proficiencyModifier"),
           this.createSettingField("levelingMode")
@@ -45644,7 +45644,7 @@ function registerSystemSettings() {
     scope: "world",
     config: false,
     type: CalendarConfigSetting,
-    onChange: () => dnd5e.ui.calendar?.onUpdateSettings?.()
+    onChange: () => varlyn5e.ui.calendar?.onUpdateSettings?.()
   });
 
   game.settings.register("dnd5e", "calendarPreferences", {
@@ -45652,7 +45652,7 @@ function registerSystemSettings() {
     scope: "user",
     config: false,
     type: CalendarPreferencesSetting,
-    onChange: () => dnd5e.ui.calendar?.onUpdateSettings?.()
+    onChange: () => varlyn5e.ui.calendar?.onUpdateSettings?.()
   });
 
   // Combat Settings
@@ -45952,13 +45952,13 @@ function registerSystemSettings() {
  * Cache various World settings to improve performance.
  */
 function cacheSettings() {
-  dnd5e.settings = { rulesVersion: "modern" };
+  varlyn5e.settings = { rulesVersion: "modern" };
   for ( const setting of game.settings.settings.values() ) {
     const { key, namespace, onChange, requiresReload, scope } = setting;
     if ( (scope !== "world") || (namespace !== "dnd5e") ) continue;
-    dnd5e.settings[key] = game.settings.get(namespace, key);
+    varlyn5e.settings[key] = game.settings.get(namespace, key);
     if ( !requiresReload ) setting.onChange = (value, ...args) => {
-      dnd5e.settings[key] = value;
+      varlyn5e.settings[key] = value;
       onChange?.(value, ...args);
     };
   }
@@ -46617,7 +46617,7 @@ class EffectsElement extends (foundry.applications.elements.AdoptableHTMLElement
       const effect = this.getEffect(element.dataset);
       if ( !effect ) return;
       ui.context.menuItems = this._getContextOptions(effect);
-      Hooks.call("dnd5e.getActiveEffectContextOptions", effect, ui.context.menuItems);
+      Hooks.call("varlyn5e.getActiveEffectContextOptions", effect, ui.context.menuItems);
     }, jQuery: false });
   }
 
@@ -47891,7 +47891,7 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
 
     // If using modern rules, do not show redundant artificer progression unless it is already selected.
     context.spellProgression = { ...CONFIG.DND5E.spellProgression };
-    if ( (dnd5e.settings.rulesVersion === "modern")
+    if ( (varlyn5e.settings.rulesVersion === "modern")
       && (this.item.system.spellcasting?.progression !== "artificer") ) delete context.spellProgression.artificer;
     context.spellProgression = Object.entries(context.spellProgression).map(([value, config]) => {
       const group = CONFIG.DND5E.spellcasting[config.type]?.label ?? "";
@@ -48165,7 +48165,7 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
   _attachFrameListeners() {
     super._attachFrameListeners();
     new ContextMenu5e(this.element, ".advancement-item[data-id]", [], {
-      onOpen: target => dnd5e.documents.advancement.Advancement.onContextMenu(this.item, target), jQuery: false
+      onOpen: target => varlyn5e.documents.advancement.Advancement.onContextMenu(this.item, target), jQuery: false
     });
   }
 
@@ -48222,11 +48222,11 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
   /** @override */
   _addDocument() {
     if ( this.tabGroups.primary === "activities" ) {
-      return dnd5e.documents.activity.UtilityActivity.createDialog({}, { parent: this.item }, { sheet: this });
+      return varlyn5e.documents.activity.UtilityActivity.createDialog({}, { parent: this.item }, { sheet: this });
     }
 
     if ( this.tabGroups.primary === "advancement" ) {
-      return dnd5e.documents.advancement.Advancement.createDialog({}, { parent: this.item }, { sheet: this });
+      return varlyn5e.documents.advancement.Advancement.createDialog({}, { parent: this.item }, { sheet: this });
     }
 
     if ( this.tabGroups.primary === "effects" ) {
@@ -48456,14 +48456,14 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
 
     /**
      * A hook event that fires when some useful data is dropped onto an ItemSheet5e.
-     * @function dnd5e.dropItemSheetData
+     * @function varlyn5e.dropItemSheetData
      * @memberof hookEvents
      * @param {Item5e} item                  The Item5e.
      * @param {ItemSheet5e} sheet            The ItemSheet5e application.
      * @param {object} data                  The data that has been dropped onto the sheet.
      * @returns {boolean}                    Explicitly return `false` to prevent normal drop handling.
      */
-    const allowed = Hooks.call("dnd5e.dropItemSheetData", item, this, data);
+    const allowed = Hooks.call("varlyn5e.dropItemSheetData", item, this, data);
     if ( allowed === false ) return;
     event.stopPropagation();
 
@@ -48499,7 +48499,7 @@ class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
     if ( effect.type === "enchantment" ) {
       effectData.origin ??= effect.parent?.uuid;
       options.keepOrigin = true;
-      options.dnd5e = {
+      options.varlyn5e = {
         enchantmentProfile: effect.id,
         activityId: data.activityId ?? effect.parent?.system.activities?.getByType("enchant").find(a =>
           a.effects.some(e => e._id === effect.id)
@@ -48862,14 +48862,14 @@ function PrimarySheetMixin(Base) {
 
       /**
        * A hook event that fires during preparation of sheet parts.
-       * @function dnd5e.prepareSheetContext
+       * @function varlyn5e.prepareSheetContext
        * @memberof hookEvents
        * @param {PrimarySheet5e} sheet  Sheet being rendered.
        * @param {string} partId         The ID of the part being prepared.
        * @param {object} context        Preparation context that should be mutated.
        * @param {object} options        Render options.
        */
-      Hooks.callAll("dnd5e.prepareSheetContext", this, partId, context, options);
+      Hooks.callAll("varlyn5e.prepareSheetContext", this, partId, context, options);
 
       return context;
     }
@@ -51444,7 +51444,7 @@ class BaseActorSheet extends PrimarySheetMixin(
       limited: this.actor.limited,
       modernRules: this.actor.system.source?.rules
         ? this.actor.system.source.rules === "2024"
-        : dnd5e.settings.rulesVersion === "modern",
+        : varlyn5e.settings.rulesVersion === "modern",
       rollableClass: this.isEditable ? "rollable" : "",
       sidebarCollapsed: !!game.user.getFlag("dnd5e", this._sidebarCollapsedKeyPath),
       system: this.actor.system,
@@ -51508,7 +51508,7 @@ class BaseActorSheet extends PrimarySheetMixin(
           parentId: effect.target === effect.parent ? null : effect.parent.id,
           durationParts: duration.remaining ? duration.label.split(", ") : [],
           showDuration: Number.isFinite(duration.value),
-          hasTooltip: source instanceof dnd5e.documents.Item5e
+          hasTooltip: source instanceof varlyn5e.documents.Item5e
         });
         return arr;
       }, []);
@@ -51784,7 +51784,7 @@ class BaseActorSheet extends PrimarySheetMixin(
    * @protected
    */
   _prepareSpellbook(context) {
-    const { SingleLevelSpellcasting } = dnd5e.dataModels.spellcasting;
+    const { SingleLevelSpellcasting } = varlyn5e.dataModels.spellcasting;
     const spellbook = {};
     const columns = customElements.get(this.options.elements.inventory).mapColumns([
       "school", "time", "range", "target", "roll", { id: "uses", order: 650, priority: 300 },
@@ -53336,14 +53336,14 @@ class BaseActorSheet extends PrimarySheetMixin(
 
     /**
      * A hook event that fires when a sheet filters an item.
-     * @function dnd5e.filterItem
+     * @function varlyn5e.filterItem
      * @memberof hookEvents
      * @param {BaseActorSheet|ContainerSheet} sheet     The sheet the item is being rendered on.
      * @param {Item5e} item                             The item being filtered.
      * @param {Set<string>} filters                     Filters applied to the Item.
      * @returns {false|void} Return false to hide the item, otherwise other filters will continue to apply.
      */
-    if ( Hooks.call("dnd5e.filterItem", this, item, filters) === false ) return false;
+    if ( Hooks.call("varlyn5e.filterItem", this, item, filters) === false ) return false;
   }
 
   /* -------------------------------------------- */
@@ -53652,7 +53652,7 @@ class CharacterActorSheet extends BaseActorSheet {
       reference: CONFIG.DND5E.creatureTypes[details.type.value]?.reference,
       subtitle: details.type.subtype
     };
-    if ( details.race instanceof dnd5e.documents.Item5e ) context.species = details.race;
+    if ( details.race instanceof varlyn5e.documents.Item5e ) context.species = details.race;
     context.labels.size = CONFIG.DND5E.actorSizes[traits.size]?.label ?? traits.size;
 
     // Saving Throws
@@ -54254,14 +54254,14 @@ class CharacterActorSheet extends BaseActorSheet {
     if ( !this.isEditable || (event.target.tagName === "INPUT") ) return;
     const { favoriteId } = target.closest("[data-favorite-id]").dataset;
     const favorite = await fromUuid(favoriteId, { relative: this.actor });
-    if ( (favorite instanceof dnd5e.documents.Item5e) || target.dataset.activityId ) {
+    if ( (favorite instanceof varlyn5e.documents.Item5e) || target.dataset.activityId ) {
       if ( favorite.type === "container" ) this._renderChild(favorite.sheet);
       else favorite.use({ event }, { options: { sheet: this } });
     }
-    else if ( favorite instanceof dnd5e.dataModels.activity.BaseActivityData ) {
+    else if ( favorite instanceof varlyn5e.dataModels.activity.BaseActivityData ) {
       if ( favorite.canUse ) favorite.use({ event }, { options: { sheet: this } });
     }
-    else if ( favorite instanceof dnd5e.documents.ActiveEffect5e ) favorite.update({ disabled: !favorite.disabled });
+    else if ( favorite instanceof varlyn5e.documents.ActiveEffect5e ) favorite.update({ disabled: !favorite.disabled });
     else {
       const { key } = target.closest("[data-key]")?.dataset ?? {};
       if ( key ) {
@@ -54277,7 +54277,7 @@ class CharacterActorSheet extends BaseActorSheet {
 
   /** @override */
   _defaultDropBehavior(event, data) {
-    if ( data.dnd5e?.action === "favorite" || (["Activity", "Item"].includes(data.type)
+    if ( data.varlyn5e?.action === "favorite" || (["Activity", "Item"].includes(data.type)
       && event.target.closest(".favorites")) ) return "link";
     return super._defaultDropBehavior(event, data);
   }
@@ -54301,8 +54301,8 @@ class CharacterActorSheet extends BaseActorSheet {
     game.tooltip.deactivate();
 
     const dragData = { dnd5e: { action: "favorite", type } };
-    if ( type === "slots" ) dragData.dnd5e.id = methods[method].getSpellSlotKey(Number(level));
-    else dragData.dnd5e.id = key;
+    if ( type === "slots" ) dragData.varlyn5e.id = methods[method].getSpellSlotKey(Number(level));
+    else dragData.varlyn5e.id = key;
     event.dataTransfer.setData("application/json", JSON.stringify(dragData));
     event.dataTransfer.effectAllowed = "link";
   }
@@ -54321,7 +54321,7 @@ class CharacterActorSheet extends BaseActorSheet {
       console.error(e);
       return;
     }
-    const { action, type, id } = data.dnd5e ?? {};
+    const { action, type, id } = data.varlyn5e ?? {};
     if ( action === "favorite" ) return this._onDropFavorite(event, { type, id });
     if ( data.type === "Activity" ) {
       const activity = await fromUuid(data.uuid);
@@ -54914,7 +54914,7 @@ class NPCActorSheet extends BaseActorSheet {
     // Visibility
     if ( this._mode === this.constructor.MODES.PLAY ) {
       context.showDeathSaves = context.important && !context.system.attributes.hp.value;
-      context.showInitiativeScore = dnd5e.settings.rulesVersion === "modern";
+      context.showInitiativeScore = varlyn5e.settings.rulesVersion === "modern";
     }
     context.showLoyalty = context.important && game.settings.get("dnd5e", "loyaltyScore") && game.user.isGM;
     context.showRests = game.user.isGM || (this.actor.isOwner && game.settings.get("dnd5e", "allowRests"));
@@ -56255,7 +56255,7 @@ class ActivitiesElement extends (foundry.applications.elements.AdoptableHTMLElem
     }
 
     new ContextMenu5e(this, "[data-activity-id]", [], {
-      onOpen: target => dnd5e.documents.activity.UtilityActivity.onContextMenu(this.document, target), jQuery: false
+      onOpen: target => varlyn5e.documents.activity.UtilityActivity.onContextMenu(this.document, target), jQuery: false
     });
   }
 
@@ -57443,7 +57443,7 @@ class EnchantmentApplicationElement extends MaybeAdoptable$2 {
    * the card list.
    */
   buildItemList() {
-    const enchantedItems = dnd5e.registry.enchantments.applied(this.enchantmentActivity.uuid).map(enchantment => {
+    const enchantedItems = varlyn5e.registry.enchantments.applied(this.enchantmentActivity.uuid).map(enchantment => {
       const item = enchantment.parent;
       const div = document.createElement("div");
       div.classList.add("preview");
@@ -58880,7 +58880,7 @@ class InventoryElement extends (foundry.applications.elements.AdoptableHTMLEleme
     if ( element.closest("[data-activity-id]") ) UtilityActivity.onContextMenu(item, element);
     else {
       ui.context.menuItems = this._getContextOptions(item, element);
-      Hooks.callAll("dnd5e.getItemContextOptions", item, ui.context.menuItems);
+      Hooks.callAll("varlyn5e.getItemContextOptions", item, ui.context.menuItems);
     }
   }
 
@@ -59757,7 +59757,7 @@ class ContainerSheet extends ItemSheet5e {
     const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
     if ( !["Item", "Folder"].includes(data.type) ) return super._onDrop(event, data);
 
-    if ( Hooks.call("dnd5e.dropItemSheetData", this.item, this, data) === false ) return;
+    if ( Hooks.call("varlyn5e.dropItemSheetData", this.item, this, data) === false ) return;
 
     if ( data.type === "Folder" ) return this._onDropFolder(event, data);
     return this._onDropItem(event, data);
@@ -59978,14 +59978,14 @@ class ContainerSheet extends ItemSheet5e {
 
     /**
      * A hook event that fires when a sheet filters an item.
-     * @function dnd5e.filterItem
+     * @function varlyn5e.filterItem
      * @memberof hookEvents
      * @param {BaseActorSheet|ContainerSheet} sheet     The sheet the item is being rendered on.
      * @param {Item5e} item                             The item being filtered.
      * @param {Set<string>} filters                     Filters applied to the Item.
      * @returns {false|void} Return false to hide the item, otherwise other filters will continue to apply.
      */
-    if ( Hooks.call("dnd5e.filterItem", this, item, filters) === false ) return false;
+    if ( Hooks.call("varlyn5e.filterItem", this, item, filters) === false ) return false;
   }
 
   /* -------------------------------------------- */
@@ -60600,7 +60600,7 @@ class JournalClassPageSheet extends JournalEntryPageHandlebarsSheet$1 {
      * @param {object} table                          Table definition being built. *Will be mutated.*
      * @param {Item5e} item                           Class for which the spellcasting table is being built.
      * @param {SpellcastingDescription} spellcasting  Spellcasting descriptive object.
-     * @function dnd5e.buildSpellcastingTable
+     * @function varlyn5e.buildSpellcastingTable
      * @memberof hookEvents
      */
     Hooks.callAll(`dnd5e.build${spellcasting.type.capitalize()}SpellcastingTable`, table, item, spellcasting);
@@ -61417,7 +61417,7 @@ class JournalSpellListPageSheet extends JournalEntryPageHandlebarsSheet {
    * @type {Record<string, string>}
    */
   static get GROUPING_MODES() {
-    return dnd5e.dataModels.journal.SpellListJournalPageData.GROUPING_MODES;
+    return varlyn5e.dataModels.journal.SpellListJournalPageData.GROUPING_MODES;
   }
 
   /* -------------------------------------------- */
@@ -62069,8 +62069,8 @@ function renderSettings(html) {
   section.innerHTML = `
     <h4 class="divider">${_loc("WORLD.FIELDS.system.label")}</h4>
     <div class="system-badge">
-      <img src="systems/dnd5e/ui/official/dnd-badge-32.webp" data-tooltip="${dnd5e.title}" alt="${dnd5e.title}">
-      <span class="system-info">${dnd5e.version}</span>
+      <img src="systems/dnd5e/ui/official/dnd-badge-32.webp" data-tooltip="${varlyn5e.title}" alt="${varlyn5e.title}">
+      <span class="system-info">${varlyn5e.version}</span>
     </div>
   `;
   section.append(_generateLinks());
@@ -62293,7 +62293,7 @@ class BasicRoll extends Roll {
      * A hook event that fires before a roll is performed. Multiple hooks may be called depending on the rolling
      * method (e.g. `dnd5e.preRollSkill`, `dnd5e.preRollAbilityCheck`, `dnd5e.preRoll`). Exact contents of the
      * configuration object will also change based on the roll type, but the same objects will always be present.
-     * @function dnd5e.preRoll
+     * @function varlyn5e.preRoll
      * @memberof hookEvents
      * @param {BasicRollProcessConfiguration} config   Configuration data for the pending roll.
      * @param {BasicRollDialogConfiguration} dialog    Presentation data for the roll configuration dialog.
@@ -62331,7 +62331,7 @@ class BasicRoll extends Roll {
      * Multiple hooks may be called depending on the rolling method (e.g. `dnd5e.postSkillCheckRollConfiguration`,
      * `dnd5e.postAbilityTestRollConfiguration`, and `dnd5e.postRollConfiguration` for skill checks). Exact contents of
      * the configuration object will also change based on the roll type, but the same objects will always be present.
-     * @function dnd5e.postRollConfiguration
+     * @function varlyn5e.postRollConfiguration
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls                      Rolls that have been constructed but not evaluated.
      * @param {BasicRollProcessConfiguration} config   Configuration information for the roll.
@@ -63033,7 +63033,7 @@ class ChatMessage5e extends ChatMessage {
       const itemData = this.system.deltas?.deleted?.find(i => i._id === this.flags.dnd5e.item.id);
       if ( itemData ) Object.defineProperty(this.flags.dnd5e.item, "data", { value: itemData });
     }
-    dnd5e.registry.messages.track(this);
+    varlyn5e.registry.messages.track(this);
   }
 
   /* -------------------------------------------- */
@@ -63055,17 +63055,17 @@ class ChatMessage5e extends ChatMessage {
 
       await this._enrichChatCard(html);
       this._collapseTrays(html);
-      dnd5e.enrichers.activateChatListeners(this, html);
+      varlyn5e.enrichers.activateChatListeners(this, html);
     }
 
     /**
      * A hook event that fires after dnd5e-specific chat message modifications have completed.
-     * @function dnd5e.renderChatMessage
+     * @function varlyn5e.renderChatMessage
      * @memberof hookEvents
      * @param {ChatMessage5e} message  Chat message being rendered.
      * @param {HTMLElement} html       HTML contents of the message.
      */
-    Hooks.callAll("dnd5e.renderChatMessage", this, html);
+    Hooks.callAll("varlyn5e.renderChatMessage", this, html);
 
     return html;
   }
@@ -63153,7 +63153,7 @@ class ChatMessage5e extends ChatMessage {
       const d0 = d20Roll.dice[0];
       if ( (d0?.faces !== 20) || (d0?.values.length !== 1) ) continue;
 
-      d20Roll = dnd5e.dice.D20Roll.fromRoll(d20Roll);
+      d20Roll = varlyn5e.dice.D20Roll.fromRoll(d20Roll);
       const d = d20Roll.dice[0];
 
       const isModifiedRoll = ("success" in d.results[0]) || d.options.marginSuccess || d.options.marginFailure;
@@ -63351,7 +63351,7 @@ class ChatMessage5e extends ChatMessage {
    */
   _enrichAttackTargets(html) {
     const attackRoll = this.rolls[0];
-    if ( !(attackRoll instanceof dnd5e.dice.D20Roll) ) return;
+    if ( !(attackRoll instanceof varlyn5e.dice.D20Roll) ) return;
 
     const masteryConfig = CONFIG.DND5E.weaponMasteries[attackRoll.options.mastery];
     if ( masteryConfig ) {
@@ -63620,7 +63620,7 @@ class ChatMessage5e extends ChatMessage {
     `);
 
     // Otherwise if actor is still concentrating, display break button.
-    else if ( actor?.isOwner && !dnd5e.settings.disableConcentration && actor.concentration.effects.size ) {
+    else if ( actor?.isOwner && !varlyn5e.settings.disableConcentration && actor.concentration.effects.size ) {
       content.insertAdjacentHTML("beforeend", `
         <div class="card-buttons">
           <button type="button">
@@ -63918,7 +63918,7 @@ class ChatMessage5e extends ChatMessage {
   /** @inheritDoc */
   _onDelete(options, userId) {
     super._onDelete(options, userId);
-    dnd5e.registry.messages.untrack(this);
+    varlyn5e.registry.messages.untrack(this);
   }
 
   /* -------------------------------------------- */
@@ -63981,7 +63981,7 @@ class ChatMessage5e extends ChatMessage {
    * @returns {ChatMessage5e[]}
    */
   getAssociatedRolls(type) {
-    return dnd5e.registry.messages.get(this.id, type);
+    return varlyn5e.registry.messages.get(this.id, type);
   }
 
   /* -------------------------------------------- */
@@ -64146,7 +64146,7 @@ class RollTableSheet5e extends ApplicationV2Mixin(RollTableSheet, { handlebars: 
    * @param {PrimarySheetMixin.MODES} [mode]  Mode to set. If not provided, mode will be toggled.
    */
   async changeMode(mode) {
-    this.mode = mode ? mode === dnd5e.applications.item.ItemSheet5e.MODES.PLAY ? "view" : "edit"
+    this.mode = mode ? mode === varlyn5e.applications.item.ItemSheet5e.MODES.PLAY ? "view" : "edit"
       : this.isEditMode ? "view" : "edit";
     const button = this.element?.querySelector('[data-action="changeMode"]');
     if ( button ) {
@@ -64459,7 +64459,7 @@ class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
    */
   isOccupiedGridSpaceBlocking(gridSpace, token, { preview=false }={}) {
     const tokenSize = CONFIG.DND5E.actorSizes[token.actor?.system.traits.size]?.numerical ?? 2;
-    const modernRules = dnd5e.settings.rulesVersion === "modern";
+    const modernRules = varlyn5e.settings.rulesVersion === "modern";
     const halflingNimbleness = token.actor?.getFlag("dnd5e", "halflingNimbleness");
     const found = this.#getRelevantOccupyingTokens(gridSpace, token, { preview }).filter(t => {
       // Only creatures block movement.
@@ -64486,7 +64486,7 @@ class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
     /**
      * Hook event that fires when determining whether a grid space is occupied by a token which should block movement
      * for a provided token.
-     * @function dnd5e.determineOccupiedGridSpaceBlocking
+     * @function varlyn5e.determineOccupiedGridSpaceBlocking
      * @memberof hookEvents
      * @param {GridOffset3D} gridSpace  The grid space being checked.
      * @param {Token5e} token           The token being moved.
@@ -64494,7 +64494,7 @@ class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
      * @param {boolean} options.preview Whether the movement in question is previewed.
      * @param {Set<Token5e>} found      The found set of tokens which would block movement. *Will be mutated.*
      */
-    Hooks.callAll("dnd5e.determineOccupiedGridSpaceBlocking", gridSpace, token, { preview }, found);
+    Hooks.callAll("varlyn5e.determineOccupiedGridSpaceBlocking", gridSpace, token, { preview }, found);
     return found.size > 0;
   }
 
@@ -64510,7 +64510,7 @@ class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
    * @returns {boolean} Whether the moving token should suffer difficult terrain
    */
   isOccupiedGridSpaceDifficult(gridSpace, token, { preview=false }={}) {
-    const modernRules = dnd5e.settings.rulesVersion === "modern";
+    const modernRules = varlyn5e.settings.rulesVersion === "modern";
     const found = this.#getRelevantOccupyingTokens(gridSpace, token, { preview }).filter(t => {
       // Only consider creatures as difficult terrain for now.
       if ( !t.actor?.system.isCreature ) return false;
@@ -64531,7 +64531,7 @@ class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
     /**
      * Hook event that fires when determining whether a grid space is occupied by a token which should cause difficult
      * terrain for a provided token.
-     * @function dnd5e.determineOccupiedGridSpaceDifficult
+     * @function varlyn5e.determineOccupiedGridSpaceDifficult
      * @memberof hookEvents
      * @param {GridOffset3D} gridSpace  The grid space being checked.
      * @param {Token5e} token           The token being moved.
@@ -64539,7 +64539,7 @@ class TokenLayer5e extends foundry.canvas.layers.TokenLayer {
      * @param {boolean} options.preview Whether the movement in question is previewed.
      * @param {Set<Token5e>} found      The found set of tokens which would cause difficult terrain. *Will be mutated.*
      */
-    Hooks.callAll("dnd5e.determineOccupiedGridSpaceDifficult", gridSpace, token, { preview }, found);
+    Hooks.callAll("varlyn5e.determineOccupiedGridSpaceDifficult", gridSpace, token, { preview }, found);
     return found.size > 0;
   }
 
@@ -64779,7 +64779,7 @@ class Token5e extends foundry.canvas.placeables.Token {
     // Allocate percentages of the total
     const tempPct = Math.clamp(temp, 0, displayMax) / displayMax;
     const colorPct = Math.clamp(value, 0, effectiveMax) / displayMax;
-    const hpColor = dnd5e.documents.Actor5e.getHPColor(value, effectiveMax);
+    const hpColor = varlyn5e.documents.Actor5e.getHPColor(value, effectiveMax);
 
     // Determine colors to use
     const blk = 0x000000;
@@ -65620,7 +65620,7 @@ class CreatureTypeField extends foundry.data.fields.SchemaField {
 
     Object.defineProperty(obj, "label", {
       get() {
-        return dnd5e.documents.Actor5e.formatCreatureType(this);
+        return varlyn5e.documents.Actor5e.formatCreatureType(this);
       },
       enumerable: false
     });
@@ -66179,7 +66179,7 @@ class AttributesFields {
     init.mod = ability.mod ?? 0;
 
     // Initiative proficiency
-    const isLegacy = dnd5e.settings.rulesVersion === "legacy";
+    const isLegacy = varlyn5e.settings.rulesVersion === "legacy";
     const prof = this.attributes.prof ?? 0;
     const joat = flags.jackOfAllTrades && isLegacy;
     const ra = this.parent._isRemarkableAthlete(abilityId);
@@ -66226,7 +66226,7 @@ class AttributesFields {
     const heavilyEncumbered = statuses.has("heavilyEncumbered");
     const exceedingCarryingCapacity = statuses.has("exceedingCarryingCapacity");
     const units = this.attributes.movement.units ??= defaultUnits("length");
-    let reduction = dnd5e.settings.rulesVersion === "modern" && !this.traits?.ci?.value?.has("exhaustion")
+    let reduction = varlyn5e.settings.rulesVersion === "modern" && !this.traits?.ci?.value?.has("exhaustion")
       ? (this.attributes.exhaustion ?? 0) * (CONFIG.DND5E.conditionTypes.exhaustion?.reduction?.speed ?? 0) : 0;
     if ( ((this.attributes.ac?.equippedArmor?.system.strength ?? 0) > (this.abilities?.str?.value ?? Infinity))
       && !this.parent.flags.dnd5e?.ignoreArmorSpeedReduction && this.isCreature ) {
@@ -66356,7 +66356,7 @@ class AttributesFields {
     /**
      * A hook event that fires when an actor is damaged or healed by any means. The actual name
      * of the hook will depend on the change in hit points.
-     * @function dnd5e.damageActor
+     * @function varlyn5e.damageActor
      * @memberof hookEvents
      * @param {Actor5e} actor                                       The actor that had their hit points reduced.
      * @param {{hp: number, temp: number, total: number}} changes   The changes to hit points.
@@ -67948,7 +67948,7 @@ class NPCData extends CreatureTemplate {
     if ( legres.max && legendaryResistanceItem ) {
       const max = this._source.resources.legres.max;
       const modernRules = (this.source?.rules
-        || (dnd5e.settings.rulesVersion === "modern" ? "2024" : "2014")) === "2024";
+        || (varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014")) === "2024";
       legendaryResistanceItem.system.uses.label = this.resources.lair.value && modernRules ? _loc(
         "DND5E.LegendaryResistance.LairUses", { normal: formatNumber(max), lair: formatNumber(max + 1) }
       ) : `${formatNumber(max)}/${CONFIG.DND5E.limitedUsePeriods.day?.label ?? ""}`;
@@ -68027,7 +68027,7 @@ class NPCData extends CreatureTemplate {
     if ( !max ) return "";
     const pr = getPluralRules().select(max);
     const rulesVersion = this.source?.rules
-      || (dnd5e.settings.rulesVersion === "modern" ? "2024" : "2014");
+      || (varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014");
     return _loc(`DND5E.LegendaryAction.Description${rulesVersion === "2014" ? "Legacy" : ""}`, {
       name: name.toLowerCase(),
       uses: this.resources.lair.value ? _loc("DND5E.LegendaryAction.LairUses", {
@@ -68084,14 +68084,14 @@ class NPCData extends CreatureTemplate {
 
     /**
      * A hook event that fires after an embedded NPC stat block is rendered.
-     * @function dnd5e.renderNPCStatBlock
+     * @function varlyn5e.renderNPCStatBlock
      * @memberof hookEvents
      * @param {Actor5e} actor                   NPC being embedded.
      * @param {HTMLTemplateElement} template    Template whose children will be embedded.
      * @param {DocumentHTMLEmbedConfig} config  Configuration for embedding behavior.
      * @param {EnrichmentOptions} options       Original enrichment options.
      */
-    Hooks.call("dnd5e.renderNPCStatBlock", this.parent, template, config, options);
+    Hooks.call("varlyn5e.renderNPCStatBlock", this.parent, template, config, options);
 
     return template.content;
   }
@@ -69796,7 +69796,7 @@ class RaceData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescriptionT
 
   /** @override */
   _advancementToCreate(options) {
-    if ( dnd5e.settings.rulesVersion === "legacy" ) return [
+    if ( varlyn5e.settings.rulesVersion === "legacy" ) return [
       { type: "AbilityScoreImprovement" },
       { type: "Size" },
       { type: "Trait", configuration: { grants: ["languages:standard:common"] } }
@@ -69875,7 +69875,7 @@ class SubclassData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescript
         label: "TYPES.Item.class",
         type: "set",
         config: {
-          choices: dnd5e.registry.classes.choices,
+          choices: varlyn5e.registry.classes.choices,
           keyPath: "system.classIdentifier"
         }
       }],
@@ -69898,7 +69898,7 @@ class SubclassData extends ItemDataModel.mixin(AdvancementTemplate, ItemDescript
 
   /** @inheritDoc */
   get tooltipSubtitle() {
-    const cls = dnd5e.registry.classes.get(this.classIdentifier)?.name;
+    const cls = varlyn5e.registry.classes.get(this.classIdentifier)?.name;
     if ( cls ) return [_loc("DND5E.SubclassOf", { class: cls })];
     return super.tooltipSubtitle;
   }
@@ -70723,7 +70723,7 @@ class WeaponData extends ItemDataModel.mixin(
     context.info = [{
       label: "DND5E.ToHit",
       classes: "info-lg",
-      value: dnd5e.utils.formatModifier(parseInt(this.parent.labels.modifier))
+      value: varlyn5e.utils.formatModifier(parseInt(this.parent.labels.modifier))
     }];
     if ( this.parent.labels.damages?.length ) {
       const config = { ...CONFIG.DND5E.damageTypes, ...CONFIG.DND5E.healingTypes };
@@ -72883,7 +72883,7 @@ class Combat5e extends Combat {
     const combatantsInfo = ids.reduce((info, id) => {
       const rollGroupingKey = this.combatants.get(id).getInitiativeGroupingKey() ?? id;
       let deriveFrom = null;
-      if ( dnd5e.settings.initiativeGroupRoll && !this.started ) {
+      if ( varlyn5e.settings.initiativeGroupRoll && !this.started ) {
         deriveFrom = this.combatants.find(c =>
           (c.getInitiativeGroupingKey() === rollGroupingKey) && (Number.isFinite(c.initiative))
         )?.id ?? null;
@@ -73052,14 +73052,14 @@ class Combatant5e extends Combatant {
 
     /**
      * A hook event that fires before a combat state change chat message is created.
-     * @function dnd5e.preCreateCombatMessage
+     * @function varlyn5e.preCreateCombatMessage
      * @memberof hookEvents
      * @param {Combatant5e} combatant         Combatant for which the message will be created.
      * @param {object} messageConfig
      * @param {boolean} messageConfig.create  Should the chat message be posted?
      * @param {object} messageConfig.data     Data for the created chat message.
      */
-    Hooks.callAll("dnd5e.preCreateCombatMessage", this, messageConfig);
+    Hooks.callAll("varlyn5e.preCreateCombatMessage", this, messageConfig);
 
     if ( messageConfig.create ) return ChatMessage.implementation.create(messageConfig.data);
   }
@@ -73072,7 +73072,7 @@ class Combatant5e extends Combatant {
    */
   getGroupingKey() {
     if ( this.group ) return this.group.id;
-    if ( (this.initiative === null) || !dnd5e.settings.initiativeGroupCombatants ) return null;
+    if ( (this.initiative === null) || !varlyn5e.settings.initiativeGroupCombatants ) return null;
     return this.getUniqueKey(Math.floor(this.initiative).paddedString(4));
   }
 
@@ -73084,7 +73084,7 @@ class Combatant5e extends Combatant {
    */
   getInitiativeGroupingKey() {
     if ( this.group ) return this.group.id;
-    if ( !dnd5e.settings.initiativeGroupRoll ) return null;
+    if ( !varlyn5e.settings.initiativeGroupRoll ) return null;
     return this.getUniqueKey(this.getInitiativeRoll().formula);
   }
 
@@ -73117,13 +73117,13 @@ class Combatant5e extends Combatant {
   async recoverCombatUses(periods) {
     /**
      * A hook event that fires before combat-related recovery changes.
-     * @function dnd5e.preCombatRecovery
+     * @function varlyn5e.preCombatRecovery
      * @memberof hookEvents
      * @param {Combatant5e} combatant  Combatant that is being recovered.
      * @param {string[]} periods       Periods to be recovered.
      * @returns {boolean}              Explicitly return `false` to prevent recovery from being performed.
      */
-    if ( Hooks.call("dnd5e.preCombatRecovery", this, periods) === false ) return;
+    if ( Hooks.call("varlyn5e.preCombatRecovery", this, periods) === false ) return;
 
     const results = { actor: {}, delete: [], item: [], rolls: [] };
     await this.actor?.system.recoverCombatUses?.(periods, results);
@@ -73145,14 +73145,14 @@ class Combatant5e extends Combatant {
     /**
      * A hook event that fires after combat-related recovery changes have been prepared, but before they have been
      * applied to the actor.
-     * @function dnd5e.combatRecovery
+     * @function varlyn5e.combatRecovery
      * @memberof hookEvents
      * @param {Combatant5e} combatant          Combatant that is being recovered.
      * @param {string[]} periods               Periods that were recovered.
      * @param {CombatRecoveryResults} results  Update that will be applied to the actor and its items.
      * @returns {boolean}  Explicitly return `false` to prevent updates from being performed.
      */
-    if ( Hooks.call("dnd5e.combatRecovery", this, periods, results) === false ) return;
+    if ( Hooks.call("varlyn5e.combatRecovery", this, periods, results) === false ) return;
 
     const deltas = ActorDeltasField.getDeltas(this.actor, results);
 
@@ -73164,13 +73164,13 @@ class Combatant5e extends Combatant {
 
     /**
      * A hook event that fires after combat-related recovery changes have been applied.
-     * @function dnd5e.postCombatRecovery
+     * @function varlyn5e.postCombatRecovery
      * @memberof hookEvents
      * @param {Combatant5e} combatant       Combatant that is being recovered.
      * @param {string[]} periods            Periods that were recovered.
      * @param {ChatMessage5e|void} message  Chat message created, if any.
      */
-    Hooks.callAll("dnd5e.postCombatRecovery", this, periods, message);
+    Hooks.callAll("varlyn5e.postCombatRecovery", this, periods, message);
   }
 
   /* -------------------------------------------- */
@@ -73595,7 +73595,7 @@ class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
     const origin = this.actor?.getFlag("dnd5e", "summon.origin");
     if ( origin ) {
       const { collection, primaryId } = foundry.utils.parseUuid(origin);
-      dnd5e.registry.summons.untrack(collection?.get?.(primaryId)?.uuid, this.actor.uuid);
+      varlyn5e.registry.summons.untrack(collection?.get?.(primaryId)?.uuid, this.actor.uuid);
     }
   }
 }
@@ -73688,7 +73688,7 @@ function registerSourceBooks(manifest) {
  */
 function registerSpellLists(manifest) {
   if ( !Array.isArray(manifest.flags.dnd5e?.spellLists) ) return;
-  manifest.flags.dnd5e.spellLists.forEach(uuid => dnd5e.registry.spellLists.register(uuid));
+  manifest.flags.dnd5e.spellLists.forEach(uuid => varlyn5e.registry.spellLists.register(uuid));
   return "spell lists";
 }
 
@@ -74312,7 +74312,7 @@ class SpellList {
    * @type {string}
    */
   get name() {
-    return dnd5e.registry[SpellList.#REGISTRIES[this.metadata.type]]?.get(this.metadata.identifier)?.name
+    return varlyn5e.registry[SpellList.#REGISTRIES[this.metadata.type]]?.get(this.metadata.identifier)?.name
       ?? this.metadata.name;
   }
 
@@ -74591,7 +74591,7 @@ class Tooltips5e {
     // Sheet-specific tooltips
     if ( loading?.dataset.uuid ) {
       const doc = await fromUuid(loading.dataset.uuid);
-      if ( doc instanceof dnd5e.documents.Actor5e ) return this._onHoverActor(doc);
+      if ( doc instanceof varlyn5e.documents.Actor5e ) return this._onHoverActor(doc);
       return this._onHoverContentLink(doc);
     }
 
@@ -74808,7 +74808,7 @@ class Tooltips5e {
 /*  Define Module Structure                     */
 /* -------------------------------------------- */
 
-globalThis.dnd5e = {
+globalThis.varlyn5e = {
   applications,
   canvas: canvas$1,
   config: DND5E,
@@ -74827,8 +74827,8 @@ globalThis.dnd5e = {
 /* -------------------------------------------- */
 
 Hooks.once("init", function() {
-  globalThis.dnd5e = game.dnd5e = Object.assign(game.system, globalThis.dnd5e);
-  log(`Initializing the D&D Fifth Game System - Version ${dnd5e.version}`);
+  globalThis.varlyn5e = game.varlyn5e = Object.assign(game.system, globalThis.varlyn5e);
+  log(`Initializing the D&D Fifth Game System - Version ${varlyn5e.version}`);
 
   // Record Configuration Values
   CONFIG.DND5E = DND5E;
@@ -74870,10 +74870,10 @@ Hooks.once("init", function() {
   registerSystemKeybindings();
 
   // Configure tooltips
-  game.dnd5e.tooltips = new Tooltips5e();
+  game.varlyn5e.tooltips = new Tooltips5e();
 
   // Register system
-  DND5E.SPELL_LISTS.forEach(uuid => dnd5e.registry.spellLists.register(uuid));
+  DND5E.SPELL_LISTS.forEach(uuid => varlyn5e.registry.spellLists.register(uuid));
 
   // Register module data from manifests
   registerModuleData();
@@ -75004,11 +75004,11 @@ function _configureCalendar() {
   /**
    * A hook event that fires during the `init` step to give modules a chance to customize the calendar
    * configuration before loading the world calendar.
-   * @function dnd5e.preSetupCalendar
+   * @function varlyn5e.preSetupCalendar
    * @memberof hookEvents
    * @returns               Explicitly return `false` to prevent system from setting up the calendar.
    */
-  if ( Hooks.call("dnd5e.setupCalendar") === false ) return;
+  if ( Hooks.call("varlyn5e.setupCalendar") === false ) return;
 
   const calendar = game.settings.get("dnd5e", "calendar");
   const calendarConfig = CONFIG.DND5E.calendar.calendars.find(c => c.value === calendar);
@@ -75178,7 +75178,7 @@ Hooks.once("setup", function() {
 
   CONFIG.DND5E.trackableAttributes = expandAttributeList(CONFIG.DND5E.trackableAttributes);
   Tooltips5e.activateListeners();
-  game.dnd5e.tooltips.observe();
+  game.varlyn5e.tooltips.observe();
 
   // Register settings after modules have had a chance to initialize
   registerDeferredSettings();
@@ -75255,16 +75255,16 @@ Hooks.once("ready", function() {
   game.actors.forEach(a => a.sourcedItems._redirectKeys());
 
   // Register items by type
-  dnd5e.registry.classes.initialize();
-  dnd5e.registry.subclasses.initialize();
+  varlyn5e.registry.classes.initialize();
+  varlyn5e.registry.subclasses.initialize();
 
   // Chat message listeners
   ChatMessage5e.activateListeners();
 
   // Display the calendar HUD
   if ( CONFIG.DND5E.calendar.application ) {
-    dnd5e.ui.calendar = new CONFIG.DND5E.calendar.application();
-    dnd5e.ui.calendar.render({ force: true });
+    varlyn5e.ui.calendar = new CONFIG.DND5E.calendar.application();
+    varlyn5e.ui.calendar.render({ force: true });
   }
 });
 
@@ -75330,10 +75330,10 @@ Hooks.on("renderCombatTracker", (app, html, data) => app.renderGroups(html));
 Hooks.on("preCreateScene", (doc, createData, options, userId) => {
   // Set default grid units based on metric length setting
   const units = defaultUnits("length");
-  if ( (units !== dnd5e.grid.units) && !foundry.utils.getProperty(createData, "grid.distance")
+  if ( (units !== varlyn5e.grid.units) && !foundry.utils.getProperty(createData, "grid.distance")
     && !foundry.utils.getProperty(createData, "grid.units") ) {
     doc.updateSource({
-      grid: { distance: convertLength(dnd5e.grid.distance, dnd5e.grid.units, units, { strict: false }), units }
+      grid: { distance: convertLength(varlyn5e.grid.distance, varlyn5e.grid.units, units, { strict: false }), units }
     });
   }
 });

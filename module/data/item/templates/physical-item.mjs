@@ -330,12 +330,12 @@ export default class PhysicalItemTemplate extends SystemDataModel {
 
     /**
      * A hook event that fires when retrieving an item as gear.
-     * @function dnd5e.getAsGear
+     * @function varlyn5e.getAsGear
      * @memberof hookEvents
      * @param {Item5e} item  Item on NPC being prepared as gear.
      * @param {Item5e} gear  Non-saved clone of the item to be returned as gear.
      */
-    Hooks.callAll("dnd5e.getAsGear", this.parent, clone);
+    Hooks.callAll("varlyn5e.getAsGear", this.parent, clone);
 
     return clone;
   }

@@ -68,7 +68,7 @@ export default class RollTableSheet5e extends ApplicationV2Mixin(RollTableSheet,
    * @param {PrimarySheetMixin.MODES} [mode]  Mode to set. If not provided, mode will be toggled.
    */
   async changeMode(mode) {
-    this.mode = mode ? mode === dnd5e.applications.item.ItemSheet5e.MODES.PLAY ? "view" : "edit"
+    this.mode = mode ? mode === varlyn5e.applications.item.ItemSheet5e.MODES.PLAY ? "view" : "edit"
       : this.isEditMode ? "view" : "edit";
     const button = this.element?.querySelector('[data-action="changeMode"]');
     if ( button ) {

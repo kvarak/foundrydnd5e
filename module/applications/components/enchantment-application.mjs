@@ -107,7 +107,7 @@ export default class EnchantmentApplicationElement extends MaybeAdoptable {
    * the card list.
    */
   buildItemList() {
-    const enchantedItems = dnd5e.registry.enchantments.applied(this.enchantmentActivity.uuid).map(enchantment => {
+    const enchantedItems = varlyn5e.registry.enchantments.applied(this.enchantmentActivity.uuid).map(enchantment => {
       const item = enchantment.parent;
       const div = document.createElement("div");
       div.classList.add("preview");

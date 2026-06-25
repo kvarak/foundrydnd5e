@@ -203,7 +203,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
       limited: this.actor.limited,
       modernRules: this.actor.system.source?.rules
         ? this.actor.system.source.rules === "2024"
-        : dnd5e.settings.rulesVersion === "modern",
+        : varlyn5e.settings.rulesVersion === "modern",
       rollableClass: this.isEditable ? "rollable" : "",
       sidebarCollapsed: !!game.user.getFlag("dnd5e", this._sidebarCollapsedKeyPath),
       system: this.actor.system,
@@ -267,7 +267,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
           parentId: effect.target === effect.parent ? null : effect.parent.id,
           durationParts: duration.remaining ? duration.label.split(", ") : [],
           showDuration: Number.isFinite(duration.value),
-          hasTooltip: source instanceof dnd5e.documents.Item5e
+          hasTooltip: source instanceof varlyn5e.documents.Item5e
         });
         return arr;
       }, []);
@@ -543,7 +543,7 @@ export default class BaseActorSheet extends PrimarySheetMixin(
    * @protected
    */
   _prepareSpellbook(context) {
-    const { SingleLevelSpellcasting } = dnd5e.dataModels.spellcasting;
+    const { SingleLevelSpellcasting } = varlyn5e.dataModels.spellcasting;
     const spellbook = {};
     const columns = customElements.get(this.options.elements.inventory).mapColumns([
       "school", "time", "range", "target", "roll", { id: "uses", order: 650, priority: 300 },
@@ -2095,14 +2095,14 @@ export default class BaseActorSheet extends PrimarySheetMixin(
 
     /**
      * A hook event that fires when a sheet filters an item.
-     * @function dnd5e.filterItem
+     * @function varlyn5e.filterItem
      * @memberof hookEvents
      * @param {BaseActorSheet|ContainerSheet} sheet     The sheet the item is being rendered on.
      * @param {Item5e} item                             The item being filtered.
      * @param {Set<string>} filters                     Filters applied to the Item.
      * @returns {false|void} Return false to hide the item, otherwise other filters will continue to apply.
      */
-    if ( Hooks.call("dnd5e.filterItem", this, item, filters) === false ) return false;
+    if ( Hooks.call("varlyn5e.filterItem", this, item, filters) === false ) return false;
   }
 
   /* -------------------------------------------- */

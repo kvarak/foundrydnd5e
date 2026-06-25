@@ -57,7 +57,7 @@ export default class JournalSpellListPageSheet extends JournalEntryPageHandlebar
    * @type {Record<string, string>}
    */
   static get GROUPING_MODES() {
-    return dnd5e.dataModels.journal.SpellListJournalPageData.GROUPING_MODES;
+    return varlyn5e.dataModels.journal.SpellListJournalPageData.GROUPING_MODES;
   }
 
   /* -------------------------------------------- */

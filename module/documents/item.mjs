@@ -102,13 +102,13 @@ export default class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires before source data is initialized for an Item in a compendium.
-     * @function dnd5e.initializeItemSource
+     * @function varlyn5e.initializeItemSource
      * @memberof hookEvents
      * @param {Item5e} item     Item for which the data is being initialized.
      * @param {object} source   Source data being initialized.
      * @param {object} options  Additional data initialization options.
      */
-    if ( options.pack || options.parent?.pack ) Hooks.callAll("dnd5e.initializeItemSource", this, data, options);
+    if ( options.pack || options.parent?.pack ) Hooks.callAll("varlyn5e.initializeItemSource", this, data, options);
 
     if ( data.type === "spell" ) {
       return super._initializeSource(new Proxy(data, {
@@ -799,27 +799,27 @@ export default class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires before an item chat card is created without using an activity.
-     * @function dnd5e.preDisplayCard
+     * @function varlyn5e.preDisplayCard
      * @memberof hookEvents
      * @param {Item5e} item                           Item for which the card will be created.
      * @param {ActivityMessageConfiguration} message  Configuration for the roll message.
      * @returns {boolean}                             Return `false` to prevent the card from being displayed.
      */
-    if ( Hooks.call("dnd5e.preDisplayCard", this, messageConfig) === false ) return;
-    if ( Hooks.call("dnd5e.preDisplayCardV2", this, messageConfig) === false ) return;
+    if ( Hooks.call("varlyn5e.preDisplayCard", this, messageConfig) === false ) return;
+    if ( Hooks.call("varlyn5e.preDisplayCardV2", this, messageConfig) === false ) return;
 
     ChatMessage.applyMode(messageConfig.data, messageConfig.rollMode);
     const card = messageConfig.create === false ? messageConfig.data : await ChatMessage.create(messageConfig.data);
 
     /**
      * A hook event that fires after an item chat card is created.
-     * @function dnd5e.displayCard
+     * @function varlyn5e.displayCard
      * @memberof hookEvents
      * @param {Item5e} item                Item for which the chat card is being displayed.
      * @param {ChatMessage5e|object} card  The created ChatMessage instance or ChatMessageData depending on whether
      *                                     options.createMessage was set to `true`.
      */
-    Hooks.callAll("dnd5e.displayCard", this, card);
+    Hooks.callAll("varlyn5e.displayCard", this, card);
 
     return card;
   }
@@ -1341,7 +1341,7 @@ export default class Item5e extends SystemDocumentMixin(Item) {
     if ( spell.pack ) return this.createScrollFromCompendiumSpell(spell.uuid, config);
 
     const values = {};
-    if ( (spell instanceof Item5e) && spell.isOwned && (dnd5e.settings.rulesVersion === "modern") ) {
+    if ( (spell instanceof Item5e) && spell.isOwned && (varlyn5e.settings.rulesVersion === "modern") ) {
       const spellcastingClass = spell.actor.spellcastingClasses?.[spell.system.classIdentifier];
       if ( spellcastingClass ) {
         values.bonus = spellcastingClass.spellcasting.attack;
@@ -1380,14 +1380,14 @@ export default class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires before the item data for a scroll is created.
-     * @function dnd5e.preCreateScrollFromSpell
+     * @function varlyn5e.preCreateScrollFromSpell
      * @memberof hookEvents
      * @param {object} itemData                  The initial item data of the spell to convert to a scroll.
      * @param {object} options                   Additional options that modify the created scroll.
      * @param {SpellScrollConfiguration} config  Configuration options for scroll creation.
      * @returns {boolean}                        Explicitly return false to prevent the scroll to be created.
      */
-    if ( Hooks.call("dnd5e.preCreateScrollFromSpell", itemData, options, config) === false ) return;
+    if ( Hooks.call("varlyn5e.preCreateScrollFromSpell", itemData, options, config) === false ) return;
 
     let { activities, level, properties, source } = itemData.system;
 
@@ -1450,13 +1450,13 @@ export default class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires after the item data for a scroll is created but before the item is returned.
-     * @function dnd5e.createScrollFromSpell
+     * @function varlyn5e.createScrollFromSpell
      * @memberof hookEvents
      * @param {Item5e|object} spell              The spell or item data to be made into a scroll.
      * @param {object} spellScrollData           The final item data used to make the scroll.
      * @param {SpellScrollConfiguration} config  Configuration options for scroll creation.
      */
-    Hooks.callAll("dnd5e.createScrollFromSpell", spell, spellScrollData, config);
+    Hooks.callAll("varlyn5e.createScrollFromSpell", spell, spellScrollData, config);
 
     return new this(spellScrollData);
   }
@@ -1490,13 +1490,13 @@ export default class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires before the item data for a scroll is created for a compendium spell.
-     * @function dnd5e.preCreateScrollFromCompendiumSpell
+     * @function varlyn5e.preCreateScrollFromCompendiumSpell
      * @memberof hookEvents
      * @param {Item5e} spell                     Spell to add to the scroll.
      * @param {SpellScrollConfiguration} config  Configuration options for scroll creation.
      * @returns {boolean}                        Explicitly return `false` to prevent the scroll to be created.
      */
-    if ( Hooks.call("dnd5e.preCreateScrollFromCompendiumSpell", spell, config) === false ) return;
+    if ( Hooks.call("varlyn5e.preCreateScrollFromCompendiumSpell", spell, config) === false ) return;
 
     // Get scroll data
     let scrollUuid;
@@ -1548,13 +1548,13 @@ export default class Item5e extends SystemDocumentMixin(Item) {
 
     /**
      * A hook event that fires after the item data for a scroll is created but before the item is returned.
-     * @function dnd5e.createScrollFromSpell
+     * @function varlyn5e.createScrollFromSpell
      * @memberof hookEvents
      * @param {Item5e} spell                     The spell or item data to be made into a scroll.
      * @param {object} spellScrollData           The final item data used to make the scroll.
      * @param {SpellScrollConfiguration} config  Configuration options for scroll creation.
      */
-    Hooks.callAll("dnd5e.createScrollFromSpell", spell, spellScrollData, config);
+    Hooks.callAll("varlyn5e.createScrollFromSpell", spell, spellScrollData, config);
 
     return new this(spellScrollData);
   }

@@ -137,14 +137,14 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
 
     /**
      * A hook event that fires before summoning is performed.
-     * @function dnd5e.preSummon
+     * @function varlyn5e.preSummon
      * @memberof hookEvents
      * @param {SummonActivity} activity         The activity that is performing the summoning.
      * @param {SummonsProfile} profile          Profile used for summoning.
      * @param {SummoningConfiguration} options  Additional summoning options.
      * @returns {boolean}                       Explicitly return `false` to prevent summoning.
      */
-    if ( Hooks.call("dnd5e.preSummon", this, profile, options) === false ) return;
+    if ( Hooks.call("varlyn5e.preSummon", this, profile, options) === false ) return;
 
     // Fetch the actor that will be summoned
     const summonUuid = this.summon.mode === "cr" ? await this.queryActor(profile) : profile.uuid;
@@ -153,7 +153,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
       folderId: this.actor?.folder?.id ?? null,
       origin: { key: "flags.dnd5e.summon.origin", value: this.item?.uuid }
     };
-    const actor = await dnd5e.documents.Actor5e.fetchExisting(summonUuid, fetchOptions);
+    const actor = await varlyn5e.documents.Actor5e.fetchExisting(summonUuid, fetchOptions);
 
     // Verify ownership of actor
     if ( !actor.isOwner ) {
@@ -180,7 +180,7 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
         /**
          * A hook event that fires before a specific token is summoned. After placement has been determined but before
          * the final token data is constructed.
-         * @function dnd5e.preSummonToken
+         * @function varlyn5e.preSummonToken
          * @memberof hookEvents
          * @param {SummonActivity} activity         The activity that is performing the summoning.
          * @param {SummonsProfile} profile          Profile used for summoning.
@@ -188,21 +188,21 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
          * @param {SummoningConfiguration} options  Additional summoning options.
          * @returns {boolean}                       Explicitly return `false` to prevent this token from being summoned.
          */
-        if ( Hooks.call("dnd5e.preSummonToken", this, profile, tokenUpdateData, options) === false ) continue;
+        if ( Hooks.call("varlyn5e.preSummonToken", this, profile, tokenUpdateData, options) === false ) continue;
 
         // Create a token document and apply updates
         const tokenData = await this.getTokenData(tokenUpdateData);
 
         /**
          * A hook event that fires after token creation data is prepared, but before summoning occurs.
-         * @function dnd5e.summonToken
+         * @function varlyn5e.summonToken
          * @memberof hookEvents
          * @param {SummonActivity} activity         The activity that is performing the summoning.
          * @param {SummonsProfile} profile          Profile used for summoning.
          * @param {object} tokenData                Data for creating a token.
          * @param {SummoningConfiguration} options  Additional summoning options.
          */
-        Hooks.callAll("dnd5e.summonToken", this, profile, tokenData, options);
+        Hooks.callAll("varlyn5e.summonToken", this, profile, tokenData, options);
 
         tokensData.push(tokenData);
       }
@@ -216,14 +216,14 @@ export default class SummonActivity extends ActivityMixin(BaseSummonActivityData
 
     /**
      * A hook event that fires when summoning is complete.
-     * @function dnd5e.postSummon
+     * @function varlyn5e.postSummon
      * @memberof hookEvents
      * @param {SummonActivity} activity         The activity that is performing the summoning.
      * @param {SummonsProfile} profile          Profile used for summoning.
      * @param {Token5e[]} tokens                Tokens that have been created.
      * @param {SummoningConfiguration} options  Additional summoning options.
      */
-    Hooks.callAll("dnd5e.postSummon", this, profile, createdTokens, options);
+    Hooks.callAll("varlyn5e.postSummon", this, profile, createdTokens, options);
 
     return createdTokens;
   }

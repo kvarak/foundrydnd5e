@@ -107,7 +107,7 @@ export default class ChatMessage5e extends ChatMessage {
       const itemData = this.system.deltas?.deleted?.find(i => i._id === this.flags.dnd5e.item.id);
       if ( itemData ) Object.defineProperty(this.flags.dnd5e.item, "data", { value: itemData });
     }
-    dnd5e.registry.messages.track(this);
+    varlyn5e.registry.messages.track(this);
   }
 
   /* -------------------------------------------- */
@@ -129,17 +129,17 @@ export default class ChatMessage5e extends ChatMessage {
 
       await this._enrichChatCard(html);
       this._collapseTrays(html);
-      dnd5e.enrichers.activateChatListeners(this, html);
+      varlyn5e.enrichers.activateChatListeners(this, html);
     }
 
     /**
      * A hook event that fires after dnd5e-specific chat message modifications have completed.
-     * @function dnd5e.renderChatMessage
+     * @function varlyn5e.renderChatMessage
      * @memberof hookEvents
      * @param {ChatMessage5e} message  Chat message being rendered.
      * @param {HTMLElement} html       HTML contents of the message.
      */
-    Hooks.callAll("dnd5e.renderChatMessage", this, html);
+    Hooks.callAll("varlyn5e.renderChatMessage", this, html);
 
     return html;
   }
@@ -227,7 +227,7 @@ export default class ChatMessage5e extends ChatMessage {
       const d0 = d20Roll.dice[0];
       if ( (d0?.faces !== 20) || (d0?.values.length !== 1) ) continue;
 
-      d20Roll = dnd5e.dice.D20Roll.fromRoll(d20Roll);
+      d20Roll = varlyn5e.dice.D20Roll.fromRoll(d20Roll);
       const d = d20Roll.dice[0];
 
       const isModifiedRoll = ("success" in d.results[0]) || d.options.marginSuccess || d.options.marginFailure;
@@ -425,7 +425,7 @@ export default class ChatMessage5e extends ChatMessage {
    */
   _enrichAttackTargets(html) {
     const attackRoll = this.rolls[0];
-    if ( !(attackRoll instanceof dnd5e.dice.D20Roll) ) return;
+    if ( !(attackRoll instanceof varlyn5e.dice.D20Roll) ) return;
 
     const masteryConfig = CONFIG.DND5E.weaponMasteries[attackRoll.options.mastery];
     if ( masteryConfig ) {
@@ -694,7 +694,7 @@ export default class ChatMessage5e extends ChatMessage {
     `);
 
     // Otherwise if actor is still concentrating, display break button.
-    else if ( actor?.isOwner && !dnd5e.settings.disableConcentration && actor.concentration.effects.size ) {
+    else if ( actor?.isOwner && !varlyn5e.settings.disableConcentration && actor.concentration.effects.size ) {
       content.insertAdjacentHTML("beforeend", `
         <div class="card-buttons">
           <button type="button">
@@ -992,7 +992,7 @@ export default class ChatMessage5e extends ChatMessage {
   /** @inheritDoc */
   _onDelete(options, userId) {
     super._onDelete(options, userId);
-    dnd5e.registry.messages.untrack(this);
+    varlyn5e.registry.messages.untrack(this);
   }
 
   /* -------------------------------------------- */
@@ -1055,7 +1055,7 @@ export default class ChatMessage5e extends ChatMessage {
    * @returns {ChatMessage5e[]}
    */
   getAssociatedRolls(type) {
-    return dnd5e.registry.messages.get(this.id, type);
+    return varlyn5e.registry.messages.get(this.id, type);
   }
 
   /* -------------------------------------------- */

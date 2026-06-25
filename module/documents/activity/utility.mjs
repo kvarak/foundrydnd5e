@@ -106,14 +106,14 @@ export default class UtilityActivity extends ActivityMixin(BaseUtilityActivityDa
 
     /**
      * A hook event that fires after a formula has been rolled for a Utility activity.
-     * @function dnd5e.rollFormula
+     * @function varlyn5e.rollFormula
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls             The resulting rolls.
      * @param {object} data
      * @param {UtilityActivity} data.subject  The Activity that performed the roll.
      */
-    Hooks.callAll("dnd5e.rollFormula", rolls, { subject: this });
-    Hooks.callAll("dnd5e.rollFormulaV2", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.rollFormula", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.rollFormulaV2", rolls, { subject: this });
 
     return rolls;
   }

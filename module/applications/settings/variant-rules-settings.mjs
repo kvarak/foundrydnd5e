@@ -39,7 +39,7 @@ export default class VariantRulesSettingsConfig extends BaseSettingsConfig {
     switch ( partId ) {
       case "general":
         context.fields = [
-          dnd5e.settings.rulesVersion === "legacy" ? this.createSettingField("allowFeats") : null,
+          varlyn5e.settings.rulesVersion === "legacy" ? this.createSettingField("allowFeats") : null,
           this.createSettingField("restVariant"),
           this.createSettingField("proficiencyModifier"),
           this.createSettingField("levelingMode")

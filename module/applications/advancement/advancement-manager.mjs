@@ -536,11 +536,11 @@ export default class AdvancementManager extends Application5e {
 
     /**
      * A hook event that fires when an AdvancementManager is about to be processed.
-     * @function dnd5e.preAdvancementManagerRender
+     * @function varlyn5e.preAdvancementManagerRender
      * @memberof hookEvents
      * @param {AdvancementManager} advancementManager The advancement manager about to be rendered
      */
-    if ( Hooks.call("dnd5e.preAdvancementManagerRender", this) === false ) return;
+    if ( Hooks.call("varlyn5e.preAdvancementManagerRender", this) === false ) return;
 
     const automaticData = (this.options.automaticApplication && (options.direction !== "backward"))
       ? await this.step?.flow?.getAutomaticApplicationValue() : false;
@@ -551,7 +551,7 @@ export default class AdvancementManager extends Application5e {
       return this;
     }
 
-    if ( this.step?.flow instanceof dnd5e.applications.advancement.AdvancementFlowV2 ) {
+    if ( this.step?.flow instanceof varlyn5e.applications.advancement.AdvancementFlowV2 ) {
       this.#preEmbeddedItems = Array.from(this.clone.items);
       const flow = this.step.flow;
       if ( flow.retainedData && !this.step.error ) await flow.advancement.restore(flow.level, flow.retainedData);
@@ -640,7 +640,7 @@ export default class AdvancementManager extends Application5e {
           if ( this.previousStep ) await this.#restart(event);
           break;
         case "previous":
-          if ( this.step?.flow instanceof dnd5e.applications.advancement.AdvancementFlowV2 ) {
+          if ( this.step?.flow instanceof varlyn5e.applications.advancement.AdvancementFlowV2 ) {
             this.#preEmbeddedItems = Array.from(this.clone.items);
             const flow = this.step.flow;
             await flow.retainData(await flow.advancement.reverse(flow.level));
@@ -896,7 +896,7 @@ export default class AdvancementManager extends Application5e {
     /**
      * A hook event that fires at the final stage of a character's advancement process, before actor and item updates
      * are applied.
-     * @function dnd5e.preAdvancementManagerComplete
+     * @function varlyn5e.preAdvancementManagerComplete
      * @memberof hookEvents
      * @param {AdvancementManager} advancementManager  The advancement manager.
      * @param {object} actorUpdates                    Updates to the actor.
@@ -904,7 +904,7 @@ export default class AdvancementManager extends Application5e {
      * @param {object[]} toUpdate                      Items that will be updated on the actor.
      * @param {string[]} toDelete                      IDs of items that will be deleted on the actor.
      */
-    if ( Hooks.call("dnd5e.preAdvancementManagerComplete", this, updates, toCreate, toUpdate, toDelete) === false ) {
+    if ( Hooks.call("varlyn5e.preAdvancementManagerComplete", this, updates, toCreate, toUpdate, toDelete) === false ) {
       log("AdvancementManager completion was prevented by the 'preAdvancementManagerComplete' hook.");
       return this.close({ skipConfirmation: true });
     }
@@ -919,11 +919,11 @@ export default class AdvancementManager extends Application5e {
 
     /**
      * A hook event that fires when an AdvancementManager is done modifying an actor.
-     * @function dnd5e.advancementManagerComplete
+     * @function varlyn5e.advancementManagerComplete
      * @memberof hookEvents
      * @param {AdvancementManager} advancementManager The advancement manager that just completed
      */
-    Hooks.callAll("dnd5e.advancementManagerComplete", this);
+    Hooks.callAll("varlyn5e.advancementManagerComplete", this);
 
     // Close prompt
     return this.close({ skipConfirmation: true });

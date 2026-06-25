@@ -960,12 +960,12 @@ export default class CompendiumBrowser extends Application5e {
 
     /**
      * Hook event that fires when a compendium browser is submitted with selected items.
-     * @function dnd5e.compendiumBrowserSelection
+     * @function varlyn5e.compendiumBrowserSelection
      * @memberof hookEvents
      * @param {CompendiumBrowser} browser  Compendium Browser application being submitted.
      * @param {Set<string>} selected       Set of document UUIDs that are selected.
      */
-    Hooks.callAll("dnd5e.compendiumBrowserSelection", this, this.#selected);
+    Hooks.callAll("varlyn5e.compendiumBrowserSelection", this, this.#selected);
   }
 
   /* -------------------------------------------- */

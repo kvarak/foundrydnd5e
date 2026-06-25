@@ -66,7 +66,7 @@ export default class ActivitiesTemplate extends SystemDataModel {
    * @type {ActiveEffect5e[]}
    */
   get appliedEnchantments() {
-    return dnd5e.registry.enchantments.applied(this.parent.uuid);
+    return varlyn5e.registry.enchantments.applied(this.parent.uuid);
   }
 
   /* -------------------------------------------- */
@@ -451,8 +451,8 @@ export default class ActivitiesTemplate extends SystemDataModel {
       || !foundry.utils.hasProperty(changed, "system.activities") ) return;
 
     // If any Cast activities were removed, or their spells changed, remove old cached spells
-    if ( options.dnd5e?.removedCachedItems ) {
-      await this.parent.actor.deleteEmbeddedDocuments("Item", options.dnd5e.removedCachedItems);
+    if ( options.varlyn5e?.removedCachedItems ) {
+      await this.parent.actor.deleteEmbeddedDocuments("Item", options.varlyn5e.removedCachedItems);
     }
 
     // Create any new cached spells & update existing ones as necessary

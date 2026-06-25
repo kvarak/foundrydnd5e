@@ -342,7 +342,7 @@ export default class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
     const origin = this.actor?.getFlag("dnd5e", "summon.origin");
     if ( origin ) {
       const { collection, primaryId } = foundry.utils.parseUuid(origin);
-      dnd5e.registry.summons.untrack(collection?.get?.(primaryId)?.uuid, this.actor.uuid);
+      varlyn5e.registry.summons.untrack(collection?.get?.(primaryId)?.uuid, this.actor.uuid);
     }
   }
 }

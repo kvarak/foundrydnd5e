@@ -197,15 +197,15 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
 
     /**
      * A hook event that fires after an attack has been rolled but before any ammunition is consumed.
-     * @function dnd5e.rollAttack
+     * @function varlyn5e.rollAttack
      * @memberof hookEvents
      * @param {D20Roll[]} rolls                        The resulting rolls.
      * @param {object} data
      * @param {AttackActivity|null} data.subject       The Activity that performed the attack.
      * @param {AmmunitionUpdate|null} data.ammoUpdate  Any updates related to ammo consumption for this attack.
      */
-    Hooks.callAll("dnd5e.rollAttack", rolls, { subject: this, ammoUpdate });
-    Hooks.callAll("dnd5e.rollAttackV2", rolls, { subject: this, ammoUpdate });
+    Hooks.callAll("varlyn5e.rollAttack", rolls, { subject: this, ammoUpdate });
+    Hooks.callAll("varlyn5e.rollAttackV2", rolls, { subject: this, ammoUpdate });
 
     // Commit ammunition consumption on attack rolls resource consumption if the attack roll was made
     if ( canUpdate && ammoUpdate?.destroy ) {
@@ -213,7 +213,7 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
       const data = this.actor.items.get(ammoUpdate.id).toObject();
       const messageId = messageConfig.data?.flags?.dnd5e?.originatingMessage
         ?? rollConfig.event?.target.closest("[data-message-id]")?.dataset.messageId;
-      const attackMessage = dnd5e.registry.messages.get(messageId, "attack")?.pop();
+      const attackMessage = varlyn5e.registry.messages.get(messageId, "attack")?.pop();
       await attackMessage?.setFlag("dnd5e", "roll.ammunitionData", data);
       await this.actor.deleteEmbeddedDocuments("Item", [ammoUpdate.id]);
     }
@@ -223,13 +223,13 @@ export default class AttackActivity extends ActivityMixin(BaseAttackActivityData
 
     /**
      * A hook event that fires after an attack has been rolled and ammunition has been consumed.
-     * @function dnd5e.postRollAttack
+     * @function varlyn5e.postRollAttack
      * @memberof hookEvents
      * @param {D20Roll[]} rolls                   The resulting rolls.
      * @param {object} data
      * @param {AttackActivity|null} data.subject  The activity that performed the attack.
      */
-    Hooks.callAll("dnd5e.postRollAttack", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.postRollAttack", rolls, { subject: this });
 
     return rolls;
   }

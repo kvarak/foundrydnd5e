@@ -47,7 +47,7 @@ export default class SubclassData extends ItemDataModel.mixin(AdvancementTemplat
         label: "TYPES.Item.class",
         type: "set",
         config: {
-          choices: dnd5e.registry.classes.choices,
+          choices: varlyn5e.registry.classes.choices,
           keyPath: "system.classIdentifier"
         }
       }],
@@ -70,7 +70,7 @@ export default class SubclassData extends ItemDataModel.mixin(AdvancementTemplat
 
   /** @inheritDoc */
   get tooltipSubtitle() {
-    const cls = dnd5e.registry.classes.get(this.classIdentifier)?.name;
+    const cls = varlyn5e.registry.classes.get(this.classIdentifier)?.name;
     if ( cls ) return [_loc("DND5E.SubclassOf", { class: cls })];
     return super.tooltipSubtitle;
   }

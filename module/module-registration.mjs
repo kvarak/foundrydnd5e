@@ -46,7 +46,7 @@ function registerSourceBooks(manifest) {
  */
 function registerSpellLists(manifest) {
   if ( !Array.isArray(manifest.flags.dnd5e?.spellLists) ) return;
-  manifest.flags.dnd5e.spellLists.forEach(uuid => dnd5e.registry.spellLists.register(uuid));
+  manifest.flags.dnd5e.spellLists.forEach(uuid => varlyn5e.registry.spellLists.register(uuid));
   return "spell lists";
 }
 

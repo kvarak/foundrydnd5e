@@ -162,7 +162,7 @@ export default class CalendarHUD extends BaseCalendarHUD {
     /**
      * A hook event that fires when preparing the buttons displayed around the calendar HUD. Buttons in each list
      * are sorted with those closest to the center first.
-     * @function dnd5e.prepareCalendarButtons
+     * @function varlyn5e.prepareCalendarButtons
      * @memberof hookEvents
      * @param {CalendarHUD} app              The Calendar HUD application being rendered.
      * @param {CalendarHUDButton[]} buttons  Buttons displayed around the calendar UI.
@@ -302,6 +302,6 @@ export default class CalendarHUD extends BaseCalendarHUD {
 
   /** @override */
   static onUpdateWorldTime(worldTime, deltaTime, options, userId) {
-    if ( this.shouldDisplay ) dnd5e.ui.calendar?.renderCore(options.dnd5e?.deltas);
+    if ( this.shouldDisplay ) varlyn5e.ui.calendar?.renderCore(options.dnd5e?.deltas);
   }
 }

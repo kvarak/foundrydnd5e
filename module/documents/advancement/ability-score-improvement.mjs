@@ -71,7 +71,7 @@ export default class AbilityScoreImprovementAdvancement extends Advancement {
    */
   get allowFeat() {
     return (this.item.type === "class") && (game.settings.get("dnd5e", "allowFeats")
-      || dnd5e.settings.rulesVersion === "modern");
+      || varlyn5e.settings.rulesVersion === "modern");
   }
 
   /* -------------------------------------------- */
@@ -84,7 +84,7 @@ export default class AbilityScoreImprovementAdvancement extends Advancement {
     return (this.level >= AbilityScoreImprovementAdvancement.EPIC_BOON_LEVEL)
       && (this.item.type === "class")
       && (this.item.system.source?.rules ? (this.item.system.source.rules === "2024")
-        : (dnd5e.settings.rulesVersion === "modern"));
+        : (varlyn5e.settings.rulesVersion === "modern"));
   }
 
   /* -------------------------------------------- */
@@ -135,7 +135,7 @@ export default class AbilityScoreImprovementAdvancement extends Advancement {
   summaryForLevel(level, { configMode=false }={}) {
     const formatter = new Intl.NumberFormat(game.i18n.lang, { signDisplay: "always" });
     if ( configMode && this.isEpicBoon ) {
-      return dnd5e.utils.linkForUuid(this.configuration.recommendation);
+      return varlyn5e.utils.linkForUuid(this.configuration.recommendation);
     }
 
     else if ( configMode ) {

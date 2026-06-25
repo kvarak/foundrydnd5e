@@ -51,7 +51,7 @@ export default class AbilityTemplate extends foundry.canvas.placeables.MeasuredT
    */
   static fromActivity(activity, options={}) {
     const target = activity.target?.template ?? {};
-    const templateShape = dnd5e.config.areaTargetTypes[target.type]?.template;
+    const templateShape = varlyn5e.config.areaTargetTypes[target.type]?.template;
     if ( !templateShape ) return null;
 
     // Prepare template data
@@ -101,13 +101,13 @@ export default class AbilityTemplate extends foundry.canvas.placeables.MeasuredT
 
     /**
      * A hook event that fires before a template is created for an Activity.
-     * @function dnd5e.preCreateActivityTemplate
+     * @function varlyn5e.preCreateActivityTemplate
      * @memberof hookEvents
      * @param {Activity} activity    Activity for which the template is being placed.
      * @param {object} templateData  Data used to create the new template.
      * @returns {boolean}            Explicitly return `false` to prevent the template from being placed.
      */
-    if ( Hooks.call("dnd5e.preCreateActivityTemplate", activity, templateData) === false ) return null;
+    if ( Hooks.call("varlyn5e.preCreateActivityTemplate", activity, templateData) === false ) return null;
 
     // Construct the templates from activity data
     const cls = CONFIG.MeasuredTemplate.documentClass;
@@ -122,12 +122,12 @@ export default class AbilityTemplate extends foundry.canvas.placeables.MeasuredT
 
     /**
      * A hook event that fires after a template are created for an Activity.
-     * @function dnd5e.createActivityTemplate
+     * @function varlyn5e.createActivityTemplate
      * @memberof hookEvents
      * @param {Activity} activity            Activity for which the template is being placed.
      * @param {AbilityTemplate[]} templates  The templates being placed.
      */
-    Hooks.callAll("dnd5e.createActivityTemplate", activity, created);
+    Hooks.callAll("varlyn5e.createActivityTemplate", activity, created);
 
     return created;
   }

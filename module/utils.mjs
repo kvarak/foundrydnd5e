@@ -1240,7 +1240,7 @@ export function getHumanReadableAttributeLabel(attr, { actor, item }={}) {
   const getUnknownLabel = (attr, options) => {
     /**
      * A hook event that fires when a human readable attribute label couldn't be found.
-     * @function dnd5e.getUnknownAttributeLabel
+     * @function varlyn5e.getUnknownAttributeLabel
      * @memberof hookEvents
      * @param {string} attribute  Attribute for which to generate a label.
      * @param {object} options
@@ -1248,7 +1248,7 @@ export function getHumanReadableAttributeLabel(attr, { actor, item }={}) {
      * @param {Item5e} [options.item]    An optional reference item.
      * @param {string} [options.label]   Label that can be set to define the label to use.
      */
-    Hooks.callAll("dnd5e.getUnknownAttributeLabel", attr, options);
+    Hooks.callAll("varlyn5e.getUnknownAttributeLabel", attr, options);
     return options.label;
   };
 

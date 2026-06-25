@@ -33,7 +33,7 @@ import DragDrop5e from "./module/drag-drop.mjs";
 /*  Define Module Structure                     */
 /* -------------------------------------------- */
 
-globalThis.dnd5e = {
+globalThis.varlyn5e = {
   applications,
   canvas,
   config: DND5E,
@@ -52,8 +52,8 @@ globalThis.dnd5e = {
 /* -------------------------------------------- */
 
 Hooks.once("init", function() {
-  globalThis.dnd5e = game.dnd5e = Object.assign(game.system, globalThis.dnd5e);
-  utils.log(`Initializing the D&D Fifth Game System - Version ${dnd5e.version}`);
+  globalThis.varlyn5e = game.varlyn5e = Object.assign(game.system, globalThis.varlyn5e);
+  utils.log(`Initializing the D&D Fifth Game System - Version ${varlyn5e.version}`);
 
   // Record Configuration Values
   CONFIG.DND5E = DND5E;
@@ -95,10 +95,10 @@ Hooks.once("init", function() {
   registerSystemKeybindings();
 
   // Configure tooltips
-  game.dnd5e.tooltips = new Tooltips5e();
+  game.varlyn5e.tooltips = new Tooltips5e();
 
   // Register system
-  DND5E.SPELL_LISTS.forEach(uuid => dnd5e.registry.spellLists.register(uuid));
+  DND5E.SPELL_LISTS.forEach(uuid => varlyn5e.registry.spellLists.register(uuid));
 
   // Register module data from manifests
   registerModuleData();
@@ -229,11 +229,11 @@ function _configureCalendar() {
   /**
    * A hook event that fires during the `init` step to give modules a chance to customize the calendar
    * configuration before loading the world calendar.
-   * @function dnd5e.preSetupCalendar
+   * @function varlyn5e.preSetupCalendar
    * @memberof hookEvents
    * @returns               Explicitly return `false` to prevent system from setting up the calendar.
    */
-  if ( Hooks.call("dnd5e.setupCalendar") === false ) return;
+  if ( Hooks.call("varlyn5e.setupCalendar") === false ) return;
 
   const calendar = game.settings.get("dnd5e", "calendar");
   const calendarConfig = CONFIG.DND5E.calendar.calendars.find(c => c.value === calendar);
@@ -403,7 +403,7 @@ Hooks.once("setup", function() {
 
   CONFIG.DND5E.trackableAttributes = expandAttributeList(CONFIG.DND5E.trackableAttributes);
   Tooltips5e.activateListeners();
-  game.dnd5e.tooltips.observe();
+  game.varlyn5e.tooltips.observe();
 
   // Register settings after modules have had a chance to initialize
   registerDeferredSettings();
@@ -480,16 +480,16 @@ Hooks.once("ready", function() {
   game.actors.forEach(a => a.sourcedItems._redirectKeys());
 
   // Register items by type
-  dnd5e.registry.classes.initialize();
-  dnd5e.registry.subclasses.initialize();
+  varlyn5e.registry.classes.initialize();
+  varlyn5e.registry.subclasses.initialize();
 
   // Chat message listeners
   documents.ChatMessage5e.activateListeners();
 
   // Display the calendar HUD
   if ( CONFIG.DND5E.calendar.application ) {
-    dnd5e.ui.calendar = new CONFIG.DND5E.calendar.application();
-    dnd5e.ui.calendar.render({ force: true });
+    varlyn5e.ui.calendar = new CONFIG.DND5E.calendar.application();
+    varlyn5e.ui.calendar.render({ force: true });
   }
 });
 
@@ -555,10 +555,10 @@ Hooks.on("renderCombatTracker", (app, html, data) => app.renderGroups(html));
 Hooks.on("preCreateScene", (doc, createData, options, userId) => {
   // Set default grid units based on metric length setting
   const units = utils.defaultUnits("length");
-  if ( (units !== dnd5e.grid.units) && !foundry.utils.getProperty(createData, "grid.distance")
+  if ( (units !== varlyn5e.grid.units) && !foundry.utils.getProperty(createData, "grid.distance")
     && !foundry.utils.getProperty(createData, "grid.units") ) {
     doc.updateSource({
-      grid: { distance: utils.convertLength(dnd5e.grid.distance, dnd5e.grid.units, units, { strict: false }), units }
+      grid: { distance: utils.convertLength(varlyn5e.grid.distance, varlyn5e.grid.units, units, { strict: false }), units }
     });
   }
 });

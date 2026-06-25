@@ -273,7 +273,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
       reference: CONFIG.DND5E.creatureTypes[details.type.value]?.reference,
       subtitle: details.type.subtype
     };
-    if ( details.race instanceof dnd5e.documents.Item5e ) context.species = details.race;
+    if ( details.race instanceof varlyn5e.documents.Item5e ) context.species = details.race;
     context.labels.size = CONFIG.DND5E.actorSizes[traits.size]?.label ?? traits.size;
 
     // Saving Throws
@@ -875,14 +875,14 @@ export default class CharacterActorSheet extends BaseActorSheet {
     if ( !this.isEditable || (event.target.tagName === "INPUT") ) return;
     const { favoriteId } = target.closest("[data-favorite-id]").dataset;
     const favorite = await fromUuid(favoriteId, { relative: this.actor });
-    if ( (favorite instanceof dnd5e.documents.Item5e) || target.dataset.activityId ) {
+    if ( (favorite instanceof varlyn5e.documents.Item5e) || target.dataset.activityId ) {
       if ( favorite.type === "container" ) this._renderChild(favorite.sheet);
       else favorite.use({ event }, { options: { sheet: this } });
     }
-    else if ( favorite instanceof dnd5e.dataModels.activity.BaseActivityData ) {
+    else if ( favorite instanceof varlyn5e.dataModels.activity.BaseActivityData ) {
       if ( favorite.canUse ) favorite.use({ event }, { options: { sheet: this } });
     }
-    else if ( favorite instanceof dnd5e.documents.ActiveEffect5e ) favorite.update({ disabled: !favorite.disabled });
+    else if ( favorite instanceof varlyn5e.documents.ActiveEffect5e ) favorite.update({ disabled: !favorite.disabled });
     else {
       const { key } = target.closest("[data-key]")?.dataset ?? {};
       if ( key ) {
@@ -898,7 +898,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
 
   /** @override */
   _defaultDropBehavior(event, data) {
-    if ( data.dnd5e?.action === "favorite" || (["Activity", "Item"].includes(data.type)
+    if ( data.varlyn5e?.action === "favorite" || (["Activity", "Item"].includes(data.type)
       && event.target.closest(".favorites")) ) return "link";
     return super._defaultDropBehavior(event, data);
   }
@@ -922,8 +922,8 @@ export default class CharacterActorSheet extends BaseActorSheet {
     game.tooltip.deactivate();
 
     const dragData = { dnd5e: { action: "favorite", type } };
-    if ( type === "slots" ) dragData.dnd5e.id = methods[method].getSpellSlotKey(Number(level));
-    else dragData.dnd5e.id = key;
+    if ( type === "slots" ) dragData.varlyn5e.id = methods[method].getSpellSlotKey(Number(level));
+    else dragData.varlyn5e.id = key;
     event.dataTransfer.setData("application/json", JSON.stringify(dragData));
     event.dataTransfer.effectAllowed = "link";
   }
@@ -942,7 +942,7 @@ export default class CharacterActorSheet extends BaseActorSheet {
       console.error(e);
       return;
     }
-    const { action, type, id } = data.dnd5e ?? {};
+    const { action, type, id } = data.varlyn5e ?? {};
     if ( action === "favorite" ) return this._onDropFavorite(event, { type, id });
     if ( data.type === "Activity" ) {
       const activity = await fromUuid(data.uuid);

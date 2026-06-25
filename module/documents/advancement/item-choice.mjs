@@ -71,7 +71,7 @@ export default class ItemChoiceAdvancement extends ItemGrantAdvancement {
   summaryForLevel(level, { configMode=false }={}) {
     const items = this.value.added?.[level];
     if ( !items || configMode ) return "";
-    return Object.values(items).reduce((html, uuid) => html + game.dnd5e.utils.linkForUuid(uuid), "");
+    return Object.values(items).reduce((html, uuid) => html + game.varlyn5e.utils.linkForUuid(uuid), "");
   }
 
   /* -------------------------------------------- */
@@ -305,7 +305,7 @@ export default class ItemChoiceAdvancement extends ItemGrantAdvancement {
     // If spell list is specified, ensure the spell is on that list
     if ( (type === "spell") && restriction.list.size ) {
       const lists = Array.from(restriction.list)
-        .map(l => dnd5e.registry.spellLists.forType(l))
+        .map(l => varlyn5e.registry.spellLists.forType(l))
         .filter(_ => _);
       if ( !lists.some(l => l.has(item)) ) return handleError("DND5E.ADVANCEMENT.ItemChoice.Warning.SpellList", {
         lists: game.i18n.getListFormatter({ type: "disjunction" }).format(lists.map(l => l.name))

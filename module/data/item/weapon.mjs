@@ -533,7 +533,7 @@ export default class WeaponData extends ItemDataModel.mixin(
     context.info = [{
       label: "DND5E.ToHit",
       classes: "info-lg",
-      value: dnd5e.utils.formatModifier(parseInt(this.parent.labels.modifier))
+      value: varlyn5e.utils.formatModifier(parseInt(this.parent.labels.modifier))
     }];
     if ( this.parent.labels.damages?.length ) {
       const config = { ...CONFIG.DND5E.damageTypes, ...CONFIG.DND5E.healingTypes };

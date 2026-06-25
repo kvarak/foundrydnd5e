@@ -64,7 +64,7 @@ export default class Combat5e extends Combat {
     const combatantsInfo = ids.reduce((info, id) => {
       const rollGroupingKey = this.combatants.get(id).getInitiativeGroupingKey() ?? id;
       let deriveFrom = null;
-      if ( dnd5e.settings.initiativeGroupRoll && !this.started ) {
+      if ( varlyn5e.settings.initiativeGroupRoll && !this.started ) {
         deriveFrom = this.combatants.find(c =>
           (c.getInitiativeGroupingKey() === rollGroupingKey) && (Number.isFinite(c.initiative))
         )?.id ?? null;

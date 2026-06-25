@@ -397,7 +397,7 @@ export default class AttributesFields {
     init.mod = ability.mod ?? 0;
 
     // Initiative proficiency
-    const isLegacy = dnd5e.settings.rulesVersion === "legacy";
+    const isLegacy = varlyn5e.settings.rulesVersion === "legacy";
     const prof = this.attributes.prof ?? 0;
     const joat = flags.jackOfAllTrades && isLegacy;
     const ra = this.parent._isRemarkableAthlete(abilityId);
@@ -444,7 +444,7 @@ export default class AttributesFields {
     const heavilyEncumbered = statuses.has("heavilyEncumbered");
     const exceedingCarryingCapacity = statuses.has("exceedingCarryingCapacity");
     const units = this.attributes.movement.units ??= defaultUnits("length");
-    let reduction = dnd5e.settings.rulesVersion === "modern" && !this.traits?.ci?.value?.has("exhaustion")
+    let reduction = varlyn5e.settings.rulesVersion === "modern" && !this.traits?.ci?.value?.has("exhaustion")
       ? (this.attributes.exhaustion ?? 0) * (CONFIG.DND5E.conditionTypes.exhaustion?.reduction?.speed ?? 0) : 0;
     if ( ((this.attributes.ac?.equippedArmor?.system.strength ?? 0) > (this.abilities?.str?.value ?? Infinity))
       && !this.parent.flags.dnd5e?.ignoreArmorSpeedReduction && this.isCreature ) {
@@ -574,7 +574,7 @@ export default class AttributesFields {
     /**
      * A hook event that fires when an actor is damaged or healed by any means. The actual name
      * of the hook will depend on the change in hit points.
-     * @function dnd5e.damageActor
+     * @function varlyn5e.damageActor
      * @memberof hookEvents
      * @param {Actor5e} actor                                       The actor that had their hit points reduced.
      * @param {{hp: number, temp: number, total: number}} changes   The changes to hit points.

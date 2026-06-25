@@ -63,7 +63,7 @@ export default class ActivitiesElement extends (foundry.applications.elements.Ad
     }
 
     new ContextMenu5e(this, "[data-activity-id]", [], {
-      onOpen: target => dnd5e.documents.activity.UtilityActivity.onContextMenu(this.document, target), jQuery: false
+      onOpen: target => varlyn5e.documents.activity.UtilityActivity.onContextMenu(this.document, target), jQuery: false
     });
   }
 

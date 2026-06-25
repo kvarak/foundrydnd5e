@@ -288,7 +288,7 @@ export default class RollConfigurationDialog extends Dialog5e {
      * A hook event that fires when a roll config is built using the roll prompt. Multiple hooks may be called depending
      * on the rolling method (e.g. `dnd5e.buildSkillRollConfig`, `dnd5e.buildAbilityCheckRollConfig`,
      * `dnd5e.buildRollConfig`).
-     * @function dnd5e.buildRollConfig
+     * @function varlyn5e.buildRollConfig
      * @memberof hookEvents
      * @param {RollConfigurationDialog} app    Roll configuration dialog.
      * @param {BasicRollConfiguration} config  Roll configuration data.
@@ -306,7 +306,7 @@ export default class RollConfigurationDialog extends Dialog5e {
      * A hook event that fires after a roll config has been built using the roll prompt. Multiple hooks may be called
      * depending on the rolling method (e.g. `dnd5e.postBuildSkillRollConfig`, `dnd5e.postBuildAbilityCheckRollConfig`,
      * `dnd5e.postBuildRollConfig`).
-     * @function dnd5e.postBuildRollConfig
+     * @function varlyn5e.postBuildRollConfig
      * @memberof hookEvents
      * @param {BasicRollProcessConfiguration} process  Full process configuration data.
      * @param {BasicRollConfiguration} config          Roll configuration data.

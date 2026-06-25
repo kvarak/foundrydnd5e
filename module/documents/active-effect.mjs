@@ -117,7 +117,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   get isSuppressed() {
     if ( super.isSuppressed ) return true;
     if ( this.type === "enchantment" ) return false;
-    if ( this.parent instanceof dnd5e.documents.Item5e ) {
+    if ( this.parent instanceof varlyn5e.documents.Item5e ) {
       if ( this.parent.areEffectsSuppressed ) return true;
       if ( this.dependentOrigin?.active === false ) return true;
     }
@@ -138,7 +138,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    * @returns {Promise<Actor5e|Item5e|null>}
    */
   async getSource() {
-    if ( (this.target instanceof dnd5e.documents.Actor5e) && (this.parent instanceof dnd5e.documents.Item5e) ) {
+    if ( (this.target instanceof varlyn5e.documents.Actor5e) && (this.parent instanceof varlyn5e.documents.Item5e) ) {
       return this.parent;
     }
     return fromUuid(this.origin);
@@ -400,7 +400,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   prepareDerivedData() {
     super.prepareDerivedData();
     if ( this.id === this.constructor.ID.EXHAUSTION ) this._prepareExhaustionLevel();
-    if ( this.isAppliedEnchantment && this.uuid ) dnd5e.registry.enchantments.track(this.origin, this.uuid);
+    if ( this.isAppliedEnchantment && this.uuid ) varlyn5e.registry.enchantments.track(this.origin, this.uuid);
   }
 
   /* -------------------------------------------- */
@@ -488,7 +488,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
     } else if ( enchantmentProfile && activityId ) {
       let activity;
       const origin = await fromUuid(this.origin);
-      if ( origin instanceof dnd5e.documents.activity.EnchantActivity ) {
+      if ( origin instanceof varlyn5e.documents.activity.EnchantActivity ) {
         activity = origin;
         item = activity.item;
       } else if ( origin instanceof Item ) {
@@ -670,7 +670,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
   _onDelete(options, userId) {
     super._onDelete(options, userId);
     if ( game.user === game.users.activeGM ) this.getDependents().forEach(e => e.delete());
-    if ( this.isAppliedEnchantment ) dnd5e.registry.enchantments.untrack(this.origin, this.uuid);
+    if ( this.isAppliedEnchantment ) varlyn5e.registry.enchantments.untrack(this.origin, this.uuid);
     document.body.querySelectorAll(`enchantment-application:has([data-enchantment-uuid="${this.uuid}"]`)
       .forEach(element => element.buildItemList());
   }
@@ -735,7 +735,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
    */
   _shouldPromptConcentrationEnd() {
     if ( !this.active || !(this.parent instanceof Actor) ) return false;
-    if ( dnd5e.settings.disableConcentration || !this.parent.concentration.effects.size ) return false;
+    if ( varlyn5e.settings.disableConcentration || !this.parent.concentration.effects.size ) return false;
 
     return this.statuses.has("dead") || this.statuses.has("incapacitated");
   }
@@ -921,7 +921,7 @@ export default class ActiveEffect5e extends DependentDocumentMixin(ActiveEffect)
           || ((actor && (actor === otherActor)) || (item && (item === otherItem)))) arr.push(doc);
       }
       return arr;
-    }, []).concat(dnd5e.registry.dependents.get(this));
+    }, []).concat(varlyn5e.registry.dependents.get(this));
   }
 
   /* -------------------------------------------- */

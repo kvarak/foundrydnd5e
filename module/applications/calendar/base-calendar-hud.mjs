@@ -99,6 +99,6 @@ export default class BaseCalendarHUD extends Application5e {
    * @param {string} userId
    */
   static onUpdateWorldTime(worldTime, deltaTime, options, userId) {
-    if ( this.shouldDisplay ) dnd5e.ui.calendar?.render();
+    if ( this.shouldDisplay ) varlyn5e.ui.calendar?.render();
   }
 }

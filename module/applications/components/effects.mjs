@@ -28,7 +28,7 @@ export default class EffectsElement extends (foundry.applications.elements.Adopt
       const effect = this.getEffect(element.dataset);
       if ( !effect ) return;
       ui.context.menuItems = this._getContextOptions(effect);
-      Hooks.call("dnd5e.getActiveEffectContextOptions", effect, ui.context.menuItems);
+      Hooks.call("varlyn5e.getActiveEffectContextOptions", effect, ui.context.menuItems);
     }, jQuery: false });
   }
 

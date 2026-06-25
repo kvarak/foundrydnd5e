@@ -520,7 +520,7 @@ export class SpellList {
    * @type {string}
    */
   get name() {
-    return dnd5e.registry[SpellList.#REGISTRIES[this.metadata.type]]?.get(this.metadata.identifier)?.name
+    return varlyn5e.registry[SpellList.#REGISTRIES[this.metadata.type]]?.get(this.metadata.identifier)?.name
       ?? this.metadata.name;
   }
 

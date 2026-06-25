@@ -234,7 +234,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    * @type {Actor5e[]}
    */
   get summonedCreatures() {
-    return dnd5e.registry.summons.creatures(this);
+    return varlyn5e.registry.summons.creatures(this);
   }
 
   /* -------------------------------------------- */
@@ -247,13 +247,13 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before source data is initialized for an Actor in a compendium.
-     * @function dnd5e.initializeActorSource
+     * @function varlyn5e.initializeActorSource
      * @memberof hookEvents
      * @param {Actor5e} actor   Actor for which the data is being initialized.
      * @param {object} source   Source data being initialized.
      * @param {object} options  Additional data initialization options.
      */
-    if ( options.pack ) Hooks.callAll("dnd5e.initializeActorSource", this, source, options);
+    if ( options.pack ) Hooks.callAll("varlyn5e.initializeActorSource", this, source, options);
 
     return super._initializeSource(source, options);
   }
@@ -466,7 +466,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     const origin = this.getFlag("dnd5e", "summon.origin");
     if ( origin && this.token?.id ) {
       const { collection, primaryId } = foundry.utils.parseUuid(origin);
-      dnd5e.registry.summons.track(collection?.get?.(primaryId)?.uuid, this.uuid);
+      varlyn5e.registry.summons.track(collection?.get?.(primaryId)?.uuid, this.uuid);
     }
   }
 
@@ -479,7 +479,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    */
   getConcentrationDC(damage) {
     return Math.clamp(
-      Math.floor(damage / 2), 10, dnd5e.settings.rulesVersion === "modern" ? 30 : Infinity
+      Math.floor(damage / 2), 10, varlyn5e.settings.rulesVersion === "modern" ? 30 : Infinity
     );
   }
 
@@ -542,7 +542,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     const level = this.system.attributes?.exhaustion ?? null;
     const imms = this.system.traits?.ci?.value ?? new Set();
     const applyExhaustion = (level !== null) && !imms.has("exhaustion")
-      && (dnd5e.settings.rulesVersion === "legacy");
+      && (varlyn5e.settings.rulesVersion === "legacy");
     const statuses = this.statuses;
     const isActiveSource = k => {
       const l = Number(k.split("-").pop());
@@ -632,7 +632,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {SpellcastingDescription} spellcasting  Spellcasting descriptive object.
      * @param {number} count                          Number of classes with this type of spellcasting.
      * @returns {boolean}  Explicitly return false to prevent default progression from being calculated.
-     * @function dnd5e.computeSpellcastingProgression
+     * @function varlyn5e.computeSpellcastingProgression
      * @memberof hookEvents
      */
     const allowed = Hooks.call(
@@ -663,7 +663,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {Actor5e|void} actor   Actor for whom the data is being prepared, if any.
      * @param {object} progression   Spellcasting progression data.
      * @returns {boolean}            Explicitly return false to prevent default preparation from being performed.
-     * @function dnd5e.prepareSpellcastingSlots
+     * @function varlyn5e.prepareSpellcastingSlots
      * @memberof hookEvents
      */
     const allowed = Hooks.call(`dnd5e.prepare${type.capitalize()}Slots`, spells, actor, progression);
@@ -733,10 +733,10 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {object} updates                    Distinct updates to be performed on the actor.
      * @param {DamageApplicationOptions} options  Additional damage application options.
      * @returns {boolean}                         Explicitly return `false` to prevent damage application.
-     * @function dnd5e.preApplyDamage
+     * @function varlyn5e.preApplyDamage
      * @memberof hookEvents
      */
-    if ( Hooks.call("dnd5e.preApplyDamage", this, amount, updates, options) === false ) return this;
+    if ( Hooks.call("varlyn5e.preApplyDamage", this, amount, updates, options) === false ) return this;
 
     // Delegate damage application to a hook
     // TODO: Replace this in the future with a better modifyTokenAttribute function in the core
@@ -754,10 +754,10 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {Actor5e} actor                     Actor that has been damaged.
      * @param {number} amount                     Amount of damage that has been applied.
      * @param {DamageApplicationOptions} options  Additional damage application options.
-     * @function dnd5e.applyDamage
+     * @function varlyn5e.applyDamage
      * @memberof hookEvents
      */
-    Hooks.callAll("dnd5e.applyDamage", this, amount, options);
+    Hooks.callAll("varlyn5e.applyDamage", this, amount, options);
 
     return this;
   }
@@ -783,10 +783,10 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {DamageDescription[]} damages       Damage descriptions.
      * @param {DamageApplicationOptions} options  Additional damage application options.
      * @returns {boolean}                         Explicitly return `false` to prevent damage application.
-     * @function dnd5e.preCalculateDamage
+     * @function varlyn5e.preCalculateDamage
      * @memberof hookEvents
      */
-    if ( Hooks.call("dnd5e.preCalculateDamage", this, damages, options) === false ) return false;
+    if ( Hooks.call("varlyn5e.preCalculateDamage", this, damages, options) === false ) return false;
 
     const multiplier = options.multiplier ?? 1;
     const treatAs = options.originatingMessage?.flags?.dnd5e?.roll?.type
@@ -881,10 +881,10 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {DamageSummary} damages             Damage descriptions.
      * @param {DamageApplicationOptions} options  Additional damage application options.
      * @returns {boolean}                         Explicitly return `false` to prevent damage application.
-     * @function dnd5e.calculateDamage
+     * @function varlyn5e.calculateDamage
      * @memberof hookEvents
      */
-    if ( Hooks.call("dnd5e.calculateDamage", this, damages, options) === false ) return false;
+    if ( Hooks.call("varlyn5e.calculateDamage", this, damages, options) === false ) return false;
 
     return damages;
   }
@@ -1013,7 +1013,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook that is called before a concentration effect is created.
-     * @function dnd5e.preBeginConcentrating
+     * @function varlyn5e.preBeginConcentrating
      * @memberof hookEvents
      * @param {Actor5e} actor         The actor initiating concentration.
      * @param {Item5e} item           The item that will be concentrated on.
@@ -1021,20 +1021,20 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {Activity} activity     The activity that triggered the concentration.
      * @returns {boolean}             Explicitly return false to prevent the effect from being created.
      */
-    if ( Hooks.call("dnd5e.preBeginConcentrating", this, activity.item, effectData, activity) === false ) return;
+    if ( Hooks.call("varlyn5e.preBeginConcentrating", this, activity.item, effectData, activity) === false ) return;
 
     const effect = await ActiveEffect5e.create(effectData, { parent: this });
 
     /**
      * A hook that is called after a concentration effect is created.
-     * @function dnd5e.createConcentrating
+     * @function varlyn5e.createConcentrating
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor initiating concentration.
      * @param {Item5e} item               The item that is being concentrated on.
      * @param {ActiveEffect5e} effect     The created ActiveEffect instance.
      * @param {Activity} activity         The activity that triggered the concentration.
      */
-    Hooks.callAll("dnd5e.beginConcentrating", this, activity.item, effect, activity);
+    Hooks.callAll("varlyn5e.beginConcentrating", this, activity.item, effect, activity);
 
     return effect;
   }
@@ -1070,24 +1070,24 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook that is called before a concentration effect is deleted.
-     * @function dnd5e.preEndConcentration
+     * @function varlyn5e.preEndConcentration
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor ending concentration.
      * @param {ActiveEffect5e} effect     The ActiveEffect that will be deleted.
      * @returns {boolean}                 Explicitly return false to prevent the effect from being deleted.
      */
-    if ( Hooks.call("dnd5e.preEndConcentration", this, effect) === false) return [];
+    if ( Hooks.call("varlyn5e.preEndConcentration", this, effect) === false) return [];
 
     await effect.delete();
 
     /**
      * A hook that is called after a concentration effect is deleted.
-     * @function dnd5e.endConcentration
+     * @function varlyn5e.endConcentration
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor ending concentration.
      * @param {ActiveEffect5e} effect     The ActiveEffect that was deleted.
      */
-    Hooks.callAll("dnd5e.endConcentration", this, effect);
+    Hooks.callAll("varlyn5e.endConcentration", this, effect);
 
     return [effect];
   }
@@ -1172,7 +1172,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    * @private
    */
   _isRemarkableAthlete(ability) {
-    return (dnd5e.settings.rulesVersion === "legacy") && this.getFlag("dnd5e", "remarkableAthlete")
+    return (varlyn5e.settings.rulesVersion === "legacy") && this.getFlag("dnd5e", "remarkableAthlete")
       && CONFIG.DND5E.characterFlags.remarkableAthlete.abilities.includes(ability);
   }
 
@@ -1186,7 +1186,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    * @param {object} data     Roll data.
    */
   addRollExhaustion(parts, data) {
-    if ( (dnd5e.settings.rulesVersion !== "modern") || !this.system.attributes?.exhaustion
+    if ( (varlyn5e.settings.rulesVersion !== "modern") || !this.system.attributes?.exhaustion
       || this.system.traits?.ci?.value?.has("exhaustion") ) return;
     const amount = this.system.attributes.exhaustion * (CONFIG.DND5E.conditionTypes.exhaustion?.reduction?.rolls ?? 0);
     if ( amount ) {
@@ -1348,8 +1348,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a skill or tool check has been rolled.
-     * @function dnd5e.rollSkill
-     * @function dnd5e.rollToolCheck
+     * @function varlyn5e.rollSkill
+     * @function varlyn5e.rollToolCheck
      * @memberof hookEvents
      * @param {D20Roll[]} rolls       The resulting rolls.
      * @param {object} data
@@ -1382,7 +1382,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     const rollData = this.getRollData();
     const abilityId = formData?.get("ability") ?? process.ability;
     const ability = this.system.abilities?.[abilityId];
-    const { calculateSkillToolProficiency } = dnd5e.dataModels.actor.CommonTemplate;
+    const { calculateSkillToolProficiency } = varlyn5e.dataModels.actor.CommonTemplate;
     let prof = calculateSkillToolProficiency(this, abilityId, process);
     const originalProf = calculateSkillToolProficiency(hostActor, abilityId, process);
     if ( originalProf?.multiplier > prof.multiplier ) prof = originalProf;
@@ -1553,8 +1553,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after an ability check or save has been rolled.
-     * @function dnd5e.rollAbilityCheck
-     * @function dnd5e.rollSavingThrow
+     * @function varlyn5e.rollAbilityCheck
+     * @function varlyn5e.rollSavingThrow
      * @memberof hookEvents
      * @param {D20Roll[]} rolls       The resulting rolls.
      * @param {object} data
@@ -1672,7 +1672,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     /**
      * A hook event that fires after a death saving throw has been rolled for an Actor, but before
      * updates have been performed.
-     * @function dnd5e.rollDeathSave
+     * @function varlyn5e.rollDeathSave
      * @memberof hookEvents
      * @param {D20Roll[]} rolls         The resulting rolls.
      * @param {object} data
@@ -1682,8 +1682,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {Actor5e} data.subject    Actor for which the death saving throw has been rolled.
      * @returns {boolean}               Explicitly return `false` to prevent updates from being performed.
      */
-    if ( Hooks.call("dnd5e.rollDeathSave", rolls, details) === false ) return returnValue;
-    if ( Hooks.call("dnd5e.rollDeathSaveV2", rolls, details) === false ) return returnValue;
+    if ( Hooks.call("varlyn5e.rollDeathSave", rolls, details) === false ) return returnValue;
+    if ( Hooks.call("varlyn5e.rollDeathSaveV2", rolls, details) === false ) return returnValue;
 
     if ( !foundry.utils.isEmpty(details.updates) ) await this.update(details.updates);
 
@@ -1700,14 +1700,14 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a death saving throw has been rolled and after changes have been applied.
-     * @function dnd5e.postRollDeathSave
+     * @function varlyn5e.postRollDeathSave
      * @memberof hookEvents
      * @param {D20Roll[]} rolls                  The resulting rolls.
      * @param {object} data
      * @param {ChatMessage5e|void} data.message  The created results chat message.
      * @param {Actor5e} data.subject             Actor for which the death saving throw has been rolled.
      */
-    Hooks.callAll("dnd5e.postRollDeathSave", rolls, { message: resultsMessage, subject: this });
+    Hooks.callAll("varlyn5e.postRollDeathSave", rolls, { message: resultsMessage, subject: this });
 
     return returnValue;
   }
@@ -1765,14 +1765,14 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a saving throw to maintain concentration is rolled for an Actor.
-     * @function dnd5e.rollConcentration
+     * @function varlyn5e.rollConcentration
      * @memberof hookEvents
      * @param {D20Roll[]} rolls     The resulting rolls.
      * @param {object} data
      * @param {Actor5e} data.actor  Actor for which the saving throw has been rolled.
      */
-    Hooks.callAll("dnd5e.rollConcentration", rolls, { subject: this });
-    Hooks.callAll("dnd5e.rollConcentrationV2", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.rollConcentration", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.rollConcentrationV2", rolls, { subject: this });
 
     return oldFormat ? rolls[0] : rolls;
   }
@@ -1820,7 +1820,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
       initiativeBonus: init.bonus,
       [`${abilityId}AbilityCheckBonus`]: ability?.bonuses?.check,
       abilityCheckBonus: this.system.bonuses?.abilities?.check,
-      alert: flags.initiativeAlert && (dnd5e.settings.rulesVersion === "legacy") ? 5 : null
+      alert: flags.initiativeAlert && (varlyn5e.settings.rulesVersion === "legacy") ? 5 : null
     }, rollData);
 
     const { advantage, disadvantage } = AdvantageModeField.combineFields(this.system, [
@@ -1852,12 +1852,12 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before initiative roll is prepared for an Actor.
-     * @function dnd5e.preConfigureInitiative
+     * @function varlyn5e.preConfigureInitiative
      * @memberof hookEvents
      * @param {Actor5e} subject              The Actor that is rolling initiative.
      * @param {D20RollConfiguration} config  Configuration data for the pending roll.
      */
-    Hooks.callAll("dnd5e.preConfigureInitiative", this, rollConfig);
+    Hooks.callAll("varlyn5e.preConfigureInitiative", this, rollConfig);
 
     return rollConfig;
   }
@@ -1908,12 +1908,12 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before initiative is rolled for an Actor.
-     * @function dnd5e.preRollInitiative
+     * @function varlyn5e.preRollInitiative
      * @memberof hookEvents
      * @param {Actor5e} actor  The Actor that is rolling initiative.
      * @param {D20Roll} roll   The initiative roll.
      */
-    if ( Hooks.call("dnd5e.preRollInitiative", this, this._cachedInitiativeRoll) === false ) {
+    if ( Hooks.call("varlyn5e.preRollInitiative", this, this._cachedInitiativeRoll) === false ) {
       delete this._cachedInitiativeRoll;
       return null;
     }
@@ -1925,12 +1925,12 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after an Actor has rolled for initiative.
-     * @function dnd5e.rollInitiative
+     * @function varlyn5e.rollInitiative
      * @memberof hookEvents
      * @param {Actor5e} actor           The Actor that rolled initiative.
      * @param {Combatant[]} combatants  The associated Combatants in the Combat.
      */
-    Hooks.callAll("dnd5e.rollInitiative", this, combatants);
+    Hooks.callAll("varlyn5e.rollInitiative", this, combatants);
     delete this._cachedInitiativeRoll;
     return combat;
   }
@@ -1981,7 +1981,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
         return null;
       }
     }
-    const rulesVersion = dnd5e.settings.rulesVersion;
+    const rulesVersion = varlyn5e.settings.rulesVersion;
     const minimumValue = rulesVersion === "modern" ? 1 : 0;
     formula ??= `max(${minimumValue}, 1${config.denomination} + @abilities.con.mod)`;
     const rollConfig = foundry.utils.deepClone(config);
@@ -2023,7 +2023,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a hit die has been rolled for an Actor, but before updates have been performed.
-     * @function dnd5e.rollHitDie
+     * @function varlyn5e.rollHitDie
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls          The resulting rolls.
      * @param {object} data
@@ -2033,8 +2033,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {object} data.updates.class  Updates that will be applied to the class.
      * @returns {boolean}                  Explicitly return `false` to prevent updates from being performed.
      */
-    if ( Hooks.call("dnd5e.rollHitDie", rolls, { subject: this, updates }) === false ) return returnValue;
-    if ( Hooks.call("dnd5e.rollHitDieV2", rolls, { subject: this, updates }) === false ) return returnValue;
+    if ( Hooks.call("varlyn5e.rollHitDie", rolls, { subject: this, updates }) === false ) return returnValue;
+    if ( Hooks.call("varlyn5e.rollHitDieV2", rolls, { subject: this, updates }) === false ) return returnValue;
 
     // Perform updates
     if ( !foundry.utils.isEmpty(updates.actor) ) await this.update(updates.actor);
@@ -2042,13 +2042,13 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a hit die has been rolled for an Actor and updates have been performed.
-     * @function dnd5e.postRollHitDie
+     * @function varlyn5e.postRollHitDie
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls     The resulting rolls.
      * @param {object} data
      * @param {Actor5e} data.subject  Actor for which the roll was performed.
      */
-    Hooks.callAll("dnd5e.postRollHitDie", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.postRollHitDie", rolls, { subject: this });
 
     return returnValue;
   }
@@ -2061,7 +2061,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    * @param {object} options
    * @param {boolean} [options.chatMessage=true]  Display the chat message for this roll.
    * @returns {Promise<Roll>}                     The completed roll.
-   * @see {@link dnd5e.preRollClassHitPoints}
+   * @see {@link varlyn5e.preRollClassHitPoints}
    */
   async rollClassHitPoints(item, { chatMessage=true }={}) {
     if ( item.type !== "class" ) throw new Error("Hit points can only be rolled for a class item.");
@@ -2080,7 +2080,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before hit points are rolled for a character's class.
-     * @function dnd5e.preRollClassHitPoints
+     * @function varlyn5e.preRollClassHitPoints
      * @memberof hookEvents
      * @param {Actor5e} actor            Actor for which the hit points are being rolled.
      * @param {Item5e} item              The class item whose hit dice will be rolled.
@@ -2089,19 +2089,19 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {object} config.data       The data object against which to parse attributes within the formula.
      * @param {object} messageData       The data object to use when creating the message.
      */
-    Hooks.callAll("dnd5e.preRollClassHitPoints", this, item, config, messageData);
+    Hooks.callAll("varlyn5e.preRollClassHitPoints", this, item, config, messageData);
 
     const roll = new Roll(config.formula, config.data);
     await roll.evaluate();
 
     /**
      * A hook event that fires after hit points haven been rolled for a character's class.
-     * @function dnd5e.rollClassHitPoints
+     * @function varlyn5e.rollClassHitPoints
      * @memberof hookEvents
      * @param {Actor5e} actor  Actor for which the hit points have been rolled.
      * @param {Roll} roll      The resulting roll.
      */
-    Hooks.callAll("dnd5e.rollClassHitPoints", this, roll);
+    Hooks.callAll("varlyn5e.rollClassHitPoints", this, roll);
 
     if ( config.chatMessage ) await roll.toMessage(messageData);
     return roll;
@@ -2114,7 +2114,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
    * @param {object} options
    * @param {boolean} [options.chatMessage=true]  Display the chat message for this roll.
    * @returns {Promise<Roll>}                     The completed roll.
-   * @see {@link dnd5e.preRollNPCHitPoints}
+   * @see {@link varlyn5e.preRollNPCHitPoints}
    */
   async rollNPCHitPoints({ chatMessage=true }={}) {
     if ( !this.system.isNPC ) throw new Error("NPC hit points can only be rolled for NPCs");
@@ -2133,7 +2133,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires before hit points are rolled for an NPC.
-     * @function dnd5e.preRollNPCHitPoints
+     * @function varlyn5e.preRollNPCHitPoints
      * @memberof hookEvents
      * @param {Actor5e} actor            Actor for which the hit points are being rolled.
      * @param {object} config
@@ -2141,19 +2141,19 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {object} config.data       The data object against which to parse attributes within the formula.
      * @param {object} messageData       The data object to use when creating the message.
      */
-    Hooks.callAll("dnd5e.preRollNPCHitPoints", this, config, messageData);
+    Hooks.callAll("varlyn5e.preRollNPCHitPoints", this, config, messageData);
 
     const roll = new Roll(config.formula, config.data);
     await roll.evaluate();
 
     /**
      * A hook event that fires after hit points are rolled for an NPC.
-     * @function dnd5e.rollNPCHitPoints
+     * @function varlyn5e.rollNPCHitPoints
      * @memberof hookEvents
      * @param {Actor5e} actor  Actor for which the hit points have been rolled.
      * @param {Roll} roll      The resulting roll.
      */
-    Hooks.callAll("dnd5e.rollNPCHitPoints", this, roll);
+    Hooks.callAll("varlyn5e.rollNPCHitPoints", this, roll);
 
     if ( config.chatMessage ) await roll.toMessage(messageData);
     return roll;
@@ -2191,7 +2191,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     /**
      * A hook event that fires before a rest is started. The actual name of the hook will depend on the rest type
      * (e.g. `dnd5e.preShortRest` or `dnd5e.preLongRest`).
-     * @function dnd5e.preRest
+     * @function varlyn5e.preRest
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor that is being rested.
      * @param {RestConfiguration} config  Configuration options for the rest.
@@ -2212,7 +2212,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after a rest has started, after the configuration is complete.
-     * @function dnd5e.rest
+     * @function varlyn5e.rest
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor that is being rested.
      * @param {RestConfiguration} config  Configuration options for the rest.
@@ -2317,14 +2317,14 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires after rest result is calculated, but before any updates are performed.
-     * @function dnd5e.preRestCompleted
+     * @function varlyn5e.preRestCompleted
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor that is being rested.
      * @param {RestResult} result         Details on the rest to be completed.
      * @param {RestConfiguration} config  Configuration data for the rest occurring.
      * @returns {boolean}                 Explicitly return `false` to prevent the rest updates from being performed.
      */
-    if ( Hooks.call("dnd5e.preRestCompleted", this, result, config) === false ) return result;
+    if ( Hooks.call("varlyn5e.preRestCompleted", this, result, config) === false ) return result;
 
     // Perform updates
     await this.update(result.updateData, { isRest: true });
@@ -2339,13 +2339,13 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires when the rest process is completed for an actor.
-     * @function dnd5e.restCompleted
+     * @function varlyn5e.restCompleted
      * @memberof hookEvents
      * @param {Actor5e} actor             The actor that just completed resting.
      * @param {RestResult} result         Details on the rest completed.
      * @param {RestConfiguration} config  Configuration data for that occurred.
      */
-    Hooks.callAll("dnd5e.restCompleted", this, result, config);
+    Hooks.callAll("varlyn5e.restCompleted", this, result, config);
 
     // Return data summarizing the rest effects
     return result;
@@ -2460,7 +2460,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
   _getRestHitDiceRecovery({ maxHitDice, fraction, ...config }={}, result={}) {
     const restConfig = CONFIG.DND5E.restTypes[config.type];
     if ( !this.system.attributes.hd || !restConfig?.recoverHitDice ) return;
-    fraction ??= dnd5e.settings.rulesVersion === "modern" ? 1 : 0.5;
+    fraction ??= varlyn5e.settings.rulesVersion === "modern" ? 1 : 0.5;
 
     // Handle simpler HD recovery for NPCs
     if ( this.system.isNPC ) {
@@ -2895,7 +2895,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
       // Keep specific items from the original data
       const spellIdentifiers = settings.spellLists.size ? new Set(
         Array.from(settings.spellLists)
-          .map(id => dnd5e.registry.spellLists.forType(id))
+          .map(id => varlyn5e.registry.spellLists.forType(id))
           .filter(list => this.identifiedItems.get(list?.metadata.identifier, list?.metadata.type)?.size)
           .flatMap(list => Array.from(list.identifiers))
       ) : null;
@@ -2940,7 +2940,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
           }];
           d.effects.push(profOverride);
         } else {
-          const cls = new dnd5e.dataModels.item.ClassData({ levels: d.system.details.cr });
+          const cls = new varlyn5e.dataModels.item.ClassData({ levels: d.system.details.cr });
           d.items.push({
             type: "class",
             name: _loc("DND5E.TRANSFORM.TemporaryClass"),
@@ -3086,7 +3086,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires just before the actor is transformed.
-     * @function dnd5e.transformActor
+     * @function varlyn5e.transformActor
      * @memberof hookEvents
      * @param {Actor5e} host                    The original actor before transformation.
      * @param {Actor5e} source                  The source actor into which to transform.
@@ -3094,8 +3094,8 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
      * @param {TransformationSetting} settings  Settings that determine how the transformation is performed.
      * @param {object} options                  Rendering options passed to the actor creation.
      */
-    Hooks.callAll("dnd5e.transformActor", this, source, d, settings, options);
-    Hooks.callAll("dnd5e.transformActorV2", this, source, d, settings, options);
+    Hooks.callAll("varlyn5e.transformActor", this, source, d, settings, options);
+    Hooks.callAll("varlyn5e.transformActorV2", this, source, d, settings, options);
 
     // Create new Actor with transformed data
     const newActor = await this.constructor.create(d, options);
@@ -3156,13 +3156,13 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
 
     /**
      * A hook event that fires just before the actor is reverted to original form.
-     * @function dnd5e.revertOriginalForm
+     * @function varlyn5e.revertOriginalForm
      * @memberof hookEvents
      * @param {Actor} actor                  The original actor before transformation.
      * @param {object} options
      * @param {boolean} options.renderSheet  Render the reverted actor sheet.
      */
-    Hooks.callAll("dnd5e.revertOriginalForm", this, options);
+    Hooks.callAll("varlyn5e.revertOriginalForm", this, options);
 
     const transformOptions = this.getFlag("dnd5e", "transformOptions");
     const previousActorIds = this.getFlag("dnd5e", "previousActorIds") ?? [];
@@ -3344,7 +3344,7 @@ export default class Actor5e extends SystemDocumentMixin(Actor) {
     const origin = this.getFlag("dnd5e", "summon.origin");
     if ( origin ) {
       const { collection, primaryId } = foundry.utils.parseUuid(origin);
-      dnd5e.registry.summons.untrack(collection?.get?.(primaryId)?.uuid, this.uuid);
+      varlyn5e.registry.summons.untrack(collection?.get?.(primaryId)?.uuid, this.uuid);
     }
   }
 

@@ -81,7 +81,7 @@ export default class BaseRestDialog extends Dialog5e {
    */
   get duration() {
     return this.config.duration ?? CONFIG.DND5E.restTypes[this.config.type]
-      ?.duration?.[dnd5e.settings.restVariant] ?? 0;
+      ?.duration?.[varlyn5e.settings.restVariant] ?? 0;
   }
 
   /* -------------------------------------------- */

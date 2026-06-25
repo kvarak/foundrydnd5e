@@ -44,14 +44,14 @@ export default class Combatant5e extends Combatant {
 
     /**
      * A hook event that fires before a combat state change chat message is created.
-     * @function dnd5e.preCreateCombatMessage
+     * @function varlyn5e.preCreateCombatMessage
      * @memberof hookEvents
      * @param {Combatant5e} combatant         Combatant for which the message will be created.
      * @param {object} messageConfig
      * @param {boolean} messageConfig.create  Should the chat message be posted?
      * @param {object} messageConfig.data     Data for the created chat message.
      */
-    Hooks.callAll("dnd5e.preCreateCombatMessage", this, messageConfig);
+    Hooks.callAll("varlyn5e.preCreateCombatMessage", this, messageConfig);
 
     if ( messageConfig.create ) return ChatMessage.implementation.create(messageConfig.data);
   }
@@ -64,7 +64,7 @@ export default class Combatant5e extends Combatant {
    */
   getGroupingKey() {
     if ( this.group ) return this.group.id;
-    if ( (this.initiative === null) || !dnd5e.settings.initiativeGroupCombatants ) return null;
+    if ( (this.initiative === null) || !varlyn5e.settings.initiativeGroupCombatants ) return null;
     return this.getUniqueKey(Math.floor(this.initiative).paddedString(4));
   }
 
@@ -76,7 +76,7 @@ export default class Combatant5e extends Combatant {
    */
   getInitiativeGroupingKey() {
     if ( this.group ) return this.group.id;
-    if ( !dnd5e.settings.initiativeGroupRoll ) return null;
+    if ( !varlyn5e.settings.initiativeGroupRoll ) return null;
     return this.getUniqueKey(this.getInitiativeRoll().formula);
   }
 
@@ -109,13 +109,13 @@ export default class Combatant5e extends Combatant {
   async recoverCombatUses(periods) {
     /**
      * A hook event that fires before combat-related recovery changes.
-     * @function dnd5e.preCombatRecovery
+     * @function varlyn5e.preCombatRecovery
      * @memberof hookEvents
      * @param {Combatant5e} combatant  Combatant that is being recovered.
      * @param {string[]} periods       Periods to be recovered.
      * @returns {boolean}              Explicitly return `false` to prevent recovery from being performed.
      */
-    if ( Hooks.call("dnd5e.preCombatRecovery", this, periods) === false ) return;
+    if ( Hooks.call("varlyn5e.preCombatRecovery", this, periods) === false ) return;
 
     const results = { actor: {}, delete: [], item: [], rolls: [] };
     await this.actor?.system.recoverCombatUses?.(periods, results);
@@ -137,14 +137,14 @@ export default class Combatant5e extends Combatant {
     /**
      * A hook event that fires after combat-related recovery changes have been prepared, but before they have been
      * applied to the actor.
-     * @function dnd5e.combatRecovery
+     * @function varlyn5e.combatRecovery
      * @memberof hookEvents
      * @param {Combatant5e} combatant          Combatant that is being recovered.
      * @param {string[]} periods               Periods that were recovered.
      * @param {CombatRecoveryResults} results  Update that will be applied to the actor and its items.
      * @returns {boolean}  Explicitly return `false` to prevent updates from being performed.
      */
-    if ( Hooks.call("dnd5e.combatRecovery", this, periods, results) === false ) return;
+    if ( Hooks.call("varlyn5e.combatRecovery", this, periods, results) === false ) return;
 
     const deltas = ActorDeltasField.getDeltas(this.actor, results);
 
@@ -156,13 +156,13 @@ export default class Combatant5e extends Combatant {
 
     /**
      * A hook event that fires after combat-related recovery changes have been applied.
-     * @function dnd5e.postCombatRecovery
+     * @function varlyn5e.postCombatRecovery
      * @memberof hookEvents
      * @param {Combatant5e} combatant       Combatant that is being recovered.
      * @param {string[]} periods            Periods that were recovered.
      * @param {ChatMessage5e|void} message  Chat message created, if any.
      */
-    Hooks.callAll("dnd5e.postCombatRecovery", this, periods, message);
+    Hooks.callAll("varlyn5e.postCombatRecovery", this, periods, message);
   }
 
   /* -------------------------------------------- */

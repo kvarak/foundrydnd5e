@@ -138,7 +138,7 @@ export function getRulesVersion(config={}, options={}) {
   if ( Number.isNumeric(config.rules) ) return String(config.rules);
   return options.relativeTo?.parent?.system?.source?.rules
     || options.relativeTo?.system?.source?.rules
-    || (dnd5e.settings.rulesVersion === "modern" ? "2024" : "2014");
+    || (varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014");
 }
 
 /* -------------------------------------------- */
@@ -335,9 +335,9 @@ async function rollAttack(config, event) {
 
   const rolls = await CONFIG.Dice.D20Roll.build(rollConfig, dialogConfig, messageConfig);
   if ( rolls?.length ) {
-    Hooks.callAll("dnd5e.rollAttack", rolls, { subject: null, ammoUpdate: null });
-    Hooks.callAll("dnd5e.rollAttackV2", rolls, { subject: null, ammoUpdate: null });
-    Hooks.callAll("dnd5e.postRollAttack", rolls, { subject: null });
+    Hooks.callAll("varlyn5e.rollAttack", rolls, { subject: null, ammoUpdate: null });
+    Hooks.callAll("varlyn5e.rollAttackV2", rolls, { subject: null, ammoUpdate: null });
+    Hooks.callAll("varlyn5e.postRollAttack", rolls, { subject: null });
   }
 }
 
@@ -651,7 +651,7 @@ export async function enrichCheck(config, label, options) {
 function handleCheckCommand(config) {
   config = parseCheckConfig(config);
   config.type = "check";
-  if ( (config.tool.length === 1) && (config.skill.length > 0) && (dnd5e.settings.rulesVersion === "modern") ) {
+  if ( (config.tool.length === 1) && (config.skill.length > 0) && (varlyn5e.settings.rulesVersion === "modern") ) {
     config.usingTool = config.tool.pop();
   }
   if ( config.request ) return handlePostRequest(config);
@@ -1208,8 +1208,8 @@ async function rollDamage(config, event) {
 
   const rolls = await CONFIG.Dice.DamageRoll.build(rollConfig, {}, messageConfig);
   if ( !rolls?.length ) return;
-  Hooks.callAll("dnd5e.rollDamage", rolls);
-  Hooks.callAll("dnd5e.rollDamageV2", rolls);
+  Hooks.callAll("varlyn5e.rollDamage", rolls);
+  Hooks.callAll("varlyn5e.rollDamageV2", rolls);
 }
 
 /* -------------------------------------------- */

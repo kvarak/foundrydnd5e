@@ -344,7 +344,7 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
 
     // If using modern rules, do not show redundant artificer progression unless it is already selected.
     context.spellProgression = { ...CONFIG.DND5E.spellProgression };
-    if ( (dnd5e.settings.rulesVersion === "modern")
+    if ( (varlyn5e.settings.rulesVersion === "modern")
       && (this.item.system.spellcasting?.progression !== "artificer") ) delete context.spellProgression.artificer;
     context.spellProgression = Object.entries(context.spellProgression).map(([value, config]) => {
       const group = CONFIG.DND5E.spellcasting[config.type]?.label ?? "";
@@ -618,7 +618,7 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
   _attachFrameListeners() {
     super._attachFrameListeners();
     new ContextMenu5e(this.element, ".advancement-item[data-id]", [], {
-      onOpen: target => dnd5e.documents.advancement.Advancement.onContextMenu(this.item, target), jQuery: false
+      onOpen: target => varlyn5e.documents.advancement.Advancement.onContextMenu(this.item, target), jQuery: false
     });
   }
 
@@ -675,11 +675,11 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
   /** @override */
   _addDocument() {
     if ( this.tabGroups.primary === "activities" ) {
-      return dnd5e.documents.activity.UtilityActivity.createDialog({}, { parent: this.item }, { sheet: this });
+      return varlyn5e.documents.activity.UtilityActivity.createDialog({}, { parent: this.item }, { sheet: this });
     }
 
     if ( this.tabGroups.primary === "advancement" ) {
-      return dnd5e.documents.advancement.Advancement.createDialog({}, { parent: this.item }, { sheet: this });
+      return varlyn5e.documents.advancement.Advancement.createDialog({}, { parent: this.item }, { sheet: this });
     }
 
     if ( this.tabGroups.primary === "effects" ) {
@@ -909,14 +909,14 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
 
     /**
      * A hook event that fires when some useful data is dropped onto an ItemSheet5e.
-     * @function dnd5e.dropItemSheetData
+     * @function varlyn5e.dropItemSheetData
      * @memberof hookEvents
      * @param {Item5e} item                  The Item5e.
      * @param {ItemSheet5e} sheet            The ItemSheet5e application.
      * @param {object} data                  The data that has been dropped onto the sheet.
      * @returns {boolean}                    Explicitly return `false` to prevent normal drop handling.
      */
-    const allowed = Hooks.call("dnd5e.dropItemSheetData", item, this, data);
+    const allowed = Hooks.call("varlyn5e.dropItemSheetData", item, this, data);
     if ( allowed === false ) return;
     event.stopPropagation();
 
@@ -952,7 +952,7 @@ export default class ItemSheet5e extends PrimarySheetMixin(DocumentSheet5e) {
     if ( effect.type === "enchantment" ) {
       effectData.origin ??= effect.parent?.uuid;
       options.keepOrigin = true;
-      options.dnd5e = {
+      options.varlyn5e = {
         enchantmentProfile: effect.id,
         activityId: data.activityId ?? effect.parent?.system.activities?.getByType("enchant").find(a =>
           a.effects.some(e => e._id === effect.id)

@@ -270,7 +270,7 @@ export function registerSystemSettings() {
     scope: "world",
     config: false,
     type: CalendarConfigSetting,
-    onChange: () => dnd5e.ui.calendar?.onUpdateSettings?.()
+    onChange: () => varlyn5e.ui.calendar?.onUpdateSettings?.()
   });
 
   game.settings.register("dnd5e", "calendarPreferences", {
@@ -278,7 +278,7 @@ export function registerSystemSettings() {
     scope: "user",
     config: false,
     type: CalendarPreferencesSetting,
-    onChange: () => dnd5e.ui.calendar?.onUpdateSettings?.()
+    onChange: () => varlyn5e.ui.calendar?.onUpdateSettings?.()
   });
 
   // Combat Settings
@@ -578,13 +578,13 @@ export function registerSystemSettings() {
  * Cache various World settings to improve performance.
  */
 function cacheSettings() {
-  dnd5e.settings = { rulesVersion: "modern" };
+  varlyn5e.settings = { rulesVersion: "modern" };
   for ( const setting of game.settings.settings.values() ) {
     const { key, namespace, onChange, requiresReload, scope } = setting;
     if ( (scope !== "world") || (namespace !== "dnd5e") ) continue;
-    dnd5e.settings[key] = game.settings.get(namespace, key);
+    varlyn5e.settings[key] = game.settings.get(namespace, key);
     if ( !requiresReload ) setting.onChange = (value, ...args) => {
-      dnd5e.settings[key] = value;
+      varlyn5e.settings[key] = value;
       onChange?.(value, ...args);
     };
   }

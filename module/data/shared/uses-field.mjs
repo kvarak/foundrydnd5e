@@ -250,7 +250,7 @@ export default class UsesField extends SchemaField {
     /**
      * A hook event that fires after an Item or Activity has rolled to recharge, but before any usage changes have
      * been made.
-     * @function dnd5e.rollRecharge
+     * @function varlyn5e.rollRecharge
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls             The resulting rolls.
      * @param {object} data
@@ -258,20 +258,20 @@ export default class UsesField extends SchemaField {
      * @param {object} data.updates           Updates to be applied to the subject.
      * @returns {boolean}                     Explicitly return `false` to prevent updates from being performed.
      */
-    if ( Hooks.call("dnd5e.rollRecharge", rolls, { subject: this, updates }) === false ) return rolls;
-    if ( Hooks.call("dnd5e.rollRechargeV2", rolls, { subject: this, updates }) === false ) return rolls;
+    if ( Hooks.call("varlyn5e.rollRecharge", rolls, { subject: this, updates }) === false ) return rolls;
+    if ( Hooks.call("varlyn5e.rollRechargeV2", rolls, { subject: this, updates }) === false ) return rolls;
 
     if ( (rollConfig.apply !== false) && !foundry.utils.isEmpty(updates) ) await this.update(updates);
 
     /**
      * A hook event that fires after an Item or Activity has rolled recharge and usage updates have been performed.
-     * @function dnd5e.postRollRecharge
+     * @function varlyn5e.postRollRecharge
      * @memberof hookEvents
      * @param {BasicRoll[]} rolls     The resulting rolls.
      * @param {object} data
      * @param {Actor5e} data.subject  Item or Activity for which the roll was performed.
      */
-    Hooks.callAll("dnd5e.postRollRecharge", rolls, { subject: this });
+    Hooks.callAll("varlyn5e.postRollRecharge", rolls, { subject: this });
 
     return { rolls, updates };
   }

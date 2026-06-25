@@ -119,7 +119,7 @@ export default class TransformationSetting extends foundry.abstract.DataModel {
       input: field instanceof BooleanField ? createCheckboxInput : undefined,
       value: this[name]
     };
-    if ( name === "spellLists" ) descriptor.options = dnd5e.registry.spellLists.options.filter(o => {
+    if ( name === "spellLists" ) descriptor.options = varlyn5e.registry.spellLists.options.filter(o => {
       if ( !host ) return true;
       const [type, identifier] = o.value.split(":");
       return host.identifiedItems.get(identifier, type)?.size > 0;

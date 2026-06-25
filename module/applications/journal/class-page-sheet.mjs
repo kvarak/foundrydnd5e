@@ -370,7 +370,7 @@ export default class JournalClassPageSheet extends JournalEntryPageHandlebarsShe
      * @param {object} table                          Table definition being built. *Will be mutated.*
      * @param {Item5e} item                           Class for which the spellcasting table is being built.
      * @param {SpellcastingDescription} spellcasting  Spellcasting descriptive object.
-     * @function dnd5e.buildSpellcastingTable
+     * @function varlyn5e.buildSpellcastingTable
      * @memberof hookEvents
      */
     Hooks.callAll(`dnd5e.build${spellcasting.type.capitalize()}SpellcastingTable`, table, item, spellcasting);

@@ -176,7 +176,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
 
     /**
      * Hook that fires before an enchantment is applied to an item.
-     * @function dnd5e.preApplyEnchantment
+     * @function varlyn5e.preApplyEnchantment
      * @memberof hookEvents
      * @param {Item5e} item                        Item to which the enchantment will be applied.
      * @param {object} enchantmentData             Data for the enchantment effect that will be created.
@@ -185,7 +185,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
      * @param {ChatMessage5e} options.chatMessage  Chat message used to make the enchantment, if applicable.
      * @returns {boolean}                          Explicitly return `false` to prevent enchantment from being applied.
      */
-    if ( Hooks.call("dnd5e.preApplyEnchantment", item, enchantmentData, { activity: this, chatMessage }) === false ) return null;
+    if ( Hooks.call("varlyn5e.preApplyEnchantment", item, enchantmentData, { activity: this, chatMessage }) === false ) return null;
 
     // For compendium items, create on actor
     if ( item.inCompendium ) {
@@ -207,7 +207,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
 
     /**
      * Hook that fires after an enchantment has been applied to an item.
-     * @function dnd5e.applyEnchantment
+     * @function varlyn5e.applyEnchantment
      * @memberof hookEvents
      * @param {Item5e} item                        Item to which the enchantment was be applied.
      * @param {ActiveEffect5e} enchantment         The enchantment effect that was be created.
@@ -215,7 +215,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
      * @param {Activity} options.activity          Enchant activity applied the enchantment.
      * @param {ChatMessage5e} options.chatMessage  Chat message used to make the enchantment, if applicable.
      */
-    Hooks.callAll("dnd5e.applyEnchantment", item, enchantment, { activity: this, chatMessage });
+    Hooks.callAll("varlyn5e.applyEnchantment", item, enchantment, { activity: this, chatMessage });
 
     return enchantment;
   }
@@ -273,7 +273,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
 
     /**
      * A hook event that fires while validating whether an enchantment can be applied to a specific item.
-     * @function dnd5e.canEnchant
+     * @function varlyn5e.canEnchant
      * @memberof hookEvents
      * @param {EnchantActivity} activity             The activity performing the enchanting.
      * @param {Item5e} item                          Item to which the enchantment will be applied.
@@ -283,7 +283,7 @@ export default class EnchantActivity extends ActivityMixin(BaseEnchantActivityDa
      * @param {object} options
      * @param {ChatMessage5e} [options.chatMessage]  Chat message used to make the enchantment, if applicable.
      */
-    Hooks.callAll("dnd5e.canEnchant", this, item, errors, { chatMessage });
+    Hooks.callAll("varlyn5e.canEnchant", this, item, errors, { chatMessage });
 
     return errors.length ? errors : true;
   }

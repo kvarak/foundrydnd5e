@@ -212,7 +212,7 @@ export default function ActivityMixin(Base) {
 
       /**
        * A hook event that fires before an activity usage is configured.
-       * @function dnd5e.preUseActivity
+       * @function varlyn5e.preUseActivity
        * @memberof hookEvents
        * @param {Activity} activity                           Activity being used.
        * @param {ActivityUseConfiguration} usageConfig        Configuration info for the activation.
@@ -220,7 +220,7 @@ export default function ActivityMixin(Base) {
        * @param {ActivityMessageConfiguration} messageConfig  Configuration info for the created chat message.
        * @returns {boolean}  Explicitly return `false` to prevent activity from being used.
        */
-      if ( Hooks.call("dnd5e.preUseActivity", activity, usageConfig, dialogConfig, messageConfig) === false ) return;
+      if ( Hooks.call("varlyn5e.preUseActivity", activity, usageConfig, dialogConfig, messageConfig) === false ) return;
 
       // Display configuration window if necessary
       if ( dialogConfig.configure && activity._requiresConfigurationDialog(usageConfig) ) {
@@ -263,14 +263,14 @@ export default function ActivityMixin(Base) {
 
       /**
        * A hook event that fires when an activity is activated.
-       * @function dnd5e.postUseActivity
+       * @function varlyn5e.postUseActivity
        * @memberof hookEvents
        * @param {Activity} activity                     Activity being activated.
        * @param {ActivityUseConfiguration} usageConfig  Configuration data for the activation.
        * @param {ActivityUsageResults} results          Final details on the activation.
        * @returns {boolean}  Explicitly return `false` to prevent any subsequent actions from being triggered.
        */
-      if ( Hooks.call("dnd5e.postUseActivity", activity, usageConfig, results) === false ) return results;
+      if ( Hooks.call("varlyn5e.postUseActivity", activity, usageConfig, results) === false ) return results;
 
       // Trigger any primary action provided by this activity
       if ( usageConfig.subsequentActions !== false ) {
@@ -294,14 +294,14 @@ export default function ActivityMixin(Base) {
     async consume(usageConfig, messageConfig) {
       /**
        * A hook event that fires before an item's resource consumption is calculated.
-       * @function dnd5e.preActivityConsumption
+       * @function varlyn5e.preActivityConsumption
        * @memberof hookEvents
        * @param {Activity} activity                           Activity being activated.
        * @param {ActivityUseConfiguration} usageConfig        Configuration data for the activation.
        * @param {ActivityMessageConfiguration} messageConfig  Configuration info for the created chat message.
        * @returns {boolean}  Explicitly return `false` to prevent activity from being activated.
        */
-      if ( Hooks.call("dnd5e.preActivityConsumption", this, usageConfig, messageConfig) === false ) return false;
+      if ( Hooks.call("varlyn5e.preActivityConsumption", this, usageConfig, messageConfig) === false ) return false;
 
       const updates = await this._prepareUsageUpdates(usageConfig);
       if ( !updates ) return false;
@@ -309,7 +309,7 @@ export default function ActivityMixin(Base) {
       /**
        * A hook event that fires after an item's resource consumption is calculated, but before any updates are
        * performed.
-       * @function dnd5e.activityConsumption
+       * @function varlyn5e.activityConsumption
        * @memberof hookEvents
        * @param {Activity} activity                           Activity being activated.
        * @param {ActivityUseConfiguration} usageConfig        Configuration data for the activation.
@@ -317,7 +317,7 @@ export default function ActivityMixin(Base) {
        * @param {ActivityUsageUpdates} updates                Updates to apply to the actor and other documents.
        * @returns {boolean}  Explicitly return `false` to prevent activity from being activated.
        */
-      if ( Hooks.call("dnd5e.activityConsumption", this, usageConfig, messageConfig, updates) === false ) return false;
+      if ( Hooks.call("varlyn5e.activityConsumption", this, usageConfig, messageConfig, updates) === false ) return false;
 
       const consumed = await this.#applyUsageUpdates(updates);
       if ( !foundry.utils.isEmpty(consumed) ) {
@@ -329,7 +329,7 @@ export default function ActivityMixin(Base) {
 
       /**
        * A hook event that fires after an item's resource consumption is calculated and applied.
-       * @function dnd5e.postActivityConsumption
+       * @function varlyn5e.postActivityConsumption
        * @memberof hookEvents
        * @param {Activity} activity                           Activity being activated.
        * @param {ActivityUseConfiguration} usageConfig        Configuration data for the activation.
@@ -337,7 +337,7 @@ export default function ActivityMixin(Base) {
        * @param {ActivityUsageUpdates} updates                Applied updates to the actor and other documents.
        * @returns {boolean}  Explicitly return `false` to prevent activity from being activated.
        */
-      if ( Hooks.call("dnd5e.postActivityConsumption", this, usageConfig, messageConfig, updates) === false ) return false;
+      if ( Hooks.call("varlyn5e.postActivityConsumption", this, usageConfig, messageConfig, updates) === false ) return false;
 
       return updates;
     }
@@ -801,24 +801,24 @@ export default function ActivityMixin(Base) {
 
       /**
        * A hook event that fires before an activity usage card is created.
-       * @function dnd5e.preCreateUsageMessage
+       * @function varlyn5e.preCreateUsageMessage
        * @memberof hookEvents
        * @param {Activity} activity                     Activity for which the card will be created.
        * @param {ActivityMessageConfiguration} message  Configuration info for the created message.
        */
-      Hooks.callAll("dnd5e.preCreateUsageMessage", this, messageConfig);
+      Hooks.callAll("varlyn5e.preCreateUsageMessage", this, messageConfig);
 
       ChatMessage.applyMode(messageConfig.data, messageConfig.rollMode);
       const card = messageConfig.create === false ? messageConfig.data : await ChatMessage.create(messageConfig.data);
 
       /**
        * A hook event that fires after an activity usage card is created.
-       * @function dnd5e.postCreateUsageMessage
+       * @function varlyn5e.postCreateUsageMessage
        * @memberof hookEvents
        * @param {Activity} activity          Activity for which the card was created.
        * @param {ChatMessage5e|object} card  Created card or configuration data if not created.
        */
-      Hooks.callAll("dnd5e.postCreateUsageMessage", this, card);
+      Hooks.callAll("varlyn5e.postCreateUsageMessage", this, card);
 
       return card;
     }
@@ -916,14 +916,14 @@ export default function ActivityMixin(Base) {
 
       /**
        * A hook event that fires after damage has been rolled.
-       * @function dnd5e.rollDamage
+       * @function varlyn5e.rollDamage
        * @memberof hookEvents
        * @param {DamageRoll[]} rolls       The resulting rolls.
        * @param {object} [data]
        * @param {Activity} [data.subject]  The activity that performed the roll.
        */
-      Hooks.callAll("dnd5e.rollDamage", rolls, { subject: this });
-      Hooks.callAll("dnd5e.rollDamageV2", rolls, { subject: this });
+      Hooks.callAll("varlyn5e.rollDamage", rolls, { subject: this });
+      Hooks.callAll("varlyn5e.rollDamageV2", rolls, { subject: this });
 
       return rolls;
     }
@@ -1057,13 +1057,13 @@ export default function ActivityMixin(Base) {
 
       /**
        * A hook even that fires when the context menu for an Activity is opened.
-       * @function dnd5e.getItemActivityContext
+       * @function varlyn5e.getItemActivityContext
        * @memberof hookEvents
        * @param {Activity} activity             The Activity.
        * @param {HTMLElement} target            The element that menu was triggered on.
        * @param {ContextMenuEntry[]} menuItems  The context menu entries.
        */
-      Hooks.callAll("dnd5e.getItemActivityContext", activity, target, menuItems);
+      Hooks.callAll("varlyn5e.getItemActivityContext", activity, target, menuItems);
       ui.context.menuItems = menuItems;
     }
 

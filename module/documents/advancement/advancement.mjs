@@ -259,7 +259,7 @@ export default class Advancement extends PseudoDocumentMixin(BaseAdvancementData
   async delete(options={}) {
     if ( this.item.actor?.system.metadata?.supportsAdvancement
         && !game.settings.get("dnd5e", "disableAdvancements") ) {
-      const manager = dnd5e.applications.advancement.AdvancementManager
+      const manager = varlyn5e.applications.advancement.AdvancementManager
         .forDeletedAdvancement(this.item.actor, this.item.id, this.id);
       if ( manager.steps.length ) return manager.render(true);
     }
@@ -390,13 +390,13 @@ export default class Advancement extends PseudoDocumentMixin(BaseAdvancementData
 
     /**
      * A hook even that fires when the context menu for an Advancement is opened.
-     * @function dnd5e.getItemAdvancementContext
+     * @function varlyn5e.getItemAdvancementContext
      * @memberof hookEvents
      * @param {Advancement} advancement       The Advancement.
      * @param {HTMLElement} target            The element that menu was triggered on.
      * @param {ContextMenuEntry[]} menuItems  The context menu entries.
      */
-    Hooks.callAll("dnd5e.getItemAdvancementContext", advancement, target, menuItems);
+    Hooks.callAll("varlyn5e.getItemAdvancementContext", advancement, target, menuItems);
     ui.context.menuItems = menuItems;
   }
 

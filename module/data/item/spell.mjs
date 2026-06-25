@@ -96,7 +96,7 @@ export default class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, I
           let include = new Set();
           let exclude = new Set();
           for ( const [k, v] of Object.entries(value ?? {}) ) {
-            const list = dnd5e.registry.spellLists.forType(k);
+            const list = varlyn5e.registry.spellLists.forType(k);
             if ( !list || (v === 0) ) continue;
             if ( v === 1 ) include = include.union(list.identifiers);
             else if ( v === -1 ) exclude = exclude.union(list.identifiers);
@@ -105,9 +105,9 @@ export default class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, I
           if ( exclude.size ) filters.push({ o: "NOT", v: { k: "system.identifier", o: "in", v: exclude } });
         },
         config: {
-          choices: dnd5e.registry.spellLists.options.reduce((obj, entry) => {
+          choices: varlyn5e.registry.spellLists.options.reduce((obj, entry) => {
             const [type, identifier] = entry.value.split(":");
-            const list = dnd5e.registry.spellLists.forType(type, identifier);
+            const list = varlyn5e.registry.spellLists.forType(type, identifier);
             if ( list?.identifiers.size ) obj[entry.value] = {
               label: entry.label, group: CONFIG.DND5E.spellListTypes[type]
             };
@@ -417,7 +417,7 @@ export default class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, I
     const uuid = this.parent._stats.compendiumSource ?? this.parent.uuid;
     Object.defineProperty(labels, "classes", {
       get() {
-        return Array.from(dnd5e.registry.spellLists.forSpell(uuid))
+        return Array.from(varlyn5e.registry.spellLists.forSpell(uuid))
           .filter(list => list.metadata.type === "class")
           .map(list => list.name)
           .sort((lhs, rhs) => lhs.localeCompare(rhs, game.i18n.lang));
@@ -690,14 +690,14 @@ export default class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, I
 
     /**
      * A hook event that fires after an embedded spell with details is rendered.
-     * @function dnd5e.renderEmbeddedSpell
+     * @function varlyn5e.renderEmbeddedSpell
      * @memberof hookEvents
      * @param {Item5e} item                     Spell being embedded.
      * @param {HTMLTemplateElement} template    Template whose children will be embedded.
      * @param {DocumentHTMLEmbedConfig} config  Configuration for embedding behavior.
      * @param {EnrichmentOptions} options       Original enrichment options.
      */
-    Hooks.call("dnd5e.renderEmbeddedSpell", this.parent, template, config, options);
+    Hooks.call("varlyn5e.renderEmbeddedSpell", this.parent, template, config, options);
 
     return template.children;
   }
@@ -741,7 +741,7 @@ export default class SpellData extends ItemDataModel.mixin(ActivitiesTemplate, I
 
     // Create intersection of spellcasting classes and classes that offer the spell
     const spellClasses = new Set(
-      dnd5e.registry.spellLists.forSpell(this.parent._stats.compendiumSource).map(l => l.metadata.identifier)
+      varlyn5e.registry.spellLists.forSpell(this.parent._stats.compendiumSource).map(l => l.metadata.identifier)
     );
     const intersection = classes.intersection(spellClasses);
     if ( intersection.size === 1 ) setClass(intersection.first());

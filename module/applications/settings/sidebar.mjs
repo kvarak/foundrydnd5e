@@ -42,8 +42,8 @@ export function renderSettings(html) {
   section.innerHTML = `
     <h4 class="divider">${_loc("WORLD.FIELDS.system.label")}</h4>
     <div class="system-badge">
-      <img src="systems/dnd5e/ui/official/dnd-badge-32.webp" data-tooltip="${dnd5e.title}" alt="${dnd5e.title}">
-      <span class="system-info">${dnd5e.version}</span>
+      <img src="systems/dnd5e/ui/official/dnd-badge-32.webp" data-tooltip="${varlyn5e.title}" alt="${varlyn5e.title}">
+      <span class="system-info">${varlyn5e.version}</span>
     </div>
   `;
   section.append(_generateLinks());

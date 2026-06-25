@@ -448,7 +448,7 @@ export default class NPCData extends CreatureTemplate {
     if ( legres.max && legendaryResistanceItem ) {
       const max = this._source.resources.legres.max;
       const modernRules = (this.source?.rules
-        || (dnd5e.settings.rulesVersion === "modern" ? "2024" : "2014")) === "2024";
+        || (varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014")) === "2024";
       legendaryResistanceItem.system.uses.label = this.resources.lair.value && modernRules ? _loc(
         "DND5E.LegendaryResistance.LairUses", { normal: formatNumber(max), lair: formatNumber(max + 1) }
       ) : `${formatNumber(max)}/${CONFIG.DND5E.limitedUsePeriods.day?.label ?? ""}`;
@@ -527,7 +527,7 @@ export default class NPCData extends CreatureTemplate {
     if ( !max ) return "";
     const pr = getPluralRules().select(max);
     const rulesVersion = this.source?.rules
-      || (dnd5e.settings.rulesVersion === "modern" ? "2024" : "2014");
+      || (varlyn5e.settings.rulesVersion === "modern" ? "2024" : "2014");
     return _loc(`DND5E.LegendaryAction.Description${rulesVersion === "2014" ? "Legacy" : ""}`, {
       name: name.toLowerCase(),
       uses: this.resources.lair.value ? _loc("DND5E.LegendaryAction.LairUses", {
@@ -584,14 +584,14 @@ export default class NPCData extends CreatureTemplate {
 
     /**
      * A hook event that fires after an embedded NPC stat block is rendered.
-     * @function dnd5e.renderNPCStatBlock
+     * @function varlyn5e.renderNPCStatBlock
      * @memberof hookEvents
      * @param {Actor5e} actor                   NPC being embedded.
      * @param {HTMLTemplateElement} template    Template whose children will be embedded.
      * @param {DocumentHTMLEmbedConfig} config  Configuration for embedding behavior.
      * @param {EnrichmentOptions} options       Original enrichment options.
      */
-    Hooks.call("dnd5e.renderNPCStatBlock", this.parent, template, config, options);
+    Hooks.call("varlyn5e.renderNPCStatBlock", this.parent, template, config, options);
 
     return template.content;
   }

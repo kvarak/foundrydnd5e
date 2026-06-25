@@ -58,7 +58,7 @@ export default class StartingEquipmentTemplate extends SystemDataModel {
 
     // For modern classes, display as "Choose A or B"
     modernStyle ??= (this.source.rules === "2024")
-      || (!this.source.rules && (dnd5e.settings.rulesVersion === "modern"));
+      || (!this.source.rules && (varlyn5e.settings.rulesVersion === "modern"));
     if ( modernStyle ) {
       const entries = topLevel[0].type === "OR" ? topLevel[0].children : topLevel;
       if ( this.wealth ) entries.push(new EquipmentEntryData({
@@ -251,7 +251,7 @@ export class EquipmentEntryData extends foundry.abstract.DataModel {
   generateLabel({ depth=1, modernStyle }={}) {
     let label;
     modernStyle ??= (this.parent.source?.rules === "2024")
-      || (!this.parent.source?.rules && (dnd5e.settings.rulesVersion === "modern"));
+      || (!this.parent.source?.rules && (varlyn5e.settings.rulesVersion === "modern"));
 
     switch ( this.type ) {
       // For AND/OR, use a simple conjunction/disjunction list (e.g. "first, second, and third")

@@ -77,7 +77,7 @@ export default class CastActivity extends ActivityMixin(BaseCastActivityData) {
 
     /**
      * A hook event that fires before a linked spell is used by a Cast activity.
-     * @function dnd5e.preUseLinkedSpell
+     * @function varlyn5e.preUseLinkedSpell
      * @memberof hookEvents
      * @param {CastActivity} activity                                Cast activity being used.
      * @param {Partial<ActivityUseConfiguration>} usageConfig        Configuration info for the activation.
@@ -85,7 +85,7 @@ export default class CastActivity extends ActivityMixin(BaseCastActivityData) {
      * @param {Partial<ActivityMessageConfiguration>} messageConfig  Configuration info for the created chat message.
      * @returns {boolean}  Explicitly return `false` to prevent activity from being used.
      */
-    if ( Hooks.call("dnd5e.preUseLinkedSpell", this, usage, dialog, message) === false ) return;
+    if ( Hooks.call("varlyn5e.preUseLinkedSpell", this, usage, dialog, message) === false ) return;
 
     let spell = this.cachedSpell;
     if ( !spell ) {
@@ -96,13 +96,13 @@ export default class CastActivity extends ActivityMixin(BaseCastActivityData) {
 
     /**
      * A hook event that fires after a linked spell is used by a Cast activity.
-     * @function dnd5e.postUseLinkedSpell
+     * @function varlyn5e.postUseLinkedSpell
      * @memberof hookEvents
      * @param {CastActivity} activity                          Activity being activated.
      * @param {Partial<ActivityUseConfiguration>} usageConfig  Configuration data for the activation.
      * @param {ActivityUsageResults} results                   Final details on the activation.
      */
-    if ( results ) Hooks.callAll("dnd5e.postUseLinkedSpell", this, usage, results);
+    if ( results ) Hooks.callAll("varlyn5e.postUseLinkedSpell", this, usage, results);
 
     return results;
   }

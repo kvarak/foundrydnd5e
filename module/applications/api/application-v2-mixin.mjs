@@ -134,7 +134,7 @@ export default function ApplicationV2Mixin(Base, { handlebars=true }={}) {
     async _prepareContext(options) {
       const context = await super._prepareContext(options);
       context.CONFIG = CONFIG.DND5E;
-      context.inputs = { ...foundry.applications.fields, ...dnd5e.applications.fields };
+      context.inputs = { ...foundry.applications.fields, ...varlyn5e.applications.fields };
       return context;
     }
 
@@ -270,7 +270,7 @@ export default function ApplicationV2Mixin(Base, { handlebars=true }={}) {
       await super._onRender(context, options);
 
       this.element.querySelectorAll("[data-context-menu]").forEach(control =>
-        control.addEventListener("click", dnd5e.applications.ContextMenu5e.triggerEvent)
+        control.addEventListener("click", varlyn5e.applications.ContextMenu5e.triggerEvent)
       );
 
       // Allow tags to be removed when the whole tag is clicked.

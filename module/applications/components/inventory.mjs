@@ -624,7 +624,7 @@ export default class InventoryElement extends (foundry.applications.elements.Ado
     if ( element.closest("[data-activity-id]") ) UtilityActivity.onContextMenu(item, element);
     else {
       ui.context.menuItems = this._getContextOptions(item, element);
-      Hooks.callAll("dnd5e.getItemContextOptions", item, ui.context.menuItems);
+      Hooks.callAll("varlyn5e.getItemContextOptions", item, ui.context.menuItems);
     }
   }
 
