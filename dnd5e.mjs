@@ -53,7 +53,7 @@ globalThis.dnd5e = {
 
 Hooks.once("init", function() {
   globalThis.dnd5e = game.dnd5e = Object.assign(game.system, globalThis.dnd5e);
-  utils.log(`Initializing the D&D Fifth Game System - Version ${dnd5e.version}\n${DND5E.ASCII}`);
+  utils.log(`Initializing the D&D Fifth Game System - Version ${dnd5e.version}`);
 
   // Record Configuration Values
   CONFIG.DND5E = DND5E;
