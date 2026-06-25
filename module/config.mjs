@@ -2739,11 +2739,6 @@ DND5E.spellcasting = {
       third: {
         label: "DND5E.SPELLCASTING.METHODS.Spell.Third.label",
         divisor: 3
-      },
-      artificer: {
-        label: "DND5E.SPELLCASTING.METHODS.Spell.Artificer.label",
-        divisor: 2,
-        roundUp: true
       }
     }
   }
@@ -2875,7 +2870,6 @@ preLocalize("spellSchools", { key: "label", sort: true });
 DND5E.spellListTypes = {
   class: "TYPES.Item.class",
   subclass: "TYPES.Item.subclass",
-  background: "TYPES.Item.background",
   race: "TYPES.Item.race",
   other: "JOURNALENTRYPAGE.DND5E.SpellList.Type.Other"
 };
