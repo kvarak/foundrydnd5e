@@ -16,10 +16,10 @@
     }
   ],
   "esmodules": [
-    "dnd5e.mjs"
+    "varlyn-dnd5e.mjs"
   ],
   "styles": [
-    "dnd5e.css"
+    "varlyn-dnd5e.css"
   ],
   "documentTypes": {
     "ActiveEffect": {
@@ -238,7 +238,7 @@
         "json"
       ],
       "paths": [
-        "dnd5e.css",
+        "varlyn-dnd5e.css",
         "templates",
         "lang"
       ]

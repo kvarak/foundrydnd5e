@@ -25,7 +25,7 @@ install:
 
 ## Build everything: JS bundle, CSS, and compendium packs
 build: build-code build-css build-db
-	@mv --force dnd5e-compiled.mjs dnd5e.mjs 2>/dev/null || true
+	@mv --force varlyn-dnd5e-compiled.mjs varlyn-dnd5e.mjs 2>/dev/null || true
 
 ## Build and bundle the JS entry point
 build-code:
@@ -70,7 +70,7 @@ zip: build
 
 ## Remove build artifacts
 clean:
-	rm -f dnd5e-compiled.mjs dnd5e-compiled.mjs.map dnd5e.css dnd5e.css.map
+	rm -f varlyn-dnd5e-compiled.mjs varlyn-dnd5e-compiled.mjs.map varlyn-dnd5e.css varlyn-dnd5e.css.map
 	rm -f $(SYSTEM_ID)-*.zip
 	npm run build:clean 2>/dev/null || true
 
