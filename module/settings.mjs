@@ -7,8 +7,6 @@ import VisibilitySettingsConfig from "./applications/settings/visibility-setting
 import { CalendarConfigSetting, CalendarPreferencesSetting } from "./data/settings/calendar-setting.mjs";
 import PrimaryPartySetting from "./data/settings/primary-party-setting.mjs";
 import TransformationSetting from "./data/settings/transformation-setting.mjs";
-import * as LEGACY from "./config-legacy.mjs";
-
 const { StringField } = foundry.data.fields;
 
 /**
@@ -52,21 +50,6 @@ export function registerSystemSettings() {
     scope: "client",
     config: false,
     type: TransformationSetting
-  });
-
-  // Rules version
-  game.settings.register("dnd5e", "rulesVersion", {
-    name: "SETTINGS.DND5E.RULESVERSION.Name",
-    hint: "SETTINGS.DND5E.RULESVERSION.Hint",
-    scope: "world",
-    config: true,
-    default: "modern",
-    type: String,
-    choices: {
-      modern: "SETTINGS.DND5E.RULESVERSION.Modern",
-      legacy: "SETTINGS.DND5E.RULESVERSION.Legacy"
-    },
-    requiresReload: true
   });
 
   // Movement automation
@@ -451,16 +434,6 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register("dnd5e", "honorScore", {
-    name: "SETTINGS.DND5E.VARIANT.HonorScore.Name",
-    hint: "SETTINGS.DND5E.VARIANT.HonorScore.Hint",
-    scope: "world",
-    config: false,
-    default: false,
-    type: Boolean,
-    requiresReload: true
-  });
-
   game.settings.register("dnd5e", "levelingMode", {
     name: "SETTINGS.DND5E.VARIANT.LevelingMode.Name",
     hint: "SETTINGS.DND5E.VARIANT.LevelingMode.Hint",
@@ -500,16 +473,6 @@ export function registerSystemSettings() {
       gritty: "SETTINGS.DND5E.VARIANT.Rest.Gritty",
       epic: "SETTINGS.DND5E.VARIANT.Rest.Epic"
     }
-  });
-
-  game.settings.register("dnd5e", "sanityScore", {
-    name: "SETTINGS.DND5E.VARIANT.SanityScore.Name",
-    hint: "SETTINGS.DND5E.VARIANT.SanityScore.Hint",
-    scope: "world",
-    config: false,
-    default: false,
-    type: Boolean,
-    requiresReload: true
   });
 
   // Visibility Settings
@@ -671,60 +634,6 @@ export function registerDeferredSettings() {
     setTheme(document.body, s.colorScheme);
   };
   setTheme(document.body, setting.colorScheme);
-}
-
-/* -------------------------------------------- */
-
-/**
- * Update configuration data when legacy rules are set.
- */
-export function applyLegacyRules() {
-  const DND5E = CONFIG.DND5E;
-
-  // Set half-casters to round down.
-  DND5E.spellcasting.spell.progression.half.roundUp = false;
-
-  // Adjust Wild Shape and Polymorph presets.
-  for ( const preset of ["polymorph", "wildshape"] ) {
-    DND5E.transformation.presets[preset].settings.keep.delete("hp");
-    DND5E.transformation.presets[preset].settings.keep.delete("languages");
-    DND5E.transformation.presets[preset].settings.keep.delete("type");
-    delete DND5E.transformation.presets[preset].settings.tempFormula;
-  }
-
-  // Adjust language categories.
-  delete DND5E.languages.standard.children.sign;
-  DND5E.languages.exotic.children.draconic = DND5E.languages.standard.children.draconic;
-  delete DND5E.languages.standard.children.draconic;
-  DND5E.languages.cant = DND5E.languages.exotic.children.cant;
-  delete DND5E.languages.exotic.children.cant;
-  DND5E.languages.druidic = DND5E.languages.exotic.children.druidic;
-  delete DND5E.languages.exotic.children.druidic;
-
-  // Stunned stops movement in legacy & surprised doesn't provide initiative disadvantage.
-  DND5E.conditionEffects.noMovement.add("stunned");
-  DND5E.conditionEffects.initiativeAdvantage.delete("invisible");
-  DND5E.conditionEffects.initiativeDisadvantage.delete("incapacitated");
-  DND5E.conditionEffects.initiativeDisadvantage.delete("surprised");
-
-  // Incapacitated creatures within 2 size categories still cannot be moved through in legacy
-  delete DND5E.conditionTypes.incapacitated.neverBlockMovement;
-
-  // Adjust references.
-  Object.assign(DND5E.rules, LEGACY.RULES);
-  for ( const [cat, value] of Object.entries(LEGACY.REFERENCES) ) {
-    Object.entries(value).forEach(([k, v]) => DND5E[cat][k].reference = v);
-  }
-
-  // Adjust base item IDs.
-  for ( const [cat, value] of Object.entries(LEGACY.IDS) ) {
-    if ( cat === "focusTypes" ) Object.entries(value).forEach(([k, v]) => DND5E[cat][k].itemIds = v);
-    else if ( cat === "tools" ) Object.entries(value).forEach(([k, v]) => DND5E[cat][k].id = v);
-    else DND5E[cat] = value;
-  }
-
-  // Swap spell lists.
-  DND5E.SPELL_LISTS = LEGACY.SPELL_LISTS;
 }
 
 /* -------------------------------------------- */

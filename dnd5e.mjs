@@ -12,7 +12,7 @@
 // Import Configuration
 import DND5E from "./module/config.mjs";
 import {
-  applyLegacyRules, registerDeferredSettings, registerSystemKeybindings, registerSystemSettings
+  registerDeferredSettings, registerSystemKeybindings, registerSystemSettings
 } from "./module/settings.mjs";
 
 // Import Submodules
@@ -96,13 +96,6 @@ Hooks.once("init", function() {
 
   // Configure tooltips
   game.dnd5e.tooltips = new Tooltips5e();
-
-  // Remove honor & sanity from configuration if they aren't enabled
-  if ( !game.settings.get("dnd5e", "honorScore") ) delete DND5E.abilities.hon;
-  if ( !game.settings.get("dnd5e", "sanityScore") ) delete DND5E.abilities.san;
-
-  // Legacy rules.
-  if ( dnd5e.settings.rulesVersion === "legacy" ) applyLegacyRules();
 
   // Register system
   DND5E.SPELL_LISTS.forEach(uuid => dnd5e.registry.spellLists.register(uuid));
