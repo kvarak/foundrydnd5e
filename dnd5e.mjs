@@ -449,40 +449,6 @@ Hooks.once("i18nInit", () => {
   // Set up status effects. Explicitly performed after init and before prelocalization.
   _configureStatusEffects();
 
-  if ( dnd5e.settings.rulesVersion === "legacy" ) {
-    const { translations, _fallback } = game.i18n;
-    foundry.utils.mergeObject(translations, {
-      "TYPES.Item": {
-        race: _loc("TYPES.Item.raceLegacy"),
-        racePl: _loc("TYPES.Item.raceLegacyPl")
-      },
-      DND5E: {
-        "Feature.Class.ArtificerPlan": _loc("DND5E.Feature.Class.ArtificerInfusion"),
-        "Feature.Species": _loc("DND5E.Feature.SpeciesLegacy"),
-        FlagsAlertHint: _loc("DND5E.FlagsAlertHintLegacy"),
-        FlagsRemarkableAthleteHint: _loc("DND5E.FlagsRemarkableAthleteHintLegacy"),
-        ItemSpeciesDetails: _loc("DND5E.ItemSpeciesDetailsLegacy"),
-        "Language.Category.Rare": _loc("DND5E.Language.Category.Exotic"),
-        "MOVEMENT.Type.Speed": _loc("DND5E.MOVEMENT.Type.Walk"),
-        RacialTraits: _loc("DND5E.RacialTraitsLegacy"),
-        "REST.Long.Hint.Normal": _loc("DND5E.REST.Long.Hint.NormalLegacy"),
-        "REST.Long.Hint.Group": _loc("DND5E.REST.Long.Hint.GroupLegacy"),
-        "Species.Add": _loc("DND5E.Species.AddLegacy"),
-        "Species.Features": _loc("DND5E.Species.FeaturesLegacy"),
-        "TARGET.Type.Emanation": foundry.utils.mergeObject(
-          _fallback.DND5E?.TARGET?.Type?.Radius ?? {},
-          translations.DND5E?.TARGET?.Type?.Radius ?? {},
-          { inplace: false }
-        ),
-        TraitArmorPlural: foundry.utils.mergeObject(
-          _fallback.DND5E?.TraitArmorLegacyPlural ?? {},
-          translations.DND5E?.TraitArmorLegacyPlural ?? {},
-          { inplace: false }
-        ),
-        TraitArmorProf: _loc("DND5E.TraitArmorLegacyProf")
-      }
-    });
-  }
   utils.performPreLocalization(CONFIG.DND5E);
   Object.values(CONFIG.DND5E.activityTypes).forEach(c => c.documentClass.localize());
   Object.values(CONFIG.DND5E.advancementTypes).forEach(c => c.documentClass.localize());

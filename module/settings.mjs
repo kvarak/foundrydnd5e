@@ -578,7 +578,7 @@ export function registerSystemSettings() {
  * Cache various World settings to improve performance.
  */
 function cacheSettings() {
-  dnd5e.settings = {};
+  dnd5e.settings = { rulesVersion: "modern" };
   for ( const setting of game.settings.settings.values() ) {
     const { key, namespace, onChange, requiresReload, scope } = setting;
     if ( (scope !== "world") || (namespace !== "dnd5e") ) continue;
